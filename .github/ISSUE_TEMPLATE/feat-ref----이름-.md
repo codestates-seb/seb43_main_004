@@ -1,7 +1,7 @@
 ---
 name: 'Feat/ref : <이름>'
 about: 리팩토링
-title: ''
+title: 'Feat/ref : <이름>'
 labels: ''
 assignees: ''
 
