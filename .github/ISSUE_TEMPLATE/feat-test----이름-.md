@@ -1,7 +1,7 @@
 ---
 name: 'Feat/test : <이름>'
 about: 테스트
-title: "[NEW]"
+title: ''
 labels: ''
 assignees: ''
 

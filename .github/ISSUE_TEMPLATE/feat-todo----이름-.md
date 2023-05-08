@@ -1,7 +1,7 @@
 ---
 name: 'Feat/todo : <이름>'
 about: 기능 구현
-title: "[NEW]"
+title: ''
 labels: ''
 assignees: ''
 
