@@ -1,5 +1,5 @@
 ---
-name: 'Feat/ref : <이름>'
+name: 'BE Feat/ref : <이름>'
 about: 리팩토링
 title: 'Feat/ref : <이름>'
 labels: ''

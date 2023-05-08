@@ -1,7 +1,7 @@
 ---
-name: 'Feat/test : <이름>'
-about: 테스트
-title: 'Feat/test : <이름>'
+name: 'BE Feat/todo : <이름>'
+about: 기능 구현
+title: 'Feat/todo : <이름>'
 labels: ''
 assignees: ''
 
