@@ -1,7 +1,8 @@
 ---
 name: 'FE Feat/todo : <이름>'
 about: 기능 구현
-title: ''
+title: 'FE Feat/todo : <이름>
+'
 labels: ''
 assignees: ''
 
