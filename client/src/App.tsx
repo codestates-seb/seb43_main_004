@@ -1,21 +1,18 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import './App.css'
-import GlobalStyle from './styles/GlobalStyle'
-import { ThemeProvider } from 'styled-components'
-import Theme from './styles/Theme'
-import Header from './components/Common/Header'
+import UserSignIn from './pages/UserSignIn'
+import UserSignUp from './pages/UserSignUp'
 
 function App() {
   return (
     <>
-      <GlobalStyle />
-      <ThemeProvider theme={Theme}>
-        <div className="App">
-          <Header />
-          <Routes></Routes>
-        </div>
-      </ThemeProvider>
+      <div className="App">
+        <Routes>
+          <Route path="/sign-in" element={<UserSignIn />} />
+          <Route path="/sign-up" element={<UserSignUp />} />
+        </Routes>
+      </div>
     </>
   )
 }

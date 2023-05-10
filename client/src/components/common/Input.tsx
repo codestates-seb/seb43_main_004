@@ -4,7 +4,7 @@ import styled from 'styled-components'
 interface inputProps {
   label?: string
   type: string
-  placeholder: string
+  placeholder?: string
   name: string
   value?: string
   defaultValue?: string
@@ -25,7 +25,7 @@ const Input = (props: inputProps) => {
   } = props
 
   return (
-    <div>
+    <InputWrapper>
       {label && <StyledLabel htmlFor={label}>{label}</StyledLabel>}
       <StyledInput
         type={type}
@@ -37,9 +37,14 @@ const Input = (props: inputProps) => {
         autoComplete="off"
       />
       {error && <ErrorMessage>{error}</ErrorMessage>}
-    </div>
+    </InputWrapper>
   )
 }
+
+const InputWrapper = styled.div`
+  height: 6rem;
+  flex: 1;
+`
 
 const StyledLabel = styled.label`
   display: inline-block;
@@ -49,8 +54,8 @@ const StyledLabel = styled.label`
 `
 const StyledInput = styled.input`
   width: 100%;
-  padding: 1rem;
-  border-radius: 0.6rem;
+  padding: 1.2rem 1rem;
+  border-radius: 1rem;
   border: 1px solid var(--color-dark-gray);
 
   &::placeholder {
