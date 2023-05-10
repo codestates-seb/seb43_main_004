@@ -5,16 +5,13 @@ const GlobalStyle = createGlobalStyle`
     ${reset}
 
     /* font */
+    // pretendard - 400(Regular) 500(Medium) 600(SemiBold) 700(Bold)
     @font-face {
         font-family: 'yg-jalnan';
         src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
         font-weight: normal;
         font-style: normal;
     }
-
-    // pretendard - 400(Regular) 500(Medium) 600(SemiBold) 700(Bold)
-    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css");
-
 
     :root{
         --color-primary: #F8CF84;
@@ -73,6 +70,10 @@ const GlobalStyle = createGlobalStyle`
         font-size: inherit;
         display: block;
         color: inherit;
+    }
+
+    .test-btn {
+        margin-top: 250px;
     }
 `
 
