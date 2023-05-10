@@ -6,18 +6,18 @@ interface buttonProps {
   width?: string
   disabled?: boolean
   onClick(): void
-  unique?: boolean
+  outline?: boolean | string
 }
 
 const Button = (props: buttonProps) => {
-  const { children, width, disabled, onClick, unique } = props
+  const { children, width, disabled, onClick, outline } = props
 
   return (
     <StyledButton
       width={width}
       disabled={disabled}
       onClick={onClick}
-      unique={unique}
+      outline={outline?.toString()}
     >
       {children}
     </StyledButton>
@@ -25,9 +25,9 @@ const Button = (props: buttonProps) => {
 }
 
 const StyledButton = styled.button<buttonProps>`
-  padding: 1rem 1.6rem;
+  padding: 1.2rem 1.6rem;
   border: none;
-  border-radius: 0.6rem;
+  border-radius: 1rem;
   background-color: var(--color-point);
   color: var(--color-white);
   transition: 0.1s all;
@@ -43,8 +43,8 @@ const StyledButton = styled.button<buttonProps>`
       display: block;
       width: ${width};
     `}
-  ${({ unique }) =>
-    unique &&
+  ${({ outline }) =>
+    outline &&
     css`
       background-color: var(--color-white);
       border: 1px solid var(--color-point);
