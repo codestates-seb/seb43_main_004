@@ -3,6 +3,19 @@ import reset from 'styled-reset'
 
 const GlobalStyle = createGlobalStyle`
     ${reset}
+
+    /* font */
+    @font-face {
+        font-family: 'yg-jalnan';
+        src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    // pretendard - 400(Regular) 500(Medium) 600(SemiBold) 700(Bold)
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css");
+
+
     :root{
         --color-primary: #F8CF84;
         --color-secondary: #F2AE1C;
@@ -30,7 +43,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     h1,h2,h3,h4,h5,h6{
-        font-family: 'Jalnan', sans-serif;
+        font-family: 'yg-jalnan', sans-serif;
     }
 
     ol,ul,li{
@@ -41,10 +54,25 @@ const GlobalStyle = createGlobalStyle`
         text-decoration: none;
         color: inherit;
         cursor: pointer;
+        display: block;
     }
     
     input, button{
         outline: none;
+    }
+
+    button {
+        border: none;
+        background: transparent;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    // icon setting
+    .material-icons-round {
+        font-size: inherit;
+        display: block;
+        color: inherit;
     }
 `
 
