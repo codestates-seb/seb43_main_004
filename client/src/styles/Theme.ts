@@ -1,7 +1,7 @@
 const color = {
   primary: '#F8CF84',
   second: '#F2AE1C',
-  point: '4C7031',
+  point: '#4C7031',
   pointHover: '#7AB152',
   danger: '#C50000',
   white: '#FFFFFF',
