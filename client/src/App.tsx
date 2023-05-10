@@ -1,4 +1,5 @@
 import React from 'react'
+import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import GlobalStyle from './styles/GlobalStyle'
 import { ThemeProvider } from 'styled-components'
@@ -12,7 +13,7 @@ function App() {
       <ThemeProvider theme={Theme}>
         <div className="App">
           <Header />
-          <h1> hello world </h1>
+          <Routes></Routes>
         </div>
       </ThemeProvider>
     </>
