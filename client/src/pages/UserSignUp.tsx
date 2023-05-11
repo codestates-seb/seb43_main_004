@@ -10,6 +10,9 @@ interface userInfo {
   password: string
   gender: string
   score: string
+  height: number
+  weight: number
+  birth: string
 }
 
 type radio = {
@@ -36,9 +39,12 @@ const UserSignUp = () => {
     password: '',
     gender: 'male',
     score: '적음',
+    height: 0,
+    weight: 0,
+    birth: '',
   })
   const [error, setError] = useState<string>('')
-  const [isValid, setIsValid] = useState<boolean>(false)
+  const [isEmpty, setIsEmpty] = useState<boolean>(true)
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -158,7 +164,7 @@ const UserSignUp = () => {
         <li>회사원 등 어느 정도 규칙적인 생활을 하는 사람 : 보통</li>
         <li>육체 노동자 등 신체 활동이 많은 사람 : 많음</li>
       </ul>
-      <Button disabled={isValid} onClick={checkValid}>
+      <Button disabled={isEmpty} onClick={checkValid}>
         가입하기
       </Button>
     </Container>
@@ -166,13 +172,18 @@ const UserSignUp = () => {
 }
 
 const Container = styled.div`
-  width: 37rem;
+  width: 40rem;
   border: 1px solid var(--color-light-gray);
   border-radius: 1.5rem;
-  padding: 2rem;
+  padding: 3.2rem;
   display: flex;
   flex-direction: column;
   gap: 3rem;
+
+  h1 {
+    font-size: ${(props) => props.theme.fontSize.smmh};
+    text-align: center;
+  }
 
   li:nth-child(2) {
     margin: 0.4rem 0;
