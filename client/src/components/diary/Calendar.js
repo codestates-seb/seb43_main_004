@@ -26,6 +26,10 @@ const Container = styled.div`
   }
 
   .react-calendar__month-view__weekdays {
+    font-size: 10px;
+    /* text-align: left; */
+    font-weight: 400;
+    color: var(--color-dark-gray);
     // 달력 요일 표시 커스텀
     div {
       height: 30px;
@@ -43,7 +47,8 @@ const Container = styled.div`
       position: relative;
       display: flex;
       height: 90px;
-      border: 0.1px solid var(--color-light-gray);
+      border-right: 0.1px solid var(--color-light-gray);
+      border-bottom: 0.1px solid var(--color-light-gray);
       font-size: 18px;
       font-family: 'Pretendard', sans-serif;
       font-weight: 400;

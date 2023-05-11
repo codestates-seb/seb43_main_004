@@ -5,10 +5,10 @@ import Stats from './Stats'
 
 const DiaryPageWrapper = styled.div`
   max-width: 1250px;
-  margin: 0 auto;
+  margin: 2rem auto;
 
   h2 {
-    font-size: 32px;
+    font-size: 28px;
     margin-bottom: 20px;
   }
 `
