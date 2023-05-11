@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Input from '../components/common/Input'
 import Button from '../components/common/Button'
 import { useNavigate, Link } from 'react-router-dom'
+import logo from '../assets/logo.png'
 
 interface userType {
   email: string
@@ -36,7 +37,9 @@ const UserSignIn = () => {
 
   return (
     <Container>
-      <h1>로그인</h1>
+      <Logo>
+        <img src={logo} alt="logo" />
+      </Logo>
       <Form>
         <Input
           label="이메일"
@@ -55,10 +58,10 @@ const UserSignIn = () => {
         />
       </Form>
       <Button onClick={checkValid}>로그인</Button>
-      <Button outline={true} onClick={() => console.log('google social login')}>
+      <Button outline="true" onClick={() => console.log('google social login')}>
         구글 계정으로 로그인
       </Button>
-      <div>
+      <div className="padding-box">
         <span>비밀번호를 잊으셨나요?</span>
         <StyledLink to="/find-pwd">비밀번호 찾기</StyledLink>
       </div>
@@ -74,13 +77,28 @@ const Container = styled.div`
   width: 34rem;
   border: 1px solid var(--color-light-gray);
   border-radius: 1.5rem;
-  padding: 2rem;
+  padding: 3rem;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
 
+  .padding-box {
+    padding-top: 1.2rem;
+  }
+
+  > div {
+    display: flex;
+    justify-content: center;
+  }
+
   span {
     font-size: 1.2rem;
+  }
+`
+
+const Logo = styled.div`
+  img {
+    width: 9rem;
   }
 `
 
