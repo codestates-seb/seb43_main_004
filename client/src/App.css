@@ -8,4 +8,10 @@ body {
     height: auto;
     min-height: 100%;
     padding-bottom: 164px;
+    max-width: 1250px;
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    padding-top: 50px;
+    display: flex;
 }
