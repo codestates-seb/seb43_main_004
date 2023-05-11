@@ -40,6 +40,7 @@ const Container = styled.div`
 
   .react-calendar__month-view__days {
     button {
+      position: relative;
       display: flex;
       height: 90px;
       border: 0.1px solid var(--color-light-gray);
@@ -76,9 +77,18 @@ const Container = styled.div`
   }
 
   .emoji {
-    position: relative;
+    padding: 0 auto;
+    position: absolute;
     top: 50%;
-    left: 30%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    font-size: 4.6rem;
+  }
+
+  h1 {
+    margin-top: 1rem;
   }
 `
 

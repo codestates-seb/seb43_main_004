@@ -3,15 +3,18 @@ body {
     height: 100vh;
 }
 
+.App{
+    height: 100vh;
+}
 
-.App {
-    height: auto;
-    min-height: 100%;
-    padding-bottom: 164px;
+
+.Wrapper {
     max-width: 1250px;
-    margin: 0 auto;
-    width: 100%;
-    height: 100%;
-    padding-top: 50px;
+    min-height: 100%;
+    margin-top: 174px;
     display: flex;
+    margin-bottom: 40px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }

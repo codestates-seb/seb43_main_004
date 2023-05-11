@@ -7,6 +7,8 @@ const StyledHeader = styled.header`
   background-color: ${({ theme }) => theme.color.primary};
   padding: 2rem;
   position: fixed;
+  top: 0;
+  z-index: 800;
   width: 100%;
 
   .container {
