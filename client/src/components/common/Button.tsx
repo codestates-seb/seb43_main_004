@@ -10,14 +10,14 @@ interface buttonProps {
 }
 
 const Button = (props: buttonProps) => {
-  const { children, width, disabled, onClick, outline } = props
+  const { children, width, onClick, disabled = false, outline = false } = props
 
   return (
     <StyledButton
       width={width}
       disabled={disabled}
       onClick={onClick}
-      outline={outline?.toString()}
+      outline={outline.toString()}
     >
       {children}
     </StyledButton>
@@ -44,13 +44,14 @@ const StyledButton = styled.button<buttonProps>`
       width: ${width};
     `}
   ${({ outline }) =>
-    outline &&
+    outline === 'true' &&
     css`
       background-color: var(--color-white);
       border: 1px solid var(--color-point);
       color: var(--color-point);
 
       &:hover {
+        color: var(--color-white);
         background-color: var(--color-point-hover);
       }
     `}
