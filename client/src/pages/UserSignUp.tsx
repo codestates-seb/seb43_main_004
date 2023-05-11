@@ -21,18 +21,18 @@ type radio = {
   value: string
 }
 
+const gender: radio[] = [
+  { id: 'male', name: 'gender', value: 'male' },
+  { id: 'female', name: 'gender', value: 'female' },
+]
+
+const activityScore: radio[] = [
+  { id: '1', name: 'score', value: '적음' },
+  { id: '2', name: 'score', value: '보통' },
+  { id: '3', name: 'score', value: '많음' },
+]
+
 const UserSignUp = () => {
-  const gender: radio[] = [
-    { id: 'male', name: 'gender', value: 'male' },
-    { id: 'female', name: 'gender', value: 'female' },
-  ]
-
-  const activityScore: radio[] = [
-    { id: '1', name: 'score', value: '적음' },
-    { id: '2', name: 'score', value: '보통' },
-    { id: '3', name: 'score', value: '많음' },
-  ]
-
   const [values, setValues] = useState<userInfo>({
     email: '',
     nickname: '',
