@@ -69,40 +69,67 @@ public class MealServiceTest {
         meal.setSugar(3);
         meal.setSalt(1);
 
-        Mockito.when(mealRepository.findById(1L)).thenReturn(Optional.of(meal));
+        Mockito.lenient().when(mealRepository.findById(1L)).thenReturn(Optional.of(meal));
 
-        Meal updatedMeal = new Meal();
-        updatedMeal.setMealId(1L);
-        updatedMeal.setMealType(Meal.MealType.LUNCH);
-        updatedMeal.setCarbohydrate(20);
-        updatedMeal.setProtein(15);
-        updatedMeal.setFat(10);
-        updatedMeal.setKcal(250);
-        updatedMeal.setSugar(4);
-        updatedMeal.setSalt(2);
+        Meal patchMeal = new Meal();
+        patchMeal.setMealId(1L);
+        patchMeal.setMealType(Meal.MealType.LUNCH);
+        patchMeal.setCarbohydrate(20);
+        patchMeal.setProtein(15);
+        patchMeal.setFat(10);
+        patchMeal.setKcal(250);
+        patchMeal.setSugar(4);
+        patchMeal.setSalt(2);
 
-        Mockito.when(mealRepository.save(updatedMeal)).thenReturn(updatedMeal);
+        Mockito.when(mealRepository.save(patchMeal)).thenReturn(patchMeal);
 
         // when
-        Meal saveMeal = mealService.updateMeal(updatedMeal);
+        Meal saveMeal = mealService.updateMeal(patchMeal);
 
         // then
         assertNotNull(saveMeal);
-        assertEquals(updatedMeal.getMealId(),(saveMeal.getMealId()));
-        assertTrue(updatedMeal.getMealType().equals(saveMeal.getMealType()));
-        assertEquals(updatedMeal.getCarbohydrate(), saveMeal.getCarbohydrate());
-        assertEquals(updatedMeal.getProtein(), saveMeal.getProtein());
-        assertEquals(updatedMeal.getFat(), saveMeal.getFat());
-        assertEquals(updatedMeal.getKcal(), saveMeal.getKcal());
-        assertEquals(updatedMeal.getSugar(), saveMeal.getSugar());
-        assertEquals(updatedMeal.getSalt(), saveMeal.getSalt());
+        assertEquals(patchMeal.getMealId(),(saveMeal.getMealId()));
+        assertTrue(patchMeal.getMealType().equals(saveMeal.getMealType()));
+        assertEquals(patchMeal.getCarbohydrate(), saveMeal.getCarbohydrate());
+        assertEquals(patchMeal.getProtein(), saveMeal.getProtein());
+        assertEquals(patchMeal.getFat(), saveMeal.getFat());
+        assertEquals(patchMeal.getKcal(), saveMeal.getKcal());
+        assertEquals(patchMeal.getSugar(), saveMeal.getSugar());
+        assertEquals(patchMeal.getSalt(), saveMeal.getSalt());
 
     }
 
     @Test
-    @DisplayName("meal 등록 테스트")
+    @DisplayName("meal 삭제 테스트")
     public void deleteMealTest() {
+        // given
+        Meal meal = new Meal(Meal.MealType.BREAKFAST, 10, 20, 30, 500, 5, 2);
+        Meal savedMeal = mealRepository.save(meal);
 
+        Mockito.when(mealRepository.findById(savedMeal.getMealId()))
+                .thenReturn(Optional.of(savedMeal));
+
+        // when
+        mealService.deleteMeal(savedMeal.getMealId());
+
+        // then
+        Mockito.verify(mealRepository, Mockito.times(1))
+                .deleteById(savedMeal.getMealId());
     }
+
+//    @Test
+//    @DisplayName("meal 삭제 테스트")
+//    public void deleteMealTest() {
+//        // given
+//        Meal meal = new Meal(Meal.MealType.BREAKFAST, 10, 20, 30, 500, 5, 2);
+//        Meal savedMeal = mealRepository.save(meal);
+//
+//        // when
+//        mealService.deleteMeal(savedMeal.getMealId());
+//
+//        // then
+//        Optional<Meal> deletedMeal = mealRepository.findById(savedMeal.getMealId());
+//        assertFalse(deletedMeal.isPresent());
+//    }
 
 }

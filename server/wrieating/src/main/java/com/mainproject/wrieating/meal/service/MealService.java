@@ -23,7 +23,10 @@ public class MealService {
     }
 
     public void deleteMeal(Long mealId) {
-        mealRepository.deleteById(mealId);
+        Optional<Meal> meal = mealRepository.findById(mealId);
+        if (meal.isPresent()) {
+            mealRepository.deleteById(mealId);
+        }
     }
 
     public Meal findMeal(long mealId) {

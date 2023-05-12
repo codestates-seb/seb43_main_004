@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MealResponseDto {
-    private int nutrientId;
 
     private String mealType;
 
@@ -15,6 +14,8 @@ public class MealResponseDto {
     private int protein;
 
     private int fat;
+
+    private int kcal;
 
     private int sugar;
 

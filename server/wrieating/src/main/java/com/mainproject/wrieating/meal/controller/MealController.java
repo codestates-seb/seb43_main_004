@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Positive;
+
 @RequestMapping("/meal")
 @RestController
 @RequiredArgsConstructor
@@ -29,12 +31,19 @@ public class MealController {
     }
 
     @PatchMapping("/{mealId}")
-    public ResponseEntity<?> updateMeal(@PathVariable Long mealId, @RequestBody MealPatchDto mealPatchDto) {
+    public ResponseEntity updateMeal(@PathVariable Long mealId, @RequestBody MealPatchDto mealPatchDto) {
 
         Meal meal = mapper.mealPatchDtoToMeal(mealPatchDto);
         meal.setMealId(mealId);
         Meal result = mealService.updateMeal(meal);
 
         return new ResponseEntity<>(mapper.mealToMealResponseDto(result), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{mealId}")
+    public ResponseEntity deleteMeal(@PathVariable @Positive long mealId) {
+        mealService.deleteMeal(mealId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

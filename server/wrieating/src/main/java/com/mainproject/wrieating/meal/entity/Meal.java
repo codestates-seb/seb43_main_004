@@ -38,12 +38,21 @@ public class Meal {
     @Column(nullable = true)
     private int salt;
 
+
+    public Meal(MealType mealType, int carbohydrate, int protein, int fat, int kcal, int sugar, int salt) {
+        this.mealType = mealType;
+        this.carbohydrate = carbohydrate;
+        this.protein = protein;
+        this.fat = fat;
+        this.kcal = kcal;
+        this.sugar = sugar;
+        this.salt = salt;
+    }
+
     public enum MealType {
         BREAKFAST,
         LUNCH,
         DINNER,
         SNACK
     }
-
-
 }

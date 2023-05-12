@@ -11,8 +11,6 @@ public class MealPostDto {
 
     private Long diaryId;
 
-    private Long nutrientId;
-
     private String mealType;
 
     private int carbohydrate;
@@ -20,6 +18,8 @@ public class MealPostDto {
     private int protein;
 
     private int fat;
+
+    private int kcal;
 
     private int sugar;
 
