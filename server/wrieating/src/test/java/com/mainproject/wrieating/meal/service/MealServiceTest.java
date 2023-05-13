@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -103,33 +104,14 @@ public class MealServiceTest {
     @DisplayName("meal 삭제 테스트")
     public void deleteMealTest() {
         // given
-        Meal meal = new Meal(Meal.MealType.BREAKFAST, 10, 20, 30, 500, 5, 2);
-        Meal savedMeal = mealRepository.save(meal);
+        long mealId = 1L;
 
-        Mockito.when(mealRepository.findById(savedMeal.getMealId()))
-                .thenReturn(Optional.of(savedMeal));
+        Mockito.when(mealRepository.findById(mealId)).thenReturn(Optional.of(new Meal(Meal.MealType.BREAKFAST, 10, 20, 30, 500, 5, 2)));
 
         // when
-        mealService.deleteMeal(savedMeal.getMealId());
+        mealService.deleteMeal(mealId);
 
         // then
-        Mockito.verify(mealRepository, Mockito.times(1))
-                .deleteById(savedMeal.getMealId());
+        Mockito.verify(mealRepository, times(1)).deleteById(mealId);
     }
-
-//    @Test
-//    @DisplayName("meal 삭제 테스트")
-//    public void deleteMealTest() {
-//        // given
-//        Meal meal = new Meal(Meal.MealType.BREAKFAST, 10, 20, 30, 500, 5, 2);
-//        Meal savedMeal = mealRepository.save(meal);
-//
-//        // when
-//        mealService.deleteMeal(savedMeal.getMealId());
-//
-//        // then
-//        Optional<Meal> deletedMeal = mealRepository.findById(savedMeal.getMealId());
-//        assertFalse(deletedMeal.isPresent());
-//    }
-
 }

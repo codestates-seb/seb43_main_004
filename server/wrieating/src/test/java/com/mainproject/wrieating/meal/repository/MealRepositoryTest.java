@@ -69,5 +69,4 @@ public class MealRepositoryTest {
 
         assertThat(mealRepository.findById(1L).isEmpty());
     }
-
 }
