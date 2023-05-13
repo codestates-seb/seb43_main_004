@@ -1,17 +1,16 @@
 package com.mainproject.wrieating.diary.dto;
 
 import com.mainproject.wrieating.diary.entity.Diary;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.ArrayList;
+import lombok.NoArgsConstructor;
 
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
-public class DiaryResponseDto {
-    private Long diaryId;
+public class DiariesResponseDto {
     private String userDate;
-    private String memo;
     private Diary.DiaryStatus diaryStatus;
-    private String comment;
 }
