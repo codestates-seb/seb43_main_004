@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static com.mainproject.wrieating.diary.entity.Diary.DiaryStatus.GOOD_EMOJI;
@@ -33,9 +34,7 @@ public class DiaryRepositoryTest {
         //given
         final Diary diary = Diary.builder()
                 .diaryId(id)
-                .memberId(id)
-                .recipeId(id)
-                .userDate(now)
+                .userDate(LocalDate.of(2023,5,5))
                 .memo("test")
                 .comment("suggestion")
                 .diaryStatus(GOOD_EMOJI)
@@ -48,9 +47,7 @@ public class DiaryRepositoryTest {
 
         // then
         assertThat(result.getDiaryId()).isEqualTo(id);
-        assertThat(result.getMemberId()).isEqualTo(id);
-        assertThat(result.getRecipeId()).isEqualTo(id);
-        assertThat(result.getUserDate()).isEqualTo(now);
+        assertThat(result.getUserDate()).isEqualTo(LocalDate.of(2023,5,5));
         assertThat(result.getMemo()).isEqualTo("test");
         assertThat(result.getComment()).isEqualTo("suggestion");
         assertThat(result.getDiaryStatus()).isEqualTo(GOOD_EMOJI);
@@ -67,9 +64,7 @@ public class DiaryRepositoryTest {
 
         final Diary diary = Diary.builder()
                 .diaryId(id)
-                .memberId(id)
-                .recipeId(id)
-                .userDate(now)
+                .userDate(LocalDate.of(2023,5,5))
                 .memo("test")
                 .comment("suggestion")
                 .diaryStatus(GOOD_EMOJI)
@@ -79,14 +74,12 @@ public class DiaryRepositoryTest {
 
         //when
         diaryRepository.save(diary);
-        final Diary findResult = diaryRepository.findByUserDate(now);
+        final Diary findResult = diaryRepository.findByUserDate(LocalDate.of(2023,5,5));
 
         //then
         assertThat(findResult).isNotNull();
         assertThat(findResult.getDiaryId()).isEqualTo(id);
-        assertThat(findResult.getMemberId()).isEqualTo(id);
-        assertThat(findResult.getRecipeId()).isEqualTo(id);
-        assertThat(findResult.getUserDate()).isEqualTo(now);
+        assertThat(findResult.getUserDate()).isEqualTo(LocalDate.of(2023,5,5));
         assertThat(findResult.getMemo()).isEqualTo("test");
         assertThat(findResult.getComment()).isEqualTo("suggestion");
         assertThat(findResult.getDiaryStatus()).isEqualTo(GOOD_EMOJI);
@@ -103,9 +96,7 @@ public class DiaryRepositoryTest {
 
         final Diary diary = Diary.builder()
                 .diaryId(id)
-                .memberId(id)
-                .recipeId(id)
-                .userDate(now)
+                .userDate(LocalDate.of(2023,5,5))
                 .memo("test")
                 .comment("suggestion")
                 .diaryStatus(GOOD_EMOJI)
