@@ -1,47 +1,42 @@
 package com.mainproject.wrieating.diary.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
+@ToString // 상세 데이터 로그 출력용
 @Builder
 @Table
 public class Diary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long diaryId;
 
     @Column(nullable = false)
-    private Long memberId;
+    private LocalDate userDate;
 
-    @Column(nullable = false)
-    private Long recipeId;
-
-    @Column(nullable = false)
-    private LocalDateTime userDate;
-
-    @Column(nullable = true)
+    @Column
     private String memo;
 
-    @Column(nullable = true)
+    @Column
     private String comment;
 
     @Enumerated(EnumType.STRING)
     private DiaryStatus diaryStatus;
 
-    @Column(nullable = false)
+    @CreatedDate
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = true)
+    @Column
     private LocalDateTime modifiedAt;
 
     public enum DiaryStatus {
