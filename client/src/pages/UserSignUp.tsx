@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Input from '../components/common/Input'
-import Button from '../components/common/Button'
-import Radio from '../components/common/Radio'
+import Input from '../components/Common/Input'
+import Button from '../components/Common/Button'
+import Radio from '../components/Common/Radio'
 
 interface userInfo {
   email: string
