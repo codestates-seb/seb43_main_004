@@ -16,6 +16,7 @@ function App() {
       <Header />
       <div className="Wrapper">
         <Routes>
+          <Route path="/" element={<DiaryCheck />} />
           <Route path="/diaries" element={<DiaryCheck />} />
           <Route path="/diaries/:id" element={<DiaryDetail />} />
           <Route path="/sign-in" element={<UserSignIn />} />
