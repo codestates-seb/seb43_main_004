@@ -2,6 +2,7 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import './App.css'
 import DiaryCheck from './components/diary/DiaryCheck'
+import DiaryDetail from './components/diary/DiaryDetail'
 import Header from './components/Common/Header'
 import Footer from './components/Common/Footer'
 import UserSignIn from './pages/UserSignIn'
@@ -16,6 +17,7 @@ function App() {
       <div className="Wrapper">
         <Routes>
           <Route path="/diaries" element={<DiaryCheck />} />
+          <Route path="/diaries/:id" element={<DiaryDetail />} />
           <Route path="/sign-in" element={<UserSignIn />} />
           <Route path="/sign-up" element={<UserSignUp />} />
           <Route path="/find-pwd" element={<UserFindPwd />} />

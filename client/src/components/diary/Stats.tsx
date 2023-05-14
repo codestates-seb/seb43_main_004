@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ResponsivePie } from '@nivo/pie'
+import { DataResponse } from './DiaryCheck'
 
 const StatsWrapper = styled.div`
   display: flex;
@@ -59,35 +60,73 @@ const StatsWrapper = styled.div`
     }
 
     p:nth-child(2) {
-      font-weight: 600;
+      font-weight: 500;
       flex: 2;
+      margin-right: 0.4rem;
     }
 
     p:last-child {
-      color: #c50000;
-      font-weight: 600;
+      font-weight: 700;
       flex: 2;
       justify-items: center;
+    }
+
+    .excessive {
+      color: #c50000;
+    }
+
+    .deficient {
+      color: #f2ae1c;
+    }
+
+    .appropriate {
+      color: #4c7031;
     }
   }
 `
 
-const Stats = () => {
+const Stats = ({ diaries }: any) => {
+  const { calcul, standardIntake } = diaries
+  const intake = calcul && calcul[0] // 지난주 섭취량
+  const standardIntakes = standardIntake && standardIntake[0] // 평균섭취량
+
+  const percentIntake = (nutrient: string) => {
+    return (
+      (intake?.[nutrient] / 7 / standardIntakes?.[nutrient]) *
+      100
+    ).toFixed(0)
+  }
+
+  const getSugarClassName = (nutrient: string) => {
+    if (Number(percentIntake(nutrient)) > 120) {
+      return 'excessive'
+    } else if (Number(percentIntake(nutrient)) < 80) {
+      return 'deficient'
+    } else {
+      return 'appropriate'
+    }
+  }
+
   const data = [
     {
       id: '탄수화물',
       label: '탄수화물',
-      value: 50,
+      value: `${intake.carbohydrate}`,
     },
     {
       id: '단백질',
       label: '단백질',
-      value: 30,
+      value: `${intake.protein}`,
     },
     {
       id: '지방',
       label: '지방',
-      value: 10,
+      value: `${intake.fat}`,
+    },
+    {
+      id: '당',
+      label: '당',
+      value: `${intake.sugar}`,
     },
   ]
   return (
@@ -105,22 +144,51 @@ const Stats = () => {
         />
       </div>
       <div className="pie__detail">
-        <p className="detail__Kcal">16,000 Kcal</p>
+        <p className="detail__Kcal">{`${intake?.kcal} Kcal`}</p>
         <ul className="detail__container">
           <li className="nutrient__list">
             <p>탄수화물</p>
-            <p>50%</p>
-            <p>과다</p>
+            <p>{percentIntake('carbohydrate')}%</p>
+            <p className={getSugarClassName('carbohydrate')}>
+              {Number(percentIntake('carbohydrate')) > 120
+                ? '과다'
+                : Number(percentIntake('carbohydrate')) < 80
+                ? '부족'
+                : '적정'}
+            </p>
           </li>
           <li className="nutrient__list">
             <p>단백질</p>
-            <p>5%</p>
-            <p>부족</p>
+            <p>{percentIntake('protein')}%</p>
+            <p className={getSugarClassName('protein')}>
+              {Number(percentIntake('protein')) > 120
+                ? '과다'
+                : Number(percentIntake('protein')) < 80
+                ? '부족'
+                : '적정'}
+            </p>
           </li>
           <li className="nutrient__list">
             <p>지방</p>
-            <p>10%</p>
-            <p>보통</p>
+            <p>{percentIntake('fat')}%</p>
+            <p className={getSugarClassName('fat')}>
+              {Number(percentIntake('fat')) > 120
+                ? '과다'
+                : Number(percentIntake('fat')) < 80
+                ? '부족'
+                : '적정'}
+            </p>
+          </li>
+          <li className="nutrient__list">
+            <p>당</p>
+            <p>{percentIntake('sugar')}%</p>
+            <p className={getSugarClassName('sugar')}>
+              {Number(percentIntake('sugar')) > 120
+                ? '과다'
+                : Number(percentIntake('sugar')) < 80
+                ? '부족'
+                : '적정'}
+            </p>
           </li>
         </ul>
       </div>

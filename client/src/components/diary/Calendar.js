@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
-
+import { DataResponse } from './DiaryCheck'
 const Container = styled.div`
   .react-calendar {
     width: 550px;
@@ -97,16 +97,13 @@ const Container = styled.div`
   }
 `
 
-const CalendarPage = () => {
+const CalendarPage = ({ diaries }) => {
   const [value, onChange] = useState(new Date())
 
   const dateWithEmoji = {
     '2023-05-10': '\u{1F600}',
     '2023-05-07': '\u{1F62D}',
   }
-
-  console.log(dateWithEmoji)
-
   const tileContent = ({ date }) => {
     const formattedDate = date.toISOString().split('T')[0]
     return <div className="emoji">{dateWithEmoji[formattedDate]}</div>
