@@ -46,6 +46,7 @@ const RadioGroup = styled.div``
 
 const RadioWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
 
   input[type='radio'],
