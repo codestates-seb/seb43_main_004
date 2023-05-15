@@ -4,7 +4,7 @@ files:
   - source:  /
     destination: /home/ec2-user/action
     overwrite: yes
-file_exists_behaviorL: OVERWRITE
+file_exists_behavior: OVERWRITE
 
 permissions:
   - object: /
