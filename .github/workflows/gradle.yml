@@ -31,13 +31,11 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-    - name: Add permission
-      run: chmod +x /home/usr/tools/gradle-7.3.3/bin/gradle
     - name: Build with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
-        gradle-executable: /home/usr/tools/gradle-7.3.3/bin/gradle
+        gradle-executable: ~/tools/gradle-7.3.3/bin/gradle
     # build한 후 프로젝트를 압축합니다.
     - name: Make zip file
       run: zip -r ./deploy.zip .
