@@ -31,11 +31,14 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
+    - name: Install Gradle
+      run: |
+        curl -s "https://get.sdkman.io" | bash
+        source "$HOME/.sdkman/bin/sdkman-init.sh"
+        sdk install gradle 7.3.3
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-      with:
-        arguments: build
-        working-directory: seb43_main_004/server/wrieating/
+      run: gradle build
+      working-directory: seb43_main_004/server/wrieating/
     
     # build한 후 프로젝트를 압축합니다.
     - name: Make zip file
