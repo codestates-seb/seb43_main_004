@@ -1,46 +1,45 @@
 {
-    "diaries": {
-        "data": [
-            {
-                "diaryId": "1",
-                "userDate": "2023-05-24",
-                "diaryStatus": "\\u{1F600}"
-            },
-            {
-                "diaryId": "2",
-                "userDate": "2023-05-25",
-                "diaryStatus": "\\u{1F62D}"
-            }
-        ],
-        "standardIntake": [
-            {
-                "carbohydrate": 225,
-                "protein": 60,
-                "fat": 47.13,
-                "kcal": 2500,
-                "sugar": 25
-            }
-        ],
-        "calcul": [
-            {
-                "carbohydrate": 1612,
-                "protein": 420,
-                "fat": 254,
-                "kcal": 2450,
-                "sugar": 89
-            }
-        ],
-        "comment": "탄수화물이 너무 많아요",
-        "pageInfo": {
-            "page": 1,
-            "size": 10,
-            "totalElements": 2,
-            "totalPages": 1
-        }
-    },
-
-    "diary": [
-        {
+  "diaries": {
+    "data": [
+      {
+        "diaryId": "1",
+        "userDate": "2023-05-24",
+        "diaryStatus": "\\u{1F600}"
+      },
+      {
+        "diaryId": "2",
+        "userDate": "2023-05-25",
+        "diaryStatus": "\\u{1F62D}"
+      }
+    ],
+    "standardIntake": [
+      {
+        "carbohydrate": 225,
+        "protein": 60,
+        "fat": 47,
+        "kcal": 2200,
+        "sugar": 25
+      }
+    ],
+    "calcul": [
+      {
+        "carbohydrate": 1612,
+        "protein": 420,
+        "fat": 404,
+        "kcal": 1750,
+        "sugar": 125
+      }
+    ],
+    "comment": "탄수화물이 너무 많아요",
+    "pageInfo": {
+      "page": 1,
+      "size": 10,
+      "totalElements": 2,
+      "totalPages": 1
+    }
+  },
+  "diary": [
+    {
       "id": 1,
       "userDate": "2023-05-12",
       "memo": "",
@@ -51,50 +50,61 @@
       "recipe": [],
       "comment": ""
     },
-     {
-       "id": 2,
-       "userDate": "2023-05-13",
-       "memo": "유혹을 참지 못하고 도미노피자",
-       "diaryStatus": "이모지",
-       "meal": [
-         {
-           "foodName": "고등어 조림",
-           "mealType": "LUNCH",
-           "kcal": "600",
-           "intake": "180g"
-         },
-         {
-           "foodName": "고등어 조림",
-           "mealType": "DINNER",
-           "kcal": "600",
-           "intake": "180g"
-         }
-       ],
-       "standardIntake": [
-         {
-           "carbohydrate": 225,
-           "protein": 60,
-           "fat": 47.13,
-           "kcal": 2500,
-           "sugar": 25
-         }
-       ],
-       "calcul": [
-         {
-           "탄수화물": 0,
-           "단백질": 0,
-           "지방": 0,
-           "칼로리": 0,
-           "당": 0,
-           "나트륨": 0
-         }
-       ],
-       "recipe": [
-         {
-           "foodName": "고등어 조림"
-         }
-       ],
-       "comment": "탄수화물이 너무 많아요"
-     }
-]
+    {
+      "id": 2,
+      "userDate": "2023-05-13",
+      "memo": "유혹을 참지 못하고 배달을 두 번 시켜버렸습니다 ㅎㅎㅎ",
+      "diaryStatus": "이모지",
+      "meal": [
+        {
+          "foodName": "고등어 조림",
+          "mealType": "BREAKFAST",
+          "kcal": 600,
+          "intake": "180g"
+        },
+        {
+          "foodName": "삼겹살",
+          "mealType": "LUNCH",
+          "kcal": 500,
+          "intake": "120g"
+        },
+        {
+          "foodName": "삼양라면",
+          "mealType": "DINNER",
+          "kcal": 560,
+          "intake": "100g"
+        },
+        {
+          "foodName": "김치",
+          "mealType": "DINNER",
+          "kcal": 65,
+          "intake": "80g"
+        }
+      ],
+      "standardIntake": [
+        {
+          "carbohydrate": 225,
+          "protein": 60,
+          "fat": 47,
+          "kcal": 2200,
+          "sugar": 25
+        }
+      ],
+      "calcul": [
+        {
+          "carbohydrate": 180,
+          "protein": 50,
+          "fat": 60,
+          "kcal": 1725,
+          "sugar": 0
+        }
+      ],
+      "recipe": [
+        {
+          "foodName": "고등어 조림"
+        }
+      ],
+      "comment": "탄수화물이 너무 많아요"
+    }
+  ]
 }
