@@ -10,14 +10,9 @@ const Tab = ({ tabItem }: TabMenus) => {
   const location = useLocation()
   const [active, setActive] = useState<number>(0)
 
-  const handleTab = (idx: number) => {
-    console.log(idx)
-    setActive(idx)
-  }
-
   useEffect(() => {
     setActive(tabItem.findIndex((i) => location.pathname === i.path))
-  }, [active])
+  }, [])
 
   return (
     <div>
@@ -26,7 +21,7 @@ const Tab = ({ tabItem }: TabMenus) => {
           <TabLink
             to={i.path}
             key={idx}
-            onClick={() => handleTab(idx)}
+            onClick={() => setActive(idx)}
             className={active === idx ? 'active' : ''}
           >
             {i.name}
