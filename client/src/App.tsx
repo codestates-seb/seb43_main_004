@@ -18,7 +18,8 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/sign-in" element={<UserSignIn />} />
-          <Route path="/sign-up" element={<UserSignUp />} />
+          <Route path="/sign-up" element={<UserSignUp social={false} />} />
+          <Route path="/register" element={<UserSignUp social={true} />} />
           <Route path="/find-pwd" element={<UserFindPwd />} />
           <Route path="/userpage" element={<UserPage />}>
             <Route path="" element={<EditProfile />} />
