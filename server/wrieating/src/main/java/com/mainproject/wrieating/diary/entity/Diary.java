@@ -1,5 +1,6 @@
 package com.mainproject.wrieating.diary.entity;
 
+import com.mainproject.wrieating.audit.Auditable;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @ToString // 상세 데이터 로그 출력용
 @Builder
 @Table
-public class Diary {
+public class Diary extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long diaryId;
@@ -31,13 +32,6 @@ public class Diary {
 
     @Enumerated(EnumType.STRING)
     private DiaryStatus diaryStatus;
-
-    @CreatedDate
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column
-    private LocalDateTime modifiedAt;
 
     public enum DiaryStatus {
         GOOD_EMOJI("웃는 이모지");

@@ -29,7 +29,7 @@ public class DiaryController {
     @PostMapping("/write")
     @ResponseStatus(HttpStatus.CREATED)
     public void postDiary(@Validated @RequestBody DiaryPostDto diaryPostDto) {
-        Diary diary = service.createDiary(mapper.diaryPostDtoToDiary(diaryPostDto));
+        service.createDiary(diaryPostDto);
     }
 
     @GetMapping("/{diaries-id}")
@@ -52,7 +52,7 @@ public class DiaryController {
     @ResponseStatus(HttpStatus.OK)
     public void updateDiary(@PathVariable("diaries-id") @Positive long diaryId,
                             @Validated @RequestBody DiaryPatchDto diaryPatchDto) {
-        service.updateDiary(diaryId,mapper.dairyPatchDtoToDiary(diaryPatchDto));
+        service.updateDiary(diaryId,diaryPatchDto);
     }
 
     @DeleteMapping("/delete/{diaries-id}")
