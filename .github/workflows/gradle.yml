@@ -36,7 +36,7 @@ jobs:
       with:
         gradle-version: 7.3.3
         arguments: build
-        working-directory: server/wrieating
+        working-directory: /home/ec2-user/tools/gradle-7.3.3/bin
     # build한 후 프로젝트를 압축합니다.
     - name: Make zip file
       run: zip -r ./wrieating-deploy.zip .
