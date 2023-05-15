@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import TabFrame from './TabFrame'
 import Input from '../common/Input'
 import Button from '../common/Button'
+import { checkPassword } from '../../utils/userfunc'
 
 interface pwdType {
   currentPassword: string
@@ -41,13 +42,15 @@ const ChangePwd = () => {
     let isValid = true
 
     if (currentPassword.trim() === '') {
-      // msg['currentPassword'] = '현재 비밀번호를 입력해주세요.'
       msg.currentPassword = '현재 비밀번호를 입력해주세요.'
       isValid = false
     }
 
     if (newPassword.trim() === '') {
       msg.newPassword = '새 비밀번호를 입력해주세요.'
+      isValid = false
+    } else if (!checkPassword(newPassword)) {
+      msg.newPassword = '최소 8자, 영문+숫자 조합으로 구성되어야 합니다.'
       isValid = false
     }
 
@@ -62,7 +65,7 @@ const ChangePwd = () => {
     if (!isValid) {
       setError(msg)
     } else {
-      console.log('비밀번호 변경')
+      alert('비밀번호가 변경되었습니다.') // 비밀번호 변경
     }
   }
 
