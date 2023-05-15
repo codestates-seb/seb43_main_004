@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Button from '../components/common/Button'
 import Input from '../components/common/Input'
 import { useNavigate } from 'react-router-dom'
+import { checkEmail } from '../utils/userfunc'
 
 interface AuthInfo {
   email: string
@@ -36,12 +37,15 @@ const UserFindPwd = () => {
   }
 
   // 인증번호 전송
-  const sendNumber = () => {
+  const sendNumber = (email: string) => {
     console.log('send authentication numbers')
-    // 메일 전송을 위한 api 호출 하는 로직 ......
-    // 이메일이 정상적으로 입력되었는지 확인
-    // 인증번호 저장
-    setAuthNums('1111')
+    // 이메일이 정상적으로 입력되었는지 확인 후 인증번호 전송
+    if (checkEmail(email)) {
+      // api 호출
+      setAuthNums('1111')
+    } else {
+      console.log('이메일이 유효하지 않습니다.')
+    }
   }
 
   // 인증번호 확인
@@ -87,7 +91,18 @@ const UserFindPwd = () => {
                 onChange={handleInput}
               />
               <div>
-                <Button onClick={sendNumber}>인증번호 전송</Button>
+                <Button
+                  onClick={() => {
+                    if (!email) {
+                      console.log('이메일을 입력해야함')
+                      return ''
+                    }
+
+                    sendNumber(email)
+                  }}
+                >
+                  인증번호 전송
+                </Button>
               </div>
             </div>
             <div className="flex-div">

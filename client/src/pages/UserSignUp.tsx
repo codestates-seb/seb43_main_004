@@ -4,6 +4,7 @@ import Input from '../components/common/Input'
 import Button from '../components/common/Button'
 import Radio from '../components/common/Radio'
 import { genderList, activityScore } from '../utils/options'
+import { checkEmail } from '../utils/userfunc'
 
 interface Props {
   social?: boolean
@@ -20,6 +21,19 @@ interface userInfo {
   birth: string
 }
 
+interface authentication {
+  auth: string
+  ckAuth: string
+}
+
+interface errorType {
+  email: string
+  auth: string
+  nickName: string
+  password: string
+  ckPassword: string
+}
+
 const UserSignUp = ({ social }: Props) => {
   const [values, setValues] = useState<userInfo>({
     email: '',
@@ -34,8 +48,17 @@ const UserSignUp = ({ social }: Props) => {
 
   const { email, nickName, password, gender, activity, height, weight, birth } =
     values
-  const [authNums, setAuthNums] = useState<string>('') // 인증번호
-  const [error, setError] = useState<string>('')
+  const [authNums, setAuthNums] = useState<authentication>({
+    auth: '',
+    ckAuth: '',
+  }) // 인증번호
+  const [error, setError] = useState<errorType>({
+    email: '',
+    auth: '',
+    nickName: '',
+    password: '',
+    ckPassword: '',
+  })
   const [isEmpty, setIsEmpty] = useState<boolean>(true)
 
   // 사용자 입력값 핸들링
@@ -47,33 +70,36 @@ const UserSignUp = ({ social }: Props) => {
   }
 
   // 인증번호 전송
-  const sendNumbers = () => {
-    // 이메일이 정상적으로 입력되었는지 확인(@/.)
-    // 정상적으로 입력되지 않았다면 에러 메세지
-    console.log('/members/emailcheck, email')
-    console.log('/members/sendverifyemail, email')
+  const sendNumbers = (email: string) => {
+    const isValid = false
+    // 이메일이 정상적으로 입력되었는지 확인 후 이메일 중복확인 api 호출
+    if (checkEmail(email)) {
+      console.log('/members/emailcheck, email') // 중복확인 후 중복이 아니면 isValid = true
+    } else {
+      console.log('이메일이 유효하지 않습니다.') // 에러 메세지 띄우기
+    }
+
+    if (isValid) {
+      console.log('/members/sendverifyemail, email') // 인증번호 전송 api 호출
+    }
   }
   // 인증번호 확인
   const verifyNumbers = () => {
-    console.log('/members/verifiedemail, verifyEmail')
+    if (authNums.auth === authNums.ckAuth) {
+      console.log('인증 성공')
+    } else {
+      console.log('인증번호가 일치하지 않습니다.')
+    }
   }
   // 닉네임 중복확인
   const checkDuplicate = () => {
     console.log('/members/nicknamecheck, nickName')
-    if (nickName !== '') {
-      return
-    }
   }
   // 가입하기 - 모든 값이 유효한 경우 버튼 활성화
   const checkValid = () => {
     console.log('/members/signup')
-
-    if (values.email == '' || values.password == '') {
-      setError('error message')
-      return
-    }
-    setError('')
   }
+
   return (
     <Container>
       <h1>회원가입</h1>
@@ -86,10 +112,21 @@ const UserSignUp = ({ social }: Props) => {
                 type="email"
                 name="email"
                 placeholder="email"
+                error={error.email}
                 onChange={handleInput}
               />
               <div>
-                <Button onClick={sendNumbers}>인증번호 전송</Button>
+                <Button
+                  onClick={() => {
+                    if (!email) {
+                      return ''
+                    }
+
+                    sendNumbers(email)
+                  }}
+                >
+                  인증번호 전송
+                </Button>
               </div>
             </div>
             <div className="flex-div">
@@ -98,7 +135,7 @@ const UserSignUp = ({ social }: Props) => {
                 type="text"
                 name="auth"
                 placeholder="0000"
-                error={error}
+                error={error.auth}
                 onChange={handleInput}
               />
               <div>
@@ -114,7 +151,7 @@ const UserSignUp = ({ social }: Props) => {
             type="text"
             name="nickName"
             placeholder="홍길순"
-            error={error}
+            error={error.nickName}
             onChange={handleInput}
           />
           <div>
@@ -135,7 +172,7 @@ const UserSignUp = ({ social }: Props) => {
               type="password"
               name="passwordcheck"
               placeholder="비밀번호를 입력해주세요"
-              error={error}
+              error={error.password}
               onChange={handleInput}
             />
           </>
