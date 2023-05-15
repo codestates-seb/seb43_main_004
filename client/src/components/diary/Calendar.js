@@ -3,6 +3,38 @@ import styled from 'styled-components'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { DataResponse } from './DiaryCheck'
+
+const CalendarPage = ({ diaries }) => {
+  const [value, onChange] = useState(new Date())
+
+  const dateWithEmoji = {
+    '2023-05-10': '\u{1F600}',
+    '2023-05-07': '\u{1F62D}',
+  }
+  const tileContent = ({ date }) => {
+    const formattedDate = date.toISOString().split('T')[0]
+    return <div className="emoji">{dateWithEmoji[formattedDate]}</div>
+  }
+
+  return (
+    <Container>
+      <Calendar
+        onChange={onChange}
+        value={value}
+        locale="en-US"
+        tileContent={tileContent}
+      />
+      <h1>
+        {new Date(value).toLocaleDateString('ko', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        })}
+      </h1>
+    </Container>
+  )
+}
+
 const Container = styled.div`
   .react-calendar {
     width: 550px;
@@ -96,36 +128,5 @@ const Container = styled.div`
     margin-top: 1rem;
   }
 `
-
-const CalendarPage = ({ diaries }) => {
-  const [value, onChange] = useState(new Date())
-
-  const dateWithEmoji = {
-    '2023-05-10': '\u{1F600}',
-    '2023-05-07': '\u{1F62D}',
-  }
-  const tileContent = ({ date }) => {
-    const formattedDate = date.toISOString().split('T')[0]
-    return <div className="emoji">{dateWithEmoji[formattedDate]}</div>
-  }
-
-  return (
-    <Container>
-      <Calendar
-        onChange={onChange}
-        value={value}
-        locale="en-US"
-        tileContent={tileContent}
-      />
-      <h1>
-        {new Date(value).toLocaleDateString('ko', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })}
-      </h1>
-    </Container>
-  )
-}
 
 export default CalendarPage

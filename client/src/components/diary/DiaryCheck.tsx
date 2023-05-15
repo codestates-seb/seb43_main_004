@@ -4,6 +4,35 @@ import styled from 'styled-components'
 import CalendarPage from './Calendar'
 import Stats from './Stats'
 
+const DiaryCheck = () => {
+  const [diaries, setDiaries] = useState<DataResponse | null>(null)
+  console.log(diaries)
+
+  const fetchData = () => {
+    axios
+      .get<DataResponse>('http://localhost:4000/diaries')
+      .then((res) => setDiaries(res.data))
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  return (
+    <DiaryPageWrapper>
+      <h2>나의 식단일기</h2>
+      <ContainerWrapper>
+        {diaries && (
+          <>
+            <CalendarPage diaries={diaries} />
+            <Stats diaries={diaries} />
+          </>
+        )}
+      </ContainerWrapper>
+    </DiaryPageWrapper>
+  )
+}
+
 export const DiaryPageWrapper = styled.div`
   h2 {
     font-size: 28px;
@@ -43,34 +72,6 @@ export interface DataResponse {
       totalPages: number
     }
   }
-}
-const DiaryCheck = () => {
-  const [diaries, setDiaries] = useState<DataResponse | null>(null)
-  console.log(diaries)
-
-  const fetchData = () => {
-    axios
-      .get<DataResponse>('http://localhost:4000/diaries')
-      .then((res) => setDiaries(res.data))
-  }
-
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-  return (
-    <DiaryPageWrapper>
-      <h2>나의 식단일기</h2>
-      <ContainerWrapper>
-        {diaries && (
-          <>
-            <CalendarPage diaries={diaries} />
-            <Stats diaries={diaries} />
-          </>
-        )}
-      </ContainerWrapper>
-    </DiaryPageWrapper>
-  )
 }
 
 export default DiaryCheck

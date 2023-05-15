@@ -3,88 +3,6 @@ import styled from 'styled-components'
 import { ResponsivePie } from '@nivo/pie'
 import { DataResponse } from './DiaryCheck'
 
-const StatsWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 30px;
-  max-width: 250px;
-  border: 1px solid var(--color-light-gray);
-  border-radius: 15px;
-  padding: 1rem;
-
-  h3 {
-    font-size: 2.4rem;
-    text-align: center;
-    margin-top: 1rem;
-  }
-
-  .detail__Kcal {
-    font-family: 'yg-jalnan';
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-
-  .pie__container {
-    position: relative;
-    display: inline;
-    left: -3.5rem;
-    width: 300px;
-    height: 300px;
-    margin: 0 auto;
-  }
-
-  .pie__detail {
-    position: relative;
-    bottom: 8rem;
-  }
-
-  .detail__container {
-    font-size: 13px;
-    border-radius: 7px;
-    padding: 2rem;
-    background-color: #fff0d8;
-  }
-
-  .nutrient__list {
-    width: 150px;
-    display: flex;
-    white-space: nowrap;
-
-    p {
-      margin-bottom: 0.9rem;
-    }
-
-    p:first-child {
-      flex: 6;
-    }
-
-    p:nth-child(2) {
-      font-weight: 500;
-      flex: 2;
-      margin-right: 0.4rem;
-    }
-
-    p:last-child {
-      font-weight: 700;
-      flex: 2;
-      justify-items: center;
-    }
-
-    .excessive {
-      color: #c50000;
-    }
-
-    .deficient {
-      color: #f2ae1c;
-    }
-
-    .appropriate {
-      color: #4c7031;
-    }
-  }
-`
-
 const Stats = ({ diaries }: any) => {
   const { calcul, standardIntake } = diaries
   const intake = calcul && calcul[0] // 지난주 섭취량
@@ -195,5 +113,87 @@ const Stats = ({ diaries }: any) => {
     </StatsWrapper>
   )
 }
+
+const StatsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 30px;
+  max-width: 250px;
+  border: 1px solid var(--color-light-gray);
+  border-radius: 15px;
+  padding: 1rem;
+
+  h3 {
+    font-size: 2.4rem;
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .detail__Kcal {
+    font-family: 'yg-jalnan';
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .pie__container {
+    position: relative;
+    display: inline;
+    left: -3.5rem;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+  }
+
+  .pie__detail {
+    position: relative;
+    bottom: 8rem;
+  }
+
+  .detail__container {
+    font-size: 13px;
+    border-radius: 7px;
+    padding: 2rem;
+    background-color: #fff0d8;
+  }
+
+  .nutrient__list {
+    width: 150px;
+    display: flex;
+    white-space: nowrap;
+
+    p {
+      margin-bottom: 0.9rem;
+    }
+
+    p:first-child {
+      flex: 6;
+    }
+
+    p:nth-child(2) {
+      font-weight: 500;
+      flex: 2;
+      margin-right: 0.4rem;
+    }
+
+    p:last-child {
+      font-weight: 700;
+      flex: 2;
+      justify-items: center;
+    }
+
+    .excessive {
+      color: #c50000;
+    }
+
+    .deficient {
+      color: #f2ae1c;
+    }
+
+    .appropriate {
+      color: #4c7031;
+    }
+  }
+`
 
 export default Stats
