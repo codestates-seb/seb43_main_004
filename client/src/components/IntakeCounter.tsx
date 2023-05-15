@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 
 const StyledIntakeCounter = styled.div`
@@ -28,14 +28,42 @@ const StyledIntakeCounter = styled.div`
   }
 `
 
-const IntakeCounter = () => {
+interface IntakeProps {
+  standard?: number
+}
+
+const IntakeCounter = (props: IntakeProps) => {
+  const { standard } = props
+
+  const [intake, setIntake] = useState(100)
+
+  useEffect(() => {
+    if (standard) setIntake(standard)
+  }, [])
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // 숫자만 입력가능
+    if (!isNaN(Number(e.target.value))) {
+      setIntake(Number(e.target.value))
+    }
+  }
+
+  const handleIncrease = () => {
+    setIntake(intake + 100)
+  }
+  const handleDecrease = () => {
+    if (intake - 100 >= 0) {
+      setIntake(intake - 100)
+    }
+  }
+
   return (
     <StyledIntakeCounter>
-      <button type="button" className="decrease">
+      <button type="button" className="decrease" onClick={handleDecrease}>
         <span className="material-icons-round">remove</span>
       </button>
-      <input type="text" />
-      <button type="button" className="increase">
+      <input type="text" value={intake} onChange={(e) => handleOnChange(e)} />
+      <button type="button" className="increase" onClick={handleIncrease}>
         <span className="material-icons-round">add</span>
       </button>
     </StyledIntakeCounter>
