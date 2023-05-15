@@ -29,17 +29,13 @@ const StyledIntakeCounter = styled.div`
 `
 
 interface IntakeProps {
-  standard?: number
+  standard: number
 }
 
 const IntakeCounter = (props: IntakeProps) => {
   const { standard } = props
 
-  const [intake, setIntake] = useState(100)
-
-  useEffect(() => {
-    if (standard) setIntake(standard)
-  }, [])
+  const [intake, setIntake] = useState(standard)
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 숫자만 입력가능

@@ -2,6 +2,7 @@ import React from 'react'
 import IntakeCounter from './IntakeCounter'
 import { styled } from 'styled-components'
 import Input from './Common/Input'
+import { FoodList } from '../pages/DiaryWrite'
 
 const StyledFoodItem = styled.li`
   position: relative;
@@ -80,10 +81,15 @@ const StyledFoodItem = styled.li`
 
 interface FoodItemProps {
   custom?: boolean
+  data: FoodList
+  delete: (title: string) => void
 }
 
 const FoodItem = (props: FoodItemProps) => {
-  const { custom } = props
+  const { custom, data, delete: deleteItem } = props
+
+  // 칼로리 계산에 사용할 상태
+  // 칼로리 = (탄수화물 그램 수 x 4) + (단백질 그램 수 x 4) + (지방 그램 수 x 9)
 
   const onclick = () => {
     console.log('onclick')
@@ -91,11 +97,15 @@ const FoodItem = (props: FoodItemProps) => {
 
   return (
     <StyledFoodItem>
-      <button type="button" className="btn-food-delete">
-        <span className="material-icons-round">close</span>
-      </button>
       {custom ? (
         <>
+          <button
+            type="button"
+            className="btn-food-delete"
+            onClick={() => deleteItem(data.title)}
+          >
+            <span className="material-icons-round">close</span>
+          </button>
           <div className="food-title">
             <Input
               type="text"
@@ -105,7 +115,7 @@ const FoodItem = (props: FoodItemProps) => {
             />
             <div className="food-intake">
               <p>1인분 기준 섭취량(g)</p>
-              <IntakeCounter />
+              <IntakeCounter standard={data.intake} />
               <p className="kcal">238kcal</p>
             </div>
           </div>
@@ -149,34 +159,41 @@ const FoodItem = (props: FoodItemProps) => {
         </>
       ) : (
         <>
+          <button
+            type="button"
+            className="btn-food-delete"
+            onClick={() => deleteItem(data.title)}
+          >
+            <span className="material-icons-round">close</span>
+          </button>
           <div className="food-title">
-            <p className="food-name">김치만두</p>
+            <p className="food-name">{data.title}</p>
             <div className="food-intake">
               <p>섭취량(g)</p>
-              <IntakeCounter />
-              <p className="kcal">238kcal</p>
+              <IntakeCounter standard={data.intake} />
+              <p className="kcal">{data.kcal}kcal</p>
             </div>
           </div>
           <div className="food-info">
             <p>
               <span>탄수화물</span>
-              <span>67.4g</span>
+              <span>{data.carbohydrate}g</span>
             </p>
             <p>
               <span>단백질</span>
-              <span>67.4g</span>
+              <span>{data.protein}g</span>
             </p>
             <p>
               <span>지방</span>
-              <span>67.4g</span>
+              <span>{data.fat}g</span>
             </p>
             <p>
               <span>당류</span>
-              <span>67.4g</span>
+              <span>{data.protein}g</span>
             </p>
             <p>
               <span>나트륨</span>
-              <span>67.4mg</span>
+              <span>{data.fat}mg</span>
             </p>
           </div>
         </>
