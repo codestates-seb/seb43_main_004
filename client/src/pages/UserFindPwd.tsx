@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Button from '../components/common/Button'
 import Input from '../components/common/Input'
 import { useNavigate } from 'react-router-dom'
-import { checkEmail } from '../utils/userfunc'
+import { checkEmail, checkPassword } from '../utils/userfunc'
 
 interface AuthInfo {
   email: string
@@ -24,7 +24,12 @@ const UserFindPwd = () => {
 
   const [authNums, setAuthNums] = useState<string>('')
   const [isValid, setIsValid] = useState<boolean>(false) // 폼변
-  const [error, setError] = useState<string>('') // 에러 메세지
+  const [error, setError] = useState<AuthInfo>({
+    email: '',
+    auth: '',
+    password: '',
+    ckPassword: '',
+  })
 
   // 이메일, 비밀번호 입력값 핸들링
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,40 +43,57 @@ const UserFindPwd = () => {
 
   // 인증번호 전송
   const sendNumber = (email: string) => {
-    console.log('send authentication numbers')
+    const msg = { email: '' }
+
+    if (!email) {
+      msg.email = '이메일을 입력해주세요.'
+      setError({ ...error, ...msg })
+      return
+    }
     // 이메일이 정상적으로 입력되었는지 확인 후 인증번호 전송
     if (checkEmail(email)) {
       // api 호출
       setAuthNums('1111')
+      setError({ ...error, ...msg })
     } else {
-      console.log('이메일이 유효하지 않습니다.')
+      msg.email = '이메일이 유효하지 않습니다.'
+      setError({ ...error, ...msg })
     }
   }
 
   // 인증번호 확인
   const verifyNumber = () => {
-    console.log('verify authentication numbers')
+    const msg = { auth: '' }
+
     console.log(`${values.auth}, ${authNums}`)
     // 인증번호가 유효한지 확인하고 유효하면 다음 폼으로 이동, 유효하지 않으면 에러 메세지...
     // 전송된 인증번호와 사용자의 입력값 비교
     if (auth === authNums) {
       setIsValid(true)
-      setError('')
     } else {
-      setError('인증번호가 일치하지 않습니다.')
+      msg.auth = '인증번호가 일치하지 않습니다.'
+      setError({ ...error, ...msg })
     }
   }
 
   // 비밀번호 변경
   const changePassword = () => {
-    console.log('change password')
+    const msg = { password: '', ckPassword: '' }
 
-    if (password !== '' && password === ckPassword) {
-      // 새 비밀번호가 일치하면...
-      alert('비밀번호가 변경되었습니다.')
-      navigate('/sign-in')
+    if (password.trim() === '') {
+      msg.password = '새 비밀번호를 입력해주세요.'
+      setError({ ...error, ...msg })
+    }
+
+    if (!checkPassword(password)) {
+      msg.password = '최소 8자, 영문+숫자 조합으로 구성되어야 합니다.'
+      setError({ ...error, ...msg })
+    } else if (checkPassword(password) && password !== ckPassword) {
+      msg.ckPassword = '새 비밀번호가 일치하지 않습니다.'
+      setError({ ...error, ...msg })
     } else {
-      setError('비밀번호가 일치하지 않습니다.')
+      alert('비밀번호가 변경 되었습니다.') // 모달로 대체할 예정
+      navigate('/sign-in')
     }
   }
 
@@ -88,21 +110,11 @@ const UserFindPwd = () => {
                 name="email"
                 placeholder="email"
                 value={email}
+                error={error.email}
                 onChange={handleInput}
               />
               <div>
-                <Button
-                  onClick={() => {
-                    if (!email) {
-                      console.log('이메일을 입력해야함')
-                      return ''
-                    }
-
-                    sendNumber(email)
-                  }}
-                >
-                  인증번호 전송
-                </Button>
+                <Button onClick={() => sendNumber(email)}>인증번호 전송</Button>
               </div>
             </div>
             <div className="flex-div">
@@ -112,7 +124,7 @@ const UserFindPwd = () => {
                 name="auth"
                 placeholder=""
                 value={auth}
-                error={error}
+                error={error.auth}
                 onChange={handleInput}
               />
               <div>
@@ -130,6 +142,7 @@ const UserFindPwd = () => {
               name="password"
               value={password}
               placeholder="******"
+              error={error.password}
               onChange={handleInput}
             />
             <Input
@@ -138,7 +151,7 @@ const UserFindPwd = () => {
               name="ckPassword"
               value={ckPassword}
               placeholder="******"
-              error={error}
+              error={error.ckPassword}
               onChange={handleInput}
             />
             <Button onClick={changePassword}>비밀번호 변경</Button>
@@ -164,7 +177,7 @@ const Container = styled.div`
   form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.7rem;
   }
 
   .flex-div {
