@@ -1,7 +1,10 @@
 body {
     width: 100vw;
     height: 100vh;
+    white-space:nowrap;
 }
+
+
 
 .App{
     height: 100vh;
@@ -9,10 +12,15 @@ body {
 
 
 .Wrapper { 
-    width: 100%;
     max-width: 1250px;
+    width: 100%;
     min-height: 100%;
     margin: 174px auto;
-     display: flex;
+    display: flex;
     justify-content: center; 
+}
+
+/* 스크롤바를 없앰 */
+::-webkit-scrollbar {
+    display: none;
 }
