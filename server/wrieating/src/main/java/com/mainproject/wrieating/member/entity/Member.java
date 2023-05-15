@@ -1,5 +1,6 @@
 package com.mainproject.wrieating.member.entity;
 
+import com.mainproject.wrieating.audit.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table
-public class Member {
+public class Member extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -46,9 +47,6 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private Status status;      //탈퇴유무
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
 
     public enum Activity{
         NONE_ACTIVITY("운동 전혀 안함"),
