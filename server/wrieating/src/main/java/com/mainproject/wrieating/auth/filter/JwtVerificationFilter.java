@@ -4,7 +4,6 @@ import com.mainproject.wrieating.auth.utils.CustomAuthorityUtils;
 import com.mainproject.wrieating.auth.utils.JwtUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
-import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,11 +18,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@AllArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
     private final CustomAuthorityUtils authorityUtils;
 
+    public JwtVerificationFilter(JwtUtils jwtUtils,
+                                 CustomAuthorityUtils authorityUtils) {
+        this.jwtUtils = jwtUtils;
+        this.authorityUtils = authorityUtils;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -37,7 +40,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             request.setAttribute("exception", e);
         }
-        filterChain.doFilter(request, response); // (5)
+        filterChain.doFilter(request, response);
     }
 
     @Override
@@ -48,17 +51,17 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     }
 
 //    private Map<String, Object> verifyJws(HttpServletRequest request) {
-//        String jws = request.getHeader("Authorization").replace("Bearer ", ""); // (3-1)
-//        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()); // (3-2)
-//        Map<String, Object> claims = jwtUtils.getClaims(jws, base64EncodedSecretKey).getBody();   // (3-3)
+//        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+//        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+//        Map<String, Object> claims = jwtUtils.getClaims(jws, base64EncodedSecretKey).getBody();
 //
 //        return claims;
 //    }
 
     private void setAuthenticationToContext(Map<String, Object> claims) {
-        String username = (String) claims.get("username");
+        String email = (String) claims.get("email");
         List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(email, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }
