@@ -1,19 +1,29 @@
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Button from '../Common/Button'
+import Modal from '../Common/Modal'
 
 const DiaryDetail = () => {
   const [diary, setDiary] = useState<Diary | null>(null)
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'] // 요일을 구하기 위한 배열
   const [memoContent, setMemoContent] = useState(diary?.memo)
   const [isOpenMemo, setIsOpenMemo] = useState(true)
+  const [isOpenModal, setIsOpenModal] = useState(false)
+
+  const navigate = useNavigate()
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
 
+  console.log(diary)
+
   const onClickBtn = () => {
     console.log('hi')
+  }
+
+  const onChangeModal = () => {
+    setIsOpenModal((prev) => !prev)
   }
 
   // textarea 요소 있는 value의 마지막으로 커서 이동
@@ -35,7 +45,7 @@ const DiaryDetail = () => {
       100
     )
   }
-
+  // 메모 작성 / 수정 함수
   const onSendMemo = () => {
     axios
       .patch(`http://localhost:4000/diary/${id}`, { memo: memoContent })
@@ -46,6 +56,13 @@ const DiaryDetail = () => {
       .catch((err) => {
         console.log(err)
       })
+  }
+
+  const onDeleteDiary = () => {
+    axios.delete(`http://localhost:4000/diary/${id}`).then((res) => {
+      setIsOpenModal((prev) => !prev)
+      navigate(`/diaries`)
+    })
   }
 
   // 퍼센트에 따른 색상 지정(차트 그래프, 성분량 글씨에 적용됨)
@@ -73,6 +90,18 @@ const DiaryDetail = () => {
       <h2>나의 식단 일기</h2>
       {diary && (
         <DiaryDetailWrapper>
+          <Modal
+            state={isOpenModal}
+            setState={setIsOpenModal}
+            msg={
+              '작성한 식단일기가 삭제되며, 복구 할 수 없습니다. \n 정말로 삭제하시겠습니까? '
+            }
+          >
+            <Button onClick={onChangeModal} outline={true}>
+              취소
+            </Button>
+            <Button onClick={onDeleteDiary}>확인</Button>
+          </Modal>
           <div className="diary__container">
             <h3 className="diary__header">
               <p>{`${new Date(diary.userDate).getMonth() + 1}월 ${new Date(
@@ -81,7 +110,7 @@ const DiaryDetail = () => {
                 weekdays[new Date(diary.userDate).getDay()]
               }요일`}</p>
               <div className="diary__header__btn">
-                <Button onClick={onClickBtn} outline={true}>
+                <Button onClick={onChangeModal} outline={true}>
                   <span className="material-symbols-outlined">delete</span>
                   모든 기록 삭제
                 </Button>
@@ -114,18 +143,22 @@ const DiaryDetail = () => {
                               {
                                 foodName: '',
                                 mealType: '',
-                                intake: '',
+                                intake: 0,
                                 kcal: 0,
                               } as Meal
                             ).kcal
                           : 0
                       }Kcal`}</p>
-                      <div>
-                        <span className="material-symbols-outlined">edit</span>
-                        <span className="material-symbols-outlined">
-                          delete
-                        </span>
-                      </div>
+                      {mealData.length !== 0 && (
+                        <div>
+                          <span className="material-symbols-outlined">
+                            edit
+                          </span>
+                          <span className="material-symbols-outlined">
+                            delete
+                          </span>
+                        </div>
+                      )}
                     </header>
                     <ul className="meal__lists">
                       {mealData.length !== 0 ? (
@@ -133,7 +166,7 @@ const DiaryDetail = () => {
                           return (
                             <li className="meal__list" key={idx}>
                               <p>{data.foodName}</p>
-                              <p>{data.intake}</p>
+                              <p>{data.intake}g</p>
                               <span>{`${data.kcal}kcal`}</span>
                             </li>
                           )
@@ -237,6 +270,17 @@ const DiaryDetail = () => {
             </div>
             <div className="recipe__container">
               <h2>추천 레시피</h2>
+              <ul className="recipe__lists"></ul>
+              <p>코멘트 공간입니다.</p>
+              {diary &&
+                diary.recipe.map((el, idx) => {
+                  return (
+                    <li className="recipe__list" key={idx}>
+                      <img src={`${el.foodImage}`} />
+                      <span>{el.foodName}</span>
+                    </li>
+                  )
+                })}
             </div>
           </div>
         </DiaryDetailWrapper>
@@ -260,7 +304,7 @@ interface Meal {
   foodName: string
   mealType: string
   kcal: number
-  intake: string
+  intake: number
 }
 
 interface StandardIntake {
@@ -283,6 +327,7 @@ interface Calcul {
 
 interface Recipe {
   foodName: string
+  foodImage: string
 }
 
 const Wrapper = styled.div`
@@ -431,6 +476,21 @@ const DiaryDetailWrapper = styled.div`
     background-color: var(--color-light-gray);
     border-radius: 8px;
     margin-bottom: 1.2rem;
+  }
+
+  .recipe__list {
+    font-weight: 500;
+    display: flex;
+
+    align-items: center;
+    margin-bottom: 1rem;
+
+    img {
+      width: 45px;
+      height: 45px;
+      border-radius: 8px;
+      margin-right: 1.2rem;
+    }
   }
 `
 
