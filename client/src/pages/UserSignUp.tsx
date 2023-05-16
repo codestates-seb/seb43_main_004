@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import Input from '../components/common/Input'
 import Button from '../components/common/Button'
 import Radio from '../components/common/Radio'
 import { genderList, activityScore } from '../utils/options'
 import { checkEmail, checkPassword } from '../utils/userfunc'
+import { debounce } from '../utils/timefunc'
 
 interface Props {
   social?: boolean
 }
 
 interface userInfo {
+  [key: string]: any
   email: string
   nickName: string
   password: string
@@ -50,7 +52,6 @@ const UserSignUp = ({ social }: Props) => {
     values
   const [ckPassword, setCkPassword] = useState<string>('')
   const [authNums, setAuthNums] = useState<authentication>({
-    // 인증번호
     auth: '',
     ckAuth: '',
   })
@@ -61,7 +62,8 @@ const UserSignUp = ({ social }: Props) => {
     password: '',
     ckPassword: '',
   })
-  const [isEmpty, setIsEmpty] = useState<boolean>(true)
+  const [isEmpty, setIsEmpty] = useState<boolean>(true) // 버튼 활성화 여부
+  const [isConfirm, setIsConfirm] = useState<boolean>(false) // 인증번호 확인 여부
 
   // 사용자 입력값 핸들링
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,6 +121,7 @@ const UserSignUp = ({ social }: Props) => {
       msg.auth = '인증번호가 일치하지 않습니다.'
       setError({ ...error, ...msg })
     } else {
+      setIsConfirm(true)
       setError({ ...error, ...msg })
       alert('인증이 완료되었습니다.')
     }
@@ -145,25 +148,41 @@ const UserSignUp = ({ social }: Props) => {
     }
   }
 
+  // 버튼 활성화를 위한 입력값 검증
+  const checkValues = useCallback(
+    debounce((values: userInfo, isConfirm: boolean, ckpwd: string) => {
+      let isBlank = false
+      let isNotValid = true
+
+      for (const key in values) {
+        if (values[key] === '') {
+          isBlank = true
+        }
+      }
+
+      if (
+        !isBlank &&
+        isConfirm &&
+        ckpwd === values.password &&
+        values.height > 0 &&
+        values.weight > 0
+      ) {
+        isNotValid = false
+      }
+
+      setIsEmpty(isNotValid)
+    }, 700),
+    []
+  )
+
   // 가입하기 - 모든 값이 유효한 경우 버튼 활성화
   const checkValid = () => {
     console.log('/members/signup')
   }
 
   useEffect(() => {
-    const checkValues = (
-      birth: string,
-      height: number,
-      weight: number
-    ): boolean => {
-      console.log(birth, height, weight)
-      if (birth !== '' && height > 0 && weight > 0) {
-        return false
-      }
-      return true
-    }
-    setIsEmpty(checkValues(birth, height, weight))
-  }, [birth, height, weight])
+    checkValues(values, isConfirm, ckPassword)
+  }, [values, isConfirm, ckPassword])
 
   return (
     <Container>
@@ -178,6 +197,7 @@ const UserSignUp = ({ social }: Props) => {
                 name="email"
                 placeholder="email"
                 error={error.email}
+                disabled={isConfirm}
                 onChange={handleInput}
               />
               <div>
@@ -193,6 +213,7 @@ const UserSignUp = ({ social }: Props) => {
                 name="ckAuth"
                 placeholder="0000"
                 error={error.auth}
+                disabled={isConfirm}
                 onChange={handleAuthNum}
               />
               <div>
