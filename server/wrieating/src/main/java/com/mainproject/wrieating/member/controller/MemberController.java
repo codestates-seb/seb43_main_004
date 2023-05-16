@@ -13,8 +13,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import java.net.URI;
 
 @RestController
 @Validated
@@ -41,33 +39,35 @@ public class MemberController {
     }
 
     // 회원 수정
-    @PatchMapping("/members/mypage/update/{member-id}")
+    @PatchMapping("/members/mypage/update")
     public ResponseEntity updateMember(
-            @PathVariable("member-id") @Positive long memberId,
+            @RequestHeader(name = "Authorization") String token,
             @Valid @RequestBody MemberPatchDto requestBody){
-        requestBody.setMemberId(memberId);
+        log.info(String.valueOf(requestBody));
+
         Member member =
-                memberService.updateMember(memberMapper.memberPatchToMember(requestBody));
+                memberService.updateMember(memberMapper.memberPatchToMember(requestBody), token);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(memberMapper.memberToMemberResponse(member)),
                 HttpStatus.OK);
     }
 
-    // 회원 조회
-    @GetMapping("/members/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId){
-        Member member = memberService.findMember(memberId);
+    // 본인 회원 조회
+    @GetMapping("/members/mypage")
+    public ResponseEntity getMember(@RequestHeader(name = "Authorization") String token){
+        Member member = memberService.findMember(token);
+
         return new ResponseEntity<>(
                 new SingleResponseDto<>(memberMapper.memberToMemberResponse(member))
                 , HttpStatus.OK);
     }
 
     // 회원 탈퇴
-    @DeleteMapping("/members/{member-id}")
+    @DeleteMapping("/members/leaveId")
     public ResponseEntity deleteMember(
-            @PathVariable("member-id") @Positive long memberId) {
-        memberService.deleteMember(memberId);
+            @RequestHeader(name = "Authorization") String token) {
+        memberService.deleteMember(token);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
