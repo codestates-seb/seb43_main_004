@@ -149,8 +149,8 @@ public class DiaryControllerTest {
         final DiaryPatchDto patchDto = new DiaryPatchDto("test script");
         String content = gson.toJson(patchDto);
 
-        given(mapper.dairyPatchDtoToDiary(any())).willReturn(new Diary());
-        given(service.updateDiary(anyLong(),any())).willReturn(new Diary());
+//        given(mapper.dairyPatchDtoToDiary(any())).willReturn(new Diary());
+//        given(service.updateDiary(anyLong(),any())).willReturn(new Diary());
 
         mockMvc.perform(
                 patch("/diaries/update/{diaries-id}",1L)
