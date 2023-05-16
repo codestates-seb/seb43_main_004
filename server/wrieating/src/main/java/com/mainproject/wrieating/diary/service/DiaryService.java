@@ -39,12 +39,12 @@ public class DiaryService {
                 page, size, Sort.by("userDate").descending()));
     }
 
-    public Diary updateDiary(long diaryId, DiaryPatchDto diaryPatchDto) {
+    public void updateDiary(long diaryId, DiaryPatchDto diaryPatchDto) {
         Diary findDiary = findVerifiedDiary(diaryId);
         Optional.ofNullable(diaryPatchDto.getMemo()) // patch mapper 삭제
                 .ifPresent(findDiary::setMemo);
 
-        return diaryRepository.save(findDiary);
+        diaryRepository.save(findDiary);
     }
 
     public void deleteDiary(long diaryId) {
