@@ -3,19 +3,82 @@ import styled from 'styled-components'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { DataResponse } from './DiaryCheck'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const CalendarPage = ({ diaries }) => {
   const [value, onChange] = useState(new Date())
-  // // 이모지를 사용하게 되면 쓸 코드
+  const navigate = useNavigate()
 
-  // const dateWithEmoji = {
-  //   '2023-05-10': '\u{1F600}',
-  //   '2023-05-07': '\u{1F62D}',
-  // }
-  // const tileContent = ({ date }) => {
-  //   const formattedDate = date.toISOString().split('T')[0]
-  //   return <div className="emoji">{dateWithEmoji[formattedDate]}</div>
-  // }
+  const newDiary = {
+    // json-server에서 post 요청을 위해 사용하는 목업 데이터
+    id: 4,
+    userDate: '2023-05-15',
+    memo: '',
+    diaryStatus: '',
+    meal: [],
+    standardIntake: [
+      {
+        carbohydrate: 225,
+        protein: 60,
+        fat: 47,
+        kcal: 2200,
+        sugar: 25,
+      },
+    ],
+    calcul: [
+      {
+        carbohydrate: 0,
+        protein: 0,
+        fat: 0,
+        kcal: 0,
+        sugar: 0,
+      },
+    ],
+    recipe: [],
+    comment: '',
+  }
+
+  const onChangeHandler = (date) => {
+    //  브라우저의 기본 동작 때문에 선택한 날짜가 한국 표준시로 인해 하루 전으로 인식되서 코드 추가
+    const selectedDate = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    )
+    const dateString = selectedDate.toISOString().split('T')[0]
+    const diaryData = diaries.data.find(
+      (diary) => diary.userDate === dateString
+    )
+    if (diaryData) {
+      // 해당 날짜에 대한 일기 데이터가 이미 존재하는 경우
+      navigate(`/diaries/${diaryData.id}`)
+    } else {
+      // 해당 날짜에 대한 일기 데이터가 없는 경우
+      axios
+        .post('http://localhost:4000/diary', newDiary)
+        .then((res) => {
+          console.log(res)
+          // 여기서 diaries 상태를 최신화 해줘야할듯
+          navigate(`/diaries/${diaryData.id}`)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+  }
+
+  // 이모지를 사용하게 되면 쓸 코드
+  const dateWithEmoji = {
+    '2023-05-12': '\u{1F600}',
+    '2023-05-13': '\u{1F62D}',
+    '2023-05-16': '\u{1F62D}',
+  }
+  const tileContent = ({ date }) => {
+    const a = new Date(
+      Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    )
+    const formattedDate = a.toISOString().split('T')[0]
+    return <div className="emoji">{dateWithEmoji[formattedDate]}</div>
+  }
 
   return (
     <Container>
@@ -23,7 +86,8 @@ const CalendarPage = ({ diaries }) => {
         onChange={onChange}
         value={value}
         locale="en-US"
-        // tileContent={tileContent}
+        onClickDay={onChangeHandler}
+        tileContent={tileContent}
       />
       <h1>
         {new Date(value).toLocaleDateString('ko', {

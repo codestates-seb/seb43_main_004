@@ -2,13 +2,18 @@
   "diaries": {
     "data": [
       {
-        "diaryId": "1",
-        "userDate": "2023-05-24",
+        "id": "1",
+        "userDate": "2023-05-12",
         "diaryStatus": "\\u{1F600}"
       },
       {
-        "diaryId": "2",
-        "userDate": "2023-05-25",
+        "id": "2",
+        "userDate": "2023-05-13",
+        "diaryStatus": "\\u{1F62D}"
+      },
+      {
+        "id": "3",
+        "userDate": "2023-05-16",
         "diaryStatus": "\\u{1F62D}"
       }
     ],
@@ -126,6 +131,33 @@
         }
       ],
       "comment": "탄수화물이 너무 많아요"
+    },
+    {
+      "userDate": "2023-05-16",
+      "memo": "",
+      "diaryStatus": "",
+      "meal": [],
+      "standardIntake": [
+        {
+          "carbohydrate": 225,
+          "protein": 60,
+          "fat": 47,
+          "kcal": 2200,
+          "sugar": 25
+        }
+      ],
+      "calcul": [
+        {
+          "carbohydrate": 0,
+          "protein": 0,
+          "fat": 0,
+          "kcal": 0,
+          "sugar": 0
+        }
+      ],
+      "recipe": [],
+      "comment": "",
+      "id": 3
     }
   ]
 }
