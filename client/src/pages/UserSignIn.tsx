@@ -4,6 +4,7 @@ import Input from '../components/Common/Input'
 import Button from '../components/Common/Button'
 import { useNavigate, Link } from 'react-router-dom'
 import logo from '../assets/logo.png'
+import { checkEmail } from '../utils/userfunc'
 
 interface userType {
   email: string
@@ -25,14 +26,12 @@ const UserSignIn = () => {
   }
 
   const checkValid = () => {
-    if (values.email == '' || values.password == '') {
-      setError('아이디 혹은 비밀번호를 잘못 입력했습니다.')
-      console.log(values)
+    if (!checkEmail(values.email) || values.password == '') {
+      setError('이메일 혹은 비밀번호가 잘못되었거나 유효하지 않습니다.')
       return
     }
     setError('')
-    navigate('/')
-    console.log(values)
+    navigate('/userpage')
   }
 
   return (
