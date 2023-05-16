@@ -16,6 +16,8 @@ public class Meal {
     @Column(nullable = false)
     private Long mealId;
 
+    private String title;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MealType mealType;
