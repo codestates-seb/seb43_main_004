@@ -1,6 +1,5 @@
 package com.mainproject.wrieating.diary.dto;
 
-import com.mainproject.wrieating.diary.entity.Diary;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

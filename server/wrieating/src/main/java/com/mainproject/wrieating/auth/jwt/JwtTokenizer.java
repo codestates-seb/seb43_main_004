@@ -121,6 +121,7 @@ public class JwtTokenizer {
         }   catch (ExpiredJwtException e) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_UNAUTHORIZED);
         }
+        System.out.println(claims);
         return claims;
     }
 }

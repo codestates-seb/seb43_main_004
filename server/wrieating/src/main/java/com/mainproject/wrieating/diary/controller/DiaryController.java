@@ -28,20 +28,23 @@ public class DiaryController {
 
     @PostMapping("/write")
     @ResponseStatus(HttpStatus.CREATED)
-    public void postDiary(@Validated @RequestBody DiaryPostDto diaryPostDto) {
-        service.createDiary(diaryPostDto);
+    public void postDiary(@RequestHeader(name = "Authorization") String token,
+                          @Validated @RequestBody DiaryPostDto diaryPostDto) {
+        service.createDiary(token,diaryPostDto);
     }
 
     @GetMapping("/{diaries-id}")
-    public ResponseEntity getDiary(@Positive @PathVariable("diaries-id") long diaryId) {
-        Diary response = service.findDiary(diaryId);
+    public ResponseEntity getDiary(@RequestHeader(name = "Authorization") String token,
+                                   @Positive @PathVariable("diaries-id") long diaryId) {
+        Diary response = service.findDiary(token,diaryId);
         return new ResponseEntity<>(mapper.diaryToDiaryResponseDto(response),HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity getDiaries(@Positive @RequestParam int page,
+    public ResponseEntity getDiaries(@RequestHeader(name = "Authorization") String token,
+                                     @Positive @RequestParam int page,
                                      @Positive @RequestParam int size) {
-        Page<Diary> pageDiaries = service.findAllDiaries(page - 1, size);
+        Page<Diary> pageDiaries = service.findAllDiaries(token,page - 1, size);
         List<Diary> diaries = pageDiaries.getContent();
         return new ResponseEntity<>(
                 new MultiResponseDto<>(mapper.DiariesToDiariesResponseDto(diaries), pageDiaries),

@@ -7,7 +7,7 @@ public enum ExceptionCode {
     MEMBER_UNAUTHORIZED(401,"Unauthorized"),
     DIARY_NOT_FOUND(404, "Diary not found"),
     DIARY_EXIST(400, "Diary already exist"),
-    MEMBER_UNAUTHORIZED(401,"Unauthorized");
+    MEMBER_MISMATCHED(401,"Member does not matched");
 
     @Getter
     private int status;
