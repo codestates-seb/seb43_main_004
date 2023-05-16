@@ -10,7 +10,6 @@ import org.mapstruct.ReportingPolicy;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DiaryMapper {
@@ -21,8 +20,6 @@ public interface DiaryMapper {
 
         return diary;
     };
-
-    Diary dairyPatchDtoToDiary(DiaryPatchDto diaryPatchDto);
 
     default DiaryResponseDto diaryToDiaryResponseDto(Diary diary) {
         return DiaryResponseDto.builder()

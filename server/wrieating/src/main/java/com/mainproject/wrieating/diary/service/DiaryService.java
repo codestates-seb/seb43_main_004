@@ -41,7 +41,7 @@ public class DiaryService {
 
     public Diary updateDiary(long diaryId, DiaryPatchDto diaryPatchDto) {
         Diary findDiary = findVerifiedDiary(diaryId);
-        Optional.ofNullable(mapper.dairyPatchDtoToDiary(diaryPatchDto).getMemo()) // TODO: 2023-05-15 굳이 변환이 필요한가? 
+        Optional.ofNullable(diaryPatchDto.getMemo()) // patch mapper 삭제
                 .ifPresent(findDiary::setMemo);
 
         return diaryRepository.save(findDiary);

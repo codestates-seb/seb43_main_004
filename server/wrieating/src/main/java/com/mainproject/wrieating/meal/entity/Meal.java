@@ -1,5 +1,6 @@
 package com.mainproject.wrieating.meal.entity;
 
+import com.mainproject.wrieating.diary.entity.Diary;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,6 +41,9 @@ public class Meal {
     @Column(nullable = true)
     private int salt;
 
+    @ManyToOne
+    @JoinColumn(name = "DIARY_ID")
+    private Diary diary;
 
     public Meal(MealType mealType, int carbohydrate, int protein, int fat, int kcal, int sugar, int salt) {
         this.mealType = mealType;
@@ -57,4 +61,6 @@ public class Meal {
         DINNER,
         SNACK
     }
+
+    // TODO: 2023-05-16 foodDB랑 연결해야함
 }

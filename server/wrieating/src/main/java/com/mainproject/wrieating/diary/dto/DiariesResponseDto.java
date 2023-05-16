@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @Getter
 public class DiariesResponseDto {
     private String userDate;
-    private Diary.DiaryStatus diaryStatus;
+    private String diaryStatus;
 }
