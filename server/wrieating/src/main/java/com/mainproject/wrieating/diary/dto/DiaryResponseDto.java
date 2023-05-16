@@ -10,6 +10,7 @@ import java.util.ArrayList;
 @Getter
 public class DiaryResponseDto {
     private Long diaryId;
+    private Long memberId;
     private String userDate;
     private String memo;
     private String diaryStatus;

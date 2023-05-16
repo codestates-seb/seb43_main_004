@@ -24,6 +24,7 @@ public interface DiaryMapper {
     default DiaryResponseDto diaryToDiaryResponseDto(Diary diary) {
         return DiaryResponseDto.builder()
                 .diaryId(diary.getDiaryId())
+                .memberId(diary.getMember().getMemberId())
                 .userDate(diary.getUserDate().toString())
                 .memo(diary.getMemo())
                 .diaryStatus(diary.getDiaryStatus())
