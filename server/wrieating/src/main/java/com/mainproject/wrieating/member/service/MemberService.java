@@ -1,40 +1,52 @@
 package com.mainproject.wrieating.member.service;
 
+import com.mainproject.wrieating.auth.jwt.JwtTokenizer;
+import com.mainproject.wrieating.auth.utils.CustomAuthorityUtils;
 import com.mainproject.wrieating.exception.BusinessLogicException;
 import com.mainproject.wrieating.exception.ExceptionCode;
 import com.mainproject.wrieating.member.dto.MemberPatchDeleteDto;
-import com.mainproject.wrieating.member.dto.MemberPatchDto;
 import com.mainproject.wrieating.member.dto.MemberPostSignUpDto;
 import com.mainproject.wrieating.member.entity.Member;
 import com.mainproject.wrieating.member.mapper.MemberMapper;
 import com.mainproject.wrieating.member.repository.MemberRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 @Transactional
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberMapper mapper;
-
-    public MemberService(MemberRepository memberRepository, MemberMapper mapper) {
-        this.memberRepository = memberRepository;
-        this.mapper = mapper;
-    }
-
+    private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
+    private final JwtTokenizer jwtTokenizer;
 
     public MemberPostSignUpDto createMember(MemberPostSignUpDto memberDto){
         Member member = mapper.memberPostToMember(memberDto);
+
+        // JWT
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
+
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
+
         Member savedMember = memberRepository.save(member);
         MemberPostSignUpDto savedMemberDto = mapper.memberToMemberPost(savedMember);
 
         return savedMemberDto;
     }
 
-    public Member updateMember(Member member){
-        Member findMember = findVerifiedMember(member.getMemberId());
+    public Member updateMember(Member member, String token){
+        long memberId = jwtTokenizer.getMemberId(token);
+
+        Member findMember = findVerifiedMember(memberId);
 
         Optional.ofNullable(findMember.getEmail())
                 .ifPresent(email -> findMember.setEmail(email));
@@ -61,11 +73,21 @@ public class MemberService {
 
     // 회원 마이페이지
     @Transactional(readOnly = true)
-    public Member findMember(long memberId){
-        return findVerifiedMember(memberId);
+    public Member findMember(String token){
+        long memberId = jwtTokenizer.getMemberId(token);
+
+        Member findMember = findVerifiedMember(memberId);
+
+        if(findMember.getStatus().equals(Member.Status.MEMBER_QUIT)) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+
+        return findMember;
     }
 
-    public void deleteMember(long memberId) {
+    public void deleteMember(String token) {
+        long memberId = jwtTokenizer.getMemberId(token);
+
         MemberPatchDeleteDto findMember = mapper.memberToMemberPatchDelete(findVerifiedMember(memberId));
         // 회원 삭제하지않고 status만 바꾸는 로직
         // TODO 일정 시간 지난 후 삭제되게끔 작성
@@ -73,14 +95,11 @@ public class MemberService {
         findMember.setStatus(Member.Status.MEMBER_QUIT);
     }
 
-
     @Transactional(readOnly = true)
     public Member findVerifiedMember(long memberId){
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
-        Member findMember =
-                optionalMember.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        return findMember;
+        return optionalMember.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
     }
 }

@@ -1,20 +1,24 @@
 package com.mainproject.wrieating.member.entity;
 
-import com.mainproject.wrieating.audit.Auditable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
 @Table
-public class Member extends Auditable {
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
@@ -48,11 +52,16 @@ public class Member extends Auditable {
     @Column(nullable = false)
     private Status status;      //탈퇴유무
 
+    // JWT
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
     public enum Activity{
-        NONE_ACTIVITY("운동 전혀 안함"),
-        LOW_ACTIVITY("매우 조금 운동함"),
-        MIDDLE_ACTIVITY("약간 운동함"),
-        HIGH_ACTIVITY("많이 운동함");
+        NONE_ACTIVE("운동을 거의 또는 전혀 안함"), // BMR * 1.2
+        LIGHTLY_ACTIVE("가벼운 활동 수준(주1~3일)"), // BMR * 1.375
+        MODERATELY_ACTIVE("적당한 활동 수준/적당한 운동(주3~5일)"), // BMR * 1.55
+        VERY_ACTIVE("매우 활동적인 수준/스포츠, 격렬한 운동(주6일)"), // BMR * 1.725
+        EXTREMELY_ACTIVE("매우 활동적인 수준/매우 힘든 운동 및 육체노동"); // BMR * 1.9
 
         @Getter
         private String activity;
@@ -72,18 +81,5 @@ public class Member extends Auditable {
         Status(String status){
             this.status = status;
         }
-    }
-
-    public Member(Long memberId, String email, String nickName, String password, LocalDate birth,
-                  String gender, Integer height, Integer weight, Activity activity) {
-        this.memberId = memberId;
-        this.email = email;
-        this.nickName = nickName;
-        this.password = password;
-        this.birth = birth;
-        this.gender = gender;
-        this.height = height;
-        this.weight = weight;
-        this.activity = activity;
     }
 }
