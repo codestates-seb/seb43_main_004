@@ -29,7 +29,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity(debug = true)
 //@RequiredArgsConstructor
 public class SecurityConfiguration {
-    private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     MemberRepository memberRepository;
 

@@ -1,12 +1,11 @@
 package com.mainproject.wrieating.diary.entity;
 
 import com.mainproject.wrieating.audit.Auditable;
+import com.mainproject.wrieating.member.entity.Member;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -30,17 +29,12 @@ public class Diary extends Auditable {
     @Column
     private String comment;
 
-    @Enumerated(EnumType.STRING)
-    private DiaryStatus diaryStatus;
+    @Column
+    private String diaryStatus;
 
-    public enum DiaryStatus {
-        GOOD_EMOJI("웃는 이모지");
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
-        @Getter
-        private String status;
-
-        DiaryStatus(String status) {
-            this.status = status;
-        }
-    }
+    // TODO: 2023-05-16 food랑 recipe 연결해야뎀
 }

@@ -12,6 +12,6 @@ public class DiaryResponseDto {
     private Long diaryId;
     private String userDate;
     private String memo;
-    private Diary.DiaryStatus diaryStatus;
+    private String diaryStatus;
     private String comment;
 }
