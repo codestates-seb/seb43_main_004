@@ -6,15 +6,16 @@ import { DataResponse } from './DiaryCheck'
 
 const CalendarPage = ({ diaries }) => {
   const [value, onChange] = useState(new Date())
+  // // 이모지를 사용하게 되면 쓸 코드
 
-  const dateWithEmoji = {
-    '2023-05-10': '\u{1F600}',
-    '2023-05-07': '\u{1F62D}',
-  }
-  const tileContent = ({ date }) => {
-    const formattedDate = date.toISOString().split('T')[0]
-    return <div className="emoji">{dateWithEmoji[formattedDate]}</div>
-  }
+  // const dateWithEmoji = {
+  //   '2023-05-10': '\u{1F600}',
+  //   '2023-05-07': '\u{1F62D}',
+  // }
+  // const tileContent = ({ date }) => {
+  //   const formattedDate = date.toISOString().split('T')[0]
+  //   return <div className="emoji">{dateWithEmoji[formattedDate]}</div>
+  // }
 
   return (
     <Container>
@@ -22,7 +23,7 @@ const CalendarPage = ({ diaries }) => {
         onChange={onChange}
         value={value}
         locale="en-US"
-        tileContent={tileContent}
+        // tileContent={tileContent}
       />
       <h1>
         {new Date(value).toLocaleDateString('ko', {

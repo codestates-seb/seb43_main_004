@@ -6,7 +6,6 @@ import Stats from './Stats'
 
 const DiaryCheck = () => {
   const [diaries, setDiaries] = useState<DataResponse | null>(null)
-  console.log(diaries)
 
   const fetchData = () => {
     axios
@@ -51,26 +50,24 @@ export interface Diary {
 }
 
 export interface Intake {
-  탄수화물: number
-  단백질: number
-  지방: number
-  칼로리: number
-  당: number
-  나트륨: number
+  carbohydrate: number
+  protein: number
+  fat: number
+  kcal: number
+  sugar: number
+  [key: string]: number // 인덱스 시그니처 추가
 }
 
 export interface DataResponse {
-  diaries: {
-    data: Diary[]
-    standardIntake: Intake[]
-    calcul: Intake[]
-    comment: string
-    pageInfo: {
-      page: number
-      size: number
-      totalElements: number
-      totalPages: number
-    }
+  data: Diary[]
+  standardIntake: Intake[]
+  calcul: Intake[]
+  comment: string
+  pageInfo: {
+    page: number
+    size: number
+    totalElements: number
+    totalPages: number
   }
 }
 

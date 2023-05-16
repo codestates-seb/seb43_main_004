@@ -59,7 +59,7 @@ const DiaryDetail = () => {
   }
 
   const onDeleteDiary = () => {
-    axios.delete(`http://localhost:4000/diary/${id}`).then((res) => {
+    axios.delete(`http://localhost:4000/diary/${id}`).then(() => {
       setIsOpenModal((prev) => !prev)
       navigate(`/diaries`)
     })
@@ -218,8 +218,8 @@ const DiaryDetail = () => {
                     <div>
                       <span
                         className={getColor(calculatePercent('kcal'))}
-                      >{`${diary.calcul[0].kcal}kcal`}</span>
-                      <span>{` / ${diary.standardIntake[0].kcal}kcal`}</span>
+                      >{`${diary.calcul[0]?.kcal}kcal`}</span>
+                      <span>{` / ${diary.standardIntake[0]?.kcal}kcal`}</span>
                     </div>
                   </header>
                   <div className="status__bar">
@@ -270,17 +270,22 @@ const DiaryDetail = () => {
             </div>
             <div className="recipe__container">
               <h2>추천 레시피</h2>
-              <ul className="recipe__lists"></ul>
-              <p>코멘트 공간입니다.</p>
-              {diary &&
-                diary.recipe.map((el, idx) => {
-                  return (
-                    <li className="recipe__list" key={idx}>
-                      <img src={`${el.foodImage}`} />
-                      <span>{el.foodName}</span>
-                    </li>
-                  )
-                })}
+              {diary.recipe.length !== 0 ? (
+                <ul className="recipe__lists">
+                  <p>코멘트 공간입니다.</p>
+                  {diary &&
+                    diary.recipe.map((el, idx) => {
+                      return (
+                        <li className="recipe__list" key={idx}>
+                          <img src={`${el.foodImage}`} />
+                          <span>{el.foodName}</span>
+                        </li>
+                      )
+                    })}
+                </ul>
+              ) : (
+                <p>아직 등록된 일기가 없어 추천이 불가능합니다.</p>
+              )}
             </div>
           </div>
         </DiaryDetailWrapper>
@@ -333,6 +338,7 @@ interface Recipe {
 const Wrapper = styled.div`
   max-width: 1150px;
   width: calc(100% - 400px);
+  white-space: nowrap;
   h2 {
     font-size: 28px;
     margin-bottom: 20px;
@@ -441,6 +447,11 @@ const DiaryDetailWrapper = styled.div`
       margin-top: 1rem;
       font-size: 2.5rem;
       margin-bottom: 3.5rem;
+    }
+
+    p {
+      white-space: pre-wrap;
+      font-size: 15px;
     }
   }
 

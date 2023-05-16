@@ -45,8 +45,24 @@
       "memo": "",
       "diaryStatus": "",
       "meal": [],
-      "standardIntake": [],
-      "calcul": [],
+      "standardIntake": [
+        {
+          "carbohydrate": 225,
+          "protein": 60,
+          "fat": 47,
+          "kcal": 2200,
+          "sugar": 25
+        }
+      ],
+      "calcul": [
+        {
+          "carbohydrate": 0,
+          "protein": 0,
+          "fat": 0,
+          "kcal": 0,
+          "sugar": 0
+        }
+      ],
       "recipe": [],
       "comment": ""
     },

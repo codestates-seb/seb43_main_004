@@ -4,6 +4,7 @@ import { ResponsivePie } from '@nivo/pie'
 import { DataResponse } from './DiaryCheck'
 
 const Stats = ({ diaries }: any) => {
+  // 백엔드 데이터가 만들어지면 any에서  DataResponse로 변경 에정
   const { calcul, standardIntake } = diaries
   const intake = calcul && calcul[0] // 지난주 섭취량
   const standardIntakes = standardIntake && standardIntake[0] // 평균섭취량
