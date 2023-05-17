@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Button from '../components/Common/Button'
+import Button from '../components/common/Button'
 import { useNavigate } from 'react-router-dom'
 
 interface Props {

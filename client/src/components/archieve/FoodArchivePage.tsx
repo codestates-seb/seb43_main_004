@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import Button from '../Common/Button'
-import Input from '../Common/Input'
+import Button from '../common/Button'
+import Input from '../common/Input'
 
 const FoodArchive = () => {
   const [inputVal, setInputVal] = useState('')
