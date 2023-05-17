@@ -52,6 +52,7 @@ jobs:
     - name: module install
       run: |
           cd client
+          npm config set legacy-peer-deps true
           npm install
           
     - name: build react app
