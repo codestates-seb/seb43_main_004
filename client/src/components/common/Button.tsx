@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-
+// 폴더 인식이 안되서 잠깐 주석추가
 interface buttonProps {
   children: React.ReactNode
   type?: 'button' | 'submit' | 'reset'
