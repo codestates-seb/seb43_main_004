@@ -3,7 +3,7 @@
 # 빌드 디렉토리로 이동
 cd /home/ec2-user/action/server/wrieating/
 
-echo "> 현재 시간: $(date)" >> /home/ec2-user/action/deploy.log
+echo "> 현재 시간: $(/usr/bin/date)" >> /home/ec2-user/action/deploy.log
 
 echo "> 프로젝트 빌드 시작" >> /home/ec2-user/action/deploy.log
 
@@ -37,9 +37,6 @@ else
   sleep 5
 fi
 
-
-DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
+DEPLOY_JAR="$DEPLOY_PATH$JAR_NAME"
 echo "> DEPLOY_JAR 배포"    >> /home/ec2-user/action/deploy.log
-sudo nohup java -jar $DEPLOY_JAR >> /home/ec2-user/action/deploy.log 2>/home/ec2-user/action/deploy_err.log &
-
-echo "> 배포가 완료되었습니다." >> /home/ec2-user/action/deploy.log
+nohup java -jar "$DEPLOY_JAR" >> /home/ec2-user/action/deploy
