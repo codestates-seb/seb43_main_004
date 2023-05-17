@@ -26,7 +26,7 @@ jobs:
     
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [18.x]
 
     steps:
     - uses: actions/checkout@v3
@@ -50,11 +50,20 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         
-    - name: Module Install
-      run: npm install
+    - name: package-lock.json Install
+      run: |
+        cd /home/runner/work/seb43_main_004/seb43_main_004
+        npm ci --ignore-scripts
       
-    - name: Build React app
-      run: npm run build
+    - name: module install
+      run: |
+          cd /home/runner/work/seb43_main_004/seb43_main_004/client
+          npm install
+          
+    - name: build react app
+      run: |
+          cd /home/runner/work/seb43_main_004/seb43_main_004/client
+          npm run build    
 
     - name: Make zip file
       run: zip -r ${{ github.workspace }}/deploy.zip .
