@@ -44,11 +44,10 @@ jobs:
         
         
     # node version setting
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+          node-version: 18
         
     - name: package-lock.json Install
       run: |
