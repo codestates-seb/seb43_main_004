@@ -24,6 +24,7 @@
     "rules": {
         "prettier/prettier": ["error", {"singleQuote":true}],
         "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-explicit-any": "off",
         "no-duplicate-imports":"error",
         "spaced-comment":"error",
         "space-before-function-paren": [

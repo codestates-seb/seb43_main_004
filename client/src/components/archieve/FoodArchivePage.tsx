@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Button from '../Common/Button'
 import Input from '../Common/Input'
 
 const FoodArchive = () => {
-<!--   const [inputVal, setInputVal] = useState('') -->
+  const [inputVal, setInputVal] = useState('')
+  console.log(inputVal)
 
   const onClick = () => {
     console.log('hi')
@@ -13,6 +14,7 @@ const FoodArchive = () => {
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputVal(e.target.value)
   }
+
   return (
     <FoodArchiveWrapper>
       <header>

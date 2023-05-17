@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-
 import Input from '../components/Common/Input'
 import Button from '../components/Common/Button'
 import Radio from '../components/Common/Radio'
@@ -55,9 +54,9 @@ const UserSignUp = ({ social }: Props) => {
     auth: '',
     ckAuth: '',
   })
-    
-    console.log(nickName, gender, activity)
-    
+
+  console.log(nickName, gender, activity)
+
   const [error, setError] = useState<errorType>({
     email: '',
     auth: '',
