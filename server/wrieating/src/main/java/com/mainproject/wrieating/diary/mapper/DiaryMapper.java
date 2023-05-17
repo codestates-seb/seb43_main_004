@@ -7,11 +7,13 @@ import com.mainproject.wrieating.diary.dto.DiaryResponseDto;
 import com.mainproject.wrieating.diary.entity.Diary;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Component
 public interface DiaryMapper {
     default Diary diaryPostDtoToDiary(DiaryPostDto diaryPostDto) {
         Diary diary = new Diary();
