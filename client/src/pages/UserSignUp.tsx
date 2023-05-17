@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import Input from '../components/common/Input'
-import Button from '../components/common/Button'
-import Radio from '../components/common/Radio'
+
+import Input from '../components/Common/Input'
+import Button from '../components/Common/Button'
+import Radio from '../components/Common/Radio'
 import { genderList, activityScore } from '../utils/options'
 import { checkEmail, checkPassword } from '../utils/userfunc'
 

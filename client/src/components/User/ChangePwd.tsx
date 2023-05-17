@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import TabFrame from './TabFrame'
-import Input from '../common/Input'
-import Button from '../common/Button'
+import Input from '../Common/Input'
+import Button from '../Common/Button'
 import { checkPassword } from '../../utils/userfunc'
 
 interface pwdType {
