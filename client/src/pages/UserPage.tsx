@@ -5,6 +5,7 @@ import axios from 'axios'
 import { API } from '../utils/API'
 import { User } from '../utils/interface'
 
+
 const UserPage = () => {
   const [profile, setProfile] = useState<User>({
     nickName: '',

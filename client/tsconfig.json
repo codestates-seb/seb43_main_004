@@ -21,10 +21,11 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src","src/custom.d.ts"
+    "./src","src/custom.d.ts"
 
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "build"
   ]
 }
