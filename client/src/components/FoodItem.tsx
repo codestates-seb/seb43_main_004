@@ -1,5 +1,4 @@
-import React from 'react'
-import IntakeCounter from './IntakeCounter'
+import React, { useCallback, useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import Input from './Common/Input'
 import { FoodList } from '../pages/DiaryWrite'
@@ -38,6 +37,25 @@ const StyledFoodItem = styled.li`
       gap: 3rem;
       margin-right: 5rem;
 
+      .intake-counter {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+
+        button {
+          font-size: ${({ theme }) => theme.fontSize.larger};
+        }
+
+        input {
+          border: 1px solid ${({ theme }) => theme.color.darkGray};
+          border-radius: 0.6rem;
+          padding: 1rem;
+          text-align: center;
+          font-weight: 500;
+        }
+      }
+
       .kcal {
         font-weight: 500;
       }
@@ -67,6 +85,14 @@ const StyledFoodItem = styled.li`
 
       .food-intake {
         gap: 1rem;
+
+        .intake-counter {
+          gap: 0;
+
+          input {
+            width: 50%;
+          }
+        }
       }
     }
 
@@ -80,19 +106,69 @@ const StyledFoodItem = styled.li`
 `
 
 interface FoodItemProps {
-  custom?: boolean
   data: FoodList
+  setInfo: (id: number, content: { [key: string]: number | string }) => void
   delete: (title: string) => void
+  custom?: boolean
 }
 
 const FoodItem = (props: FoodItemProps) => {
-  const { custom, data, delete: deleteItem } = props
+  const { custom, data, delete: deleteItem, setInfo } = props
 
-  // 칼로리 계산에 사용할 상태
-  // 칼로리 = (탄수화물 그램 수 x 4) + (단백질 그램 수 x 4) + (지방 그램 수 x 9)
+  const id = data.nutrientId
+  const [origin, setOrigin] = useState({ ...data }) // 보존해둘 데이터 원본
+  const defaultIntake = origin.intake // 기본 섭취량
 
-  const onclick = () => {
-    console.log('onclick')
+  const handleIntakeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // 숫자만 입력가능
+    if (isNaN(Number(e.target.value))) return
+    setInfo(id, { intake: Number(e.target.value) })
+  }
+
+  const handleIncrease = () => {
+    setInfo(id, { intake: data.intake + 100 })
+  }
+
+  const handleDecrease = () => {
+    if (data.intake - 100 >= 0) {
+      setInfo(id, { intake: data.intake - 100 })
+    }
+  }
+
+  useEffect(() => {
+    const changeAmount = () => {
+      // 섭취량에 따라 영양소 값 변화
+      const ratio = data.intake / defaultIntake
+      if (ratio === 1) {
+        setInfo(id, {
+          kcal: origin.kcal,
+          carbohydrate: origin.carbohydrate,
+          protein: origin.protein,
+          fat: origin.fat,
+          sugar: origin.sugar,
+          salt: origin.salt,
+        })
+      } else {
+        setInfo(id, {
+          kcal: Number((origin.kcal * ratio).toFixed(2)),
+          carbohydrate: Number((origin.carbohydrate * ratio).toFixed(2)),
+          protein: Number((origin.protein * ratio).toFixed(2)),
+          fat: Number((origin.fat * ratio).toFixed(2)),
+          sugar: Number((origin.sugar * ratio).toFixed(2)),
+          salt: Number((origin.salt * ratio).toFixed(2)),
+        })
+      }
+    }
+
+    if (!custom) {
+      changeAmount()
+    }
+  }, [data.intake])
+
+  const customOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    if (name !== 'title' && isNaN(Number(value))) return
+    setInfo(id, { [name]: value })
   }
 
   return (
@@ -108,15 +184,30 @@ const FoodItem = (props: FoodItemProps) => {
           </button>
           <div className="food-title">
             <Input
+              label="음식명"
               type="text"
               placeholder="음식명"
-              name="foodName"
-              onChange={onclick}
+              name="title"
+              value={data.title}
+              onChange={customOnChange}
             />
             <div className="food-intake">
-              <p>1인분 기준 섭취량(g)</p>
-              <IntakeCounter standard={data.intake} />
-              <p className="kcal">238kcal</p>
+              <Input
+                label="1인분 기준 섭취량(g)"
+                type="text"
+                placeholder="g"
+                name="intake"
+                value={data.intake.toString()}
+                onChange={customOnChange}
+              />
+              <Input
+                label="kcal"
+                type="text"
+                placeholder="kcal"
+                name="kcal"
+                value={data.kcal.toString()}
+                onChange={customOnChange}
+              />
             </div>
           </div>
           <div className="food-info">
@@ -125,35 +216,40 @@ const FoodItem = (props: FoodItemProps) => {
               type="text"
               placeholder="g"
               name="carbohydrate"
-              onChange={onclick}
+              value={data.carbohydrate.toString()}
+              onChange={customOnChange}
             />
             <Input
               label="단백질"
               type="text"
               placeholder="g"
               name="protein"
-              onChange={onclick}
+              value={data.protein.toString()}
+              onChange={customOnChange}
             />
             <Input
               label="지방"
               type="text"
               placeholder="g"
               name="fat"
-              onChange={onclick}
+              value={data.fat.toString()}
+              onChange={customOnChange}
             />
             <Input
               label="당류"
               type="text"
               placeholder="g"
               name="sugar"
-              onChange={onclick}
+              value={data.sugar.toString()}
+              onChange={customOnChange}
             />
             <Input
               label="나트륨"
               type="text"
               placeholder="mg"
               name="salt"
-              onChange={onclick}
+              value={data.salt.toString()}
+              onChange={customOnChange}
             />
           </div>
         </>
@@ -170,7 +266,27 @@ const FoodItem = (props: FoodItemProps) => {
             <p className="food-name">{data.title}</p>
             <div className="food-intake">
               <p>섭취량(g)</p>
-              <IntakeCounter standard={data.intake} />
+              <div className="intake-counter">
+                <button
+                  type="button"
+                  className="decrease"
+                  onClick={handleDecrease}
+                >
+                  <span className="material-icons-round">remove</span>
+                </button>
+                <input
+                  type="text"
+                  value={data.intake}
+                  onChange={(e) => handleIntakeChange(e)}
+                />
+                <button
+                  type="button"
+                  className="increase"
+                  onClick={handleIncrease}
+                >
+                  <span className="material-icons-round">add</span>
+                </button>
+              </div>
               <p className="kcal">{data.kcal}kcal</p>
             </div>
           </div>
@@ -202,4 +318,4 @@ const FoodItem = (props: FoodItemProps) => {
   )
 }
 
-export default FoodItem
+export default React.memo(FoodItem)

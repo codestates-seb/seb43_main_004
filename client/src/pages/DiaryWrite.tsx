@@ -1,5 +1,5 @@
 /* eslint-disable space-before-function-paren */
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { styled } from 'styled-components'
 import Button from '../components/Common/Button'
 import Input from '../components/Common/Input'
@@ -195,6 +195,8 @@ export interface FoodList {
   carbohydrate: number
   protein: number
   fat: number
+  sugar: number
+  salt: number
   kcal: number
   custom?: boolean | undefined
 }
@@ -205,32 +207,26 @@ const DiaryWrite = () => {
   const [searchTxt, setSearchTxt] = useState('') // 검색 인풋에서 사용할 상태
   const [searchList, setSearchList] = useState<FoodList[]>([]) // 자동완성 검색어의 목록
   const [foodList, setFoodList] = useState<FoodList[]>([]) // 등록할 음식 리스트의 상태
-  const customId = useRef<number>(120)
+  const customId = useRef<number>(120) // 사용자등록 음식의 id. 영양성분 DB.length + 1
+
+  // Todo : 검색리스트 가져오기. 추후 전역 스토어에 영양성분 db 가져오는것으로 대체할 예정
+  const getSearchList = async () => {
+    const res = await axios.get(
+      `http://localhost:3001/nutrient?title=${searchTxt}`
+    )
+    setSearchList(res.data)
+  }
 
   useEffect(() => {
     // 검색어 자동완성
-    const getSearchList = async () => {
-      const res = await axios.get(
-        `http://localhost:3001/nutrient?title=${searchTxt}`
-      )
-      setSearchList(res.data)
-    }
-
     if (searchTxt !== '') {
       getSearchList()
     } else {
       setSearchList([])
     }
-
-    const getFoodList = async () => {
-      const res = await axios.get('http://localhost:3001/nutrient')
-      setFoodList(res.data)
-    }
-
-    getFoodList()
   }, [searchTxt])
 
-  // Todo: api로 일기 데이터 받아와서 현재 기록된것만 isDisable true 설정해주기
+  // Todo: 오늘 일기 데이터 가져와서 식사가 기록되지 않은것만 isDisabled false 처리
   const mealTime = [
     {
       label: '아침',
@@ -259,11 +255,7 @@ const DiaryWrite = () => {
     setTimeCheck(e.target.id)
   }
 
-  const onclick = () => {
-    console.log('onclick')
-  }
-
-  const addCustomFoodItem = () => {
+  const createCustomFoodItem = () => {
     const newItem: FoodList = {
       nutrientId: customId.current,
       title: '',
@@ -271,6 +263,8 @@ const DiaryWrite = () => {
       carbohydrate: 0,
       protein: 0,
       fat: 0,
+      sugar: 0,
+      salt: 0,
       kcal: 0,
       custom: true,
     }
@@ -280,10 +274,34 @@ const DiaryWrite = () => {
   }
 
   const deleteFoodItem = (title: string) => {
-    const filtered = foodList.filter((item) => item.title !== title)
-    setFoodList(filtered)
+    setFoodList(foodList.filter((item) => item.title !== title))
   }
 
+  const addToFoodList = (item: FoodList) => {
+    setFoodList([item, ...foodList])
+    setSearchList([])
+    setSearchTxt('')
+  }
+
+  const setFoodInfo = useCallback(
+    (id: number, content: { [key: string]: number | string }) => {
+      setFoodList(
+        foodList.map((item) =>
+          item.nutrientId === id ? { ...item, ...content } : item
+        )
+      )
+    },
+    [foodList]
+  )
+
+  const postDiary = () => {
+    console.log('post', '/diaries/{diary-id}/meal/write')
+    console.log(foodList)
+  }
+
+  const patchDiary = () => {
+    console.log('patch', '/diaries/{diary-id}/meal/update/{meal-id}')
+  }
   return (
     <StyledDiaryAdd>
       <h2>나의 식단일기</h2>
@@ -295,7 +313,7 @@ const DiaryWrite = () => {
               <li key={time.id}>
                 <input
                   type="radio"
-                  name="meal-time"
+                  name="mealType"
                   id={time.id}
                   disabled={time.isDisabled}
                   checked={timeCheck === time.id}
@@ -321,7 +339,7 @@ const DiaryWrite = () => {
       <div className="what">
         <div className="what-title">
           <h3>무엇을 먹었나요?</h3>
-          <Button onClick={addCustomFoodItem}>
+          <Button onClick={createCustomFoodItem}>
             <span className="material-icons-round">edit</span>
             직접 등록하기
           </Button>
@@ -334,11 +352,11 @@ const DiaryWrite = () => {
             value={searchTxt}
             onChange={(e) => setSearchTxt(e.target.value)}
           />
-          {searchTxt && (
+          {searchList.length > 0 && (
             <ul className="search-food-list">
-              {searchList.map((item, idx) => {
+              {searchList.map((item) => {
                 return (
-                  <li key={idx}>
+                  <li key={item.nutrientId} onClick={() => addToFoodList(item)}>
                     <span className="food-name">{item.title}</span>
                     <span className="material-icons-round">add</span>
                   </li>
@@ -359,17 +377,16 @@ const DiaryWrite = () => {
                 <FoodItem
                   key={data.nutrientId}
                   data={data}
+                  setInfo={setFoodInfo}
                   delete={deleteFoodItem}
                   custom={data.custom}
                 />
               ))}
-              {/* <FoodItem />
-            <FoodItem custom={true} /> */}
             </ul>
           )}
         </div>
       </div>
-      <Button onClick={onclick}>
+      <Button onClick={postDiary}>
         <span className="material-icons-round">edit</span>
         일기 등록하기
       </Button>
