@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import Input from '../components/Common/Input'
-import Button from '../components/Common/Button'
+// import Input from '../components/Common/Input'
+// import Button from '../components/Common/Button'
 import Tab from '../components/Common/Tab'
 
 // 임시 유저 정보
