@@ -54,12 +54,12 @@ jobs:
       
     - name: module install
       run: |
-          cd /client
+          cd client
           npm install
           
     - name: build react app
       run: |
-          cd /client
+          cd client
           npm run build    
 
     - name: Make zip file
