@@ -19,7 +19,7 @@ const FoodArchive = () => {
         <h2>음식 영양 성분</h2>
         <span className="material-symbols-outlined">question_mark</span>
       </header>
-      <div className="search__area">
+      <div className="search__form">
         <Input
           type="text"
           placeholder="음식을 입력하세요"
