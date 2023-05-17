@@ -48,10 +48,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
           node-version: 18
-        
-    - name: package-lock.json Install
-      run: npm install
-      working-directory: seb43_main_004
       
     - name: module install
       run: |
