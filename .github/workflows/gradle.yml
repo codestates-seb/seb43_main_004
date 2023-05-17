@@ -35,6 +35,7 @@ jobs:
     - name: Build with Gradle
       run: |
         cd /home/runner/work/seb43_main_004/seb43_main_004/server/wrieating/
+        chmod +x gradlew
         ./gradlew build
 
     - name: Make zip file
