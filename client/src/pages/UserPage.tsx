@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import Input from '../components/common/Input'
-import Button from '../components/common/Button'
-import Tab from '../components/common/Tab'
+import Input from '../components/Common/Input'
+import Button from '../components/Common/Button'
+import Tab from '../components/Common/Tab'
 
 // 임시 유저 정보
 const TempUser = {
