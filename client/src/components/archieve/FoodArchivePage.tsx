@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Button from '../Common/Button'
 import Input from '../Common/Input'
 
 const FoodArchive = () => {
-  const [inputVal, setInputVal] = useState('')
+<!--   const [inputVal, setInputVal] = useState('') -->
 
   const onClick = () => {
     console.log('hi')
