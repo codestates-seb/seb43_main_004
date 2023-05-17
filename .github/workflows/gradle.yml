@@ -34,7 +34,7 @@ jobs:
         
     - name: Build with Gradle
       run: |
-        cd /server/wrieating/
+        cd ${{ github.workspace }}/server/wrieating/
         ./gradlew build
         
     # build한 후 프로젝트를 압축합니다.
