@@ -50,18 +50,16 @@ jobs:
           node-version: 18
         
     - name: package-lock.json Install
-      run: |
-        cd /home/runner/work/seb43_main_004/seb43_main_004
-        npm install
+      run: npm install
       
     - name: module install
       run: |
-          cd /home/runner/work/seb43_main_004/seb43_main_004/client
+          cd /client
           npm install
           
     - name: build react app
       run: |
-          cd /home/runner/work/seb43_main_004/seb43_main_004/client
+          cd /client
           npm run build    
 
     - name: Make zip file
