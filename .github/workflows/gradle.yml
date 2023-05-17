@@ -52,7 +52,7 @@ jobs:
     - name: package-lock.json Install
       run: |
         cd /home/runner/work/seb43_main_004/seb43_main_004
-        npm ci --ignore-scripts
+        npm install
       
     - name: module install
       run: |
