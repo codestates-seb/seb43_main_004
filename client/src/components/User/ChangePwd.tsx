@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import TabFrame from './TabFrame'
-import Input from '../common/Input'
-import Button from '../common/Button'
+import Input from '../Common/Input'
+import Button from '../Common/Button'
 import { checkPassword } from '../../utils/userfunc'
 
 interface pwdType {
@@ -65,6 +65,9 @@ const ChangePwd = () => {
     if (!isValid) {
       setError(msg)
     } else {
+      // api 호출
+      // 현재 비밀번호가 유효하지 않습니다.
+      // 현재 비밀번호가 올바르고, 새 비밀번호도 제대로 입력되었다면 비밀번호 변경 모달 띄우기
       alert('비밀번호가 변경되었습니다.') // 비밀번호 변경
     }
   }

@@ -1,46 +1,57 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import Input from '../components/common/Input'
-import Button from '../components/common/Button'
-import Tab from '../components/common/Tab'
-
-// 임시 유저 정보
-const TempUser = {
-  nickname: 'testuser',
-  gender: 'male',
-  height: 175,
-  weight: 70,
-  activity: 'low',
-  icon: 'https://img.animalplanet.co.kr/news/2022/10/13/700/gzs211818b42g2a88a13.jpg',
-}
+import Tab from '../components/Common/Tab'
+import axios from 'axios'
+import { API } from '../utils/API'
+import { User } from '../utils/interface'
 
 const UserPage = () => {
+  const [profile, setProfile] = useState<User>({
+    nickName: '',
+    gender: '',
+    height: 0,
+    weight: 0,
+    activity: '',
+    icon: '',
+  })
+  const { nickName, gender, height, weight, activity, icon } = profile
   useEffect(() => {
-    console.log('axios get')
+    console.log('/mypage')
+    axios
+      .get(`${API}/profile/1`)
+      // .get(`${API}/members/mypage`)
+      .then((response) => {
+        console.log(response)
+        setProfile(response.data)
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }, [])
 
   return (
     <Container>
       <UserProfile>
-        <img src={TempUser.icon} alt="프로필 아이콘" />
+        <img src={icon} alt="프로필 아이콘" />
         <div>
           <div className="userinfo-top">
-            <h1>{TempUser.nickname}</h1>
-            <span>{TempUser.gender}</span>
+            <h1>{nickName}</h1>
+            <span>{gender}</span>
           </div>
 
           <ItemsWrapper>
             <div>
               <span>신장</span>
-              <span>{TempUser.height} cm</span>
+              <span>{height} cm</span>
             </div>
             <div>
               <span>체중</span>
-              <span>{TempUser.weight} kg</span>
+              <span>{weight} kg</span>
             </div>
             <div>
               <span>활동수준</span>
-              <span>{TempUser.activity}</span>
+              <span>{activity}</span>
             </div>
           </ItemsWrapper>
         </div>
