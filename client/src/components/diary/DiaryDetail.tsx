@@ -16,8 +16,6 @@ const DiaryDetail = () => {
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
 
-  console.log(diary)
-
   const onClickBtn = () => {
     console.log('hi')
   }
@@ -50,7 +48,7 @@ const DiaryDetail = () => {
     axios
       .patch(`http://localhost:4000/diary/${id}`, { memo: memoContent })
       .then((res) => {
-        console.log(`메모가 업데이트되었습니다. ${res}`)
+        console.log(`메모가 업데이트되었습니다. ${res}`) // toast창을 써야할 듯
         setIsOpenMemo(true)
       })
       .catch((err) => {
@@ -87,7 +85,7 @@ const DiaryDetail = () => {
 
   return (
     <Wrapper>
-      <h2>나의 식단 일기</h2>
+      <h2>나의 식단일기</h2>
       {diary && (
         <DiaryDetailWrapper>
           <Modal
@@ -339,6 +337,7 @@ const Wrapper = styled.div`
   max-width: 1150px;
   width: calc(100% - 400px);
   white-space: nowrap;
+  margin-bottom: 3rem;
   h2 {
     font-size: 28px;
     margin-bottom: 20px;

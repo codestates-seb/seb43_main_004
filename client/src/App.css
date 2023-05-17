@@ -3,8 +3,6 @@ body {
     height: 100vh;
 }
 
-
-
 .App{
     height: 100vh;
 }
@@ -14,7 +12,9 @@ body {
     max-width: 1250px;
     width: 100%;
     min-height: 100%;
-    margin: 174px auto;
+    margin: 0 auto;
+    margin-top: 130px;
+    margin-bottom: 164px;
     display: flex;
     justify-content: center; 
 }

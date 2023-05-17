@@ -12,6 +12,7 @@ import NotFound from './pages/NotFound'
 import UserPage from './pages/UserPage'
 import EditProfile from './components/User/EditProfile'
 import ChangePwd from './components/User/ChangePwd'
+import FoodArchive from './components/archieve/FoodArchivePage'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/" element={<DiaryCheck />} />
           <Route path="/diaries" element={<DiaryCheck />} />
           <Route path="/diaries/:id" element={<DiaryDetail />} />
+          <Route path="/nutrient" element={<FoodArchive />} />
           <Route path="/sign-in" element={<UserSignIn />} />
           <Route path="/sign-up" element={<UserSignUp social={false} />} />
           <Route path="/register" element={<UserSignUp social={true} />} />
