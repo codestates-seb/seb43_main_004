@@ -7,6 +7,8 @@ const StyledHeader = styled.header`
   background-color: ${({ theme }) => theme.color.primary};
   padding: 2rem;
   position: fixed;
+  top: 0;
+  z-index: 800;
   width: 100%;
   top: 0;
   left: 0;
@@ -26,11 +28,10 @@ const StyledHeader = styled.header`
 
   h1 {
     margin: 0 auto;
-    width: 10rem;
 
     img {
       display: block;
-      width: 100%;
+      width: 50%;
     }
   }
 
@@ -38,7 +39,7 @@ const StyledHeader = styled.header`
     padding: 1rem;
 
     .btn-menu {
-      font-size: ${({ theme }) => theme.fontSize.smmh};
+      font-size: ${({ theme }) => theme.fontSize.lgh};
     }
 
     h1 {

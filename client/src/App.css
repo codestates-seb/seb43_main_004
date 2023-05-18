@@ -3,9 +3,24 @@ body {
     height: 100vh;
 }
 
-
-.App {
-    height: auto;
-    min-height: 100%;
-    padding-bottom: 164px;
+.App{
+    height: 100vh;
 }
+
+
+.Wrapper { 
+    max-width: 1250px;
+    width: 100%;
+    min-height: 100%;
+    margin: 0 auto;
+    margin-top: 130px;
+    margin-bottom: 164px;
+    display: flex;
+    justify-content: center; 
+}
+
+/* 스크롤바를 없앰 */
+::-webkit-scrollbar {
+    display: none;
+}
+

@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { styled } from 'styled-components'
 import Button from '../components/common/Button'
 import Input from '../components/common/Input'
-import FoodItem from '../components/FoodItem'
+import FoodItem from '../components/diary/FoodItem'
 import axios from 'axios'
 import Modal from '../components/common/Modal'
 
@@ -433,7 +433,11 @@ const DiaryWrite = () => {
         msg={`작성중인 내용은 저장되지 않습니다.\n페이지를 나가시겠습니까?`}
         icon="warning"
       >
-        <Button unique={true} onClick={() => setIsUnsaved(false)}>
+        <Button
+          type="button"
+          outline={true}
+          onClick={() => setIsUnsaved(false)}
+        >
           취소
         </Button>
         <Button onClick={() => setIsUnsaved(false)}>확인</Button>

@@ -1,15 +1,17 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 interface inputProps {
   label?: string
   type: string
-  placeholder: string
+  placeholder?: string
   name: string
   value?: string
   defaultValue?: string
   error?: string
+  disabled?: boolean
   onChange(e: React.ChangeEvent<HTMLInputElement>): void
+  onBlur?(e: React.FocusEvent<HTMLInputElement>): void
 }
 
 const Input = (props: inputProps) => {
@@ -21,25 +23,34 @@ const Input = (props: inputProps) => {
     value,
     defaultValue,
     error,
+    disabled,
     onChange,
+    onBlur,
   } = props
 
   return (
-    <div>
+    <InputWrapper>
       {label && <StyledLabel htmlFor={label}>{label}</StyledLabel>}
       <StyledInput
         type={type}
         placeholder={placeholder}
         onChange={onChange}
+        onBlur={onBlur}
+        disabled={disabled}
         name={name}
         value={value}
         defaultValue={defaultValue}
         autoComplete="off"
       />
       {error && <ErrorMessage>{error}</ErrorMessage>}
-    </div>
+    </InputWrapper>
   )
 }
+
+const InputWrapper = styled.div`
+  height: 6rem;
+  flex: 1;
+`
 
 const StyledLabel = styled.label`
   display: inline-block;
@@ -47,10 +58,10 @@ const StyledLabel = styled.label`
   font-size: 1.4rem;
   font-weight: 700;
 `
-const StyledInput = styled.input`
+const StyledInput = styled.input<inputProps>`
   width: 100%;
-  padding: 1rem;
-  border-radius: 0.6rem;
+  padding: 1.2rem 1rem;
+  border-radius: 1rem;
   border: 1px solid var(--color-dark-gray);
 
   &::placeholder {
@@ -59,6 +70,13 @@ const StyledInput = styled.input`
   &:focus {
     border: 1px solid var(--color-secondary);
   }
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      border: 1px solid var(--color-light-gray);
+      color: var(--color-light-gray);
+    `}
 `
 
 const ErrorMessage = styled.p`
