@@ -1,11 +1,11 @@
 /* eslint-disable space-before-function-paren */
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { styled } from 'styled-components'
-import Button from '../components/common/Button'
-import Input from '../components/common/Input'
+import Button from '../components/Common/Button'
+import Input from '../components/Common/Input'
 import FoodItem from '../components/diary/FoodItem'
 import axios from 'axios'
-import Modal from '../components/common/Modal'
+import Modal from '../components/Common/Modal'
 
 const StyledDiaryAdd = styled.main`
   h2 {
