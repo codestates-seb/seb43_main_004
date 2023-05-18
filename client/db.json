@@ -158,6 +158,33 @@
       "recipe": [],
       "comment": "",
       "id": 3
+    },
+    {
+      "id": 4,
+      "userDate": "2023-05-15",
+      "memo": "",
+      "diaryStatus": "",
+      "meal": [],
+      "standardIntake": [
+        {
+          "carbohydrate": 225,
+          "protein": 60,
+          "fat": 47,
+          "kcal": 2200,
+          "sugar": 25
+        }
+      ],
+      "calcul": [
+        {
+          "carbohydrate": 0,
+          "protein": 0,
+          "fat": 0,
+          "kcal": 0,
+          "sugar": 0
+        }
+      ],
+      "recipe": [],
+      "comment": ""
     }
   ]
 }
