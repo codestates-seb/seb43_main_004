@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: ${profile}
   h2:
     console:
       enabled: true
