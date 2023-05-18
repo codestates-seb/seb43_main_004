@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { styled } from 'styled-components'
-import Input from './Common/Input'
+import Input from './common/Input'
 import { FoodList } from '../pages/DiaryWrite'
 
 const StyledFoodItem = styled.li`
