@@ -12,7 +12,6 @@ const color = {
 
 const fontSize = {
   small: '1.4rem',
-  middle: '1.6rem',
   large: '1.8rem',
   larger: '2.1rem',
   smh: '2.4rem',
@@ -23,8 +22,6 @@ const fontSize = {
   lgl: '7.2rem',
 }
 
-const shadow = '0px 2px 4px 0 rgba(75,75,75,0.15)'
-
 // 반응형 모바일 사이즈(태블릿 ~ 모바일)
 const device = {
   mobile: `screen and (max-width: 768px)`,
@@ -34,7 +31,6 @@ const Theme = {
   fontSize,
   color,
   device,
-  shadow,
 }
 
 export default Theme
