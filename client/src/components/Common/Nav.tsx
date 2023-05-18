@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
 
@@ -18,7 +18,7 @@ const StyledNavBg = styled.div`
   &.open {
     visibility: visible;
     opacity: 1;
-    z-index: 99;
+    z-index: 9;
   }
 `
 
@@ -26,7 +26,7 @@ const StyledNav = styled.nav`
   font-family: 'yg-jalnan';
   width: 50%;
   height: 100%;
-  padding: 3rem 5rem;
+  padding: 6rem;
   background: ${({ theme }) => theme.color.primary};
   position: fixed;
   top: 0;
@@ -42,10 +42,10 @@ const StyledNav = styled.nav`
 
   .btn-box {
     align-self: flex-end;
-    margin-bottom: 3rem;
+    margin-bottom: 4rem;
 
     button {
-      font-size: ${({ theme }) => theme.fontSize.lgh};
+      font-size: ${({ theme }) => theme.fontSize.lgl};
     }
   }
 
@@ -54,9 +54,9 @@ const StyledNav = styled.nav`
     display: flex;
     align-items: center;
     border-bottom: 1px solid ${({ theme }) => theme.color.darkGray};
-    padding-bottom: 3rem;
-    margin-bottom: 3rem;
-    gap: 3rem;
+    padding-bottom: 5rem;
+    margin-bottom: 5rem;
+    gap: 5rem;
 
     div:first-of-type {
       font-size: 13rem;
@@ -91,7 +91,7 @@ const StyledNav = styled.nav`
     a {
       color: ${({ theme }) => theme.color.darkGray};
       font-family: 'Pretendard', sans-serif;
-      font-size: ${({ theme }) => theme.fontSize.larger};
+      font-size: ${({ theme }) => theme.fontSize.smh};
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -104,10 +104,14 @@ const StyledNav = styled.nav`
   }
 
   .depth-1 {
-    font-size: ${({ theme }) => theme.fontSize.smmh};
+    font-size: ${({ theme }) => theme.fontSize.mdh};
 
     li {
-      margin-bottom: 3rem;
+      margin-bottom: 3.5rem;
+      &.active a {
+        color: ${({ theme }) => theme.color.point};
+        border-bottom: 5px solid ${({ theme }) => theme.color.point};
+      }
     }
 
     a {
@@ -116,20 +120,12 @@ const StyledNav = styled.nav`
       &:hover {
         color: ${({ theme }) => theme.color.point};
       }
-      &.active {
-        color: ${({ theme }) => theme.color.point};
-        border-bottom: 5px solid ${({ theme }) => theme.color.point};
-      }
     }
 
     .depth-2 {
       font-size: ${({ theme }) => theme.fontSize.smh};
       li {
-        margin-bottom: 2rem;
-
-        &:first-child {
-          margin-top: 2rem;
-        }
+        margin-top: 3rem;
       }
     }
   }
@@ -169,22 +165,23 @@ const StyledNav = styled.nav`
       }
 
       a {
-        font-size: ${({ theme }) => theme.fontSize.middle};
+        font-size: ${({ theme }) => theme.fontSize.large};
       }
     }
 
     .depth-1 {
-      font-size: ${({ theme }) => theme.fontSize.smh};
+      font-size: ${({ theme }) => theme.fontSize.smmh};
 
       li {
         margin-bottom: 2.5rem;
       }
-      a.active {
-        border-bottom-width: 3px;
-      }
 
       .depth-2 {
-        font-size: ${({ theme }) => theme.fontSize.larger};
+        font-size: ${({ theme }) => theme.fontSize.smh};
+
+        li {
+          margin-top: 2rem;
+        }
       }
     }
   }
@@ -223,7 +220,7 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
             </div>
             <div>
               <p>고양고양이</p>
-              <Link to="/userpage">
+              <Link to="/">
                 마이페이지
                 <span className="material-icons-round">navigate_next</span>
               </Link>
@@ -232,24 +229,24 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
         ) : (
           <div className="login-box">
             <div className="material-icons-round">account_circle</div>
-            <Link to="/sign-in">로그인</Link>
+            <Link to="/">로그인</Link>
           </div>
         )}
         <ul className="depth-1">
-          <li>
-            <NavLink to="/diaries">식단일기</NavLink>
+          <li className="active">
+            <Link to="/">식단일기</Link>
           </li>
           <li>
-            <NavLink to="/">커뮤니티</NavLink>
+            <Link to="/">통계 보기</Link>
           </li>
           <li>
-            <NavLink to="/">모아보기</NavLink>
+            <Link to="/">모아보기</Link>
             <ul className="depth-2">
               <li>
-                <NavLink to="/">레시피</NavLink>
+                <Link to="/">레시피</Link>
               </li>
               <li>
-                <NavLink to="/nutrient">영양성분</NavLink>
+                <Link to="/">영양성분</Link>
               </li>
             </ul>
           </li>
