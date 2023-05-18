@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@nivo/pie": "^0.83.0",
+    "react-calendar": "^4.2.1"
+  }
+}

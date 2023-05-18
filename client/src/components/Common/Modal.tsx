@@ -8,7 +8,7 @@ const StyledModal = styled.div`
   background-color: rgba(0, 0, 0, 0.3);
   justify-content: center;
   align-items: center;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 99;
@@ -49,7 +49,7 @@ const StyledModal = styled.div`
 
 interface ModalProps {
   state: boolean
-  setState(state: boolean): void
+  setState: React.Dispatch<React.SetStateAction<boolean>>
   icon?: string
   msg: string
   children: React.ReactNode

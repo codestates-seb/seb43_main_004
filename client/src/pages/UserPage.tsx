@@ -1,9 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import Tab from '../components/common/Tab'
+import Tab from '../components/Common/Tab'
 import axios from 'axios'
 import { API } from '../utils/API'
 import { User } from '../utils/interface'
+
+// 임시 유저 정보
+const TempUser = {
+  nickname: 'testuser',
+  gender: 'male',
+  height: 175,
+  weight: 70,
+  activity: 'low',
+  icon: 'https://img.animalplanet.co.kr/news/2022/10/13/700/gzs211818b42g2a88a13.jpg',
+}
+
+console.log(TempUser)
 
 const UserPage = () => {
   const [profile, setProfile] = useState<User>({
@@ -15,6 +27,7 @@ const UserPage = () => {
     icon: '',
   })
   const { nickName, gender, height, weight, activity, icon } = profile
+
   useEffect(() => {
     console.log('/mypage')
     axios
@@ -60,6 +73,8 @@ const UserPage = () => {
         tabItem={[
           { name: '프로필 수정', path: '/userpage' }, // 프로필 수정 페이지가 기본이 된다고 가정...
           { name: '비밀번호 변경', path: '/userpage/change-pwd' },
+          { name: '내가 작성한 글', path: '/userpage/posts' },
+          { name: '내가 작성한 댓글', path: '/userpage/comments' },
         ]}
       />
     </Container>
