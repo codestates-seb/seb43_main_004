@@ -56,7 +56,7 @@ const UserSignUp = ({ social }: Props) => {
     ckAuth: '',
   })
 
-  console.log(nickName, gender, activity)
+  console.log(nickName, gender, activity, height, weight, birth) // 빌드를 위한 콘솔
 
   const [error, setError] = useState<errorType>({
     email: '',
