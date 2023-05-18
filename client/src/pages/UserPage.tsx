@@ -73,6 +73,8 @@ const UserPage = () => {
         tabItem={[
           { name: '프로필 수정', path: '/userpage' }, // 프로필 수정 페이지가 기본이 된다고 가정...
           { name: '비밀번호 변경', path: '/userpage/change-pwd' },
+          { name: '내가 작성한 글', path: '/userpage/posts' },
+          { name: '내가 작성한 댓글', path: '/userpage/comments' },
         ]}
       />
     </Container>
