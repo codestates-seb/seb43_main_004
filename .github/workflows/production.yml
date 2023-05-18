@@ -1,6 +1,8 @@
 name: development deployment
 
 on:
+  push:
+    branches: [ "dev/fe" ]
   pull_request:
     branches: [ "dev/fe" ]
 
