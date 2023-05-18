@@ -8,6 +8,8 @@ import axios from 'axios'
 import Modal from '../components/Common/Modal'
 
 const StyledDiaryAdd = styled.main`
+  width: 100%;
+
   h2 {
     font-size: ${({ theme }) => theme.fontSize.lgh};
     margin-bottom: 5rem;
@@ -302,7 +304,7 @@ const DiaryWrite = () => {
   const checkValidation = () => {
     // 유효성검사
     // 시간 선택했는지
-    // if (timeCheck === '') setIsUnchecked(true)
+    if (timeCheck === '') setIsUnchecked(true)
     // 빈칸이 있는지
     // 배열 안의 객체를 순회해서 빈값이 있는지 확인
   }
@@ -410,38 +412,38 @@ const DiaryWrite = () => {
           <span className="material-icons-round">edit</span>
           일기 등록하기
         </Button>
-      </StyledDiaryAdd>
-      <Modal
-        state={isEmpty}
-        setState={setIsEmpty}
-        msg={`빈 칸이 있습니다.\n다시 확인하고 등록해주세요.`}
-        icon="error"
-      >
-        <Button onClick={() => setIsEmpty(false)}>확인</Button>
-      </Modal>
-      <Modal
-        state={isUnchecked}
-        setState={setIsUnchecked}
-        msg={`식사시간을 선택하지 않으셨습니다.\n다시 확인하고 등록해주세요.`}
-        icon="error"
-      >
-        <Button onClick={() => setIsUnchecked(false)}>확인</Button>
-      </Modal>
-      <Modal
-        state={isUnsaved}
-        setState={setIsUnchecked}
-        msg={`작성중인 내용은 저장되지 않습니다.\n페이지를 나가시겠습니까?`}
-        icon="warning"
-      >
-        <Button
-          type="button"
-          outline={true}
-          onClick={() => setIsUnsaved(false)}
+        <Modal
+          state={isEmpty}
+          setState={setIsEmpty}
+          msg={`빈 칸이 있습니다.\n다시 확인하고 등록해주세요.`}
+          icon="error"
         >
-          취소
-        </Button>
-        <Button onClick={() => setIsUnsaved(false)}>확인</Button>
-      </Modal>
+          <Button onClick={() => setIsEmpty(false)}>확인</Button>
+        </Modal>
+        <Modal
+          state={isUnchecked}
+          setState={setIsUnchecked}
+          msg={`식사시간을 선택하지 않으셨습니다.\n다시 확인하고 등록해주세요.`}
+          icon="error"
+        >
+          <Button onClick={() => setIsUnchecked(false)}>확인</Button>
+        </Modal>
+        <Modal
+          state={isUnsaved}
+          setState={setIsUnchecked}
+          msg={`작성중인 내용은 저장되지 않습니다.\n페이지를 나가시겠습니까?`}
+          icon="warning"
+        >
+          <Button
+            type="button"
+            outline={true}
+            onClick={() => setIsUnsaved(false)}
+          >
+            취소
+          </Button>
+          <Button onClick={() => setIsUnsaved(false)}>확인</Button>
+        </Modal>
+      </StyledDiaryAdd>
     </>
   )
 }
