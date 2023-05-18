@@ -45,18 +45,18 @@
   },
   "profile": [
     {
-    "id": 1,
-    "email" : "asd@gmail.com",
-    "nickName" : "origin",
-    "password" : "testpassword1234",
-    "birth" : "1999-11-11",
-    "gender" : "male",
-    "height" : 177,
-    "weight" : 68,
-    "activity" : "MIDDLE_ACTIVITY",
-    "icon" : "https://img.animalplanet.co.kr/news/2022/10/13/700/gzs211818b42g2a88a13.jpg"
-  }
-],
+      "id": 1,
+      "email": "asd@gmail.com",
+      "nickName": "origin",
+      "password": "testpassword1234",
+      "birth": "1999-11-11",
+      "gender": "male",
+      "height": 177,
+      "weight": 68,
+      "activity": "MIDDLE_ACTIVITY",
+      "icon": "https://img.animalplanet.co.kr/news/2022/10/13/700/gzs211818b42g2a88a13.jpg"
+    }
+  ],
   "diary": [
     {
       "id": 1,
@@ -201,111 +201,110 @@
       "comment": ""
     }
   ],
-  "nutrient" :{
-        "data" : [
-          {
-            "foodName": "새우 볶음밥",
-            "carbohydrate": 30,
-            "protein": 33,
-            "fat": 9,
-            "kcal": 500,
-            "sugar": 10
-          },
-          {
-            "foodName": "새우 볶음밥",
-            "carbohydrate": 30,
-            "protein": 33,
-            "fat": 9,
-            "kcal": 500,
-            "sugar": 10
-          },
-          {
-            "foodName": "새우 볶음밥",
-            "carbohydrate": 30,
-            "protein": 33,
-            "fat": 9,
-            "kcal": 500,
-            "sugar": 10
-          },
-          {
-            "foodName": "새우 볶음밥",
-            "carbohydrate": 30,
-            "protein": 33,
-            "fat": 9,
-            "kcal": 500,
-            "sugar": 10
-          },
-          {
-            "foodName": "새우 볶음밥",
-            "carbohydrate": 30,
-            "protein": 33,
-            "fat": 9,
-            "kcal": 500,
-            "sugar": 10
-          },
-          {
-            "foodName": "새우 볶음밥",
-            "carbohydrate": 30,
-            "protein": 33,
-            "fat": 9,
-            "kcal": 500,
-            "sugar": 10
-          },
-          {
-            "foodName": "새우 볶음밥",
-            "carbohydrate": 30,
-            "protein": 33,
-            "fat": 9,
-            "kcal": 500,
-            "sugar": 10
-          },
-          {
-            "foodName": "새우 볶음밥",
-            "carbohydrate": 30,
-            "protein": 33,
-            "fat": 9,
-            "kcal": 500,
-            "sugar": 10
-          },
-          {
-            "foodName": "새우 볶음밥",
-            "carbohydrate": 30,
-            "protein": 33,
-            "fat": 9,
-            "kcal": 500,
-            "sugar": 10
-          },
-          {
-            "foodName": "새우 볶음밥",
-            "carbohydrate": 30,
-            "protein": 33,
-            "fat": 9,
-            "kcal": 500,
-            "sugar": 10
-          },
-          {
-            "foodName": "새우 볶음밥",
-            "carbohydrate": 30,
-            "protein": 33,
-            "fat": 9,
-            "kcal": 500,
-            "sugar": 10
-          },
-          {
-            "foodName": "새우 볶음밥",
-            "carbohydrate": 30,
-            "protein": 33,
-            "fat": 9,
-            "kcal": 500,
-            "sugar": 10
-          }
-        ],
-        "pageInfo": {
-        "page": 1,
-        "size": 10,
-        "totalElements": 12,
-        "totalPages": 1
-        }
-}
-  
+  "nutrient": {
+    "data": [
+      {
+        "foodName": "새우 볶음밥",
+        "carbohydrate": 30,
+        "protein": 33,
+        "fat": 9,
+        "kcal": 500,
+        "sugar": 10
+      },
+      {
+        "foodName": "새우 볶음밥",
+        "carbohydrate": 30,
+        "protein": 33,
+        "fat": 9,
+        "kcal": 500,
+        "sugar": 10
+      },
+      {
+        "foodName": "새우 볶음밥",
+        "carbohydrate": 30,
+        "protein": 33,
+        "fat": 9,
+        "kcal": 500,
+        "sugar": 10
+      },
+      {
+        "foodName": "새우 볶음밥",
+        "carbohydrate": 30,
+        "protein": 33,
+        "fat": 9,
+        "kcal": 500,
+        "sugar": 10
+      },
+      {
+        "foodName": "새우 볶음밥",
+        "carbohydrate": 30,
+        "protein": 33,
+        "fat": 9,
+        "kcal": 500,
+        "sugar": 10
+      },
+      {
+        "foodName": "새우 볶음밥",
+        "carbohydrate": 30,
+        "protein": 33,
+        "fat": 9,
+        "kcal": 500,
+        "sugar": 10
+      },
+      {
+        "foodName": "새우 볶음밥",
+        "carbohydrate": 30,
+        "protein": 33,
+        "fat": 9,
+        "kcal": 500,
+        "sugar": 10
+      },
+      {
+        "foodName": "새우 볶음밥",
+        "carbohydrate": 30,
+        "protein": 33,
+        "fat": 9,
+        "kcal": 500,
+        "sugar": 10
+      },
+      {
+        "foodName": "새우 볶음밥",
+        "carbohydrate": 30,
+        "protein": 33,
+        "fat": 9,
+        "kcal": 500,
+        "sugar": 10
+      },
+      {
+        "foodName": "새우 볶음밥",
+        "carbohydrate": 30,
+        "protein": 33,
+        "fat": 9,
+        "kcal": 500,
+        "sugar": 10
+      },
+      {
+        "foodName": "새우 볶음밥",
+        "carbohydrate": 30,
+        "protein": 33,
+        "fat": 9,
+        "kcal": 500,
+        "sugar": 10
+      },
+      {
+        "foodName": "새우 볶음밥",
+        "carbohydrate": 30,
+        "protein": 33,
+        "fat": 9,
+        "kcal": 500,
+        "sugar": 10
+      }
+    ],
+    "pageInfo": {
+      "page": 1,
+      "size": 10,
+      "totalElements": 12,
+      "totalPages": 1
+    }
+  }
 }

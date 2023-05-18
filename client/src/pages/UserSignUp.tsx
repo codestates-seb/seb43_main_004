@@ -9,7 +9,7 @@ import { ApiCaller } from '../utils/apiCaller'
 import {
   dtoReqEmailCheck,
   dtoReqVerifyEmail,
-} from '../dto/membership/membership/dtoSignup'
+} from '../dto/membership/members/dtoSignup'
 import { dtoResponse } from '../dto'
 import { debounce } from '../utils/timefunc'
 
@@ -62,7 +62,7 @@ const UserSignUp = ({ social }: Props) => {
     ckAuth: '',
   })
 
-  console.log(nickName, gender, activity, height, weight, birth)
+  console.log(nickName, gender, activity, height, weight, birth) // 빌드를 위한 콘솔
 
   const [error, setError] = useState<errorType>({
     email: '',
@@ -88,7 +88,7 @@ const UserSignUp = ({ social }: Props) => {
   }
 
   // 인증번호 전송
-  const sendNumbers = async (email: string) => {
+  const sendNumbers = (email: string) => {
     const auth = { auth: '' }
     const msg = { email: '' }
     let isValid = false
@@ -101,28 +101,14 @@ const UserSignUp = ({ social }: Props) => {
 
     // 이메일이 정상적으로 입력되었는지 확인 후 이메일 중복확인 api 호출
     if (checkEmail(email)) {
-      const res = await ApiCaller<dtoReqEmailCheck, dtoResponse>(
-        'POST',
-        'members/emailcheck'
-      )
       console.log('/members/emailcheck, email') // 중복확인 후 중복이 아니면 isValid = true
-      if (res.status === 'OK') {
-        isValid = true
-      } else {
-        // 에러 메세지 표시 등 에러 처리
-      }
+      isValid = true
     } else {
       msg.email = '이메일이 유효하지 않습니다.'
       setError({ ...error, ...msg })
     }
 
     if (isValid) {
-      const res = await ApiCaller<dtoReqVerifyEmail, dtoResponse>(
-        'POST',
-        'members/sendverifyemail',
-        msg
-      )
-      console.log(res.status)
       console.log('/members/sendverifyemail, email') // 인증번호 전송 api 호출
       auth.auth = '1111'
       setError({ ...error, ...msg })
@@ -200,7 +186,6 @@ const UserSignUp = ({ social }: Props) => {
 
   // 가입하기 - 모든 값이 유효한 경우 버튼 활성화
   const checkValid = () => {
-    ApiCaller<userInfo, dtoResponse>('POST', 'members/signup', values)
     console.log('/members/signup')
   }
 
