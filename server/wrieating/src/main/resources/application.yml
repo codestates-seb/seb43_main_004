@@ -7,7 +7,7 @@ spring:
     url: jdbc:mysql://${AWS_RDS_URL}/
     username: admin
     password: ${AWS_RDS_PASSWORD}
-    driver-class-name:
+    driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
       data-locations:

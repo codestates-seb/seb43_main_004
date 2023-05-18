@@ -3,6 +3,16 @@
 BUILD_JAR=$(ls /home/ec2-user/action/server/wrieating/build/libs/wrieating-0.0.1-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 
+# 환경 변수 로드
+source ~/.bash_profile
+
+# 환경변수 설정
+export profile=deploy
+export PATH=$PATH:/home/ec2-user/tools/gradle-7.3.3/bin
+export JWT_SECRET_KEY=${JWT_SECRET_KEY}
+export AWS_RDS_PASSWORD=${AWS_RDS_PASSWORD}
+export AWS_RDS_URL=${AWS_RDS_URL}
+
 # 빌드 디렉토리로 이동
 cd /home/ec2-user/action/server/wrieating/
 
