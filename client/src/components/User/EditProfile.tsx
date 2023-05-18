@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import TabFrame from './TabFrame'
-import Input from '../Common/Input'
-import Button from '../Common/Button'
-import Radio from '../Common/Radio'
+import Input from '../common/Input'
+import Button from '../common/Button'
+import Radio from '../common/Radio'
 import { genderList, activityScore, icons } from '../../utils/options'
 
 interface editType {

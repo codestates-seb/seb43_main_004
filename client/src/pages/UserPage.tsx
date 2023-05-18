@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import Tab from '../components/Common/Tab'
+import Tab from '../components/common/Tab'
 
 // 임시 유저 정보
 const TempUser = {
