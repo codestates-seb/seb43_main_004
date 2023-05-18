@@ -5,6 +5,7 @@ import GlobalStyle from './styles/GlobalStyle'
 import { ThemeProvider } from 'styled-components'
 import Theme from './styles/Theme'
 import Header from './components/Common/Header'
+import DiaryWrite from './pages/DiaryWrite'
 
 function App() {
   return (
@@ -13,7 +14,11 @@ function App() {
       <ThemeProvider theme={Theme}>
         <div className="App">
           <Header />
-          <Routes></Routes>
+          <div className="wrapper">
+            <Routes>
+              <Route path="/diary-add" element={<DiaryWrite />} />
+            </Routes>
+          </div>
         </div>
       </ThemeProvider>
     </>
