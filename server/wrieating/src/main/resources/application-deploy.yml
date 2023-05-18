@@ -1,26 +1,30 @@
 spring:
+  # mysql db
   h2:
     console:
       enabled: true
-      path: /h2
+      path:
   datasource:
-    url: jdbc:h2:mem:test
+    url: jdbc:mysql://wrieating-database.ca59q4wbjg2d.ap-northeast-2.rds.amazonaws.com:13306/wrieatingdb
+    username: admin
+    password: wrieating123
+    driver-class-name:
   sql:
     init:
-      data-locations: classpath*:db/h2/
+      data-locations:
       mode: always
   jpa:
+    database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
-      ddl-auto: create  # (1) 스키마 자동 생성
-    show-sql: true      # (2) SQL 쿼리 출력
+      ddl-auto: create-drop
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
         highlight_sql: true
         color-codes: true
         use_sql_comments: true
-    defer-datasource-initialization: true  # 데이터 소스 초기화 지연 설정
-  #    open-in-view: true
+    defer-datasource-initialization: true
   output:
     ansi:
       enabled: ALWAYS
@@ -28,7 +32,6 @@ logging:
   level:
     org:
       hibernate:
-        #        SQL: debug           # jpa 설정에서 쿼리를 보여주므로 필요 없음.
         type:
           descriptor:
             sql:
@@ -38,6 +41,11 @@ mail:
   address:
     admin: admin@gmail.com
 jwt:
-  key: ${JWT_SECRET_KEY}
+  key: qweasdzxcrtyfghvbn12341234qweasdzxcrtyfghvbn345345345345345sdasdhukwhdkuahjhdu
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
+
+server:
+  error:
+    whitelabel:
+      enabled: false
