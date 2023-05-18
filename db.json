@@ -1,0 +1,14 @@
+{
+  "profile": [{
+    "id": 1,
+    "email" : "asd@gmail.com",
+    "nickName" : "origin",
+    "password" : "testpassword1234",
+    "birth" : "1999-11-11",
+    "gender" : "male",
+    "height" : 177,
+    "weight" : 68,
+    "activity" : "MIDDLE_ACTIVITY",
+    "icon" : "https://img.animalplanet.co.kr/news/2022/10/13/700/gzs211818b42g2a88a13.jpg"
+  }]
+}

@@ -5,19 +5,12 @@ import Input from '../Common/Input'
 import Button from '../Common/Button'
 import Radio from '../Common/Radio'
 import { genderList, activityScore, icons } from '../../utils/options'
-
-interface editType {
-  gender: string
-  nickName: string
-  birth: string
-  height: number
-  weight: number
-  activity: string
-  icon: string
-}
+import axios from 'axios'
+import { API } from '../../utils/API'
+import { User } from '../../utils/interface'
 
 const EditProfile = () => {
-  const [profile, setProfile] = useState<editType>({
+  const [profile, setProfile] = useState<User>({
     nickName: '',
     gender: 'male',
     birth: '',
@@ -33,8 +26,51 @@ const EditProfile = () => {
     setProfile({ ...profile, [name]: value })
     console.log(name, value)
   }
+
+  // 프로필 수정
+  const updateProfile = () => {
+    axios
+      .patch(`${API}/members/mypage/update`, {
+        headers: {
+          Authorization: 'Bearer ${token}',
+        },
+      })
+      .then((response) => {
+        console.log(response)
+      })
+      .then((error) => {
+        console.log(error)
+      })
+  }
+
+  // 회원탈퇴
+  const deleteUser = () => {
+    axios
+      .delete(`${API}/members/leaveid`, {
+        headers: {
+          Authorization: 'Bearer ${token}',
+        },
+      })
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+
   useEffect(() => {
-    console.log('get userinfo')
+    console.log('hh')
+    axios
+      .get(`${API}/profile/1`)
+      // .get(`${API}/members/mypage`)
+      .then((response) => {
+        setProfile(response.data)
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }, [])
 
   return (
@@ -52,6 +88,7 @@ const EditProfile = () => {
           label="이메일"
           type="email"
           name="email"
+          disabled={true}
           onChange={handleInput}
         />
         <div className="flex-div">
@@ -59,6 +96,7 @@ const EditProfile = () => {
             label="닉네임"
             type="text"
             name="nickName"
+            disabled={true}
             onChange={handleInput}
           />
           <div>
@@ -97,10 +135,10 @@ const EditProfile = () => {
         />
       </GridContainer>
       <ButtonWrapper>
-        <Button outline="true" onClick={() => console.log('delete user')}>
+        <Button outline="true" onClick={deleteUser}>
           회원탈퇴
         </Button>
-        <Button onClick={() => console.log('save profile')}>저장하기</Button>
+        <Button onClick={updateProfile}>저장하기</Button>
       </ButtonWrapper>
     </TabFrame>
   )
