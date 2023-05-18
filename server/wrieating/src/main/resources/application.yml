@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: ${profile}
   h2:
     console:
       enabled: true
@@ -9,7 +7,7 @@ spring:
     url: jdbc:mysql://${AWS_RDS_URL}/
     username: admin
     password: ${AWS_RDS_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name:
   sql:
     init:
       data-locations:
