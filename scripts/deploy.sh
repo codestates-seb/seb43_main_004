@@ -4,7 +4,7 @@ BUILD_JAR=$(ls /home/ec2-user/action/server/wrieating/build/libs/wrieating-0.0.1
 JAR_NAME=$(basename $BUILD_JAR)
 
 # 환경 변수 로드
-source ~/.bashrc
+source ~/.bash_profile
 
 # 환경변수 설정
 export profile=${profile}
