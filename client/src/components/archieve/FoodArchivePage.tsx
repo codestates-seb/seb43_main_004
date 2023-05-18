@@ -5,6 +5,7 @@ import Input from '../Common/Input'
 
 const FoodArchive = () => {
   const [inputVal, setInputVal] = useState('')
+  console.log(inputVal)
 
   const onClick = () => {
     console.log('hi')
@@ -13,6 +14,7 @@ const FoodArchive = () => {
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputVal(e.target.value)
   }
+
   return (
     <FoodArchiveWrapper>
       <header>

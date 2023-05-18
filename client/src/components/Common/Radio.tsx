@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-
+// 폴더 인식이 안되서 잠깐 주석추가
 type radio = {
   id: string
   name: string

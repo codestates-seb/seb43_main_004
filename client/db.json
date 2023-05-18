@@ -43,6 +43,21 @@
       "totalPages": 1
     }
   },
+
+  "profile": [
+    {
+    "id": 1,
+    "email" : "asd@gmail.com",
+    "nickName" : "origin",
+    "password" : "testpassword1234",
+    "birth" : "1999-11-11",
+    "gender" : "male",
+    "height" : 177,
+    "weight" : 68,
+    "activity" : "MIDDLE_ACTIVITY",
+    "icon" : "https://img.animalplanet.co.kr/news/2022/10/13/700/gzs211818b42g2a88a13.jpg"
+  }
+],
   "diary": [
     {
       "id": 1,
@@ -158,6 +173,34 @@
       "recipe": [],
       "comment": "",
       "id": 3
+    },
+    {
+      "id": 4,
+      "userDate": "2023-05-15",
+      "memo": "",
+      "diaryStatus": "",
+      "meal": [],
+      "standardIntake": [
+        {
+          "carbohydrate": 225,
+          "protein": 60,
+          "fat": 47,
+          "kcal": 2200,
+          "sugar": 25
+        }
+      ],
+      "calcul": [
+        {
+          "carbohydrate": 0,
+          "protein": 0,
+          "fat": 0,
+          "kcal": 0,
+          "sugar": 0
+        }
+      ],
+      "recipe": [],
+      "comment": ""
     }
   ]
+  
 }
