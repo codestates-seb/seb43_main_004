@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
 
+@CrossOrigin
 @RequestMapping("/meal")
 @RestController
 @RequiredArgsConstructor
