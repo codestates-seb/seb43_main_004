@@ -5,6 +5,7 @@ import Button from '../components/Common/Button'
 import Input from '../components/Common/Input'
 import FoodItem from '../components/FoodItem'
 import axios from 'axios'
+import Modal from '../components/Common/Modal'
 
 const StyledDiaryAdd = styled.main`
   h2 {
@@ -207,6 +208,10 @@ const DiaryWrite = () => {
   const [searchTxt, setSearchTxt] = useState('') // 검색 인풋에서 사용할 상태
   const [searchList, setSearchList] = useState<FoodList[]>([]) // 자동완성 검색어의 목록
   const [foodList, setFoodList] = useState<FoodList[]>([]) // 등록할 음식 리스트의 상태
+  // 모달 상태
+  const [isEmpty, setIsEmpty] = useState(false)
+  const [isUnchecked, setIsUnchecked] = useState(false)
+  const [isUnsaved, setIsUnsaved] = useState(false)
   const customId = useRef<number>(120) // 사용자등록 음식의 id. 영양성분 DB.length + 1
 
   // Todo : 검색리스트 가져오기. 추후 전역 스토어에 영양성분 db 가져오는것으로 대체할 예정
@@ -226,7 +231,7 @@ const DiaryWrite = () => {
     }
   }, [searchTxt])
 
-  // Todo: 오늘 일기 데이터 가져와서 식사가 기록되지 않은것만 isDisabled false 처리
+  // Todo: 오늘 일기 데이터 가져와서 상태 및 배열 생성. 식사가 기록되지 않은것만 isDisabled false 처리
   const mealTime = [
     {
       label: '아침',
@@ -294,104 +299,146 @@ const DiaryWrite = () => {
     [foodList]
   )
 
+  const checkValidation = () => {
+    // 유효성검사
+    // 시간 선택했는지
+    // if (timeCheck === '') setIsUnchecked(true)
+    // 빈칸이 있는지
+    // 배열 안의 객체를 순회해서 빈값이 있는지 확인
+  }
+
   const postDiary = () => {
-    console.log('post', '/diaries/{diary-id}/meal/write')
-    console.log(foodList)
+    checkValidation()
+    // console.log('post', '/diaries/{diary-id}/meal/write')
+    // console.log(timeCheck)
+    // console.log(foodList)
   }
 
   const patchDiary = () => {
+    // 수정하기 클릭시 api patch 전송
     console.log('patch', '/diaries/{diary-id}/meal/update/{meal-id}')
   }
   return (
-    <StyledDiaryAdd>
-      <h2>나의 식단일기</h2>
-      <div className="when">
-        <h3>언제 먹었나요?</h3>
-        <ul className="meal-time">
-          {mealTime.map((time) => {
-            return (
-              <li key={time.id}>
-                <input
-                  type="radio"
-                  name="mealType"
-                  id={time.id}
-                  disabled={time.isDisabled}
-                  checked={timeCheck === time.id}
-                  onChange={handleTimeChange}
-                />
-                <label htmlFor={time.id}>
-                  {timeCheck === time.id ? (
-                    <span className="material-icons-round">
-                      check_circle_outline
-                    </span>
-                  ) : (
-                    <span className="material-icons-round">
-                      radio_button_unchecked
-                    </span>
-                  )}
-                  <span>{time.label}</span>
-                </label>
-              </li>
-            )
-          })}
-        </ul>
-      </div>
-      <div className="what">
-        <div className="what-title">
-          <h3>무엇을 먹었나요?</h3>
-          <Button onClick={createCustomFoodItem}>
-            <span className="material-icons-round">edit</span>
-            직접 등록하기
-          </Button>
+    <>
+      <StyledDiaryAdd>
+        <h2>나의 식단일기</h2>
+        <div className="when">
+          <h3>언제 먹었나요?</h3>
+          <ul className="meal-time">
+            {mealTime.map((time) => {
+              return (
+                <li key={time.id}>
+                  <input
+                    type="radio"
+                    name="mealType"
+                    id={time.id}
+                    disabled={time.isDisabled}
+                    checked={timeCheck === time.id}
+                    onChange={handleTimeChange}
+                  />
+                  <label htmlFor={time.id}>
+                    {timeCheck === time.id ? (
+                      <span className="material-icons-round">
+                        check_circle_outline
+                      </span>
+                    ) : (
+                      <span className="material-icons-round">
+                        radio_button_unchecked
+                      </span>
+                    )}
+                    <span>{time.label}</span>
+                  </label>
+                </li>
+              )
+            })}
+          </ul>
         </div>
-        <div className="search-food">
-          <Input
-            type="text"
-            placeholder="음식의 이름을 입력해 주세요."
-            name="search-food"
-            value={searchTxt}
-            onChange={(e) => setSearchTxt(e.target.value)}
-          />
-          {searchList.length > 0 && (
-            <ul className="search-food-list">
-              {searchList.map((item) => {
-                return (
-                  <li key={item.nutrientId} onClick={() => addToFoodList(item)}>
-                    <span className="food-name">{item.title}</span>
-                    <span className="material-icons-round">add</span>
-                  </li>
-                )
-              })}
-            </ul>
-          )}
+        <div className="what">
+          <div className="what-title">
+            <h3>무엇을 먹었나요?</h3>
+            <Button onClick={createCustomFoodItem}>
+              <span className="material-icons-round">edit</span>
+              직접 등록하기
+            </Button>
+          </div>
+          <div className="search-food">
+            <Input
+              type="text"
+              placeholder="음식의 이름을 입력해 주세요."
+              name="search-food"
+              value={searchTxt}
+              onChange={(e) => setSearchTxt(e.target.value)}
+            />
+            {searchList.length > 0 && (
+              <ul className="search-food-list">
+                {searchList.map((item) => {
+                  return (
+                    <li
+                      key={item.nutrientId}
+                      onClick={() => addToFoodList(item)}
+                    >
+                      <span className="food-name">{item.title}</span>
+                      <span className="material-icons-round">add</span>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </div>
+          <div className="food-list">
+            {foodList.length === 0 ? (
+              <h3>
+                아직 등록된 음식이 없어요. <br />
+                오늘 먹은 음식을 등록해주세요!
+              </h3>
+            ) : (
+              <ul>
+                {foodList.map((data) => (
+                  <FoodItem
+                    key={data.nutrientId}
+                    data={data}
+                    setInfo={setFoodInfo}
+                    delete={deleteFoodItem}
+                    custom={data.custom}
+                  />
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
-        <div className="food-list">
-          {foodList.length === 0 ? (
-            <h3>
-              아직 등록된 음식이 없어요. <br />
-              오늘 먹은 음식을 등록해주세요!
-            </h3>
-          ) : (
-            <ul>
-              {foodList.map((data) => (
-                <FoodItem
-                  key={data.nutrientId}
-                  data={data}
-                  setInfo={setFoodInfo}
-                  delete={deleteFoodItem}
-                  custom={data.custom}
-                />
-              ))}
-            </ul>
-          )}
-        </div>
-      </div>
-      <Button onClick={postDiary}>
-        <span className="material-icons-round">edit</span>
-        일기 등록하기
-      </Button>
-    </StyledDiaryAdd>
-    // 모달 넣어야됨!! - 직접 추가하기 작성시 빈값이 있는 경우 / 등록중 뒤로가기나 페이지를 벗어나려고 할때
+        <Button onClick={postDiary}>
+          <span className="material-icons-round">edit</span>
+          일기 등록하기
+        </Button>
+      </StyledDiaryAdd>
+      <Modal
+        state={isEmpty}
+        setState={setIsEmpty}
+        msg={`빈 칸이 있습니다.\n다시 확인하고 등록해주세요.`}
+        icon="error"
+      >
+        <Button onClick={() => setIsEmpty(false)}>확인</Button>
+      </Modal>
+      <Modal
+        state={isUnchecked}
+        setState={setIsUnchecked}
+        msg={`식사시간을 선택하지 않으셨습니다.\n다시 확인하고 등록해주세요.`}
+        icon="error"
+      >
+        <Button onClick={() => setIsUnchecked(false)}>확인</Button>
+      </Modal>
+      <Modal
+        state={isUnsaved}
+        setState={setIsUnchecked}
+        msg={`작성중인 내용은 저장되지 않습니다.\n페이지를 나가시겠습니까?`}
+        icon="warning"
+      >
+        <Button unique={true} onClick={() => setIsUnsaved(false)}>
+          취소
+        </Button>
+        <Button onClick={() => setIsUnsaved(false)}>확인</Button>
+      </Modal>
+    </>
   )
 }
 
