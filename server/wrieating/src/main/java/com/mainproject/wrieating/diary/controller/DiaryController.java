@@ -2,7 +2,7 @@ package com.mainproject.wrieating.diary.controller;
 
 import com.mainproject.wrieating.diary.dto.DiaryPatchDto;
 import com.mainproject.wrieating.diary.dto.DiaryPostDto;
-import com.mainproject.wrieating.diary.dto.MultiResponseDto;
+import com.mainproject.wrieating.dto.MultiResponseDto;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.diary.mapper.DiaryMapper;
 import com.mainproject.wrieating.diary.service.DiaryService;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/diaries")
 @AllArgsConstructor
