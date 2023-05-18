@@ -1,4 +1,5 @@
 spring:
+# mysql db
   h2:
     console:
       enabled: true
@@ -15,6 +16,19 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL5Dialect
     hibernate:
+#  h2 db
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2
+#  datasource:
+#    url: jdbc:h2:mem:test
+#  sql:
+#    init:
+#      data-locations: classpath*:db/h2/
+#      mode: always
+#  jpa:
+#    hibernate:
       ddl-auto: create-drop
     show-sql: true
     properties:
