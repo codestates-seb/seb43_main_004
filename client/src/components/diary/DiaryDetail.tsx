@@ -335,9 +335,9 @@ interface Recipe {
 
 const Wrapper = styled.div`
   max-width: 1150px;
-  width: calc(100% - 400px);
+  width: calc(100vw - 500px);
   white-space: nowrap;
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
   h2 {
     font-size: 28px;
     margin-bottom: 20px;

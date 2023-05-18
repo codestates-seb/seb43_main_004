@@ -37,12 +37,12 @@ const FoodArchive = () => {
 export default FoodArchive
 
 const FoodArchiveWrapper = styled.div`
-  width: 80%;
+  width: 70vw;
 
   header {
     display: flex;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
 
     h2 {
       font-size: 28px;
@@ -56,6 +56,15 @@ const FoodArchiveWrapper = styled.div`
       background-color: black;
       border-radius: 50%;
       padding: 0.1rem;
+    }
+  }
+  .search__form {
+    display: flex;
+    align-items: center;
+
+    button {
+      align-self: flex-start;
+      margin-left: 1rem;
     }
   }
 `
