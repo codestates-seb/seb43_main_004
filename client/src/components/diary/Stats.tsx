@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ResponsivePie } from '@nivo/pie'
-import { DataResponse } from './DiaryCheck'
+// import { DataResponse } from './DiaryCheck'
 
 const Stats = ({ diaries }: any) => {
   // 백엔드 데이터가 만들어지면 any에서  DataResponse로 변경 에정

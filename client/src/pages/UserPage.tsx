@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import Tab from '../components/common/Tab'
+import Tab from '../components/Common/Tab'
 import axios from 'axios'
 import { API } from '../utils/API'
 import { User } from '../utils/interface'
