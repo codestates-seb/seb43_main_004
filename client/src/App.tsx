@@ -13,6 +13,8 @@ import UserPage from './pages/UserPage'
 import EditProfile from './components/User/EditProfile'
 import ChangePwd from './components/User/ChangePwd'
 import FoodArchive from './components/archieve/FoodArchivePage'
+import GetPosts from './components/User/GetPosts'
+import GetComments from './components/User/GetComments'
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
             <Route path="/userpage" element={<UserPage />}>
               <Route path="" element={<EditProfile />} />
               <Route path="change-pwd" element={<ChangePwd />} />
+              <Route path="posts" element={<GetPosts />} />
+              <Route path="comments" element={<GetComments />} />
             </Route>
             <Route path="/*" element={<NotFound error="404" />} />
           </Routes>

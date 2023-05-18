@@ -25,6 +25,7 @@ const UserSignIn = () => {
     })
   }
 
+  // 로그인
   const checkValid = () => {
     if (!checkEmail(values.email) || values.password == '') {
       setError('이메일 혹은 비밀번호가 잘못되었거나 유효하지 않습니다.')
