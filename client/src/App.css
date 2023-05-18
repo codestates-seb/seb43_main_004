@@ -1,26 +1,32 @@
 body {
-    width: 100vw;
-    height: 100vh;
+  width: 100vw;
+  height: 100vh;
 }
 
-.App{
-    height: 100vh;
+.App {
+  height: 100vh;
 }
 
+.contents {
+  max-width: 1250px;
+  margin-bottom: 164px;
+  min-height: 100%;
+  margin: 130px auto 164px auto;
+}
 
-.Wrapper { 
-    max-width: 1250px;
-    width: 100%;
-    min-height: 100%;
-    margin: 0 auto;
-    margin-top: 130px;
-    margin-bottom: 164px;
-    display: flex;
-    justify-content: center; 
+.Wrapper {
+  /* max-width: 1250px; */
+  /* min-height: 100%; */
+  /* margin: 0 auto;
+  margin-top: 130px;
+  margin-bottom: 164px; */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 스크롤바를 없앰 */
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
-
