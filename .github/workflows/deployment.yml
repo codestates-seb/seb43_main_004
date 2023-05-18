@@ -1,4 +1,4 @@
-name: development deployment
+name: deployment
 
 on:
   push:
@@ -21,6 +21,7 @@ jobs:
       - name: Install Dependencies
         run: |
           cd client
+          npm config set legacy-peer-deps true
           npm install
 
       - name: Build

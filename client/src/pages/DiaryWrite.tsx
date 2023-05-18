@@ -318,6 +318,7 @@ const DiaryWrite = () => {
     // 수정하기 클릭시 api patch 전송
     console.log('patch', '/diaries/{diary-id}/meal/update/{meal-id}')
   }
+
   return (
     <>
       <StyledDiaryAdd>

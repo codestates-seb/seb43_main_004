@@ -6,7 +6,10 @@ import Radio from '../components/Common/Radio'
 import { genderList, activityScore } from '../utils/options'
 import { checkEmail, checkPassword } from '../utils/userfunc'
 import { ApiCaller } from '../utils/apiCaller'
-import { dtoReqEmailCheck, dtoReqVerifyEmail } from '../dto/members/dtoSignup'
+import {
+  dtoReqEmailCheck,
+  dtoReqVerifyEmail,
+} from '../dto/membership/membership/dtoSignup'
 import { dtoResponse } from '../dto'
 import { debounce } from '../utils/timefunc'
 
