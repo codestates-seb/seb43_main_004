@@ -1,4 +1,4 @@
-package com.mainproject.wrieating.diary.dto;
+package com.mainproject.wrieating.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
