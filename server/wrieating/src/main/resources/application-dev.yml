@@ -24,6 +24,22 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${email}
+    password: ${password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+email:
+  sender:
+    man: ${email}
+    password: ${password}
 logging:
   level:
     org:
@@ -33,11 +49,12 @@ logging:
           descriptor:
             sql:
               BasicBinder: trace
+
 #jwt
 mail:
   address:
     admin: admin@gmail.com
 jwt:
-  key: ${JWT_SECRET_KEY}
+  key: ${secret-key}
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
