@@ -3,6 +3,9 @@
 BUILD_JAR=$(ls /home/ec2-user/action/server/wrieating/build/libs/wrieating-0.0.1-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 
+# 환경 변수 로드
+source ~/.bashrc
+
 # 환경변수 설정
 export profile=${profile}
 export AWS_RDS_URL=${AWS_RDS_URL}
