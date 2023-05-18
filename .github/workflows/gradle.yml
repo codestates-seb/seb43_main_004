@@ -23,10 +23,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        node-version: [18.x]
 
     steps:
     - uses: actions/checkout@v3
@@ -42,24 +38,6 @@ jobs:
         chmod +x gradlew
         ./gradlew build
         
-        
-    # node version setting
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-          node-version: 18
-      
-    - name: module install
-      run: |
-          cd client
-          npm config set legacy-peer-deps true
-          npm install
-          
-    - name: build react app
-      run: |
-          cd client
-          npm run build    
-
     - name: Make zip file
       run: zip -r ${{ github.workspace }}/deploy.zip .
       shell: bash
