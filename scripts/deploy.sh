@@ -7,10 +7,11 @@ JAR_NAME=$(basename $BUILD_JAR)
 source ~/.bash_profile
 
 # 환경변수 설정
-export profile=${profile}
-export AWS_RDS_URL=${AWS_RDS_URL}
-export AWS_RDS_PASSWORD=${AWS_RDS_PASSWORD}
-export JWT_SECRET_KEY=${JWT_SECRET_KEY}
+export profile=deploy
+export PATH=$PATH:/home/ec2-user/tools/gradle-7.3.3/bin
+export JWT_SECRET_KEY=qweasdzxcrtyfghvbn12341234qweasdzxcrtyfghvbn345345345345345sdasdhukwhdkuahjhdu
+export AWS_RDS_PASSWORD=wrieating123
+export AWS_RDS_URL=wrieating-database.ca59q4wbjg2d.ap-northeast-2.rds.amazonaws.com:13306
 
 # 빌드 디렉토리로 이동
 cd /home/ec2-user/action/server/wrieating/
