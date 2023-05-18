@@ -10,8 +10,8 @@ import UserSignUp from './pages/UserSignUp'
 import UserFindPwd from './pages/UserFindPwd'
 import NotFound from './pages/NotFound'
 import UserPage from './pages/UserPage'
-import EditProfile from './components/user/EditProfile'
-import ChangePwd from './components/user/ChangePwd'
+import EditProfile from './components/User/EditProfile'
+import ChangePwd from './components/User/ChangePwd'
 import FoodArchive from './components/archieve/FoodArchivePage'
 
 function App() {
