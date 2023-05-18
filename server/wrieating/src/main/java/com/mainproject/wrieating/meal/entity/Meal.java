@@ -24,6 +24,9 @@ public class Meal {
     private MealType mealType;
 
     @Column(nullable = true)
+    private int kcal;
+
+    @Column(nullable = true)
     private int carbohydrate;
 
     @Column(nullable = true)
@@ -33,16 +36,13 @@ public class Meal {
     private int fat;
 
     @Column(nullable = true)
-    private int kcal;
-
-    @Column(nullable = true)
     private int sugar;
 
     @Column(nullable = true)
     private int salt;
 
     @ManyToOne
-    @JoinColumn(name = "DIARY_ID")
+    @JoinColumn(name = "DIARY_ID", nullable = false)
     private Diary diary;
 
     public Meal(MealType mealType, int carbohydrate, int protein, int fat, int kcal, int sugar, int salt) {
