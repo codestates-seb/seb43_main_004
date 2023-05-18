@@ -95,11 +95,18 @@ public class MemberService {
         findMember.setStatus(Member.Status.MEMBER_QUIT);
     }
 
+    // 멤버 여부 체크
     @Transactional(readOnly = true)
     public Member findVerifiedMember(long memberId){
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
         return optionalMember.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
+    // 닉네임 중복 체크
+    @Transactional(readOnly = true)
+    public boolean verifiedMemberNickName(String nickName) {
+        return memberRepository.existsByNickName(nickName);
     }
 }
