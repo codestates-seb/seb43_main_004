@@ -2,9 +2,9 @@ name: development deployment
 
 on:
   push:
-    branches: [ "dev/fe" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "dev/fe" ]
+    branches: [ "main" ]
 
 jobs:
   deploy:
