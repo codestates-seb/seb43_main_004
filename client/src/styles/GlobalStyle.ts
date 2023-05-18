@@ -72,8 +72,28 @@ const GlobalStyle = createGlobalStyle`
         color: inherit;
     }
 
-    .test-btn {
-        margin-top: 250px;
+    .App {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .wrapper {
+        margin-top: 12rem;
+        padding: 5rem 0;
+        max-width: 1250px;
+        width: 100%;
+    }
+
+    @media ${({ theme }) => theme.device.mobile} {
+        body {
+            font-size: 1.4rem;
+        }
+        
+        .wrapper {
+            margin-top: 3rem;
+            max-width: 95%;
+        }
     }
 `
 
