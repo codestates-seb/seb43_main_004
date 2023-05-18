@@ -2,10 +2,11 @@ package com.mainproject.wrieating.diary.controller;
 
 import com.mainproject.wrieating.diary.dto.DiaryPatchDto;
 import com.mainproject.wrieating.diary.dto.DiaryPostDto;
-import com.mainproject.wrieating.diary.dto.MultiResponseDto;
+import com.mainproject.wrieating.diary.dto.DiaryResponseDto;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.diary.mapper.DiaryMapper;
 import com.mainproject.wrieating.diary.service.DiaryService;
+import com.mainproject.wrieating.dto.MultiResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/diaries")
 @AllArgsConstructor
@@ -35,9 +37,9 @@ public class DiaryController {
 
     @GetMapping("/{diaries-id}")
     public ResponseEntity getDiary(@RequestHeader(name = "Authorization") String token,
-                                   @Positive @PathVariable("diaries-id") long diaryId) {
-        Diary response = service.findDiary(token,diaryId);
-        return new ResponseEntity<>(mapper.diaryToDiaryResponseDto(response),HttpStatus.OK);
+                                   @Positive @PathVariable("diaries-id") Long diaryId) {
+        DiaryResponseDto response = service.findDiary(token,diaryId);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping

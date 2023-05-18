@@ -2,6 +2,7 @@ package com.mainproject.wrieating.member.controller;
 
 import com.mainproject.wrieating.dto.SingleResponseDto;
 import com.mainproject.wrieating.member.dto.MemberPatchDto;
+import com.mainproject.wrieating.member.dto.MemberPostNickNameVerifedDto;
 import com.mainproject.wrieating.member.dto.MemberPostSignUpDto;
 import com.mainproject.wrieating.member.entity.Member;
 import com.mainproject.wrieating.member.mapper.MemberMapper;
@@ -36,6 +37,18 @@ public class MemberController {
         // TODO 닉네임 중복 체크
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    // 닉네임 중복 체크
+    @PostMapping("/members/nicknamecheck")
+    public ResponseEntity nickNameCheckMember(@Valid @RequestBody MemberPostNickNameVerifedDto requestBody){
+        log.info(String.valueOf(requestBody));
+
+        Boolean nickNameCheck = memberService.verifiedMemberNickName(requestBody.getNickName());
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(nickNameCheck),
+                HttpStatus.OK);
     }
 
     // 회원 수정
