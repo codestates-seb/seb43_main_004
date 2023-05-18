@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 const FooterWrapper = styled.footer`
   position: relative;
+  transform: translateY(-100%);
   height: 164px;
   font-weight: 500;
   font-size: 14px;
