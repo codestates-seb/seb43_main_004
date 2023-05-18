@@ -56,7 +56,7 @@ const UserSignUp = ({ social }: Props) => {
     ckAuth: '',
   })
 
-  console.log(nickName, gender, activity)
+  console.log(nickName, gender, activity, height, weight, birth)
 
   const [error, setError] = useState<errorType>({
     email: '',

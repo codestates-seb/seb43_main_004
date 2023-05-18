@@ -1,9 +1,21 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Tab from '../components/Common/Tab'
 import axios from 'axios'
 import { API } from '../utils/API'
 import { User } from '../utils/interface'
+
+// 임시 유저 정보
+const TempUser = {
+  nickname: 'testuser',
+  gender: 'male',
+  height: 175,
+  weight: 70,
+  activity: 'low',
+  icon: 'https://img.animalplanet.co.kr/news/2022/10/13/700/gzs211818b42g2a88a13.jpg',
+}
+
+console.log(TempUser)
 
 const UserPage = () => {
   const [profile, setProfile] = useState<User>({
@@ -15,6 +27,7 @@ const UserPage = () => {
     icon: '',
   })
   const { nickName, gender, height, weight, activity, icon } = profile
+
   useEffect(() => {
     console.log('/mypage')
     axios
