@@ -15,6 +15,7 @@ import ChangePwd from './components/User/ChangePwd'
 import FoodArchive from './components/archieve/FoodArchivePage'
 import GetPosts from './components/User/GetPosts'
 import GetComments from './components/User/GetComments'
+import DiaryWrite from './pages/DiaryWrite'
 
 function App() {
   return (
