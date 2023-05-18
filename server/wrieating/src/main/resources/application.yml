@@ -4,9 +4,9 @@ spring:
       enabled: true
       path:
   datasource:
-    url: jdbc:mysql://${AWS_RDS_URL}/
+    url: jdbc:mysql://wrieating-database.ca59q4wbjg2d.ap-northeast-2.rds.amazonaws.com:13306/
     username: admin
-    password: ${AWS_RDS_PASSWORD}
+    password: wrieating123
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
@@ -40,7 +40,7 @@ mail:
   address:
     admin: admin@gmail.com
 jwt:
-  key: ${JWT_SECRET_KEY}
+  key: qweasdzxcrtyfghvbn12341234qweasdzxcrtyfghvbn345345345345345sdasdhukwhdkuahjhdu
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
 
