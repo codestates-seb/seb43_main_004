@@ -2,8 +2,8 @@ import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import Button from '../common/Button'
-import Modal from '../common/Modal'
+import Button from '../Common/Button'
+import Modal from '../Common/Modal'
 
 const DiaryDetail = () => {
   const [diary, setDiary] = useState<Diary | null>(null)
