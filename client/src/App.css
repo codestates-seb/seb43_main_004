@@ -17,9 +17,6 @@ body {
 .Wrapper {
   /* max-width: 1250px; */
   /* min-height: 100%; */
-  /* margin: 0 auto;
-  margin-top: 130px;
-  margin-bottom: 164px; */
   width: 100%;
   display: flex;
   align-items: center;
