@@ -4,10 +4,10 @@ spring:
       enabled: true
       path:
   datasource:
-    url: jdbc:mysql://wrieating-database.ca59q4wbjg2d.ap-northeast-2.rds.amazonaws.com:13306/
+    url: jdbc:mysql://wrieating-database.ca59q4wbjg2d.ap-northeast-2.rds.amazonaws.com:13306/wrieatingdb
     username: admin
     password: wrieating123
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name:
   sql:
     init:
       data-locations:
