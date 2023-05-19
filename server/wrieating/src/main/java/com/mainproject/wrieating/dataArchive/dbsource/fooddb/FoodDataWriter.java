@@ -1,7 +1,7 @@
-package com.mainproject.wrieating.dbsource.fooddb;
+package com.mainproject.wrieating.dataArchive.dbsource.fooddb;
 
-import com.mainproject.wrieating.dbsource.DatabaseConnection;
-import com.mainproject.wrieating.dbsource.fooddb.entity.FoodData;
+import com.mainproject.wrieating.dataArchive.dbsource.fooddb.entity.FoodData;
+import com.mainproject.wrieating.dataArchive.dbsource.DatabaseConnection;
 
 import java.io.IOException;
 import java.sql.SQLException;

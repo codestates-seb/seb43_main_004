@@ -1,7 +1,7 @@
-package com.mainproject.wrieating.dbsource.recipedb;
+package com.mainproject.wrieating.dataArchive.dbsource.recipedb;
 
-import com.mainproject.wrieating.dbsource.DatabaseConnection;
-import com.mainproject.wrieating.dbsource.recipedb.entity.RecipeData;
+import com.mainproject.wrieating.dataArchive.dbsource.DatabaseConnection;
+import com.mainproject.wrieating.dataArchive.dbsource.recipedb.entity.RecipeData;
 
 import java.io.IOException;
 import java.sql.Connection;

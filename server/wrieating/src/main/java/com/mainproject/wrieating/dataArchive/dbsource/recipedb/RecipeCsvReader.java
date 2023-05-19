@@ -1,6 +1,6 @@
-package com.mainproject.wrieating.dbsource.recipedb;
+package com.mainproject.wrieating.dataArchive.dbsource.recipedb;
 
-import com.mainproject.wrieating.dbsource.recipedb.entity.RecipeData;
+import com.mainproject.wrieating.dataArchive.dbsource.recipedb.entity.RecipeData;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
