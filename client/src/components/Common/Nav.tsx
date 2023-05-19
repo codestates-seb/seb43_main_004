@@ -18,7 +18,7 @@ const StyledNavBg = styled.div`
   &.open {
     visibility: visible;
     opacity: 1;
-    z-index: 9;
+    z-index: 99;
   }
 `
 
@@ -26,7 +26,7 @@ const StyledNav = styled.nav`
   font-family: 'yg-jalnan';
   width: 50%;
   height: 100%;
-  padding: 6rem;
+  padding: 3rem 5rem;
   background: ${({ theme }) => theme.color.primary};
   position: fixed;
   top: 0;
@@ -42,10 +42,10 @@ const StyledNav = styled.nav`
 
   .btn-box {
     align-self: flex-end;
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
 
     button {
-      font-size: ${({ theme }) => theme.fontSize.lgl};
+      font-size: ${({ theme }) => theme.fontSize.lgh};
     }
   }
 
@@ -54,9 +54,9 @@ const StyledNav = styled.nav`
     display: flex;
     align-items: center;
     border-bottom: 1px solid ${({ theme }) => theme.color.darkGray};
-    padding-bottom: 5rem;
-    margin-bottom: 5rem;
-    gap: 5rem;
+    padding-bottom: 3rem;
+    margin-bottom: 3rem;
+    gap: 3rem;
 
     div:first-of-type {
       font-size: 13rem;
@@ -91,7 +91,7 @@ const StyledNav = styled.nav`
     a {
       color: ${({ theme }) => theme.color.darkGray};
       font-family: 'Pretendard', sans-serif;
-      font-size: ${({ theme }) => theme.fontSize.smh};
+      font-size: ${({ theme }) => theme.fontSize.larger};
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -104,14 +104,10 @@ const StyledNav = styled.nav`
   }
 
   .depth-1 {
-    font-size: ${({ theme }) => theme.fontSize.mdh};
+    font-size: ${({ theme }) => theme.fontSize.smmh};
 
     li {
-      margin-bottom: 3.5rem;
-      &.active a {
-        color: ${({ theme }) => theme.color.point};
-        border-bottom: 5px solid ${({ theme }) => theme.color.point};
-      }
+      margin-bottom: 3rem;
     }
 
     a {
@@ -120,12 +116,20 @@ const StyledNav = styled.nav`
       &:hover {
         color: ${({ theme }) => theme.color.point};
       }
+      &.active {
+        color: ${({ theme }) => theme.color.point};
+        border-bottom: 5px solid ${({ theme }) => theme.color.point};
+      }
     }
 
     .depth-2 {
       font-size: ${({ theme }) => theme.fontSize.smh};
       li {
-        margin-top: 3rem;
+        margin-bottom: 2rem;
+
+        &:first-child {
+          margin-top: 2rem;
+        }
       }
     }
   }
@@ -165,23 +169,22 @@ const StyledNav = styled.nav`
       }
 
       a {
-        font-size: ${({ theme }) => theme.fontSize.large};
+        font-size: ${({ theme }) => theme.fontSize.middle};
       }
     }
 
     .depth-1 {
-      font-size: ${({ theme }) => theme.fontSize.smmh};
+      font-size: ${({ theme }) => theme.fontSize.smh};
 
       li {
         margin-bottom: 2.5rem;
+        a.active {
+          border-bottom-width: 3px;
+        }
       }
 
       .depth-2 {
-        font-size: ${({ theme }) => theme.fontSize.smh};
-
-        li {
-          margin-top: 2rem;
-        }
+        font-size: ${({ theme }) => theme.fontSize.larger};
       }
     }
   }

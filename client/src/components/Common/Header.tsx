@@ -8,7 +8,7 @@ const StyledHeader = styled.header`
   padding: 1rem;
   position: fixed;
   top: 0;
-  z-index: 800;
+  z-index: 9;
   width: 100%;
 
   .container {
