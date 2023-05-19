@@ -5,9 +5,12 @@ spring:
       enabled: true
       path:
   datasource:
-    url: jdbc:mysql://${AWS_RDS_URL}/wrieatingdb
+    url: jdbc:mysql://wrieating-database.ca59q4wbjg2d.ap-northeast-2.rds.amazonaws.com:13306/wrieatingdb
     username: admin
-    password: ${AWS_RDS_PASSWORD}
+    password: wrieating123
+#    url: jdbc:mysql://localhost:3306/
+#    username: root
+#    password:
     driver-class-name:
   sql:
     init:
@@ -29,8 +32,10 @@ spring:
 #      mode: always
 #  jpa:
 #    hibernate:
-      #####
-      ddl-auto: create
+      # 스키마 생성 전략
+#      ddl-auto: update
+      ddl-auto: create-drop
+      # 로그
     show-sql: true
     properties:
       hibernate:
@@ -72,7 +77,7 @@ mail:
   address:
     admin: admin@gmail.com
 jwt:
-  key: ${JWT_SECRET_KEY}
+  key: 34h34lkjh6lkj54h6lkjh456lkjh35lkj6ynbl54hyiu45hyiuo45hyiu4h5yiuh5boilb45ljhb45jklhb45kjh5b
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
 
