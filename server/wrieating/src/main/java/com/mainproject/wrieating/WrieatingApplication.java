@@ -1,11 +1,11 @@
 package com.mainproject.wrieating;
 
-import com.mainproject.wrieating.dbsource.fooddb.FoodCsvReader;
-import com.mainproject.wrieating.dbsource.fooddb.FoodDataWriter;
-import com.mainproject.wrieating.dbsource.fooddb.entity.FoodData;
-import com.mainproject.wrieating.dbsource.recipedb.RecipeCsvReader;
-import com.mainproject.wrieating.dbsource.recipedb.RecipeDataWriter;
-import com.mainproject.wrieating.dbsource.recipedb.entity.RecipeData;
+import com.mainproject.wrieating.dataArchive.dbsource.fooddb.FoodCsvReader;
+import com.mainproject.wrieating.dataArchive.dbsource.fooddb.FoodDataWriter;
+import com.mainproject.wrieating.dataArchive.dbsource.fooddb.entity.FoodData;
+import com.mainproject.wrieating.dataArchive.dbsource.recipedb.RecipeCsvReader;
+import com.mainproject.wrieating.dataArchive.dbsource.recipedb.RecipeDataWriter;
+import com.mainproject.wrieating.dataArchive.dbsource.recipedb.entity.RecipeData;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

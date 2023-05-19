@@ -1,4 +1,4 @@
-package com.mainproject.wrieating.dbsource.recipedb.entity;
+package com.mainproject.wrieating.dataArchive.dbsource.recipedb.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,13 +15,11 @@ public class RecipeData {
     private String rcpName;
     private String rcpWay;
     private String rcpPat;
-    private int weight;
     private int kcal;
     private int carbohydrate;
     private int protein;
     private int fat;
     private int natrium;
-    private String tag;
     private String img;
     @Column(columnDefinition = "TEXT")
     private String ingredients;
