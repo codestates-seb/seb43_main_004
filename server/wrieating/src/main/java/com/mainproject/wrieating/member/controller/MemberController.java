@@ -27,15 +27,15 @@ public class MemberController {
     }
 
     // 이메일 인증
-    @PostMapping("/members/sendemail")
-    public ResponseEntity<String> sendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
-        String email = emailRequestDto.getEmail();
-
-        // 이메일 인증 코드 생성 및 이메일 발송
-        String verificationCode = memberService.sendVerificationEmail(email);
-
-        return ResponseEntity.ok(verificationCode);
-    }
+//    @PostMapping("/members/sendemail")
+//    public ResponseEntity<String> sendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
+//        String email = emailRequestDto.getEmail();
+//
+//        // 이메일 인증 코드 생성 및 이메일 발송
+//        String verificationCode = memberService.sendVerificationEmail(email);
+//
+//        return ResponseEntity.ok(verificationCode);
+//    }
 
     // 회원 가입
     @PostMapping("/members/signup")

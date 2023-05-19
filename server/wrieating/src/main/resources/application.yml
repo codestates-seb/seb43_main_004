@@ -7,8 +7,8 @@ spring:
 #  datasource:
 ##    url: jdbc:mysql://wrieating-database.ca59q4wbjg2d.ap-northeast-2.rds.amazonaws.com:13306/wrieatingdb
 #    url: jdbc:mysql://localhost:3306/wrieatingdb
-#    username:
-#    password:
+#    username: root
+#    password: Taskforce@1
 #    driver-class-name:
 #  sql:
 #    init:
@@ -51,22 +51,22 @@ logging:
           descriptor:
             sql:
               BasicBinder: trace
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${email}
-    password: ${password}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-email:
-  sender:
-    man: ${email}
-    password: ${password}
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: ${email}
+#    password: ${password}
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#            required: true
+#email:
+#  sender:
+#    man: ${email}
+#    password: ${password}
 
 #jwt
 mail:
