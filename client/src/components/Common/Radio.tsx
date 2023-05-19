@@ -1,25 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-// 폴더 인식이 안되서 잠깐 주석추가
-type radio = {
-  id: string
-  name: string
-  value: string
-}
-
-interface radioProps {
-  legend: string
-  radioArray: radio[]
-  checkedValue: string
-  error?: string
-  onChange(e: React.ChangeEvent<HTMLInputElement>): void
-}
+import { radioProps } from '../../utils/options'
 
 const Radio = (props: radioProps) => {
-  const { legend, radioArray, checkedValue, error, onChange } = props
+  const { legend, radioArray, checkedValue, onChange } = props
 
   return (
-    <RadioGroup>
+    <div>
       <Legend>{legend}</Legend>
       <RadioWrapper>
         {radioArray.map((i) => (
@@ -32,17 +19,13 @@ const Radio = (props: radioProps) => {
               checked={i.value === checkedValue}
               onChange={onChange}
             />
-            <StyledLabel htmlFor={i.id}>{i.value}</StyledLabel>
+            <StyledLabel htmlFor={i.id}>{i.label}</StyledLabel>
           </div>
         ))}
       </RadioWrapper>
-
-      {error && <ErrorMessage>{error}</ErrorMessage>}
-    </RadioGroup>
+    </div>
   )
 }
-
-const RadioGroup = styled.div``
 
 const RadioWrapper = styled.div`
   display: flex;
@@ -70,12 +53,6 @@ const Legend = styled.legend`
 
 const StyledLabel = styled.label`
   font-size: 1.4rem;
-`
-
-const ErrorMessage = styled.p`
-  margin: 0.4rem 0 0 0.4rem;
-  color: var(--color-danger);
-  font-size: 1.2rem;
 `
 
 export default Radio
