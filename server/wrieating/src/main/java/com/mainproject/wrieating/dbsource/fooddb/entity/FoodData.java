@@ -1,4 +1,4 @@
-package com.mainproject.wrieating.dbsource.fooddb;
+package com.mainproject.wrieating.dbsource.fooddb.entity;
 
 import lombok.Getter;
 import lombok.Setter;
