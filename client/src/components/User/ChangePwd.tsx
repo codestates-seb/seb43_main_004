@@ -74,42 +74,56 @@ const ChangePwd = () => {
 
   return (
     <TabFrame title="비밀번호 변경">
-      <Form>
-        <Input
-          type="password"
-          label="현재 비밀번호"
-          placeholder="현재 비밀번호"
-          name="currentPassword"
-          error={error.currentPassword}
-          onChange={handleInput}
-        />
-        <Input
-          type="password"
-          label="새 비밀번호"
-          placeholder="새 비밀번호"
-          name="newPassword"
-          error={error.newPassword}
-          onChange={handleInput}
-        />
-        <Input
-          type="password"
-          label="새 비밀번호 확인"
-          placeholder="비밀번호 확인"
-          name="ckPassword"
-          error={error.ckPassword}
-          onChange={handleInput}
-        />
-        <Button onClick={changePassword}>변경하기</Button>
-      </Form>
+      <Wrapper>
+        <Form>
+          <Input
+            type="password"
+            label="현재 비밀번호"
+            placeholder="현재 비밀번호"
+            name="currentPassword"
+            error={error.currentPassword}
+            onChange={handleInput}
+          />
+          <Input
+            type="password"
+            label="새 비밀번호"
+            placeholder="새 비밀번호"
+            name="newPassword"
+            error={error.newPassword}
+            onChange={handleInput}
+          />
+          <Input
+            type="password"
+            label="새 비밀번호 확인"
+            placeholder="비밀번호 확인"
+            name="ckPassword"
+            error={error.ckPassword}
+            onChange={handleInput}
+          />
+          <Button onClick={changePassword}>변경하기</Button>
+        </Form>
+      </Wrapper>
     </TabFrame>
   )
 }
 
+const Wrapper = styled.div`
+  width: 74.7rem;
+
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
+`
+
 const Form = styled.form`
-  width: 30rem;
+  width: 35rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  > button {
+    margin-top: 0.8rem;
+  }
 `
 
 export default ChangePwd
