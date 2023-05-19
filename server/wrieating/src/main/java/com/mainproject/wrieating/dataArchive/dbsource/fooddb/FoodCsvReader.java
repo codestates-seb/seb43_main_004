@@ -1,6 +1,6 @@
-package com.mainproject.wrieating.dbsource.fooddb;
+package com.mainproject.wrieating.dataArchive.dbsource.fooddb;
 
-import com.mainproject.wrieating.dbsource.fooddb.entity.FoodData;
+import com.mainproject.wrieating.dataArchive.dbsource.fooddb.entity.FoodData;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 

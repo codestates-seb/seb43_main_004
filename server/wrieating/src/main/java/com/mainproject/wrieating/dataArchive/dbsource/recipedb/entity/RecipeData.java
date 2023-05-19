@@ -1,4 +1,4 @@
-package com.mainproject.wrieating.dbsource.recipedb.entity;
+package com.mainproject.wrieating.dataArchive.dbsource.recipedb.entity;
 
 import lombok.Getter;
 import lombok.Setter;
