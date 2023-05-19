@@ -24,12 +24,31 @@ public class CsvReader {
             data.setFoodRoughType(record.get("식품대분류"));
             data.setFoodDetailType(record.get("식품상세분류"));
             data.setServingSize(record.get("1회제공량"));
-            data.setKcal(record.get("에너지(㎉)"));
-            data.setProtein(record.get("단백질(g)"));
-            data.setFat(record.get("지방(g)"));
-            data.setCarbohydrate(record.get("탄수화물(g)"));
-            data.setTotalSugar(record.get("총당류(g)"));
-            data.setNatrium(record.get("나트륨(㎎)"));
+
+            String kcalStr = record.get("에너지(㎉)");
+            int kcal = Integer.parseInt(kcalStr);
+            data.setKcal(kcal);
+
+            String proteinStr = record.get("단백질(g)");
+            int protein = Integer.parseInt(proteinStr);
+            data.setProtein(protein);
+
+            String fatStr = record.get("지방(g)");
+            int fat = Integer.parseInt(fatStr);
+            data.setFat(fat);
+
+            String carbohydrateStr = record.get("탄수화물(g)");
+            int carbohydrate = Integer.parseInt(carbohydrateStr);
+            data.setCarbohydrate(carbohydrate);
+
+            String totalSugarStr = record.get("총당류(g)");
+            int totalSugar = Integer.parseInt(totalSugarStr);
+            data.setTotalSugar(totalSugar);
+
+            String natriumStr = record.get("나트륨(㎎)");
+            int natrium = Integer.parseInt(natriumStr);
+            data.setNatrium(natrium);
+
             dataList.add(data);
         }
 

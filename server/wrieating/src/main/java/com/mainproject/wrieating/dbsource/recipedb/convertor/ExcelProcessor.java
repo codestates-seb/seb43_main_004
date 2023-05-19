@@ -6,8 +6,8 @@ import java.io.*;
 
 public class ExcelProcessor {
     public static void main(String[] args) {
-        String inputFilePath = "C:\\Users\\keddy\\Desktop\\recipedb.xlsx";
-        String outputFilePath = "C:\\Users\\keddy\\Desktop\\modified_file.xlsx";
+        String inputFilePath = "";
+        String outputFilePath = "";
 
         try {
             // 엑셀 파일 로드
