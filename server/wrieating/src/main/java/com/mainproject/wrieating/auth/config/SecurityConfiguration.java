@@ -83,24 +83,25 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        // setAllowedOrigins()을 통해 모든 출처(Origin)에 대해 스크립트 기반의 HTTP 통신을 허용하도록 설정
-        // 이 설정은 운영 서버 환경에서 요구사항에 맞게 변경이 가능
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-
-        // setAllowedMethods()를 통해 파라미터로 지정한 HTTP Method에 대한 HTTP 통신을 허용
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
-
-        // UrlBasedCorsConfigurationSource 클래스의 객체를 생성
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        // 모든 URL에 앞에서 구성한 CORS 정책(CorsConfiguration)을 적용
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+    // TODO: 2023-05-19 cors
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//
+//        // setAllowedOrigins()을 통해 모든 출처(Origin)에 대해 스크립트 기반의 HTTP 통신을 허용하도록 설정
+//        // 이 설정은 운영 서버 환경에서 요구사항에 맞게 변경이 가능
+//        configuration.setAllowedOrigins(Arrays.asList("*"));
+//
+//        // setAllowedMethods()를 통해 파라미터로 지정한 HTTP Method에 대한 HTTP 통신을 허용
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
+//
+//        // UrlBasedCorsConfigurationSource 클래스의 객체를 생성
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//
+//        // 모든 URL에 앞에서 구성한 CORS 정책(CorsConfiguration)을 적용
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 
     @Bean
     public JwtUtils jwtUtils() {
