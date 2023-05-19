@@ -20,10 +20,10 @@ public class FoodData {
     private String foodRoughType;
     private String foodDetailType;
     private String servingSize;
-    private String kcal;
-    private String carbohydrate;
-    private String protein;
-    private String fat;
-    private String totalSugar;
-    private String natrium;
+    private int kcal;
+    private int carbohydrate;
+    private int protein;
+    private int fat;
+    private int totalSugar;
+    private int natrium;
 }
