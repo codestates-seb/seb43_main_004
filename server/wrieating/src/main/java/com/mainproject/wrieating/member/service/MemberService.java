@@ -4,6 +4,8 @@ import com.mainproject.wrieating.auth.jwt.JwtTokenizer;
 import com.mainproject.wrieating.auth.utils.CustomAuthorityUtils;
 import com.mainproject.wrieating.exception.BusinessLogicException;
 import com.mainproject.wrieating.exception.ExceptionCode;
+//import com.mainproject.wrieating.helper.email.EmailSender;
+//import com.mainproject.wrieating.helper.email.RandomGenerator;
 import com.mainproject.wrieating.member.dto.MemberPatchDeleteDto;
 import com.mainproject.wrieating.member.dto.MemberPostSignUpDto;
 import com.mainproject.wrieating.member.entity.Member;
@@ -26,6 +28,17 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final JwtTokenizer jwtTokenizer;
+//    private final EmailSender emailSender;
+
+//    public String sendVerificationEmail(String email) {
+//        // Verification Code 생성
+//        String verificationCode = RandomGenerator.generateRandomCode(6);
+//
+//        // 이메일 인증 메일 발송
+//        emailSender.sendVerificationEmail(email, verificationCode);
+//
+//        return verificationCode;
+//    }
 
     public MemberPostSignUpDto createMember(MemberPostSignUpDto memberDto){
         Member member = mapper.memberPostToMember(memberDto);
@@ -48,12 +61,8 @@ public class MemberService {
 
         Member findMember = findVerifiedMember(memberId);
 
-        Optional.ofNullable(findMember.getEmail())
-                .ifPresent(email -> findMember.setEmail(email));
         Optional.ofNullable(member.getNickName())
                 .ifPresent(name -> findMember.setNickName(name));
-        Optional.ofNullable(member.getPassword())
-                .ifPresent(pw -> findMember.setPassword(pw));
         Optional.ofNullable(member.getBirth())
                 .map(birth -> {
                     findMember.setBirth(birth);
@@ -102,6 +111,12 @@ public class MemberService {
                 memberRepository.findById(memberId);
         return optionalMember.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
+    // 이메일 중복 체크
+    @Transactional(readOnly = true)
+    public boolean verifiedMemberEmail(String email) {
+        return memberRepository.existsByEmail(email);
     }
 
     // 닉네임 중복 체크

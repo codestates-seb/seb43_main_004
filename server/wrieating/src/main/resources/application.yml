@@ -1,13 +1,14 @@
 spring:
-# mysql db
+## mysql db
   h2:
     console:
       enabled: true
       path:
   datasource:
     url: jdbc:mysql://wrieating-database.ca59q4wbjg2d.ap-northeast-2.rds.amazonaws.com:13306/wrieatingdb
+#    url: jdbc:mysql://localhost:3306/wrieatingdb
     username: admin
-    password: wrieating123
+    password: wireating123
     driver-class-name:
   sql:
     init:
@@ -29,7 +30,8 @@ spring:
 #      mode: always
 #  jpa:
 #    hibernate:
-      ddl-auto: create-drop
+      #####
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -49,6 +51,23 @@ logging:
           descriptor:
             sql:
               BasicBinder: trace
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: ${email}
+#    password: ${password}
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#            required: true
+#email:
+#  sender:
+#    man: ${email}
+#    password: ${password}
+
 #jwt
 mail:
   address:
