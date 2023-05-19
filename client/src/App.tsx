@@ -14,6 +14,7 @@ import EditProfile from './components/User/EditProfile'
 import ChangePwd from './components/User/ChangePwd'
 import FoodArchive from './components/archieve/FoodArchivePage'
 import DiaryWrite from './pages/DiaryWrite'
+import UpdateReady from './pages/UpdateReady'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/diaries/:id" element={<DiaryDetail />} />
           <Route path="/diaries/:id/add" element={<DiaryWrite />} />
           <Route path="/diaries/:id/update" element={<DiaryWrite />} />
+          <Route path="/community" element={<UpdateReady />} />
           <Route path="/nutrient" element={<FoodArchive />} />
           <Route path="/sign-in" element={<UserSignIn />} />
           <Route path="/sign-up" element={<UserSignUp social={false} />} />
