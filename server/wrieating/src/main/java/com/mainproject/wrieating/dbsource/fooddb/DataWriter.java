@@ -22,12 +22,12 @@ public class DataWriter {
                 pstmt.setString(3, data.getFoodRoughType());
                 pstmt.setString(4, data.getFoodDetailType());
                 pstmt.setString(5, data.getServingSize());
-                pstmt.setString(6, data.getKcal());
-                pstmt.setString(7, data.getCarbohydrate());
-                pstmt.setString(8, data.getFat());
-                pstmt.setString(9, data.getProtein());
-                pstmt.setString(10, data.getTotalSugar());
-                pstmt.setString(11, data.getNatrium());
+                pstmt.setInt(6, data.getKcal());
+                pstmt.setInt(7, data.getCarbohydrate());
+                pstmt.setInt(8, data.getFat());
+                pstmt.setInt(9, data.getProtein());
+                pstmt.setInt(10, data.getTotalSugar());
+                pstmt.setInt(11, data.getNatrium());
 
                 pstmt.executeUpdate();
                 pstmt.close();
