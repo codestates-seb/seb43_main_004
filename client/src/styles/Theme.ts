@@ -12,6 +12,7 @@ const color = {
 
 const fontSize = {
   small: '1.4rem',
+  middle: '1.6rem',
   large: '1.8rem',
   larger: '2.1rem',
   smh: '2.4rem',

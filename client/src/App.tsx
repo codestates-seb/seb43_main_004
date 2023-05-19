@@ -15,6 +15,7 @@ import ChangePwd from './components/User/ChangePwd'
 import FoodArchive from './components/archieve/FoodArchivePage'
 import DiaryWrite from './pages/DiaryWrite'
 import UpdateReady from './pages/UpdateReady'
+import Landing from './pages/Landing'
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
       <Header />
       <div className="wrapper">
         <Routes>
-          <Route path="/" element={<DiaryCheck />} />
+          <Route path="/" element={<Landing />} />
           <Route path="/diaries" element={<DiaryCheck />} />
           <Route path="/diaries/:id" element={<DiaryDetail />} />
           <Route path="/diaries/:id/add" element={<DiaryWrite />} />

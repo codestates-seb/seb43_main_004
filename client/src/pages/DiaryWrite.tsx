@@ -9,15 +9,17 @@ import Modal from '../components/Common/Modal'
 import { useLocation, useParams } from 'react-router-dom'
 
 const StyledDiaryAdd = styled.main`
-  width: 100%;
+  width: 98%;
+  max-width: 1250px;
+  padding: 5rem 0;
 
   h2 {
-    font-size: ${({ theme }) => theme.fontSize.lgh};
+    font-size: ${({ theme }) => theme.fontSize.smmh};
     margin-bottom: 5rem;
   }
 
   h3 {
-    font-size: ${({ theme }) => theme.fontSize.mdh};
+    font-size: ${({ theme }) => theme.fontSize.smh};
   }
 
   button {
