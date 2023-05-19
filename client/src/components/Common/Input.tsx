@@ -7,7 +7,7 @@ interface inputProps {
   type: string
   placeholder?: string
   name: string
-  value?: string
+  value?: string | number
   defaultValue?: string
   error?: string
   disabled?: boolean
