@@ -13,8 +13,8 @@ public class RecipeCsvReader {
     public static List<RecipeData> readCsvFile(String filePath) throws IOException {
         FileReader reader = new FileReader(filePath);
         Iterable<CSVRecord> records = CSVFormat.RFC4180.withHeader(
-                "rcp_name", "rcp_way", "rcp_pat", "weight", "kcal", "carbohydrate", "protein",
-                "fat", "natrium", "tag", "img", "ingredients", "MANUAL01", "MANUAL_IMG01",
+                "rcp_name", "rcp_way", "rcp_pat", "kcal", "carbohydrate", "protein",
+                "fat", "natrium", "img", "ingredients", "MANUAL01", "MANUAL_IMG01",
                 "MANUAL02", "MANUAL_IMG02", "MANUAL03", "MANUAL_IMG03", "MANUAL04", "MANUAL_IMG04",
                 "MANUAL05", "MANUAL_IMG05", "MANUAL06", "MANUAL_IMG06", "RCP_NA_TIP"
         ).parse(reader); // 컬럼
@@ -27,20 +27,15 @@ public class RecipeCsvReader {
                 isFirstRow = false;
                 continue;
             }
-            if (isDataMissing(record)) {
-                continue;
-            }
             RecipeData data = new RecipeData();
             data.setRcpName(record.get("rcp_name"));
             data.setRcpWay(record.get("rcp_way"));
             data.setRcpPat(record.get("rcp_pat"));
-            data.setNatrium((int) Double.parseDouble(record.get("weight")));
             data.setKcal((int) Double.parseDouble(record.get("kcal")));
             data.setCarbohydrate((int) Double.parseDouble(record.get("carbohydrate")));
             data.setProtein((int) Double.parseDouble(record.get("protein")));
             data.setFat((int) Double.parseDouble(record.get("fat")));
             data.setNatrium((int) Double.parseDouble(record.get("natrium")));
-            data.setTag(record.get("tag"));
             data.setImg(record.get("img"));
             data.setIngredients(record.get("ingredients"));
             data.setManual01(record.get("MANUAL01"));
@@ -61,17 +56,5 @@ public class RecipeCsvReader {
 
         reader.close();
         return dataList;
-    }
-
-    private static boolean isDataMissing(CSVRecord record) {
-        String weightStr = record.get("weight");
-        String kcalStr = record.get("kcal");
-        String carStr = record.get("carbohydrate");
-        String proStr = record.get("protein");
-        String fatStr = record.get("fat");
-        String natriumStr = record.get("natrium");
-
-        return kcalStr.isEmpty() || weightStr.isEmpty() || fatStr.isEmpty()
-                || carStr.isEmpty() || proStr.isEmpty() || natriumStr.isEmpty();
     }
 }
