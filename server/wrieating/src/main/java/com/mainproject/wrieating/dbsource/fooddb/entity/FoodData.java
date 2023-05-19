@@ -15,7 +15,6 @@ public class FoodData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long foodId;
-    private String no;
     private String foodName;
     private String foodRoughType;
     private String foodDetailType;

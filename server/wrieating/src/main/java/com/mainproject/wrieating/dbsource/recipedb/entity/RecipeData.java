@@ -15,12 +15,12 @@ public class RecipeData {
     private String rcpName;
     private String rcpWay;
     private String rcpPat;
-    private String weight;
-    private String kcal;
-    private String carbohydrate;
-    private String protein;
-    private String fat;
-    private String natrium;
+    private int weight;
+    private int kcal;
+    private int carbohydrate;
+    private int protein;
+    private int fat;
+    private int natrium;
     private String tag;
     private String img;
     @Column(columnDefinition = "TEXT")
