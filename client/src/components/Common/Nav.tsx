@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import logo from '../../assets/logo.png'
 
@@ -220,7 +220,7 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
             </div>
             <div>
               <p>고양고양이</p>
-              <Link to="/">
+              <Link to="/userpage" onClick={handleMenu}>
                 마이페이지
                 <span className="material-icons-round">navigate_next</span>
               </Link>
@@ -229,24 +229,36 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
         ) : (
           <div className="login-box">
             <div className="material-icons-round">account_circle</div>
-            <Link to="/">로그인</Link>
+            <Link to="/sign-in" onClick={handleMenu}>
+              로그인
+            </Link>
           </div>
         )}
         <ul className="depth-1">
-          <li className="active">
-            <Link to="/">식단일기</Link>
+          <li>
+            <NavLink to="/diaries" onClick={handleMenu}>
+              식단일기
+            </NavLink>
           </li>
           <li>
-            <Link to="/">통계 보기</Link>
+            <NavLink to="/" onClick={handleMenu}>
+              커뮤니티
+            </NavLink>
           </li>
           <li>
-            <Link to="/">모아보기</Link>
+            <NavLink to="/" onClick={handleMenu}>
+              모아보기
+            </NavLink>
             <ul className="depth-2">
               <li>
-                <Link to="/">레시피</Link>
+                <NavLink to="/" onClick={handleMenu}>
+                  레시피
+                </NavLink>
               </li>
               <li>
-                <Link to="/">영양성분</Link>
+                <NavLink to="/nutrient" onClick={handleMenu}>
+                  영양성분
+                </NavLink>
               </li>
             </ul>
           </li>

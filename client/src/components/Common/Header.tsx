@@ -14,20 +14,26 @@ const StyledHeader = styled.header`
   .container {
     max-width: 1250px;
     display: flex;
+    justify-content: center;
     align-items: center;
     margin: 0 auto;
+    position: relative;
   }
 
   .btn-menu {
-    font-size: ${({ theme }) => theme.fontSize.mdh};
+    font-size: ${({ theme }) => theme.fontSize.lgh};
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
   }
 
   h1 {
-    margin: 0 auto;
+    width: 10rem;
 
     img {
       display: block;
-      width: 50%;
+      width: 100%;
     }
   }
 
@@ -39,7 +45,7 @@ const StyledHeader = styled.header`
     }
 
     h1 {
-      width: 4rem;
+      width: 5rem;
     }
   }
 `

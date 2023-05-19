@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import Input from '../Common/Input'
 import { FoodList } from '../../pages/DiaryWrite'
@@ -168,7 +168,11 @@ const FoodItem = (props: FoodItemProps) => {
   const customOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     if (name !== 'title' && isNaN(Number(value))) return
-    setInfo(id, { [name]: value })
+    if (name === 'title') {
+      setInfo(id, { [name]: value })
+    } else {
+      setInfo(id, { [name]: Number(value) })
+    }
   }
 
   return (
