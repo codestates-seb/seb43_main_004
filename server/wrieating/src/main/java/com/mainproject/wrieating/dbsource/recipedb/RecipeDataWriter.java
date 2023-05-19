@@ -1,5 +1,6 @@
 package com.mainproject.wrieating.dbsource.recipedb;
 
+import com.mainproject.wrieating.dbsource.DatabaseConnection;
 import com.mainproject.wrieating.dbsource.recipedb.entity.RecipeData;
 
 import java.io.IOException;
@@ -8,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class DataWriter {
+public class RecipeDataWriter {
     public static void saveDataToDatabase(List<RecipeData> dataList) throws IOException, SQLException {
         try (Connection conn = DatabaseConnection.getConnection()) {
             String query = "INSERT INTO recipe_data (rcp_name, rcp_way, rcp_pat, weight, kcal, carbohydrate, protein, fat, natrium, tag, img, ingredients, manual01, manual_img01, manual02, manual_img02, manual03, manual_img03, manual04, manual_img04, manual05, manual_img05, manual06, manual_img06, rcp_na_tip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -18,12 +19,12 @@ public class DataWriter {
                 pstmt.setString(1, data.getRcpName());
                 pstmt.setString(2, data.getRcpWay());
                 pstmt.setString(3, data.getRcpPat());
-                pstmt.setString(4, data.getWeight());
-                pstmt.setString(5, data.getKcal());
-                pstmt.setString(6, data.getCarbohydrate());
-                pstmt.setString(7, data.getProtein());
-                pstmt.setString(8, data.getFat());
-                pstmt.setString(9, data.getNatrium());
+                pstmt.setInt(4, data.getWeight());
+                pstmt.setInt(5, data.getKcal());
+                pstmt.setInt(6, data.getCarbohydrate());
+                pstmt.setInt(7, data.getProtein());
+                pstmt.setInt(8, data.getFat());
+                pstmt.setInt(9, data.getNatrium());
                 pstmt.setString(10, data.getTag());
                 pstmt.setString(11, data.getImg());
                 pstmt.setString(12, data.getIngredients());
