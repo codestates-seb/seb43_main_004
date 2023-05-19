@@ -24,7 +24,8 @@ function App() {
           <Route path="/" element={<DiaryCheck />} />
           <Route path="/diaries" element={<DiaryCheck />} />
           <Route path="/diaries/:id" element={<DiaryDetail />} />
-          <Route path="/diary-add" element={<DiaryWrite />} />
+          <Route path="/diaries/:id/add" element={<DiaryWrite />} />
+          <Route path="/diaries/:id/update" element={<DiaryWrite />} />
           <Route path="/nutrient" element={<FoodArchive />} />
           <Route path="/sign-in" element={<UserSignIn />} />
           <Route path="/sign-up" element={<UserSignUp social={false} />} />
