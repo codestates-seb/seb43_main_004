@@ -24,8 +24,8 @@ public class WrieatingApplication {
 //		String filePath1 = "C:\\Users\\keddy\\Desktop\\Personal Project\\wrieating-main-project\\server\\wrieating\\src\\main\\resources\\totalfooddb.csv";
 
 		try {
-			List<FoodData> dataList = FoodCsvReader.readCsvFile(filePath1);
-			FoodDataWriter.saveDataToDatabase(dataList);
+			List<FoodData> dataList1 = FoodCsvReader.readCsvFile(filePath1);
+			FoodDataWriter.saveDataToDatabase(dataList1);
 		} catch (IOException e) {
 			System.err.println("Error reading CSV file: " + e.getMessage());
 		} catch (SQLException e) {
@@ -37,9 +37,9 @@ public class WrieatingApplication {
 		String filePath2 = "/home/ec2-user/action/server/wrieating/src/main/resources/recipe_data_source.csv";
 //		String filePath2 = "C:\\Users\\keddy\\Desktop\\Personal Project\\wrieating-main-project\\server\\wrieating\\src\\main\\resources\\recipe_data_source.csv";
 
-				try {
-			List<RecipeData> dataList = RecipeCsvReader.readCsvFile(filePath2);
-			RecipeDataWriter.saveDataToDatabase(dataList);
+		try {
+			List<RecipeData> dataList2 = RecipeCsvReader.readCsvFile(filePath2);
+			RecipeDataWriter.saveDataToDatabase(dataList2);
 		} catch (IOException e) {
 			System.err.println("Error reading CSV file: " + e.getMessage());
 		} catch (SQLException e) {
