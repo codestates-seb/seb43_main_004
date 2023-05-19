@@ -1,13 +1,15 @@
 spring:
+  profiles:
+    active: ${profile}
   # mysql db
   h2:
     console:
       enabled: true
       path:
   datasource:
-    url: jdbc:mysql://wrieating-database.ca59q4wbjg2d.ap-northeast-2.rds.amazonaws.com:13306/wrieatingdb
+    url: jdbc:mysql://${AWS_RDS_URL}/wrieatingdb
     username: admin
-    password: wrieating123
+    password: ${AWS_RDS_PASSWORD}
     driver-class-name:
   sql:
     init:
@@ -28,36 +30,36 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${email}
-    password: ${password}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-email:
-  sender:
-    man: ${email}
-    password: ${password}
-logging:
-  level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql:
-              BasicBinder: trace
+#  mail:
+#    host: smtp.gmail.com
+#    port: 587
+#    username: ${email}
+#    password: ${password}
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#            required: true
+#email:
+#  sender:
+#    man: ${email}
+#    password: ${password}
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        type:
+#          descriptor:
+#            sql:
+#              BasicBinder: trace
 #jwt
 mail:
   address:
     admin: admin@gmail.com
 jwt:
-  key: qweasdzxcrtyfghvbn12341234qweasdzxcrtyfghvbn345345345345345sdasdhukwhdkuahjhdu
+  key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
 
