@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import './App.css'
 import DiaryCheck from './components/diary/DiaryCheck'
 import DiaryDetail from './components/diary/DiaryDetail'
@@ -18,29 +18,37 @@ import UpdateReady from './pages/UpdateReady'
 import Landing from './pages/Landing'
 
 function App() {
+  const location = useLocation()
+  console.log(location.pathname)
+
   return (
     <div className="App">
       <Header />
-      <div className="wrapper">
+      {location.pathname === '/' ? (
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/diaries" element={<DiaryCheck />} />
-          <Route path="/diaries/:id" element={<DiaryDetail />} />
-          <Route path="/diaries/:id/add" element={<DiaryWrite />} />
-          <Route path="/diaries/:id/update" element={<DiaryWrite />} />
-          <Route path="/community" element={<UpdateReady />} />
-          <Route path="/nutrient" element={<FoodArchive />} />
-          <Route path="/sign-in" element={<UserSignIn />} />
-          <Route path="/sign-up" element={<UserSignUp social={false} />} />
-          <Route path="/register" element={<UserSignUp social={true} />} />
-          <Route path="/find-pwd" element={<UserFindPwd />} />
-          <Route path="/userpage" element={<UserPage />}>
-            <Route path="" element={<EditProfile />} />
-            <Route path="change-pwd" element={<ChangePwd />} />
-          </Route>
-          <Route path="/*" element={<NotFound error="404" />} />
         </Routes>
-      </div>
+      ) : (
+        <div className="wrapper">
+          <Routes>
+            <Route path="/diaries" element={<DiaryCheck />} />
+            <Route path="/diaries/:id" element={<DiaryDetail />} />
+            <Route path="/diaries/:id/add" element={<DiaryWrite />} />
+            <Route path="/diaries/:id/update" element={<DiaryWrite />} />
+            <Route path="/community" element={<UpdateReady />} />
+            <Route path="/nutrient" element={<FoodArchive />} />
+            <Route path="/sign-in" element={<UserSignIn />} />
+            <Route path="/sign-up" element={<UserSignUp social={false} />} />
+            <Route path="/register" element={<UserSignUp social={true} />} />
+            <Route path="/find-pwd" element={<UserFindPwd />} />
+            <Route path="/userpage" element={<UserPage />}>
+              <Route path="" element={<EditProfile />} />
+              <Route path="change-pwd" element={<ChangePwd />} />
+            </Route>
+            <Route path="/*" element={<NotFound error="404" />} />
+          </Routes>
+        </div>
+      )}
       <Footer />
     </div>
   )
