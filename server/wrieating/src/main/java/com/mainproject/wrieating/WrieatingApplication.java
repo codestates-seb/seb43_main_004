@@ -20,8 +20,8 @@ public class WrieatingApplication {
 		SpringApplication.run(WrieatingApplication.class, args);
 
 		// 음식 아카이브 데이터 삽입
-//		String filePath1 = "/home/ec2-user/action/server/wrieating/src/main/resources/totalfooddb.csv";
-		String filePath1 = "C:\\Users\\keddy\\Desktop\\Personal Project\\wrieating-main-project\\server\\wrieating\\src\\main\\resources\\totalfooddb.csv";
+		String filePath1 = "/home/ec2-user/action/server/wrieating/src/main/resources/totalfooddb.csv";
+//		String filePath1 = "C:\\Users\\keddy\\Desktop\\Personal Project\\wrieating-main-project\\server\\wrieating\\src\\main\\resources\\totalfooddb.csv";
 
 		try {
 			List<FoodData> dataList = FoodCsvReader.readCsvFile(filePath1);
@@ -34,8 +34,8 @@ public class WrieatingApplication {
 		// 완료 - 주석 처리함
 
 		// 레시피 아카이브 데이터 삽입
-//		String filePath2 = "/home/ec2-user/action/server/wrieating/src/main/resources/recipe_data_source.csv";
-		String filePath2 = "C:\\Users\\keddy\\Desktop\\Personal Project\\wrieating-main-project\\server\\wrieating\\src\\main\\resources\\recipe_data_source.csv";
+		String filePath2 = "/home/ec2-user/action/server/wrieating/src/main/resources/recipe_data_source.csv";
+//		String filePath2 = "C:\\Users\\keddy\\Desktop\\Personal Project\\wrieating-main-project\\server\\wrieating\\src\\main\\resources\\recipe_data_source.csv";
 
 				try {
 			List<RecipeData> dataList = RecipeCsvReader.readCsvFile(filePath2);
