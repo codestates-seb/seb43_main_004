@@ -10,6 +10,7 @@ const StyledHeader = styled.header`
   top: 0;
   z-index: 9;
   width: 100%;
+  height: 10rem;
 
   .container {
     max-width: 1250px;
@@ -39,6 +40,7 @@ const StyledHeader = styled.header`
 
   @media ${({ theme }) => theme.device.mobile} {
     padding: 1rem;
+    height: 6rem;
 
     .btn-menu {
       font-size: ${({ theme }) => theme.fontSize.lgh};
