@@ -1,0 +1,3 @@
+2023-05-19 12:53:43 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "FOOD_DATA" not found (this database is empty); SQL statement:
+INSERT INTO food_data (no, food_name, food_rough_Type, food_detail_type, serving_size, kcal, carbohydrate, fat, protein,  total_sugar, natrium) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) [42104-214]
