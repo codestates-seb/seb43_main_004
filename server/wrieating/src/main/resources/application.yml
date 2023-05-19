@@ -5,12 +5,12 @@ spring:
       enabled: true
       path:
   datasource:
-#    url: jdbc:mysql://wrieating-database.ca59q4wbjg2d.ap-northeast-2.rds.amazonaws.com:13306/wrieatingdb
-#    username: admin
-#    password: wrieating123
-    url: jdbc:mysql://localhost:3306/wrieatingdb
-    username:
-    password:
+    url: jdbc:mysql://wrieating-database.ca59q4wbjg2d.ap-northeast-2.rds.amazonaws.com:13306/wrieatingdb
+    username: admin
+    password: wrieating123
+#    url: jdbc:mysql://localhost:3306/wrieatingdb
+#    username: root
+#    password: Taskforce@1
     driver-class-name:
   sql:
     init:
