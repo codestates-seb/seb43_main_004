@@ -67,8 +67,8 @@ const Header = () => {
             </a>
           </h1>
         </div>
+        <Nav menuOpen={menuOpen} handleMenu={handleMenu} />
       </StyledHeader>
-      <Nav menuOpen={menuOpen} handleMenu={handleMenu} />
     </>
   )
 }

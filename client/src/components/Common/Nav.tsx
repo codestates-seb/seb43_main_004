@@ -244,14 +244,14 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/" onClick={handleMenu}>
+            <NavLink to="/community" onClick={handleMenu}>
               커뮤니티
             </NavLink>
           </li>
           <li>
-            <NavLink to="/" onClick={handleMenu}>
+            <Link to="/" onClick={handleMenu}>
               모아보기
-            </NavLink>
+            </Link>
             <ul className="depth-2">
               <li>
                 <NavLink to="/" onClick={handleMenu}>
