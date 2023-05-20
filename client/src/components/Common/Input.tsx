@@ -9,6 +9,7 @@ interface inputProps {
   name: string
   value?: string | number
   defaultValue?: string
+  success?: string
   error?: string
   disabled?: boolean
   onChange(e: React.ChangeEvent<HTMLInputElement>): void
@@ -24,6 +25,7 @@ const Input = (props: inputProps) => {
     value,
     defaultValue,
     error,
+    success,
     disabled,
     onChange,
     onBlur,
@@ -44,6 +46,7 @@ const Input = (props: inputProps) => {
         autoComplete="off"
       />
       {error && <ErrorMessage>{error}</ErrorMessage>}
+      {success && <SuccessMessage>{success}</SuccessMessage>}
     </InputWrapper>
   )
 }
@@ -84,6 +87,10 @@ const ErrorMessage = styled.p`
   margin: 0.4rem 0 0 0.4rem;
   color: var(--color-danger);
   font-size: 1.2rem;
+`
+
+const SuccessMessage = styled(ErrorMessage)`
+  color: var(--color-point);
 `
 
 export default Input
