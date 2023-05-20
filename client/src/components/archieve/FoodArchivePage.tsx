@@ -27,8 +27,10 @@ const FoodArchive = () => {
 
   const dispatch = useDispatch()
   const nutrientData = useSelector((state: RootState) => state.nutrient.data)
-  const loading = useSelector((state: RootState) => state.nutrient.loading)
-  const error = useSelector((state: RootState) => state.nutrient.error)
+  const loading = useSelector((state: RootState) => state.nutrient.loading) // false or true
+  const error = useSelector((state: RootState) => state.nutrient.error) // null or error
+
+  console.log(loading, error)
 
   const onClickSearchBtn = () => {
     if (nutrientData) {
