@@ -5,7 +5,7 @@ import { NutritionBarItem } from './DiaryDetail'
 interface NutritionItemProps {
   nutrientType: string
   diary: {
-    calcul: {
+    dayList: {
       [key: string]: number
     }[]
     standardIntake: {
@@ -35,7 +35,7 @@ const NutritionItem: React.FC<NutritionItemProps> = ({
           <div>
             <span
               className={getColor(percent)}
-            >{`${diary.calcul[0][nutrientKey]}g`}</span>
+            >{`${diary.dayList[0][nutrientKey]}g`}</span>
             <span>{` / ${diary.standardIntake[0][nutrientKey]}g`}</span>
           </div>
         </header>

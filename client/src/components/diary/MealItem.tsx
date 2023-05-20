@@ -3,7 +3,6 @@ import React from 'react'
 interface Meal {
   foodName: string
   mealType: string
-  intake: number
   kcal: number
 }
 
@@ -49,7 +48,7 @@ const MealList: React.FC<MealListProps> = ({ diary }) => {
                 mealData.map((data, idx) => (
                   <li className="meal__list" key={idx}>
                     <p>{data.foodName}</p>
-                    <p>{data.intake}g</p>
+                    <p>100g</p>
                     <span>{`${data.kcal}kcal`}</span>
                   </li>
                 ))

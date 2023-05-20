@@ -6,6 +6,7 @@ import Stats from './Stats'
 
 const DiaryCheck = () => {
   const [diaries, setDiaries] = useState<DataResponse | null>(null)
+  console.log(diaries)
 
   const fetchData = () => {
     axios
@@ -64,7 +65,7 @@ export interface Intake {
 export interface DataResponse {
   data: Diary[]
   standardIntake: Intake[]
-  calcul: Intake[]
+  dayList: Intake[]
   comment: string
   pageInfo: {
     page: number

@@ -1,5 +1,3 @@
-// src/store/nutrientSlice.ts
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { dtoResponsePage } from '../../dto'
 import { nutrient } from '../../components/archieve/FoodArchivePage'

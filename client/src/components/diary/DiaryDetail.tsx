@@ -13,6 +13,7 @@ const DiaryDetail = () => {
   const [memoContent, setMemoContent] = useState(diary?.memo)
   const [isOpenMemo, setIsOpenMemo] = useState(true)
   const [isOpenModal, setIsOpenModal] = useState(false)
+  console.log(diary)
 
   const navigate = useNavigate()
   const { id } = useParams()
@@ -40,7 +41,7 @@ const DiaryDetail = () => {
   // 표준 섭취량과 계산된 영양성분으로 퍼센트를 계산하는 함수
   const calculatePercent = (nutrient: string) => {
     return (
-      ((diary?.calcul[0]?.[nutrient] ?? 0) /
+      ((diary?.dayList[0]?.[nutrient] ?? 0) /
         (diary?.standardIntake[0]?.[nutrient] ?? 0)) *
       100
     )
@@ -158,7 +159,7 @@ const DiaryDetail = () => {
                     <div>
                       <span
                         className={getColor(calculatePercent('kcal'))}
-                      >{`${diary.calcul[0]?.kcal}kcal`}</span>
+                      >{`${diary.dayList[0]?.kcal}kcal`}</span>
                       <span>{` / ${diary.standardIntake[0]?.kcal}kcal`}</span>
                     </div>
                   </header>
@@ -214,7 +215,7 @@ interface Diary {
   diaryStatus: string
   meal: Meal[]
   standardIntake: StandardIntake[]
-  calcul: Calcul[]
+  dayList: DayList[]
   recipe: Recipe[]
   comment: string
 }
@@ -223,7 +224,6 @@ interface Meal {
   foodName: string
   mealType: string
   kcal: number
-  intake: number
 }
 
 interface StandardIntake {
@@ -235,7 +235,7 @@ interface StandardIntake {
   [key: string]: number
 }
 
-interface Calcul {
+interface DayList {
   carbohydrate: number
   protein: number
   fat: number
