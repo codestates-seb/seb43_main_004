@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,7 +59,6 @@ public class DiaryService {
     public Page<Diary> findAllDiaries(String token,int page, int size) {
         return diaryRepository.findAllByMemberMemberId(tokenizer.getMemberId(token),
                 PageRequest.of(page, size, Sort.by("userDate").descending()));
-
     }
 
     public void updateDiary(long diaryId, DiaryPatchDto diaryPatchDto) {
