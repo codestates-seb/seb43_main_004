@@ -33,8 +33,8 @@ spring:
 #  jpa:
 #    hibernate:
       # 스키마 생성 전략
-#      ddl-auto: update
-      ddl-auto: create-drop
+     ddl-auto: update
+#       ddl-auto: create-drop
       # 로그
     show-sql: true
     properties:
