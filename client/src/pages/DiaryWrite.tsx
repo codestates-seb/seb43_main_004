@@ -9,15 +9,16 @@ import Modal from '../components/Common/Modal'
 import { useLocation, useParams } from 'react-router-dom'
 
 const StyledDiaryAdd = styled.main`
-  width: 100%;
+  width: 98%;
+  max-width: 1250px;
 
   h2 {
-    font-size: ${({ theme }) => theme.fontSize.lgh};
+    font-size: ${({ theme }) => theme.fontSize.smmh};
     margin-bottom: 5rem;
   }
 
   h3 {
-    font-size: ${({ theme }) => theme.fontSize.mdh};
+    font-size: ${({ theme }) => theme.fontSize.smh};
   }
 
   button {
@@ -93,7 +94,7 @@ const StyledDiaryAdd = styled.main`
 
       .search-food-list {
         position: absolute;
-        top: 100%;
+        top: 70%;
         left: 0;
         width: 100%;
         border: 1px solid ${({ theme }) => theme.color.darkGray};
@@ -101,6 +102,8 @@ const StyledDiaryAdd = styled.main`
         overflow: hidden;
         box-shadow: ${({ theme }) => theme.shadow};
         z-index: 5;
+        max-height: 226px;
+        overflow-y: auto;
 
         li {
           display: flex;
@@ -224,7 +227,8 @@ const DiaryWrite = () => {
   // Todo : 검색리스트 가져오기. 추후 전역 스토어에 영양성분 db 가져오는것으로 대체할 예정
   const getSearchList = async () => {
     const res = await axios.get(
-      `http://localhost:3001/nutrient?title=${searchTxt}`
+      `http://localhost:4000/nutrient`
+      // ${url}/nutrient/search?page=1&size=10&search=${searchTxt}
     )
     setSearchList(res.data)
   }

@@ -8,11 +8,13 @@ const StyledHeader = styled.header`
   padding: 1rem;
   position: fixed;
   top: 0;
-  z-index: 800;
+  z-index: 9;
   width: 100%;
+  height: 10rem;
 
   .container {
     max-width: 1250px;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,6 +41,7 @@ const StyledHeader = styled.header`
 
   @media ${({ theme }) => theme.device.mobile} {
     padding: 1rem;
+    height: 6rem;
 
     .btn-menu {
       font-size: ${({ theme }) => theme.fontSize.lgh};
@@ -67,8 +70,8 @@ const Header = () => {
             </a>
           </h1>
         </div>
+        <Nav menuOpen={menuOpen} handleMenu={handleMenu} />
       </StyledHeader>
-      <Nav menuOpen={menuOpen} handleMenu={handleMenu} />
     </>
   )
 }
