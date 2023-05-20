@@ -1,6 +1,7 @@
 package com.mainproject.wrieating.member.controller;
 
 import com.mainproject.wrieating.dto.SingleResponseDto;
+import com.mainproject.wrieating.helper.email.EmailSenderResponse;
 import com.mainproject.wrieating.member.dto.*;
 import com.mainproject.wrieating.member.entity.Member;
 import com.mainproject.wrieating.member.mapper.MemberMapper;
@@ -26,16 +27,52 @@ public class MemberController {
         this.memberMapper = memberMapper;
     }
 
-    // 이메일 인증
-//    @PostMapping("/members/sendemail")
-//    public ResponseEntity<String> sendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
-//        String email = emailRequestDto.getEmail();
-//
-//        // 이메일 인증 코드 생성 및 이메일 발송
-//        String verificationCode = memberService.sendVerificationEmail(email);
-//
-//        return ResponseEntity.ok(verificationCode);
-//    }
+    // 이메일 인증(회원가입시) & 이메일 중복 체크
+    @PostMapping("/members/sendemail")
+    public ResponseEntity sendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
+        String email = emailRequestDto.getEmail();
+
+        if (memberService.verifiedMemberEmail(email)) {
+            EmailSenderResponse response = new EmailSenderResponse();
+            response.setIsactive(true);
+            response.setMessage("이미 존재하는 이메일입니다.");
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } else {
+            // 이메일 인증 코드 생성 및 이메일 발송
+            String verificationCode = memberService.sendVerificationEmail(email);
+
+            EmailSenderResponse response = new EmailSenderResponse();
+            response.setIsactive(false);
+            response.setMessage(verificationCode);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
+    // 이메일 인증(비밀번호 찾기시)
+    @PostMapping("/members/findpassword/sendemail")
+    public ResponseEntity findpasswordSendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
+        String email = emailRequestDto.getEmail();
+
+        if (memberService.verifiedMemberEmail(email)){ // 이메일이 존재한다면
+            // 이메일 인증 코드 생성 및 이메일 발송
+            String verificationCode = memberService.sendVerificationEmail(email);
+
+            EmailSenderResponse response = new EmailSenderResponse();
+            response.setIsactive(true);
+            response.setMessage(verificationCode);
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+        else{
+            EmailSenderResponse response = new EmailSenderResponse();
+            response.setIsactive(false);
+            response.setMessage("이메일이 존재하지 않습니다.");
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
 
     // 회원 가입
     @PostMapping("/members/signup")
@@ -84,8 +121,34 @@ public class MemberController {
                 HttpStatus.OK);
     }
 
+    // 회원 비밀번호 수정
+    @PatchMapping("/members/mypage/passwordupdate")
+    public ResponseEntity passwordUpdateMember(
+            @RequestHeader(name = "Authorization") String token
+            ,@Valid @RequestBody MemberPatchPasswordDto requestBody){
+
+        String curPassword = requestBody.getCurPassword();
+        String newPassword = requestBody.getNewPassword();
+
+        Member member = memberService.updatePasswordMember(token, curPassword, newPassword);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 회원 비밀번호 찾기(새 비밀번호로 변경)
+    @PatchMapping("/members/findpassword")
+    public ResponseEntity findpasswordMember(@Valid @RequestBody MemberPatchPasswordDto requestBody){
+
+        String email = requestBody.getEmail();
+        String newPassword = requestBody.getNewPassword();
+
+        Member member = memberService.updatePasswordFindMember(email,newPassword);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     // 본인 회원 조회
-    @GetMapping("/members/mypage")
+    @GetMapping("/members/myprofile")
     public ResponseEntity getMember(@RequestHeader(name = "Authorization") String token){
         Member member = memberService.findMember(token);
 

@@ -15,10 +15,10 @@ public class MemberPatchDto {   //회원수정
     @Email
     private String email;
     private String nickName;
-    private String password;
     private LocalDate birth;
     private String gender;
     private Integer height;
     private Integer weight;
     private Member.Activity activity;
+    private String icon;
 }
