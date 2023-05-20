@@ -26,6 +26,7 @@ const NutritionItem: React.FC<NutritionItemProps> = ({
   const nutrientKey = Object.keys(nutrientTypeMap).find(
     (key) => nutrientTypeMap[key] === nutrientType
   )
+
   if (nutrientKey) {
     const percent = calculatePercent(nutrientKey)
     return (
@@ -33,10 +34,22 @@ const NutritionItem: React.FC<NutritionItemProps> = ({
         <header>
           <p>{nutrientType}</p>
           <div>
-            <span
-              className={getColor(percent)}
-            >{`${diary.dayList[0][nutrientKey]}g`}</span>
-            <span>{` / ${diary.standardIntake[0][nutrientKey]}g`}</span>
+            <span className={getColor(percent)}>{`${
+              diary.dayList[0][nutrientKey]
+            }${
+              nutrientType === '나트륨'
+                ? 'mg'
+                : nutrientType === '칼로리'
+                ? 'kcal'
+                : 'g'
+            }`}</span>
+            <span>{` / ${diary.standardIntake[0][nutrientKey]}${
+              nutrientType === '나트륨'
+                ? 'mg'
+                : nutrientType === '칼로리'
+                ? 'kcal'
+                : 'g'
+            }`}</span>
           </div>
         </header>
         <div className="status__bar">

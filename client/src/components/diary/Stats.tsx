@@ -8,7 +8,6 @@ const Stats = ({ diaries }: any) => {
   const { weekList, standardIntake } = diaries
   const intake = weekList && weekList[0] // 지난주 섭취량
   const standardIntakes = standardIntake && standardIntake[0] // 평균섭취량
-  console.log(weekList)
 
   const percentIntake = (nutrient: string) => {
     return (
@@ -47,6 +46,11 @@ const Stats = ({ diaries }: any) => {
       id: '당류',
       label: '당류',
       value: `${intake.sugar}`,
+    },
+    {
+      id: '나트륨',
+      label: '나트륨',
+      value: `${intake.salt}`,
     },
   ]
   return (
@@ -106,6 +110,17 @@ const Stats = ({ diaries }: any) => {
               {Number(percentIntake('sugar')) > 120
                 ? '과다'
                 : Number(percentIntake('sugar')) < 80
+                ? '부족'
+                : '적정'}
+            </p>
+          </li>
+          <li className="nutrient__list">
+            <p>나트륨</p>
+            <p>{percentIntake('salt')}%</p>
+            <p className={getSugarClassName('salt')}>
+              {Number(percentIntake('salt')) > 120
+                ? '과다'
+                : Number(percentIntake('salt')) < 80
                 ? '부족'
                 : '적정'}
             </p>

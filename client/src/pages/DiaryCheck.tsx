@@ -1,12 +1,11 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import CalendarPage from './Calendar'
-import Stats from './Stats'
+import CalendarPage from '../components/diary/Calendar'
+import Stats from '../components/diary/Stats'
 
 const DiaryCheck = () => {
   const [diaries, setDiaries] = useState<DataResponse | null>(null)
-  console.log(diaries)
 
   const fetchData = () => {
     axios

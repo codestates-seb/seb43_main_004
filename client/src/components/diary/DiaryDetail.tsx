@@ -13,7 +13,6 @@ const DiaryDetail = () => {
   const [memoContent, setMemoContent] = useState(diary?.memo)
   const [isOpenMemo, setIsOpenMemo] = useState(true)
   const [isOpenModal, setIsOpenModal] = useState(false)
-  console.log(diary)
 
   const navigate = useNavigate()
   const { id } = useParams()
@@ -153,7 +152,7 @@ const DiaryDetail = () => {
             <div className="status__container">
               <h2>오늘의 식단</h2>
               <NutritionBar>
-                <li>
+                {/* <li>
                   <header>
                     <p>칼로리</p>
                     <div>
@@ -171,16 +170,18 @@ const DiaryDetail = () => {
                       &nbsp;
                     </NutritionBarItem>
                   </div>
-                </li>
-                {['탄수화물', '단백질', '지방', '당분'].map((el, idx) => (
-                  <NutritionItem
-                    key={idx}
-                    nutrientType={el}
-                    diary={diary}
-                    calculatePercent={calculatePercent}
-                    getColor={getColor}
-                  />
-                ))}
+                </li> */}
+                {['칼로리', '탄수화물', '단백질', '지방', '당분', '나트륨'].map(
+                  (el, idx) => (
+                    <NutritionItem
+                      key={idx}
+                      nutrientType={el}
+                      diary={diary}
+                      calculatePercent={calculatePercent}
+                      getColor={getColor}
+                    />
+                  )
+                )}
               </NutritionBar>
             </div>
             <div className="recipe__container">
