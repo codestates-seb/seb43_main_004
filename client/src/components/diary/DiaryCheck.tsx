@@ -9,8 +9,11 @@ const DiaryCheck = () => {
 
   const fetchData = () => {
     axios
-      .get<DataResponse>('http://localhost:4000/diaries')
+      .get<DataResponse>(`http://localhost:4000/diaries?page=1&size=10`)
       .then((res) => setDiaries(res.data))
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   useEffect(() => {

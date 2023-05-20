@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Button from '../Common/Button'
 import Modal from '../Common/Modal'
+import nutrientTypeMap from '../../utils/nutrientTypeMap'
 
 const DiaryDetail = () => {
   const [diary, setDiary] = useState<Diary | null>(null)
@@ -230,39 +231,35 @@ const DiaryDetail = () => {
                   </div>
                 </li>
                 {['탄수화물', '단백질', '지방', '당분'].map((el, idx) => {
-                  const nutrientTypeMap: { [key: string]: string } = {
-                    탄수화물: 'carbohydrate',
-                    단백질: 'protein',
-                    지방: 'fat',
-                    당분: 'sugar',
-                  }
-                  return (
-                    <li key={idx}>
-                      <header>
-                        <p>{el}</p>
-                        <div>
-                          <span
-                            className={getColor(
-                              calculatePercent(nutrientTypeMap[el])
-                            )}
-                          >{`${diary.calcul[0][nutrientTypeMap[el]]}g`}</span>
-                          <span>{` /${
-                            diary.standardIntake[0][nutrientTypeMap[el]]
-                          }g`}</span>
-                        </div>
-                      </header>
-                      <div className="status__bar">
-                        <NutritionBarItem
-                          width={calculatePercent(nutrientTypeMap[el])}
-                          color={getColor(
-                            calculatePercent(nutrientTypeMap[el])
-                          )}
-                        >
-                          &nbsp;
-                        </NutritionBarItem>
-                      </div>
-                    </li>
+                  const nutrientKey = Object.keys(nutrientTypeMap).find(
+                    (key) => nutrientTypeMap[key] === el
                   )
+                  if (nutrientKey) {
+                    return (
+                      <li key={idx}>
+                        <header>
+                          <p>{el}</p>
+                          <div>
+                            <span
+                              className={getColor(
+                                calculatePercent(nutrientKey)
+                              )}
+                            >{`${diary.calcul[0][nutrientKey]}g`}</span>
+                            <span>{` / ${diary.standardIntake[0][nutrientKey]}g`}</span>
+                          </div>
+                        </header>
+                        <div className="status__bar">
+                          <NutritionBarItem
+                            width={calculatePercent(nutrientKey)}
+                            color={getColor(calculatePercent(nutrientKey))}
+                          >
+                            &nbsp;
+                          </NutritionBarItem>
+                        </div>
+                      </li>
+                    )
+                  }
+                  return null
                 })}
               </NutritionBar>
             </div>

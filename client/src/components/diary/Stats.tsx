@@ -43,8 +43,8 @@ const Stats = ({ diaries }: any) => {
       value: `${intake.fat}`,
     },
     {
-      id: '당',
-      label: '당',
+      id: '당류',
+      label: '당류',
       value: `${intake.sugar}`,
     },
   ]
