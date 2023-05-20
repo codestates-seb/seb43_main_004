@@ -50,6 +50,7 @@ public interface DiaryMapper {
     default DiariesResponseDto diariesResponseDto(Diary diary) {
 
         return DiariesResponseDto.builder()
+                .diaryId(diary.getDiaryId())
                 .userDate(diary.getUserDate().toString())
                 .diaryStatus(diary.getDiaryStatus())
                 .build();
