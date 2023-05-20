@@ -227,8 +227,8 @@ const DiaryWrite = () => {
   // Todo : 검색리스트 가져오기. 추후 전역 스토어에 영양성분 db 가져오는것으로 대체할 예정
   const getSearchList = async () => {
     const res = await axios.get(
-      `http://localhost:3001/nutrient`
-      // `http://localhost:3001/nutrient?title=${searchTxt}`
+      `http://localhost:4000/nutrient`
+      // ${url}/nutrient/search?page=1&size=10&search=${searchTxt}
     )
     setSearchList(res.data)
   }
