@@ -1,16 +1,11 @@
 import React from 'react'
+import { nutrient } from './FoodArchivePage'
 
 interface SearchHighlightProps {
-  nutrient: Nutrient
+  nutrient: nutrient
   isHighlighted: boolean
-  handleClickFood: (nutrient: Nutrient) => void
+  handleClickFood: (nutrient: nutrient) => void // <-- 타입 수정
   value: string
-}
-
-interface Nutrient {
-  id: number
-  foodName: string
-  kcal: number
 }
 
 const SearchHighlight: React.FC<SearchHighlightProps> = ({

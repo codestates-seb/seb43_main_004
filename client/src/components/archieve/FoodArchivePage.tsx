@@ -7,6 +7,7 @@ import PaginationComponent from '../Common/Pagination'
 import { dtoResponsePage } from '../../dto'
 import calculateSimilarity from '../../utils/calculateSimilarity'
 import nutrientTypeMap from '../../utils/nutrientTypeMap'
+import SearchHighlight from './SearchHighlight'
 
 const FoodArchive = () => {
   const [inputVal, setInputVal] = useState('')
@@ -76,42 +77,15 @@ const FoodArchive = () => {
       <div className="archive">
         <ul className="archive__lists">
           {(filteredData.length === 0 ? nutrientData?.data : filteredData)?.map(
-            (nutrient) => {
-              const foodName = nutrient.foodName
-              // 공백을 입력하면 이상하게 출력되어 inputVal을 공백을 기준으로 나누어 검색어로 사용하고, 각 검색어에 trim() 함수를 적용하여 앞뒤 공백을 제거 / 빈 문자열인 검색어는 filter() 함수를 사용하여 제외
-              const inputKeywords = inputVal
-                .split(/\s+/)
-                .filter((keyword) => keyword.trim() !== '')
-              const highlightedFoodName = inputKeywords.reduce(
-                (acc, keyword) => {
-                  // 특수문자 처리
-                  const regex = new RegExp(
-                    keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),
-                    'gi'
-                  )
-                  return acc.replace(
-                    regex,
-                    (match) =>
-                      `<span class=${
-                        isHighlighted ? 'highlight' : ''
-                      }>${match}</span>`
-                  )
-                },
-                foodName
-              )
-              return (
-                <li
-                  className={`archive__list`} // 강조 클래스를 동적으로 적용
-                  key={nutrient.id}
-                  onClick={() => handleClickFood(nutrient)}
-                >
-                  <p
-                    dangerouslySetInnerHTML={{ __html: highlightedFoodName }}
-                  ></p>
-                  <p>{nutrient.kcal} kcal</p>
-                </li>
-              )
-            }
+            (nutrient) => (
+              <SearchHighlight
+                key={nutrient.id}
+                nutrient={nutrient}
+                isHighlighted={isHighlighted}
+                handleClickFood={handleClickFood}
+                value={inputVal}
+              />
+            )
           )}
         </ul>
 
