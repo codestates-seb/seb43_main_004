@@ -4,8 +4,8 @@ import com.mainproject.wrieating.auth.jwt.JwtTokenizer;
 import com.mainproject.wrieating.auth.utils.CustomAuthorityUtils;
 import com.mainproject.wrieating.exception.BusinessLogicException;
 import com.mainproject.wrieating.exception.ExceptionCode;
-//import com.mainproject.wrieating.helper.email.EmailSender;
-//import com.mainproject.wrieating.helper.email.RandomGenerator;
+import com.mainproject.wrieating.helper.email.EmailSender;
+import com.mainproject.wrieating.helper.email.RandomGenerator;
 import com.mainproject.wrieating.member.dto.MemberPatchDeleteDto;
 import com.mainproject.wrieating.member.dto.MemberPostSignUpDto;
 import com.mainproject.wrieating.member.entity.Member;
@@ -28,20 +28,27 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final JwtTokenizer jwtTokenizer;
-//    private final EmailSender emailSender;
+    private final EmailSender emailSender;
 
-//    public String sendVerificationEmail(String email) {
-//        // Verification Code 생성
-//        String verificationCode = RandomGenerator.generateRandomCode(6);
-//
-//        // 이메일 인증 메일 발송
-//        emailSender.sendVerificationEmail(email, verificationCode);
-//
-//        return verificationCode;
-//    }
+    public String sendVerificationEmail(String email) {
+        // Verification Code 생성
+        String verificationCode = RandomGenerator.generateRandomCode(6);
+
+        // 이메일 인증 메일 발송
+        emailSender.sendVerificationEmail(email, verificationCode);
+
+        return verificationCode;
+    }
 
     public MemberPostSignUpDto createMember(MemberPostSignUpDto memberDto){
         Member member = mapper.memberPostToMember(memberDto);
+
+        // 이메일, 닉네임 중복 체크
+        if(verifiedMemberEmail(member.getEmail())){
+            throw new BusinessLogicException(ExceptionCode.EMAIL_EXIST);
+        } else if (verifiedMemberNickName(member.getNickName())){
+            throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST);
+        }
 
         // JWT
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
@@ -61,8 +68,12 @@ public class MemberService {
 
         Member findMember = findVerifiedMember(memberId);
 
-        Optional.ofNullable(member.getNickName())
-                .ifPresent(name -> findMember.setNickName(name));
+        if (verifiedMemberNickName(member.getNickName())){
+            throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST);
+        } else {
+            Optional.ofNullable(member.getNickName())
+                .ifPresent(name -> findMember.setNickName(name));}
+
         Optional.ofNullable(member.getBirth())
                 .map(birth -> {
                     findMember.setBirth(birth);
@@ -78,6 +89,46 @@ public class MemberService {
                 .ifPresent(activity -> findMember.setActivity(activity));
 
         return memberRepository.save(findMember);
+    }
+
+    // 마이페이지 회원 비밀번호 변경
+    public Member updatePasswordMember(String token, String curPassword, String newPassword){
+        long memberId = jwtTokenizer.getMemberId(token);
+
+        Member findMember = findVerifiedMember(memberId);
+        if (passwordEncoder.matches(curPassword, findMember.getPassword())) {
+            if(!passwordEncoder.matches(newPassword, findMember.getPassword())){
+
+                findMember.setPassword(passwordEncoder.encode(newPassword));
+
+                return memberRepository.save(findMember);
+            } else { // 현재 비밀번호와 new 비밀번호가 같을 시
+                throw new BusinessLogicException(ExceptionCode.PASSWORD_IDENTICAL);
+            }
+        }
+        else {
+            throw new BusinessLogicException(ExceptionCode.PASSWORD_MISMATCHED);
+        }
+    }
+
+    // 비밀번호 찾기시 (새 비밀번호 변경)
+    public Member updatePasswordFindMember(String email, String newPassword){
+        Optional<Member> findMember = memberRepository.findByEmail(email);
+
+        if (findMember.isPresent()) {
+            Member member = findMember.get();
+
+            // JWT
+            String encryptedPassword = passwordEncoder.encode(newPassword);
+            member.setPassword(encryptedPassword);
+
+            // 변경된 멤버 정보를 저장합니다.
+            return memberRepository.save(member);
+        }
+        else { // 이메일에 해당하는 멤버가 없는 경우 처리할 로직
+
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
     }
 
     // 회원 마이페이지
@@ -99,7 +150,6 @@ public class MemberService {
 
         MemberPatchDeleteDto findMember = mapper.memberToMemberPatchDelete(findVerifiedMember(memberId));
         // 회원 삭제하지않고 status만 바꾸는 로직
-        // TODO 일정 시간 지난 후 삭제되게끔 작성
         
         findMember.setStatus(Member.Status.MEMBER_QUIT);
     }
