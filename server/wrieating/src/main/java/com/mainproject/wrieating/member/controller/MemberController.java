@@ -82,6 +82,18 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    // 이메일 중복 체크
+    @PostMapping("/members/emailcheck")
+    public ResponseEntity emailCheckMember(@Valid @RequestBody MemberPostEmailVerifedDto requestBody){
+        log.info(String.valueOf(requestBody));
+
+        Boolean emailCheck = memberService.verifiedMemberEmail(requestBody.getEmail());
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(emailCheck),
+                HttpStatus.OK);
+    }
+
     // 닉네임 중복 체크
     @PostMapping("/members/nicknamecheck")
     public ResponseEntity nickNameCheckMember(@Valid @RequestBody MemberPostNickNameVerifedDto requestBody){
