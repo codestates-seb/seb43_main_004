@@ -14,6 +14,7 @@ const StyledHeader = styled.header`
 
   .container {
     max-width: 1250px;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;

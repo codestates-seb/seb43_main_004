@@ -73,9 +73,21 @@ const StyledLanding = styled.main`
   }
 
   .visual {
-    background: url(${landing1}) no-repeat 50% 0 / contain;
     background-color: #ffce70;
-    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+
+    img {
+      height: 115%;
+    }
+
+    .txt-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
 
     h2 {
       font-size: 10rem;
@@ -261,6 +273,105 @@ const StyledLanding = styled.main`
       }
     }
   }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    margin-top: 6rem;
+
+    section {
+      height: auto;
+      padding: 5rem 0;
+
+      .container {
+        width: 98%;
+        flex-direction: column;
+        gap: 5rem;
+
+        .img-box {
+          width: 50vw;
+          height: 50vw;
+        }
+
+        .txt-box {
+          text-align: center;
+          width: 100%;
+
+          h3 {
+            font-size: ${({ theme }) => theme.fontSize.mdh};
+          }
+
+          p {
+            font-size: ${({ theme }) => theme.fontSize.large};
+          }
+        }
+      }
+    }
+
+    .visual {
+      img {
+        height: auto;
+        width: 100%;
+      }
+
+      h2 {
+        font-size: 5rem;
+      }
+
+      p {
+        font-size: ${({ theme }) => theme.fontSize.larger};
+      }
+    }
+
+    .madeby {
+      .container {
+        h3 {
+          font-size: ${({ theme }) => theme.fontSize.mdh};
+        }
+
+        .profile-box {
+          flex-direction: column;
+
+          & > div {
+            width: 70%;
+          }
+
+          .profile {
+            .profile-img {
+              width: 30%;
+            }
+
+            .profile-info {
+              width: 65%;
+            }
+          }
+
+          .be {
+            margin-top: 3rem;
+
+            .profile {
+              flex-direction: row-reverse;
+            }
+
+            .profile-info {
+              text-align: left;
+            }
+          }
+        }
+      }
+    }
+
+    .with {
+      .container {
+        h3 {
+          font-size: ${({ theme }) => theme.fontSize.mdh};
+        }
+
+        .img-box {
+          width: 50vw;
+          height: 50vw;
+        }
+      }
+    }
+  }
 `
 
 const Landing = () => {
@@ -330,20 +441,22 @@ const Landing = () => {
   return (
     <StyledLanding>
       <section className="visual">
-        <h2
-          data-aos="fade-up"
-          data-aos-duration={duration}
-          // data-aos-delay={delay}
-        >
-          Wr!eating
-        </h2>
-        <p
-          data-aos="fade-up"
-          data-aos-duration={duration}
-          data-aos-delay={delay}
-        >
-          더 건강해질 나를 위한 식단 일기
-        </p>
+        <img
+          src={landing1}
+          alt="라잇팅 웹사이트가 띄워진 노트북과 스마트폰 두개"
+        />
+        <div className="txt-box">
+          <h2 data-aos="fade-up" data-aos-duration={duration}>
+            Wr!eating
+          </h2>
+          <p
+            data-aos="fade-up"
+            data-aos-duration={duration}
+            data-aos-delay={delay}
+          >
+            더 건강해질 나를 위한 식단 일기
+          </p>
+        </div>
       </section>
       <section className="diary">
         <div className="container">
