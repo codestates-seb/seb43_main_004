@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class DiariesResponseDto {
+    private Long diaryId;
     private String userDate;
     private String diaryStatus;
 }
