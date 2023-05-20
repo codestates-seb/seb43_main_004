@@ -26,7 +26,6 @@ const FoodArchive = () => {
           foodNameWithoutWhitespace.includes(keyword)
         )
       })
-      console.log(inputKeywords, filtered)
 
       // 정렬: 가장 유사한 항목 먼저 보여주기
       const sortedData = filtered.sort((a, b) => {
@@ -100,7 +99,6 @@ const FoodArchive = () => {
                 },
                 foodName
               )
-
               return (
                 <li
                   className={`archive__list`} // 강조 클래스를 동적으로 적용
@@ -125,23 +123,34 @@ const FoodArchive = () => {
                 <p>{selectData.intake}g</p>
               </header>
               <section className="detail">
-                <p>칼로리: {selectData.kcal}kcal</p>
-                <p>상세영양소</p>
+                <div className="detail__data">
+                  <p className="detail__kcal">칼로리</p>
+                  <p>{selectData.kcal}kcal</p>
+                </div>
+                <p className="nutrient__detail">상세영양소</p>
                 {Object.entries(selectData).map(
                   ([key, value]) =>
                     key !== 'id' &&
                     key !== 'foodName' &&
                     key !== 'intake' &&
                     key !== 'kcal' && (
-                      <p key={key}>
-                        {nutrientTypeMap[key]}: {value}g
-                      </p>
+                      <div className="detail__data" key={key}>
+                        <p>{nutrientTypeMap[key]}</p>
+                        <p>{value}g</p>
+                      </div>
                     )
                 )}
               </section>
             </div>
           ) : (
-            <div>없어</div>
+            <div className="click-no-result">
+              <p>선택된 음식이 없습니다.</p>
+              <p>
+                음식을 선택하여
+                <br />
+                영양성분을 확인해보세요!
+              </p>
+            </div>
           )}
         </div>
       </div>
@@ -204,7 +213,7 @@ const FoodArchiveWrapper = styled.div`
   }
 
   .archive__lists {
-    flex: 6;
+    flex: 6.5;
     border-radius: 8px;
     margin-right: 1.5rem;
   }
@@ -233,7 +242,7 @@ const FoodArchiveWrapper = styled.div`
   }
 
   .list__detail {
-    flex: 4;
+    flex: 3.5;
     border: 1px solid var(--color-light-gray);
     border-radius: 8px;
     padding: 1rem;
@@ -256,13 +265,28 @@ const FoodArchiveWrapper = styled.div`
   }
 
   .detail {
-    padding: 1rem 2rem;
-    font-size: 16px;
+    padding: 2rem 3.5rem;
+    font-size: 18px;
     font-weight: 500;
 
-    p:first-child {
-      margin-bottom: 4rem;
+    .nutrient__detail {
+      margin-bottom: 2rem;
+      font-weight: 700;
+      font-size: 20px;
     }
+
+    p:first-child {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  .detail__data {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .detail__data:first-child {
+    margin-bottom: 2rem;
   }
 
   .no-result-message {
@@ -272,5 +296,20 @@ const FoodArchiveWrapper = styled.div`
 
   .highlight {
     color: var(--color-primary);
+  }
+
+  .click-no-result {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+
+    p {
+      font-family: 'yg-jalnan';
+      font-size: 22px;
+      margin-bottom: 3rem;
+    }
   }
 `
