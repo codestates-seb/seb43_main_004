@@ -8,15 +8,27 @@ import { dtoResponsePage } from '../../dto'
 import calculateSimilarity from '../../utils/calculateSimilarity'
 import nutrientTypeMap from '../../utils/nutrientTypeMap'
 import SearchHighlight from './SearchHighlight'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '../../store'
+import {
+  fetchNutrientDataStart,
+  fetchNutrientDataSuccess,
+  fetchNutrientDataFailure,
+} from '../../store/slices/nutrientSlice'
 
 const FoodArchive = () => {
   const [inputVal, setInputVal] = useState('')
-  const [nutrientData, setNutrientData] =
-    useState<dtoResponsePage<nutrient> | null>(null) // 서버 응답 데이터
+  // const [nutrientData, setNutrientData] =
+  //   useState<dtoResponsePage<nutrient> | null>(null) // 서버 응답 데이터
   const [filteredData, setFilteredData] = useState<nutrient[]>([]) // 검색하여 필터링 된 데이터
   const [selectData, setSelectData] = useState<nutrient | null>(null) // 클릭한 음식 데이터
   const [isNoResult, setIsNoResult] = useState(false)
   const [isHighlighted, setIsHighlighted] = useState(false) // 검색어 강조 여부 상태 추가
+
+  const dispatch = useDispatch()
+  const nutrientData = useSelector((state: RootState) => state.nutrient.data)
+  const loading = useSelector((state: RootState) => state.nutrient.loading)
+  const error = useSelector((state: RootState) => state.nutrient.error)
 
   const onClickSearchBtn = () => {
     if (nutrientData) {
@@ -51,10 +63,16 @@ const FoodArchive = () => {
   }
 
   useEffect(() => {
-    axios.get('http://localhost:4000/nutrient').then((res) => {
-      setNutrientData(res.data)
-    })
-  }, [])
+    dispatch(fetchNutrientDataStart()) // 요청 시작 액션 디스패치
+    axios
+      .get('http://localhost:4000/nutrient')
+      .then((res) => {
+        dispatch(fetchNutrientDataSuccess(res.data)) // 성공 액션 디스패치
+      })
+      .catch((error) => {
+        dispatch(fetchNutrientDataFailure(error.message)) // 실패 액션 디스패치
+      })
+  }, [dispatch])
 
   return (
     <FoodArchiveWrapper>
