@@ -16,6 +16,8 @@ import FoodArchive from './components/archieve/FoodArchivePage'
 import DiaryWrite from './pages/DiaryWrite'
 import UpdateReady from './pages/UpdateReady'
 import Landing from './pages/Landing'
+import RecipeArchive from './pages/RecipeArchive'
+import RecipeDetail from './pages/RecipeDetail'
 
 function App() {
   const location = useLocation()
@@ -36,6 +38,8 @@ function App() {
             <Route path="/diaries/:id/update" element={<DiaryWrite />} />
             <Route path="/community" element={<UpdateReady />} />
             <Route path="/nutrient" element={<FoodArchive />} />
+            <Route path="/recipe" element={<RecipeArchive />} />
+            <Route path="/recipe/:id" element={<RecipeDetail />} />
             <Route path="/sign-in" element={<UserSignIn />} />
             <Route path="/sign-up" element={<UserSignUp social={false} />} />
             <Route path="/register" element={<UserSignUp social={true} />} />
