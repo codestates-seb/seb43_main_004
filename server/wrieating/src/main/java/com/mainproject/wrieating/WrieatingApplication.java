@@ -8,16 +8,28 @@ import com.mainproject.wrieating.dataArchive.dbsource.recipedb.RecipeDataWriter;
 import com.mainproject.wrieating.dataArchive.dbsource.recipedb.entity.RecipeData;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.beans.factory.annotation.Value;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 @SpringBootApplication
 public class WrieatingApplication {
+	@Value("${profile}")
+	private String env1;
+	@Value("${AWS_RDS_URL}")
+	private String env2;
+	@Value("${AWS_RDS_PASSWORD}")
+	private String env3;
+	@Value("${JWT_SECRET_KEY}")
+	private String env4;
 
 	public static void main(String[] args) {
 		SpringApplication.run(WrieatingApplication.class, args);
+		
+		
 
 		// 음식 아카이브 데이터 삽입
 //		String filePath1 = "/home/ec2-user/action/server/wrieating/src/main/resources/totalfooddb.csv";
@@ -44,5 +56,13 @@ public class WrieatingApplication {
 //			System.err.println("Error saving data to database: " + e.getMessage());
 //		}
 		// 완료 - 주석 처리함
+	}
+	
+	@PostConstruct
+	public void printEnvVariables() {
+		System.out.println(env1);
+		System.out.println(env2);
+		System.out.println(env3);
+		System.out.println(env4);
 	}
 }
