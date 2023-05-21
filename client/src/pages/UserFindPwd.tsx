@@ -84,7 +84,7 @@ const UserFindPwd = () => {
     // }
     if (checkEmail(email)) {
       await axios
-        .post(`${API}/members/emailcheck`, email)
+        .post(`${API}/members/emailcheck`, { email: email })
         .then((response) => {
           console.log(response.data)
           // 가입된 이메일이면
@@ -95,7 +95,7 @@ const UserFindPwd = () => {
             )
             setError({ ...error, ...msg })
           } else {
-            msg.email = '등록되지 않은 이메일입니다.'
+            msg.email = '가입되지 않은 이메일입니다.'
             setError({ ...error, ...msg })
           }
         })
@@ -110,7 +110,7 @@ const UserFindPwd = () => {
     if (isValid) {
       // 인증번호 전송 api 호출
       await axios
-        .post(`${API}/members/sendemail`, email)
+        .post(`${API}/members/findpassword/sendmail`, { email })
         .then((response) => {
           console.log(response.data)
           // 가입된 이메일이면
@@ -160,7 +160,7 @@ const UserFindPwd = () => {
     } else {
       // 비밀번호 변경 API 호출
       axios
-        .post(`${API}/members/findpassword`, {
+        .patch(`${API}/members/findpassword`, {
           email: email,
           newPassword: password,
         })
