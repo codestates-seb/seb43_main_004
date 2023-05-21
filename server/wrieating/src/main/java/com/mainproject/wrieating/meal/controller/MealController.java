@@ -27,7 +27,7 @@ public class MealController {
 
     @PostMapping("/write")
     public ResponseEntity<MealPostDto> createMeal(@PathVariable("diaries-id") Long diaryId, @RequestBody MealPostDto mealPostDto) {
-        Meal createdMeal = mealService.createMeal(diaryId, mapper.toEntity(mealPostDto));
+        Meal createdMeal = mealService.createMeal(diaryId, mealPostDto);
         return ResponseEntity.ok(mapper.toDTO(createdMeal));
     }
 
