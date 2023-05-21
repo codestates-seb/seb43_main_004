@@ -25,7 +25,7 @@ public class WrieatingApplication {
 	private String env3;
 	@Value("${JWT_SECRET_KEY}")
 	private String env4;
-	@Value("${$DEPLOY_JAR}")
+	@Value("${DEPLOY_JAR}")
 	private String env5;
 
 	public static void main(String[] args) {
