@@ -72,8 +72,10 @@ const GlobalStyle = createGlobalStyle`
         color: inherit;
     }
 
-    .test-btn {
-        margin-top: 250px;
+    @media ${({ theme }) => theme.device.mobile} {
+        body {
+            font-size: 1.4rem;
+        }
     }
 `
 
