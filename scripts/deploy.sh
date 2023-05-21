@@ -16,10 +16,10 @@ export AWS_RDS_URL=${AWS_RDS_URL}
 # 빌드 디렉토리로 이동
 cd /home/ec2-user/action/server/wrieating/
 
-echo $profile
-echo $JWT_SECRET_KEY
-echo $AWS_RDS_PASSWORD
-echo $AWS_RDS_URL
+echo "> 제발------------------------: $profile" >> /home/ec2-user/action/deploy.log
+echo "> 찍혀주세요------------------: $JWT_SECRET_KEY" >> /home/ec2-user/action/deploy.log
+echo "> 한번만이라도----------------: $AWS_RDS_PASSWORD" >> /home/ec2-user/action/deploy.log
+echo "> 나와조세요....--------------: $AWS_RDS_URL" >> /home/ec2-user/action/deploy.log
 
 echo "> 현재 시간: $(date)" >> /home/ec2-user/action/deploy.log
 
