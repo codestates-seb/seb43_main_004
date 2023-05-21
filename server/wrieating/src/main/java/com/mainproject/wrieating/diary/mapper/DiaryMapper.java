@@ -58,4 +58,6 @@ public interface DiaryMapper {
     }
 
     List<DiariesResponseDto> diariesToDiariesResponseDto(List<Diary> diary);
+
+
 }

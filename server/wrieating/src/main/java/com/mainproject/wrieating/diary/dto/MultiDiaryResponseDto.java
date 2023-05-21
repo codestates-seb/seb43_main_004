@@ -1,8 +1,6 @@
-package com.mainproject.wrieating.dto;
+package com.mainproject.wrieating.diary.dto;
 
-import com.mainproject.wrieating.diary.dto.StandardIntakeDto;
-import com.mainproject.wrieating.diary.dto.WeekResponseDto;
-import com.mainproject.wrieating.diary.entity.Diary;
+import com.mainproject.wrieating.dto.PageInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +13,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MultiResponseDto2<T> {
+public class MultiDiaryResponseDto<T> {
     private List<T> data;
     private List<StandardIntakeDto> standardIntake;
     private List<WeekResponseDto> weekList;
