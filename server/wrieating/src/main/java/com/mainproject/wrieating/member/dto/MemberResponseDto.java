@@ -12,10 +12,10 @@ public class MemberResponseDto {
     private long memberId;
     private String email;
     private String nickName;
-    private String password;
     private LocalDate birth;
     private String gender;
     private Integer height;
     private Integer weight;
     private Member.Activity activity;
+    private String icon;
 }

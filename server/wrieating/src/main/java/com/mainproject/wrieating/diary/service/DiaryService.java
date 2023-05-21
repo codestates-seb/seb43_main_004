@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,8 +36,6 @@ public class DiaryService {
         Diary diary = mapper.diaryPostDtoToDiary(diaryPostDto);
 
         Member member = memberService.findVerifiedMember(tokenizer.getMemberId(token));
-
-        existDiary(diary.getUserDate());
 
         diary.setMember(member);
 
@@ -60,7 +57,6 @@ public class DiaryService {
     public Page<Diary> findAllDiaries(String token,int page, int size) {
         return diaryRepository.findAllByMemberMemberId(tokenizer.getMemberId(token),
                 PageRequest.of(page, size, Sort.by("userDate").descending()));
-
     }
 
     public void updateDiary(long diaryId, DiaryPatchDto diaryPatchDto) {
@@ -83,11 +79,6 @@ public class DiaryService {
                 .orElseThrow(
                         () -> new BusinessLogicException(ExceptionCode.DIARY_NOT_FOUND)
                 );
-    }
-
-    private void existDiary(LocalDate userDate) {
-        if (diaryRepository.findByUserDate(userDate) != null)
-            throw new BusinessLogicException(ExceptionCode.DIARY_EXIST);
     }
 
     private void verifiedRequest(long diaryMemberId, long compareId) {

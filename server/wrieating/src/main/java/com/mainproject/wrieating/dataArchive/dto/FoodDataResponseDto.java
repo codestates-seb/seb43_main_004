@@ -1,21 +1,17 @@
-package com.mainproject.wrieating.dataArchive.dbsource.fooddb.entity;
+package com.mainproject.wrieating.dataArchive.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity
-public class FoodData {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@NoArgsConstructor
+public class FoodDataResponseDto {
     private long foodId;
     private String foodName;
     private String foodRoughType;
     private String foodDetailType;
-    private int servingSize;
     private int kcal;
     private int carbohydrate;
     private int protein;

@@ -8,9 +8,6 @@ spring:
     url: jdbc:mysql://wrieating-database.ca59q4wbjg2d.ap-northeast-2.rds.amazonaws.com:13306/wrieatingdb
     username: admin
     password: wrieating123
-#    url:
-#    username:
-#    password:
     driver-class-name:
   sql:
     init:
@@ -33,8 +30,8 @@ spring:
 #  jpa:
 #    hibernate:
       # 스키마 생성 전략
-     ddl-auto: update
-#       ddl-auto: create-drop
+#      ddl-auto: update # 배포
+      ddl-auto: create-drop # 테스트
       # 로그
     show-sql: true
     properties:

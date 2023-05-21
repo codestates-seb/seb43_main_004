@@ -10,6 +10,6 @@ import java.util.List;
 
 
 public interface MealRepository extends JpaRepository<Meal, Long> {
-    @Query("SELECT new com.mainproject.wrieating.meal.entity.Day(AVG(m.kcal), AVG(m.carbohydrate), AVG(m.protein), AVG(m.fat)) FROM Meal m WHERE m.diary.diaryId = :diaryId")
+    @Query("SELECT new com.mainproject.wrieating.meal.entity.Day(SUM(m.kcal), SUM(m.carbohydrate), SUM(m.protein), SUM(m.fat)) FROM Meal m WHERE m.diary.diaryId = :diaryId")
     Day getMealSummaryByDiaryId(@Param("diaryId") Long diaryId);
 }

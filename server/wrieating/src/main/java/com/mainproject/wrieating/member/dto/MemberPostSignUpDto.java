@@ -37,6 +37,9 @@ public class MemberPostSignUpDto {  //회원가입 post
     private Integer weight;
 
     private Member.Activity activity;
+
+    private String icon = "ingredients";
+
     private Member.Status status = Member.Status.MEMBER_ACTIVE;
     private LocalDateTime createdAt = LocalDateTime.now();
 }

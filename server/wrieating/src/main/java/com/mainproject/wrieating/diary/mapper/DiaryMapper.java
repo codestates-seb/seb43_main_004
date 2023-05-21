@@ -35,6 +35,7 @@ public interface DiaryMapper {
                         .map( meal ->
                                 {
                                         MealResponseDto mealResponseDto = new MealResponseDto();
+                                        mealResponseDto.setMealId(meal.getMealId());
                                         mealResponseDto.setMealType(meal.getMealType().toString());
                                         mealResponseDto.setKcal(meal.getKcal());
                                         mealResponseDto.setCarbohydrate(meal.getCarbohydrate());
@@ -50,6 +51,7 @@ public interface DiaryMapper {
     default DiariesResponseDto diariesResponseDto(Diary diary) {
 
         return DiariesResponseDto.builder()
+                .diaryId(diary.getDiaryId())
                 .userDate(diary.getUserDate().toString())
                 .diaryStatus(diary.getDiaryStatus())
                 .build();
