@@ -1,5 +1,6 @@
 package com.mainproject.wrieating.dto;
 
+import com.mainproject.wrieating.diary.dto.StandardIntakeDto;
 import com.mainproject.wrieating.diary.dto.WeekResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 public class MultiResponseDto<T> {
     private List<T> data;
+    private List<StandardIntakeDto> standardIntake;
+    private List<WeekResponseDto> weekList;
     private PageInfo pageInfo;
 
 

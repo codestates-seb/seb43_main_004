@@ -1,7 +1,5 @@
 package com.mainproject.wrieating.diary.dto;
 
-import com.mainproject.wrieating.meal.entity.Intake;
-import com.mainproject.wrieating.meal.entity.Week;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
