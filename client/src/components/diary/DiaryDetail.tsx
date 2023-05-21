@@ -18,20 +18,42 @@ const DiaryDetail = () => {
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
 
+  const mealTypes = ['아침', '점심', '저녁', '간식']
+  const mealTypeMap: { [key: string]: string } = {
+    아침: 'BREAKFAST',
+    점심: 'LUNCH',
+    저녁: 'DINNER',
+    간식: 'SNACK',
+  }
+
+  // 식단 등록하기 버튼을 누르면 실행
   const handlePlusDiary = () => {
-    navigate(`/diaries/${id}/add`)
+    // mealType에 따라 식단이 등록되어있는지 확인할 수 있는 변수ㄴ
+    const isPlanner = mealTypes.map((el) => {
+      const hasData = diary?.meal.some(
+        (meal) => meal.mealType === mealTypeMap[el]
+      )
+      return { mealType: el, hasData }
+    })
+    navigate(`/diaries/${id}/add`, { state: { meal: isPlanner } })
   }
 
   const onChangeModal = () => {
     setIsOpenModal((prev) => !prev)
   }
 
+  // 수정 버튼을 누르면 실행
   const handleEditMeal = (mealData: Meal[]) => {
-    console.log(mealData)
+    navigate(`/diaries/${id}/update`, { state: { meal: mealData } })
   }
 
+  // 식사 시간별로 삭제
   const handleDeleteMeal = (mealData: Meal[]) => {
-    console.log(mealData)
+    mealData.map((meal) => {
+      axios.delete(
+        `${process.env.REACT_APP_SERVER_URL}/diaries/${id}/meal/delete/${meal.mealId}`
+      )
+    })
   }
 
   // textarea 요소 있는 value의 마지막으로 커서 이동
@@ -56,7 +78,9 @@ const DiaryDetail = () => {
   // 메모 작성 / 수정 함수
   const onSendMemo = () => {
     axios
-      .patch(`http://localhost:4000/diary/${id}`, { memo: memoContent })
+      .patch(`${process.env.REACT_APP_SERVER_URL}/diaries/update/${id}}`, {
+        memo: memoContent,
+      })
       .then(() => {
         console.log(`메모가 업데이트되었습니다.`) // toast창을 써야할 듯
         setIsOpenMemo(true)
@@ -215,10 +239,16 @@ interface Diary {
 }
 
 export interface Meal {
+  mealId: number
   foodName: string
   mealType: string
   kcal: number
   servingSize: number
+  carbohydrate: number
+  protein: number
+  fat: number
+  sugar: number
+  salt: number
 }
 
 interface StandardIntake {
