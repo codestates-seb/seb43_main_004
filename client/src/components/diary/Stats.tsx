@@ -31,28 +31,39 @@ const Stats = ({ diaries }: any) => {
       id: '탄수화물',
       label: '탄수화물',
       value: `${intake.carbohydrate}`,
+      color: '#14B8A6',
     },
     {
       id: '단백질',
       label: '단백질',
       value: `${intake.protein}`,
+      color: '#F59E0B',
     },
     {
       id: '지방',
       label: '지방',
       value: `${intake.fat}`,
+      color: '#FACC15',
     },
     {
       id: '당류',
       label: '당류',
       value: `${intake.sugar}`,
+      color: '#3B82F6',
     },
     {
       id: '나트륨',
       label: '나트륨',
-      value: `${intake.salt}`,
+      value: `${intake.salt / 1000}`,
+      color: '#6366F1',
     },
   ]
+
+  const CustomTooltip = ({ datum }: { datum: any }) => (
+    <TooltipWrapper>
+      <strong>{datum.label}</strong>: {datum.value}g
+    </TooltipWrapper>
+  )
   return (
     <StatsWrapper>
       <h3>지난주 통계</h3>
@@ -60,11 +71,13 @@ const Stats = ({ diaries }: any) => {
         <ResponsivePie
           data={data}
           margin={{ top: 0, right: 70, bottom: 70, left: 70 }}
-          padAngle={2}
+          padAngle={0.8}
           activeOuterRadiusOffset={6}
-          innerRadius={0.01} // chart 중간 빈공간 반지름
-          colors={['#14B8A6', '#F59E0B', '#FACC15']} // 커스텀하여 사용할 때
+          innerRadius={0.6} // chart 중간 빈공간 반지름
+          colors={(datum) => datum.data.color}
           enableArcLinkLabels={false}
+          sortByValue={true}
+          tooltip={CustomTooltip}
         />
       </div>
       <div className="pie__detail">
@@ -211,6 +224,12 @@ const StatsWrapper = styled.div`
       color: #4c7031;
     }
   }
+`
+
+const TooltipWrapper = styled.div`
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
 `
 
 export default Stats

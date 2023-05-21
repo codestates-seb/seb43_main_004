@@ -24,7 +24,7 @@
         "fat": 47,
         "kcal": 2200,
         "sugar": 25,
-        "salt" : 2800
+        "salt" : 2300
       }
     ],
     "weekList": [
@@ -34,7 +34,7 @@
         "fat": 404,
         "kcal": 1750,
         "sugar": 125,
-        "salt": 2800
+        "salt": 13000
       }
     ],
     "comment": "탄수화물이 너무 많아요",
@@ -73,7 +73,7 @@
           "fat": 47,
           "kcal": 2200,
           "sugar": 25,
-          "salt": 2800
+          "salt": 2300
         }
       ],
       "dayList": [
@@ -131,7 +131,7 @@
           "fat": 47,
           "kcal": 2200,
           "sugar": 25,
-          "salt": 2800
+          "salt": 2300
         }
       ],
       "dayList": [
@@ -168,7 +168,7 @@
           "fat": 47,
           "kcal": 2200,
           "sugar": 25,
-          "salt": 2800
+          "salt": 2300
         }
       ],
       "dayList": [
@@ -198,7 +198,7 @@
           "fat": 47,
           "kcal": 2200,
           "sugar": 25,
-          "salt": 2800
+          "salt": 2300
         }
       ],
       "dayList": [
