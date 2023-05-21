@@ -20,29 +20,29 @@ public class WrieatingApplication {
 		SpringApplication.run(WrieatingApplication.class, args);
 
 		// 음식 아카이브 데이터 삽입
-//		String filePath1 = "/home/ec2-user/action/server/wrieating/src/main/resources/totalfooddb.csv";
+		String filePath1 = "/home/ec2-user/action/server/wrieating/src/main/resources/totalfooddb.csv";
 
-//		try {
-//			List<FoodData> dataList1 = FoodCsvReader.readCsvFile(filePath1);
-//			FoodDataWriter.saveDataToDatabase(dataList1);
-//		} catch (IOException e) {
-//			System.err.println("Error reading CSV file: " + e.getMessage());
-//		} catch (SQLException e) {
-//			System.err.println("Error saving data to database: " + e.getMessage());
-//		}
-		// 완료 - 주석 처리함
+		try {
+			List<FoodData> dataList1 = FoodCsvReader.readCsvFile(filePath1);
+			FoodDataWriter.saveDataToDatabase(dataList1);
+		} catch (IOException e) {
+			System.err.println("Error reading CSV file: " + e.getMessage());
+		} catch (SQLException e) {
+			System.err.println("Error saving data to database: " + e.getMessage());
+		}
+//		 완료 - 주석 처리함
 
-		// 레시피 아카이브 데이터 삽입
-//		String filePath2 = "/home/ec2-user/action/server/wrieating/src/main/resources/recipe_data_source.csv";
+//		 레시피 아카이브 데이터 삽입
+		String filePath2 = "/home/ec2-user/action/server/wrieating/src/main/resources/recipe_data_source.csv";
 
-//		try {
-//			List<RecipeData> dataList2 = RecipeCsvReader.readCsvFile(filePath2);
-//			RecipeDataWriter.saveDataToDatabase(dataList2);
-//		} catch (IOException e) {
-//			System.err.println("Error reading CSV file: " + e.getMessage());
-//		} catch (SQLException e) {
-//			System.err.println("Error saving data to database: " + e.getMessage());
-//		}
+		try {
+			List<RecipeData> dataList2 = RecipeCsvReader.readCsvFile(filePath2);
+			RecipeDataWriter.saveDataToDatabase(dataList2);
+		} catch (IOException e) {
+			System.err.println("Error reading CSV file: " + e.getMessage());
+		} catch (SQLException e) {
+			System.err.println("Error saving data to database: " + e.getMessage());
+		}
 		// 완료 - 주석 처리함
 	}
 }
