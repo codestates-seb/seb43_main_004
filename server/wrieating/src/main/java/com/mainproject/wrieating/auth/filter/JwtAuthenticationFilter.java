@@ -2,6 +2,7 @@ package com.mainproject.wrieating.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mainproject.wrieating.auth.dto.LoginDto;
+import com.mainproject.wrieating.auth.dto.LoginResponseDto;
 import com.mainproject.wrieating.auth.jwt.JwtTokenizer;
 import com.mainproject.wrieating.member.entity.Member;
 import lombok.SneakyThrows;
@@ -48,13 +49,24 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication authResult) throws ServletException, IOException{
         Member member = (Member) authResult.getPrincipal();
 
+
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
 
+        // 응답헤더에 담기
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
+
+        // 응답바디에 담기
+        LoginResponseDto responseBody = new LoginResponseDto();
+        responseBody.setAccessToken("Bearer " + accessToken);
+        responseBody.setRefreshToken(refreshToken);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
     }
 
     private String delegateAccessToken(Member member) {
