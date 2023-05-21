@@ -19,6 +19,6 @@ public class DiaryResponseDto {
     private String memo;
     private String diaryStatus;
     private String comment;
-    private List<MealResponseDto> meal;
-    private List<Day> dayList;
+    private List<MealResponseDto> meal; // 식사 리스트
+    private List<Day> dayList; // 하루 식사 칼로리, 탄, 단, 지 리스트
 }

@@ -49,7 +49,7 @@ public class DiaryController {
         Page<Diary> pageDiaries = service.findAllDiaries(token,page - 1, size);
         List<Diary> diaries = pageDiaries.getContent();
         return new ResponseEntity<>(
-                new MultiResponseDto<>(mapper.DiariesToDiariesResponseDto(diaries), pageDiaries),
+                new MultiResponseDto<>(mapper.diariesToDiariesResponseDto(diaries), pageDiaries),
                         HttpStatus.OK);
     }
 

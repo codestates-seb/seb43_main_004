@@ -1,12 +1,11 @@
 package com.mainproject.wrieating.diary.service;
 
 import com.mainproject.wrieating.auth.jwt.JwtTokenizer;
-import com.mainproject.wrieating.diary.dto.DiaryPatchDto;
-import com.mainproject.wrieating.diary.dto.DiaryPostDto;
-import com.mainproject.wrieating.diary.dto.DiaryResponseDto;
+import com.mainproject.wrieating.diary.dto.*;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.diary.mapper.DiaryMapper;
 import com.mainproject.wrieating.diary.repository.DiaryRepository;
+import com.mainproject.wrieating.dto.MultiResponseDto;
 import com.mainproject.wrieating.exception.BusinessLogicException;
 import com.mainproject.wrieating.exception.ExceptionCode;
 import com.mainproject.wrieating.meal.entity.Day;
@@ -21,7 +20,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -37,18 +38,20 @@ public class DiaryService {
 
         Member member = memberService.findVerifiedMember(tokenizer.getMemberId(token));
 
+        existDiary(diary.getUserDate());
+
         diary.setMember(member);
 
         diaryRepository.save(diary);
     }
 
     public DiaryResponseDto findDiary(String token,Long diaryId) {
-        Diary diary = findVerifiedDiary(diaryId);
-        Member member = memberService.findVerifiedMember(tokenizer.getMemberId(token));
-        verifiedRequest(diary.getMember().getMemberId(), member.getMemberId());
+        Diary diary = findVerifiedDiary(diaryId); //다이어리 아이디 있나 검증
+        Member member = memberService.findVerifiedMember(tokenizer.getMemberId(token)); // 토큰으로 멤버있나 검증
+        verifiedRequest(diary.getMember().getMemberId(), member.getMemberId()); // 가져온 멤버랑 다이어리쓴 멤버랑 검증
 
-        DiaryResponseDto responseDto = mapper.diaryToDiaryResponseDto(diary);
-        Day summery = mealRepository.getMealSummaryByDiaryId(diaryId);
+        DiaryResponseDto responseDto = mapper.diaryToDiaryResponseDto(diary); // 매퍼보기
+        Day summery = mealRepository.getMealSummaryByDiaryId(diaryId); // 레포지토리 보기
         responseDto.setDayList(Collections.singletonList(summery)); // Summery 값 대입
 
         return responseDto;
@@ -57,6 +60,7 @@ public class DiaryService {
     public Page<Diary> findAllDiaries(String token,int page, int size) {
         return diaryRepository.findAllByMemberMemberId(tokenizer.getMemberId(token),
                 PageRequest.of(page, size, Sort.by("userDate").descending()));
+
     }
 
     public void updateDiary(long diaryId, DiaryPatchDto diaryPatchDto) {
@@ -74,14 +78,19 @@ public class DiaryService {
         diaryRepository.deleteById(diaryId);
     }
 
-    private Diary findVerifiedDiary(long diaryId) {
+    private Diary findVerifiedDiary(long diaryId) { // 다이어리 아이디 있나 검증
         return diaryRepository.findById(diaryId)
                 .orElseThrow(
                         () -> new BusinessLogicException(ExceptionCode.DIARY_NOT_FOUND)
                 );
     }
 
-    private void verifiedRequest(long diaryMemberId, long compareId) {
+    private void existDiary(LocalDate userDate) { // 해당 날짜에 이미 다이어리가 존재하는지
+        if (diaryRepository.findByUserDate(userDate) != null)
+            throw new BusinessLogicException(ExceptionCode.DIARY_EXIST);
+    }
+
+    private void verifiedRequest(long diaryMemberId, long compareId) { // 다이어리 멤버랑 비교해서 일치하는지
         if (diaryMemberId != compareId) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_MISMATCHED);
         }
