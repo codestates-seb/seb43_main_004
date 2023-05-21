@@ -28,6 +28,8 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final JwtTokenizer jwtTokenizer;
+
+    // TODO: 2023-05-21 이메일 주석
 //    private final EmailSender emailSender;
 
 //    public String sendVerificationEmail(String email) {

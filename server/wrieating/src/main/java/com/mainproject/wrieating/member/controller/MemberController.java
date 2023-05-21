@@ -27,6 +27,7 @@ public class MemberController {
         this.memberMapper = memberMapper;
     }
 
+    // TODO: 2023-05-21 이메일 주석
     // 이메일 인증(회원가입시) & 이메일 중복 체크
 //    @PostMapping("/members/sendemail")
 //    public ResponseEntity sendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
@@ -50,6 +51,7 @@ public class MemberController {
 //        }
 //    }
 
+    // TODO: 2023-05-21 이메일 주석
     // 이메일 인증(비밀번호 찾기시)
 //    @PostMapping("/members/findpassword/sendemail")
 //    public ResponseEntity findpasswordSendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
