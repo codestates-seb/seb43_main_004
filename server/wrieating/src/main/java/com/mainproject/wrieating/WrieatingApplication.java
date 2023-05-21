@@ -21,7 +21,6 @@ public class WrieatingApplication {
 
 		// 음식 아카이브 데이터 삽입
 //		String filePath1 = "/home/ec2-user/action/server/wrieating/src/main/resources/totalfooddb.csv";
-//
 //		try {
 //			List<FoodData> dataList1 = FoodCsvReader.readCsvFile(filePath1);
 //			FoodDataWriter.saveDataToDatabase(dataList1);
@@ -34,7 +33,6 @@ public class WrieatingApplication {
 
 //		 레시피 아카이브 데이터 삽입
 //		String filePath2 = "/home/ec2-user/action/server/wrieating/src/main/resources/recipe_data_source.csv";
-//
 //		try {
 //			List<RecipeData> dataList2 = RecipeCsvReader.readCsvFile(filePath2);
 //			RecipeDataWriter.saveDataToDatabase(dataList2);
