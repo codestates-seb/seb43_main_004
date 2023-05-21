@@ -17,6 +17,7 @@ public class Meal {
     @Column(nullable = false)
     private Long mealId;
 
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
@@ -42,17 +43,25 @@ public class Meal {
     private int salt;
 
     @ManyToOne
-    @JoinColumn(name = "DIARY_ID", nullable = false)
+    @JoinColumn(name = "diary_id", nullable = false)
     private Diary diary;
 
-    public Meal(MealType mealType, int carbohydrate, int protein, int fat, int kcal, int sugar, int salt) {
+    public void setDiary(Diary diary) {
+        this.diary = diary;
+        diary.getMealList().add(this);
+    }
+
+    public Meal(Long mealId, String title, MealType mealType, int kcal, int carbohydrate, int protein, int fat, int sugar, int salt, Diary diary) {
+        this.mealId = mealId;
+        this.title = title;
         this.mealType = mealType;
+        this.kcal = kcal;
         this.carbohydrate = carbohydrate;
         this.protein = protein;
         this.fat = fat;
-        this.kcal = kcal;
         this.sugar = sugar;
         this.salt = salt;
+        this.diary = diary;
     }
 
     public enum MealType {

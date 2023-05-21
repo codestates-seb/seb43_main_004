@@ -1,10 +1,14 @@
 package com.mainproject.wrieating.meal.controller;
 
+import com.mainproject.wrieating.diary.entity.Diary;
+import com.mainproject.wrieating.diary.repository.DiaryRepository;
 import com.mainproject.wrieating.meal.dto.MealPatchDto;
 import com.mainproject.wrieating.meal.dto.MealPostDto;
+import com.mainproject.wrieating.meal.dto.MealResponseDto;
 import com.mainproject.wrieating.meal.entity.Meal;
 import com.mainproject.wrieating.meal.mapper.MealMapper;
 import com.mainproject.wrieating.meal.service.MealService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,38 +17,29 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Positive;
 
 @CrossOrigin
-@RequestMapping("/meal")
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
+@RequestMapping("/diaries/{diaries-id}/meal")
 public class MealController {
-    private final MealMapper mapper;
+
     private final MealService mealService;
+    private final MealMapper mapper;
 
-    @PostMapping
-    public ResponseEntity postMeal(@RequestBody MealPostDto mealPostDto) {
-
-        Meal meal = mapper.mealPostDtoToMeal(mealPostDto);
-
-        mealService.createMeal(meal);
-
-        return new ResponseEntity<>(mapper.mealToMealResponseDto(meal), HttpStatus.OK);
-
+    @PostMapping("/write")
+    public ResponseEntity<MealPostDto> createMeal(@PathVariable("diaries-id") Long diaryId, @RequestBody MealPostDto mealPostDto) {
+        Meal createdMeal = mealService.createMeal(diaryId, mapper.toEntity(mealPostDto));
+        return ResponseEntity.ok(mapper.toDTO(createdMeal));
     }
 
-    @PatchMapping("/{mealId}")
-    public ResponseEntity updateMeal(@PathVariable Long mealId, @RequestBody MealPatchDto mealPatchDto) {
-
-        Meal meal = mapper.mealPatchDtoToMeal(mealPatchDto);
-        meal.setMealId(mealId);
-        Meal result = mealService.updateMeal(meal);
-
-        return new ResponseEntity<>(mapper.mealToMealResponseDto(result), HttpStatus.OK);
+    @PatchMapping("/update/{meal-id}")
+    public ResponseEntity<MealResponseDto> updateMeal(@PathVariable("diaries-id") Long diaryId, @PathVariable("meal-id") Long mealId, @RequestBody MealPatchDto mealPatchDto) {
+        Meal updatedMeal = mealService.updateMeal(diaryId, mealId, mealPatchDto);
+        return ResponseEntity.ok(mapper.mealToMealResponseDto(updatedMeal));
     }
 
-    @DeleteMapping("/{mealId}")
-    public ResponseEntity deleteMeal(@PathVariable @Positive long mealId) {
-        mealService.deleteMeal(mealId);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @DeleteMapping("/delete/{meal-id}")
+    public ResponseEntity<Void> deleteMeal(@PathVariable("diaries-id") Long diaryId, @PathVariable("meal-id") Long mealId) {
+        mealService.deleteMeal(diaryId, mealId);
+        return ResponseEntity.noContent().build();
     }
 }

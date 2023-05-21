@@ -1,5 +1,7 @@
 package com.mainproject.wrieating.diary.dto;
 
+import com.mainproject.wrieating.meal.entity.Intake;
+import com.mainproject.wrieating.meal.entity.Week;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class DiariesResponseDto {
-    private Long diaryId;
+    private Long diaryId; // 추가
     private String userDate;
     private String diaryStatus;
 }

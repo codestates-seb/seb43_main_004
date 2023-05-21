@@ -33,17 +33,18 @@ public interface DiaryMapper {
                 .comment(diary.getComment())
                 .meal(diary.getMealList().stream()
                         .map( meal ->
-                                {
-                                        MealResponseDto mealResponseDto = new MealResponseDto();
-                                        mealResponseDto.setMealType(meal.getMealType().toString());
-                                        mealResponseDto.setKcal(meal.getKcal());
-                                        mealResponseDto.setCarbohydrate(meal.getCarbohydrate());
-                                        mealResponseDto.setProtein(meal.getProtein());
-                                        mealResponseDto.setFat(meal.getFat());
-                                        mealResponseDto.setSugar(meal.getSugar());
-                                        mealResponseDto.setSalt(meal.getSalt());
-                                return mealResponseDto; }).collect(Collectors.toList())
-                        )
+                        {
+                            MealResponseDto mealResponseDto = new MealResponseDto();
+                            mealResponseDto.setTitle(meal.getTitle());
+                            mealResponseDto.setMealType(meal.getMealType());
+                            mealResponseDto.setKcal(meal.getKcal());
+                            mealResponseDto.setCarbohydrate(meal.getCarbohydrate());
+                            mealResponseDto.setProtein(meal.getProtein());
+                            mealResponseDto.setFat(meal.getFat());
+                            mealResponseDto.setSugar(meal.getSugar());
+                            mealResponseDto.setSalt(meal.getSalt());
+                            return mealResponseDto; }).collect(Collectors.toList())
+                )
                 .build();
     };
 
@@ -56,5 +57,5 @@ public interface DiaryMapper {
                 .build();
     }
 
-    List<DiariesResponseDto> DiariesToDiariesResponseDto(List<Diary> diary);
+    List<DiariesResponseDto> diariesToDiariesResponseDto(List<Diary> diary);
 }
