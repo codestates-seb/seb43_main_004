@@ -34,7 +34,7 @@ const SearchHighlight: React.FC<SearchHighlightProps> = ({
   return (
     <li
       className={`archive__list`}
-      key={nutrient.id}
+      key={nutrient.foodId}
       onClick={() => handleClickFood(nutrient)}
     >
       <p dangerouslySetInnerHTML={{ __html: highlightedFoodName }}></p>

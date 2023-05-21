@@ -6,7 +6,7 @@ import Input from '../Common/Input'
 import PaginationComponent from '../Common/Pagination'
 import { dtoResponsePage } from '../../dto'
 import calculateSimilarity from '../../utils/calculateSimilarity'
-import nutrientTypeMap from '../../utils/nutrientTypeMap'
+import mealTypeMap from '../../utils/mealTypeMap'
 import SearchHighlight from './SearchHighlight'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
@@ -18,40 +18,86 @@ import {
 
 const FoodArchive = () => {
   const [inputVal, setInputVal] = useState('')
-  // const [nutrientData, setNutrientData] =
-  //   useState<dtoResponsePage<nutrient> | null>(null) // 서버 응답 데이터
+
   const [filteredData, setFilteredData] = useState<nutrient[]>([]) // 검색하여 필터링 된 데이터
   const [selectData, setSelectData] = useState<nutrient | null>(null) // 클릭한 음식 데이터
   const [isNoResult, setIsNoResult] = useState(false)
   const [isHighlighted, setIsHighlighted] = useState(false) // 검색어 강조 여부 상태 추가
+  const [activePage, setActivePage] = useState(1)
 
   const dispatch = useDispatch()
   const nutrientData = useSelector((state: RootState) => state.nutrient.data)
   const loading = useSelector((state: RootState) => state.nutrient.loading) // false or true
   const error = useSelector((state: RootState) => state.nutrient.error) // null or error
 
-  console.log(loading, error)
+  // // 데이터 정렬 함수
+  // const handleSortData = () => {
+  //   if (nutrientData) {
+  //     const inputKeywords = inputVal.split(/\s+/)
+  //     const filtered = nutrientData.data.filter((item) => {
+  //       const foodNameWithoutWhitespace = item.foodName.replace(/\s/g, '')
+  //       return inputKeywords.every((keyword) =>
+  //         foodNameWithoutWhitespace.includes(keyword)
+  //       )
+  //     })
 
+  //     // 정렬: 가장 유사한 항목 먼저 보여주기
+  //     const sortedData = filtered.sort((a, b) => {
+  //       const similarityA = calculateSimilarity(a.foodName, inputVal)
+  //       const similarityB = calculateSimilarity(b.foodName, inputVal)
+  //       return similarityB - similarityA
+  //     })
+
+  //     setFilteredData(sortedData)
+  //     setIsNoResult(sortedData.length === 0)
+  //     setIsHighlighted(true)
+  //   }
+  // }
+
+  // 첫 렌더링 때 실행되는 함수
+  const fetchNutrientData = () => {
+    dispatch(fetchNutrientDataStart()) // 요청 시작 액션 디스패치
+    const url = `${process.env.REACT_APP_SERVER_URL}/nutrient?page=${activePage}&size=10`
+    axios
+      .get(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': '69420',
+        },
+      })
+      .then((res) => {
+        dispatch(fetchNutrientDataSuccess(res.data)) // 성공 액션 디스패치
+      })
+      .catch((error) => {
+        dispatch(fetchNutrientDataFailure(error.message)) // 실패 액션 디스패치
+      })
+  }
+
+  // 검색을 할 때 실행되는 함수
   const onClickSearchBtn = () => {
-    if (nutrientData) {
-      const inputKeywords = inputVal.split(/\s+/)
-      const filtered = nutrientData.data.filter((item) => {
-        const foodNameWithoutWhitespace = item.foodName.replace(/\s/g, '')
-        return inputKeywords.every((keyword) =>
-          foodNameWithoutWhitespace.includes(keyword)
-        )
-      })
+    dispatch(fetchNutrientDataStart()) // 요청 시작 액션 디스패치
+    const url = `${process.env.REACT_APP_SERVER_URL}/nutrient/search?page=${activePage}&size=10&search=${inputVal}`
 
-      // 정렬: 가장 유사한 항목 먼저 보여주기
-      const sortedData = filtered.sort((a, b) => {
-        const similarityA = calculateSimilarity(a.foodName, inputVal)
-        const similarityB = calculateSimilarity(b.foodName, inputVal)
-        return similarityB - similarityA
+    axios
+      .get(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': '69420',
+        },
       })
+      .then((res) => {
+        dispatch(fetchNutrientDataSuccess(res.data)) // 성공 액션 디스패치
+        setIsNoResult(nutrientData?.data.length === 0)
+        setIsHighlighted(true)
+      })
+      .catch((error) => {
+        dispatch(fetchNutrientDataFailure(error.message)) // 실패 액션 디스패치
+      })
+  }
 
-      setFilteredData(sortedData)
-      setIsNoResult(sortedData.length === 0)
-      setIsHighlighted(true)
+  const handleKeyDownEnter = (e: any) => {
+    if (e.key === 'Enter') {
+      onClickSearchBtn()
     }
   }
 
@@ -65,22 +111,22 @@ const FoodArchive = () => {
   }
 
   useEffect(() => {
-    dispatch(fetchNutrientDataStart()) // 요청 시작 액션 디스패치
-    axios
-      .get('http://localhost:4000/nutrient')
-      .then((res) => {
-        dispatch(fetchNutrientDataSuccess(res.data)) // 성공 액션 디스패치
-      })
-      .catch((error) => {
-        dispatch(fetchNutrientDataFailure(error.message)) // 실패 액션 디스패치
-      })
-  }, [dispatch])
+    if (inputVal) {
+      onClickSearchBtn()
+    } else {
+      fetchNutrientData()
+    }
+  }, [activePage]) // activePage 상태가 변경될 때마다 호출
+
+  const handlePageChange = (activePage: number) => {
+    setActivePage(activePage)
+  }
 
   return (
     <FoodArchiveWrapper>
       <header>
         <h2>음식 영양 성분</h2>
-        <span className="material-symbols-outlined">question_mark</span>
+        {/* <span className="material-symbols-outlined">question_mark</span> */}
       </header>
       <div className="search__form">
         <Input
@@ -88,6 +134,7 @@ const FoodArchive = () => {
           placeholder="음식을 입력하세요"
           name="인풋"
           onChange={onChangeInput}
+          onKeyDown={handleKeyDownEnter}
         />
         <Button onClick={onClickSearchBtn}>검색</Button>
       </div>
@@ -99,7 +146,7 @@ const FoodArchive = () => {
           {(filteredData.length === 0 ? nutrientData?.data : filteredData)?.map(
             (nutrient) => (
               <SearchHighlight
-                key={nutrient.id}
+                key={nutrient.foodId}
                 nutrient={nutrient}
                 isHighlighted={isHighlighted}
                 handleClickFood={handleClickFood}
@@ -114,7 +161,7 @@ const FoodArchive = () => {
             <div className="detail__container">
               <header>
                 <h3>{selectData.foodName}</h3>
-                <p>{selectData.intake}g</p>
+                <p>{selectData.servingSize}g</p>
               </header>
               <section className="detail">
                 <div className="detail__data">
@@ -124,12 +171,14 @@ const FoodArchive = () => {
                 <p className="nutrient__detail">상세영양소</p>
                 {Object.entries(selectData).map(
                   ([key, value]) =>
-                    key !== 'id' &&
+                    key !== 'foodId' &&
+                    key !== 'foodDetailType' &&
+                    key !== 'foodRoughType' &&
                     key !== 'foodName' &&
-                    key !== 'intake' &&
+                    key !== 'servingSize' &&
                     key !== 'kcal' && (
                       <div className="detail__data" key={key}>
-                        <p>{nutrientTypeMap[key]}</p>
+                        <p>{mealTypeMap[key]}</p>
                         <p>{value}g</p>
                       </div>
                     )
@@ -148,7 +197,11 @@ const FoodArchive = () => {
           )}
         </div>
       </div>
-      <PaginationComponent totalItemsCount={7000} />
+      <PaginationComponent
+        totalItemsCount={nutrientData?.pageInfo.totalElements || 0}
+        activePage={activePage}
+        onPageChange={handlePageChange}
+      />
     </FoodArchiveWrapper>
   )
 }
@@ -156,14 +209,14 @@ const FoodArchive = () => {
 export default FoodArchive
 
 export interface nutrient {
-  id: number
+  foodId: number
   foodName: string
-  intake: number
+  servingSize: number
   carbohydrate: number
   protein: number
   fat: number
   kcal: number
-  sugar: number
+  totalSugar: number
 }
 
 export interface nutrientResponse {
