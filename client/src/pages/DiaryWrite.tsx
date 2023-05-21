@@ -218,16 +218,17 @@ const DiaryWrite = () => {
   const [isEmpty, setIsEmpty] = useState(false)
   const [isUnchecked, setIsUnchecked] = useState(false)
   const [isUnsaved, setIsUnsaved] = useState(false)
-  const customId = useRef<number>(120) // 사용자등록 음식의 id. 영양성분 DB.length + 1
-  const param = useParams() // 일기 id 가져오기
+  const customId = useRef<number>(120) // 사용자등록 음식의 id. get요청 한번 해서 totalElement로 저장해두기
+  const param = useParams() // 일기 id는
   const location = useLocation() // url 가져오기
 
   // TODO: 페이지 넘어오게 되면 id로 일기 조회 데이터 가져오기
+  // 네비게이트로 데이터 넘겨준다 그걸로 가져오기
 
   // Todo : 검색리스트 가져오기. 추후 전역 스토어에 영양성분 db 가져오는것으로 대체할 예정
   const getSearchList = async () => {
     const res = await axios.get(
-      `http://localhost:4000/nutrient`
+      `http://localhost:4000/nutrient?search=${searchTxt}`
       // ${url}/nutrient/search?page=1&size=10&search=${searchTxt}
     )
     setSearchList(res.data)
@@ -326,6 +327,7 @@ const DiaryWrite = () => {
 
   const sendDiary = () => {
     checkValidation()
+    // 사용자가 등록한 음식은 custom:true 항목 추가해주기
     const sendData = foodList.map((item) => {
       return {
         mealType: timeCheck,
