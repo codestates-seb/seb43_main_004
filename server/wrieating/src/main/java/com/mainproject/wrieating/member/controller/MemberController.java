@@ -29,7 +29,7 @@ public class MemberController {
 
     // TODO: 2023-05-21 이메일 주석
     // 이메일 인증(회원가입시) & 이메일 중복 체크
-//    @PostMapping("/members/sendemail")
+//    @PostMapping("/members/sendmail")
 //    public ResponseEntity sendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
 //        String email = emailRequestDto.getEmail();
 //
@@ -53,7 +53,7 @@ public class MemberController {
 
     // TODO: 2023-05-21 이메일 주석
     // 이메일 인증(비밀번호 찾기시)
-//    @PostMapping("/members/findpassword/sendemail")
+//    @PostMapping("/members/findpassword/sendmail")
 //    public ResponseEntity findpasswordSendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
 //        String email = emailRequestDto.getEmail();
 //
