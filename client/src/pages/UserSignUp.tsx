@@ -72,8 +72,6 @@ const UserSignUp = ({ social }: Props) => {
     ckAuth: '',
   })
 
-  console.log(nickName, gender, activity, height, weight, birth) // 빌드를 위한 콘솔
-
   const [error, setError] = useState<errorType>({
     email: '',
     auth: '',
@@ -117,7 +115,7 @@ const UserSignUp = ({ social }: Props) => {
   }
 
   // 인증번호 전송
-  const sendNumbers = (email: string) => {
+  const sendNumbers = async (email: string) => {
     const auth = { auth: '' }
     const msg = { email: '' }
     let isValid = false
