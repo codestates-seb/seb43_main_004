@@ -1,7 +1,7 @@
 import React from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import './App.css'
-import DiaryCheck from './components/diary/DiaryCheck'
+import DiaryCheck from './pages/DiaryCheck'
 import DiaryDetail from './components/diary/DiaryDetail'
 import Header from './components/Common/Header'
 import Footer from './components/Common/Footer'
