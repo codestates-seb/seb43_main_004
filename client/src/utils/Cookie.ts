@@ -7,5 +7,6 @@ export const setCookie = (name: string, value: string, options?: any) => {
 }
 
 export const getCookie = (name: string) => {
-  return cookies.get(name)
+  // return cookies.get(name)
+  return localStorage.getItem(name)
 }
