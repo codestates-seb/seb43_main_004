@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class WeekResponseDto {
+    private int sumKcal;
     private int carbohydrate;
     private int protein;
     private int fat;

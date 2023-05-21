@@ -1,12 +1,12 @@
 package com.mainproject.wrieating.diary.controller;
 
-import com.mainproject.wrieating.diary.dto.DiaryPatchDto;
-import com.mainproject.wrieating.diary.dto.DiaryPostDto;
-import com.mainproject.wrieating.diary.dto.DiaryResponseDto;
+import com.mainproject.wrieating.diary.dto.*;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.diary.mapper.DiaryMapper;
 import com.mainproject.wrieating.diary.service.DiaryService;
 import com.mainproject.wrieating.dto.MultiResponseDto;
+import com.mainproject.wrieating.dto.MultiResponseDto2;
+import com.mainproject.wrieating.dto.PageInfo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -43,15 +44,25 @@ public class DiaryController {
     }
 
     @GetMapping
-    public ResponseEntity getDiaries(@RequestHeader(name = "Authorization") String token,
-                                     @Positive @RequestParam int page,
-                                     @Positive @RequestParam int size) {
-        Page<Diary> pageDiaries = service.findAllDiaries(token,page - 1, size);
-        List<Diary> diaries = pageDiaries.getContent();
-        return new ResponseEntity<>(
-                new MultiResponseDto<>(mapper.diariesToDiariesResponseDto(diaries), pageDiaries),
-                        HttpStatus.OK);
+    public ResponseEntity<MultiResponseDto2<DiariesResponseDto>> getAllDiaries(@RequestHeader(name = "Authorization") String token,
+                                                                               @Positive @RequestParam int page,
+                                                                               @Positive @RequestParam int size) {
+        MultiResponseDto2<DiariesResponseDto> responseDto = service.findAllDiaries(token, page - 1, size);
+
+        List<DiariesResponseDto> diaryList = responseDto.getData();
+        PageInfo pageInfo = responseDto.getPageInfo();
+
+        List<StandardIntakeDto> standardIntakeList = responseDto.getStandardIntake();
+        List<WeekResponseDto> weekList = responseDto.getWeekList();
+
+        return ResponseEntity.ok(new MultiResponseDto2<>(
+                diaryList,
+                standardIntakeList,
+                weekList,
+                pageInfo
+        ));
     }
+
 
     @PatchMapping("/update/{diaries-id}")
     @ResponseStatus(HttpStatus.OK)
