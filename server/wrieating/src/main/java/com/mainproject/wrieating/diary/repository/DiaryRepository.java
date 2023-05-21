@@ -9,10 +9,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
-    Diary findByUserDate(final LocalDate userDate);
     Page<Diary> findAllByMemberMemberId(final Long memberId, PageRequest pageRequest);
-
-    List<Diary> findAllByUserDateBetween(LocalDate startOfWeek, LocalDate endOfWeek);
-
 }
 

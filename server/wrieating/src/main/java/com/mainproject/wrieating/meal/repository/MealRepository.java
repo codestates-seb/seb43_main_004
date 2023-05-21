@@ -16,8 +16,8 @@ public interface MealRepository extends JpaRepository<Meal, Long> { //뽑아서 
     Day getMealSummaryByDiaryId(@Param("diaryId") Long diaryId);
 
     @Query("SELECT new com.mainproject.wrieating.meal.entity.Week(SUM(m.kcal), AVG(m.kcal), AVG(m.carbohydrate), AVG(m.protein), AVG(m.fat), AVG(m.sugar), AVG(m.salt)) " +
-            "FROM meal m JOIN m.diary d " +
-            "WHERE d.memberId = :memberId AND d.date BETWEEN :startOfPreviousWeek AND :endOfPreviousWeek")
+            "FROM Meal m JOIN m.diary d " +
+            "WHERE d.member.memberId = :memberId AND d.userDate BETWEEN :startOfPreviousWeek AND :endOfPreviousWeek")
     Week getPreviousWeekData(@Param("memberId") Long memberId, @Param("startOfPreviousWeek") LocalDate startOfPreviousWeek, @Param("endOfPreviousWeek") LocalDate endOfPreviousWeek);
 
 }
