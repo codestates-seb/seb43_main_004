@@ -38,31 +38,37 @@ const UserSignIn = () => {
     await axios
       .post(`${API}/members/login`, values)
       .then((response) => {
-        console.log(response.data)
         const tokenWithNoBearer = response.data.accessToken.substr(7)
-        console.log(tokenWithNoBearer)
+        const tokenForReissue = response.data.refreshToken
 
         const current = new Date()
+        current.setMinutes(current.getMinutes() + 40)
 
         // 액세스 토큰
-        // setCookie('access', tokenWithNoBearer, {
-        //   path: '/',
-        //   secure: true,
-        //   expires: current.setMinutes(current.getMinutes() + 40),
-        //   // sameSite: 'none',
-        // })
-        localStorage.setItem('token', tokenWithNoBearer)
+        setCookie('access', tokenWithNoBearer, {
+          path: '/',
+          secure: true,
+          expires: current,
+          sameSite: 'none',
+        })
+        // 리프레시 토큰
+        current.setMinutes(current.getMinutes() + 420)
+        setCookie('refresh', tokenForReissue, {
+          path: '/',
+          secure: true,
+          expires: current,
+          sameSite: 'none',
+        })
       })
       .catch((error) => {
         setError('존재하지 않는 계정입니다.')
       })
 
-    console.log(getCookie('token'))
     // 발급 받은 토큰으로 /members/myprofile 호출
-    axios
+    await axios
       .get(`${API}/members/myprofile`, {
         headers: {
-          Authorization: `Bearer ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('access')}`,
           'Content-Type': 'application / json',
           'ngrok-skip-browser-warning': '69420', // 테스트 서버 이용할때는 붙였다가 삭제하면 됨
         },
