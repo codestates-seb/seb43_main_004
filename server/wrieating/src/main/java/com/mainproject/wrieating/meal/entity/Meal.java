@@ -70,6 +70,4 @@ public class Meal {
         DINNER,
         SNACK
     }
-
-    // TODO: 2023-05-16 foodDB랑 연결해야함
 }

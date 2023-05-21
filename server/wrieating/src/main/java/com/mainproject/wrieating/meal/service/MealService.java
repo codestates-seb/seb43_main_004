@@ -1,5 +1,7 @@
 package com.mainproject.wrieating.meal.service;
 
+import com.mainproject.wrieating.dataArchive.dbsource.fooddb.entity.FoodData;
+import com.mainproject.wrieating.dataArchive.repository.FoodArchiveRepository;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.diary.repository.DiaryRepository;
 import com.mainproject.wrieating.meal.dto.MealPatchDto;
@@ -19,13 +21,28 @@ import java.util.Optional;
 public class MealService {
     private final MealRepository mealRepository;
     private final DiaryRepository diaryRepository;
+    private final FoodArchiveRepository foodArchiveRepository;
     private final MealMapper mapper;
 
-    public Meal createMeal(Long diaryId, Meal meal) {
+    public Meal createMeal(Long diaryId, MealPostDto mealPostDto) {
         Optional<Diary> optionalDiary = diaryRepository.findById(diaryId);
+        Meal meal = mapper.mealPostDtoToMeal(mealPostDto);
         if (optionalDiary.isPresent()) {
             Diary diary = optionalDiary.get();
             meal.setDiary(diary);
+
+            if (mealPostDto.isCustom()) {
+                FoodData foodData = new FoodData();
+                foodData.setFoodName(meal.getTitle());
+                foodData.setKcal(meal.getKcal());
+                foodData.setCarbohydrate(meal.getCarbohydrate());
+                foodData.setProtein(meal.getProtein());
+                foodData.setFat(meal.getFat());
+                foodData.setTotalSugar(meal.getSugar());
+                foodData.setNatrium(meal.getSalt());
+                foodArchiveRepository.save(foodData);
+            }
+
             return mealRepository.save(meal);
         }
         throw new IllegalArgumentException("Diary not found with ID: " + diaryId);

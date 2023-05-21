@@ -35,6 +35,7 @@ public interface DiaryMapper {
                         .map( meal ->
                         {
                             MealResponseDto mealResponseDto = new MealResponseDto();
+                            mealResponseDto.setMealId(meal.getMealId());
                             mealResponseDto.setTitle(meal.getTitle());
                             mealResponseDto.setMealType(meal.getMealType());
                             mealResponseDto.setKcal(meal.getKcal());
