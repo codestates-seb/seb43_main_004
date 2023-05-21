@@ -3,6 +3,7 @@ package com.mainproject.wrieating.diary.mapper;
 import com.mainproject.wrieating.diary.dto.*;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.meal.dto.MealResponseDto;
+import com.mainproject.wrieating.meal.entity.Week;
 import com.mainproject.wrieating.member.dto.StandardIntakeResponseDto;
 import com.mainproject.wrieating.member.entity.StandardIntake;
 import org.mapstruct.Mapper;
@@ -11,6 +12,8 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -80,7 +83,6 @@ public interface DiaryMapper {
     List<DiariesResponseDto> diariesToDiariesResponseDto(List<Diary> diary);
 
     // 멀티 리스폰스 객체 추가
-
     // 다대다 매핑이 되어 있기 때문에 List형태로 응답하는 것임
     default StandardIntakeResponseDto standardIntakeToStandardIntakeResponseDto(StandardIntake standardIntake) {
             StandardIntakeResponseDto standardIntakeResponseDto = new StandardIntakeResponseDto();
@@ -95,6 +97,9 @@ public interface DiaryMapper {
             return standardIntakeResponseDto;
     }
 
-    @Mapping(source = "member.memberId", target = "memberId")
     List<StandardIntakeResponseDto> standardIntakeToStandardIntakeDtos(List<StandardIntake> standardIntake);
+
+    WeekResponseDto weekToWeekResponseDto(Week week);
+
+    List<WeekResponseDto> weekToWeekResponseDtos(List<Week> weekList);
 }

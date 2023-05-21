@@ -43,5 +43,5 @@ public class Diary extends Auditable {
     private List<Meal> mealList = new ArrayList<>();
 
 
-    // TODO: 2023-05-16 food랑 recipe 연결해야뎀
+    // TODO: 2023-05-16 recipe 연결해야뎀
 }

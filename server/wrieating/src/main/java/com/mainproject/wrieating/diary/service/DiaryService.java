@@ -55,8 +55,7 @@ public class DiaryService {
 
     public Page<Diary> findAllDiaries(String token,int page, int size) {
         long memberId = tokenizer.getMemberId(token);
-        PreviousWeek(memberId);
-        return diaryRepository.findAllByMemberMemberId(memberId,
+        return  diaryRepository.findAllByMemberMemberId(memberId,
                 PageRequest.of(page, size, Sort.by("userDate").descending()));
     }
 
@@ -88,18 +87,5 @@ public class DiaryService {
         if (diaryMemberId != compareId) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_MISMATCHED);
         }
-    }
-
-    private void PreviousWeek(long memberId) {
-        LocalDate currentDate = LocalDate.now();
-        LocalDate startOfCurrentWeek = currentDate.with(java.time.DayOfWeek.MONDAY);
-        LocalDate endOfCurrentWeek = currentDate.with(java.time.DayOfWeek.SUNDAY);
-
-        LocalDate startOfPreviousWeek = startOfCurrentWeek.minusDays(7); // 전주 월
-        LocalDate endOfPreviousWeek = endOfCurrentWeek.minusDays(7); // 전주 일
-
-
-        Week previousWeekData = mealRepository.getPreviousWeekData(memberId, startOfPreviousWeek, endOfPreviousWeek);
-
     }
 }
