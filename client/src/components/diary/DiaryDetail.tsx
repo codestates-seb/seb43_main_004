@@ -19,7 +19,7 @@ const DiaryDetail = () => {
   const textareaEl = useRef<HTMLTextAreaElement>(null)
 
   const handlePlusDiary = () => {
-    navigate('/diary-add')
+    navigate(`/diaries/${id}/add`)
   }
 
   const onChangeModal = () => {
@@ -214,10 +214,11 @@ interface Diary {
   comment: string
 }
 
-interface Meal {
+export interface Meal {
   foodName: string
   mealType: string
   kcal: number
+  servingSize: number
 }
 
 interface StandardIntake {

@@ -1,11 +1,5 @@
 import React from 'react'
-
-interface Meal {
-  foodName: string
-  mealType: string
-  kcal: number
-}
-
+import { Meal } from './DiaryDetail'
 interface MealListProps {
   diary: { meal: Meal[] }
   handleEditMeal: (mealData: Meal[]) => void
@@ -64,7 +58,7 @@ const MealList: React.FC<MealListProps> = ({
                 mealData.map((data, idx) => (
                   <li className="meal__list" key={idx}>
                     <p>{data.foodName}</p>
-                    <p>100g</p>
+                    <p>{data.servingSize}g</p>
                     <span>{`${data.kcal}kcal`}</span>
                   </li>
                 ))

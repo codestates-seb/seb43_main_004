@@ -24,7 +24,7 @@
         "fat": 47,
         "kcal": 2200,
         "sugar": 25,
-        "salt" : 66
+        "salt" : 2800
       }
     ],
     "weekList": [
@@ -34,7 +34,7 @@
         "fat": 404,
         "kcal": 1750,
         "sugar": 125,
-        "salt": 66
+        "salt": 2800
       }
     ],
     "comment": "탄수화물이 너무 많아요",
@@ -73,7 +73,7 @@
           "fat": 47,
           "kcal": 2200,
           "sugar": 25,
-          "salt": 66
+          "salt": 2800
         }
       ],
       "dayList": [
@@ -96,24 +96,32 @@
       "diaryStatus": "이모지",
       "meal": [
         {
+          "mealId": 1,
           "foodName": "고등어 조림",
           "mealType": "BREAKFAST",
-          "kcal": 600
+          "kcal": 600,
+          "servingSize": 100
         },
         {
+          "mealId": 2,
           "foodName": "삼겹살",
           "mealType": "LUNCH",
-          "kcal": 500
+          "kcal": 500,
+          "servingSize": 400
         },
         {
+          "mealId": 3,
           "foodName": "삼양라면",
           "mealType": "DINNER",
-          "kcal": 560
+          "kcal": 560,
+          "servingSize": 150
         },
         {
+          "mealId": 4,
           "foodName": "김치",
           "mealType": "DINNER",
-          "kcal": 65
+          "kcal": 65,
+          "servingSize": 80
         }
       ],
       "standardIntake": [
@@ -123,7 +131,7 @@
           "fat": 47,
           "kcal": 2200,
           "sugar": 25,
-          "salt": 66
+          "salt": 2800
         }
       ],
       "dayList": [
@@ -133,7 +141,7 @@
           "fat": 60,
           "kcal": 1725,
           "sugar": 0,
-          "salt": 10
+          "salt": 1200
         }
       ],
       "recipe": [
@@ -160,7 +168,7 @@
           "fat": 47,
           "kcal": 2200,
           "sugar": 25,
-          "salt": 66
+          "salt": 2800
         }
       ],
       "dayList": [
@@ -190,7 +198,7 @@
           "fat": 47,
           "kcal": 2200,
           "sugar": 25,
-          "salt": 66
+          "salt": 2800
         }
       ],
       "dayList": [
