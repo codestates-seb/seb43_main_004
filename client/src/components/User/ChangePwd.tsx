@@ -4,6 +4,9 @@ import TabFrame from './TabFrame'
 import Input from '../Common/Input'
 import Button from '../Common/Button'
 import { checkPassword } from '../../utils/userfunc'
+import Modal from '../Common/Modal'
+import axios from 'axios'
+import { API } from '../../utils/API'
 
 interface pwdType {
   currentPassword: string
@@ -24,6 +27,9 @@ const ChangePwd = () => {
   })
 
   const { currentPassword, newPassword, ckPassword } = password
+
+  // 모달 핸들링
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   // 비밀번호 입력값 핸들링
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,52 +72,79 @@ const ChangePwd = () => {
       setError(msg)
     } else {
       // api 호출
-      // 현재 비밀번호가 유효하지 않습니다.
-      // 현재 비밀번호가 올바르고, 새 비밀번호도 제대로 입력되었다면 비밀번호 변경 모달 띄우기
-      alert('비밀번호가 변경되었습니다.') // 비밀번호 변경
+      axios
+        .patch(
+          `${API}/members/mypage/passwordupdate`,
+          { currentpw: currentPassword, newpw: newPassword },
+          {
+            headers: {
+              Authorization: 'Bearer ${token}',
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response)
+          // 현재 비밀번호가 올바른지는 서버에서 판단할 예정
+          // 클라이언트에선 응답값에 따라 적절히 처리만 해주면 됨
+          setError(msg)
+          setIsOpen(true)
+        })
+        .then((error) => {
+          console.log(error)
+        })
     }
   }
 
   return (
-    <TabFrame title="비밀번호 변경">
-      <Wrapper>
-        <Form>
-          <Input
-            type="password"
-            label="현재 비밀번호"
-            placeholder="현재 비밀번호"
-            name="currentPassword"
-            error={error.currentPassword}
-            onChange={handleInput}
-          />
-          <Input
-            type="password"
-            label="새 비밀번호"
-            placeholder="새 비밀번호"
-            name="newPassword"
-            error={error.newPassword}
-            onChange={handleInput}
-          />
-          <Input
-            type="password"
-            label="새 비밀번호 확인"
-            placeholder="비밀번호 확인"
-            name="ckPassword"
-            error={error.ckPassword}
-            onChange={handleInput}
-          />
-          <Button onClick={changePassword}>변경하기</Button>
-        </Form>
-      </Wrapper>
-    </TabFrame>
+    <>
+      <TabFrame title="비밀번호 변경">
+        <Wrapper>
+          <Form>
+            <Input
+              type="password"
+              label="현재 비밀번호"
+              placeholder="현재 비밀번호"
+              name="currentPassword"
+              error={error.currentPassword}
+              onChange={handleInput}
+            />
+            <Input
+              type="password"
+              label="새 비밀번호"
+              placeholder="새 비밀번호"
+              name="newPassword"
+              error={error.newPassword}
+              onChange={handleInput}
+            />
+            <Input
+              type="password"
+              label="새 비밀번호 확인"
+              placeholder="비밀번호 확인"
+              name="ckPassword"
+              error={error.ckPassword}
+              onChange={handleInput}
+            />
+            <Button onClick={changePassword}>변경하기</Button>
+          </Form>
+        </Wrapper>
+      </TabFrame>
+      <Modal
+        state={isOpen}
+        setState={setIsOpen}
+        msg="비밀번호가 성공적으로 변경되었습니다."
+      >
+        <Button onClick={() => setIsOpen(false)}>확인</Button>
+      </Modal>
+    </>
   )
 }
 
 const Wrapper = styled.div`
-  width: 74.7rem;
+  width: 63.7rem;
+  min-height: 40rem;
 
-  @media screen and (max-width: 500px) {
-    width: 100%;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 88vw;
   }
 `
 
