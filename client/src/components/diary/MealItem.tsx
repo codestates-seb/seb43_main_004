@@ -8,9 +8,15 @@ interface Meal {
 
 interface MealListProps {
   diary: { meal: Meal[] }
+  handleEditMeal: (mealData: Meal[]) => void
+  handleDeleteMeal: (mealData: Meal[]) => void
 }
 
-const MealList: React.FC<MealListProps> = ({ diary }) => {
+const MealList: React.FC<MealListProps> = ({
+  diary,
+  handleEditMeal,
+  handleDeleteMeal,
+}) => {
   const mealTypes = ['아침', '점심', '저녁', '간식']
 
   const mealTypeMap: { [key: string]: string } = {
@@ -38,8 +44,18 @@ const MealList: React.FC<MealListProps> = ({ diary }) => {
               </p>
               {mealData.length !== 0 && (
                 <div>
-                  <span className="material-symbols-outlined">edit</span>
-                  <span className="material-symbols-outlined">delete</span>
+                  <span
+                    className="material-symbols-outlined"
+                    onClick={() => handleEditMeal(mealData)}
+                  >
+                    edit
+                  </span>
+                  <span
+                    className="material-symbols-outlined"
+                    onClick={() => handleDeleteMeal(mealData)}
+                  >
+                    delete
+                  </span>
                 </div>
               )}
             </header>

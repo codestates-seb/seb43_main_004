@@ -9,7 +9,7 @@ const DiaryCheck = () => {
 
   const fetchData = () => {
     axios
-      .get<DataResponse>(`http://localhost:4000/diaries?page=1&size=10`)
+      .get<DataResponse>(`http://localhost:4000/diaries?page=1&size=1000`)
       .then((res) => setDiaries(res.data))
       .catch((err) => {
         console.log(err)
@@ -64,7 +64,7 @@ export interface Intake {
 export interface DataResponse {
   data: Diary[]
   standardIntake: Intake[]
-  dayList: Intake[]
+  weekList: Intake[]
   comment: string
   pageInfo: {
     page: number

@@ -18,12 +18,20 @@ const DiaryDetail = () => {
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
 
-  const onClickBtn = () => {
-    console.log('hi')
+  const handlePlusDiary = () => {
+    navigate('/diary-add')
   }
 
   const onChangeModal = () => {
     setIsOpenModal((prev) => !prev)
+  }
+
+  const handleEditMeal = (mealData: Meal[]) => {
+    console.log(mealData)
+  }
+
+  const handleDeleteMeal = (mealData: Meal[]) => {
+    console.log(mealData)
   }
 
   // textarea 요소 있는 value의 마지막으로 커서 이동
@@ -114,13 +122,17 @@ const DiaryDetail = () => {
                   <span className="material-symbols-outlined">delete</span>
                   모든 기록 삭제
                 </Button>
-                <Button onClick={onClickBtn}>
+                <Button onClick={handlePlusDiary}>
                   <span className="material-symbols-outlined">edit</span>
                   식단 등록하기
                 </Button>
               </div>
             </h3>
-            <MealList diary={diary} />
+            <MealList
+              diary={diary}
+              handleEditMeal={handleEditMeal}
+              handleDeleteMeal={handleDeleteMeal}
+            />
             <div className="diary__memo">
               <header>
                 <p>메모</p>
@@ -152,25 +164,6 @@ const DiaryDetail = () => {
             <div className="status__container">
               <h2>오늘의 식단</h2>
               <NutritionBar>
-                {/* <li>
-                  <header>
-                    <p>칼로리</p>
-                    <div>
-                      <span
-                        className={getColor(calculatePercent('kcal'))}
-                      >{`${diary.dayList[0]?.kcal}kcal`}</span>
-                      <span>{` / ${diary.standardIntake[0]?.kcal}kcal`}</span>
-                    </div>
-                  </header>
-                  <div className="status__bar">
-                    <NutritionBarItem
-                      width={calculatePercent('kcal')}
-                      color={getColor(calculatePercent('kcal'))}
-                    >
-                      &nbsp;
-                    </NutritionBarItem>
-                  </div>
-                </li> */}
                 {['칼로리', '탄수화물', '단백질', '지방', '당분', '나트륨'].map(
                   (el, idx) => (
                     <NutritionItem
@@ -428,6 +421,7 @@ const DiaryDetailWrapper = styled.div`
 
   .msg-box {
     width: 40%;
+    max-width: 450px;
     padding: 4rem;
   }
 `
