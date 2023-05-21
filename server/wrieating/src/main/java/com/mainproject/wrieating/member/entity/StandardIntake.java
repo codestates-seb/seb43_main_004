@@ -15,7 +15,7 @@ public class StandardIntake {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long intakeId;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "MEMBER_ID", nullable = false)
     private Member member;
 
