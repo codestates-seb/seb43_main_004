@@ -25,8 +25,6 @@ public class WrieatingApplication {
 	private String env3;
 	@Value("${JWT_SECRET_KEY}")
 	private String env4;
-	@Value("${DEPLOY_JAR}")
-	private String env5;
 
 	public static void main(String[] args) {
 		SpringApplication.run(WrieatingApplication.class, args);
@@ -66,6 +64,5 @@ public class WrieatingApplication {
 		System.out.println(env2);
 		System.out.println(env3);
 		System.out.println(env4);
-		System.out.println(env5);
 	}
 }
