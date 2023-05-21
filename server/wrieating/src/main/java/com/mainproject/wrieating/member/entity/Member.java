@@ -52,16 +52,19 @@ public class Member {
     @Column(nullable = false)
     private Status status;      //탈퇴유무
 
+    @Column(nullable = false)
+    private String icon;
+
     // JWT
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
     public enum Activity{
-        NONE_ACTIVE("운동을 거의 또는 전혀 안함"), // BMR * 1.2
-        LIGHTLY_ACTIVE("가벼운 활동 수준(주1~3일)"), // BMR * 1.375
-        MODERATELY_ACTIVE("적당한 활동 수준/적당한 운동(주3~5일)"), // BMR * 1.55
-        VERY_ACTIVE("매우 활동적인 수준/스포츠, 격렬한 운동(주6일)"), // BMR * 1.725
-        EXTREMELY_ACTIVE("매우 활동적인 수준/매우 힘든 운동 및 육체노동"); // BMR * 1.9
+        NONE_ACTIVE("매우 낮음"), // BMR * 1.2
+        LIGHTLY_ACTIVE("낮음"), // BMR * 1.375
+        MODERATELY_ACTIVE("보통"), // BMR * 1.55
+        VERY_ACTIVE("높음"), // BMR * 1.725
+        EXTREMELY_ACTIVE("매우 높음"); // BMR * 1.9
 
         @Getter
         private String activity;
