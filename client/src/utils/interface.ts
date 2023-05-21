@@ -1,4 +1,5 @@
 export interface User {
+  email?: string
   gender: string
   nickName: string
   birth?: string
