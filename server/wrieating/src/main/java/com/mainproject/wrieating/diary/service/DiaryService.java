@@ -5,10 +5,10 @@ import com.mainproject.wrieating.diary.dto.*;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.diary.mapper.DiaryMapper;
 import com.mainproject.wrieating.diary.repository.DiaryRepository;
-import com.mainproject.wrieating.dto.MultiResponseDto;
 import com.mainproject.wrieating.exception.BusinessLogicException;
 import com.mainproject.wrieating.exception.ExceptionCode;
 import com.mainproject.wrieating.meal.entity.Day;
+import com.mainproject.wrieating.meal.entity.Week;
 import com.mainproject.wrieating.meal.repository.MealRepository;
 import com.mainproject.wrieating.member.entity.Member;
 import com.mainproject.wrieating.member.service.MemberService;
@@ -16,13 +16,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -56,10 +54,12 @@ public class DiaryService {
     }
 
     public Page<Diary> findAllDiaries(String token,int page, int size) {
-        return diaryRepository.findAllByMemberMemberId(tokenizer.getMemberId(token),
+        long memberId = tokenizer.getMemberId(token);
+        PreviousWeek(memberId);
+        return diaryRepository.findAllByMemberMemberId(memberId,
                 PageRequest.of(page, size, Sort.by("userDate").descending()));
-
     }
+
 
     public void updateDiary(long diaryId, DiaryPatchDto diaryPatchDto) {
         Diary findDiary = findVerifiedDiary(diaryId);
@@ -76,6 +76,7 @@ public class DiaryService {
         diaryRepository.deleteById(diaryId);
     }
 
+
     private Diary findVerifiedDiary(long diaryId) { // 다이어리 아이디 있나 검증
         return diaryRepository.findById(diaryId)
                 .orElseThrow(
@@ -87,5 +88,18 @@ public class DiaryService {
         if (diaryMemberId != compareId) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_MISMATCHED);
         }
+    }
+
+    private void PreviousWeek(long memberId) {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate startOfCurrentWeek = currentDate.with(java.time.DayOfWeek.MONDAY);
+        LocalDate endOfCurrentWeek = currentDate.with(java.time.DayOfWeek.SUNDAY);
+
+        LocalDate startOfPreviousWeek = startOfCurrentWeek.minusDays(7); // 전주 월
+        LocalDate endOfPreviousWeek = endOfCurrentWeek.minusDays(7); // 전주 일
+
+
+        Week previousWeekData = mealRepository.getPreviousWeekData(memberId, startOfPreviousWeek, endOfPreviousWeek);
+
     }
 }

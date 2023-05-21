@@ -6,8 +6,10 @@ import com.mainproject.wrieating.diary.dto.DiaryResponseDto;
 import com.mainproject.wrieating.diary.dto.MultiDiaryResponseDto;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.diary.mapper.DiaryMapper;
+import com.mainproject.wrieating.diary.repository.DiaryRepository;
 import com.mainproject.wrieating.diary.service.DiaryService;
 import com.mainproject.wrieating.dto.MultiResponseDto;
+import com.mainproject.wrieating.meal.entity.Day;
 import com.mainproject.wrieating.member.entity.StandardIntake;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
+
 import java.util.List;
 
 @CrossOrigin
@@ -29,6 +32,7 @@ import java.util.List;
 public class DiaryController {
     private final DiaryMapper mapper;
     private final DiaryService service;
+    private final DiaryRepository diaryRepository;
 
     @PostMapping("/write")
     @ResponseStatus(HttpStatus.CREATED)
@@ -50,7 +54,6 @@ public class DiaryController {
                                      @Positive @RequestParam int size) {
         Page<Diary> pageDiaries = service.findAllDiaries(token,page - 1, size);
         List<Diary> diaries = pageDiaries.getContent();
-
         return new ResponseEntity<>(
                 new MultiDiaryResponseDto<>(mapper.diariesToDiariesResponseDto(diaries), pageDiaries,
                         mapper.standardIntakeToStandardIntakeDtos(diaries.get(1).getMember().getStandardIntakes())),
