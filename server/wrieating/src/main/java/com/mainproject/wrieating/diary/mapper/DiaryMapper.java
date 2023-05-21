@@ -3,6 +3,8 @@ package com.mainproject.wrieating.diary.mapper;
 import com.mainproject.wrieating.diary.dto.*;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.meal.dto.MealResponseDto;
+import com.mainproject.wrieating.member.dto.StandardIntakeResponseDto;
+import com.mainproject.wrieating.member.entity.StandardIntake;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.stereotype.Component;
@@ -46,6 +48,22 @@ public interface DiaryMapper {
                             mealResponseDto.setSalt(meal.getSalt());
                             return mealResponseDto; }).collect(Collectors.toList())
                 )
+                .standardIntakes(diary.getMember().getStandardIntakes().stream()
+                        .map(
+                                intake -> {
+                                    StandardIntakeResponseDto responseDto = new StandardIntakeResponseDto();
+                                    responseDto.setIntakeId(intake.getIntakeId());
+                                    responseDto.setMemberId(intake.getMember().getMemberId());
+                                    responseDto.setKcal(intake.getKcal());
+                                    responseDto.setCarbohydrate(intake.getCarbohydrate());
+                                    responseDto.setProtein(intake.getProtein());
+                                    responseDto.setFat(intake.getFat());
+                                    responseDto.setSugar(intake.getSugar());
+                                    responseDto.setSalt(intake.getSalt());
+
+                                    return responseDto;
+                                }
+                        ).collect(Collectors.toList()))
                 .build();
     };
 
