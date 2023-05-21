@@ -8,13 +8,15 @@ import com.mainproject.wrieating.dataArchive.dbsource.recipedb.RecipeDataWriter;
 import com.mainproject.wrieating.dataArchive.dbsource.recipedb.entity.RecipeData;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 @SpringBootApplication
-public class WrieatingApplication {
+public class WrieatingApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(WrieatingApplication.class, args);
@@ -42,5 +44,10 @@ public class WrieatingApplication {
 //			System.err.println("Error saving data to database: " + e.getMessage());
 //		}
 		// 완료 - 주석 처리함
+	}
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+		return builder.sources(WrieatingApplication.class);
 	}
 }

@@ -1,12 +1,16 @@
 package com.mainproject.wrieating.diary.controller;
 
-import com.mainproject.wrieating.diary.dto.*;
+import com.mainproject.wrieating.diary.dto.DiaryPatchDto;
+import com.mainproject.wrieating.diary.dto.DiaryPostDto;
+import com.mainproject.wrieating.diary.dto.DiaryResponseDto;
+import com.mainproject.wrieating.diary.dto.MultiDiaryResponseDto;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.diary.mapper.DiaryMapper;
 import com.mainproject.wrieating.diary.repository.DiaryRepository;
 import com.mainproject.wrieating.diary.service.DiaryService;
 import com.mainproject.wrieating.dto.MultiResponseDto;
 import com.mainproject.wrieating.meal.entity.Day;
+import com.mainproject.wrieating.member.entity.StandardIntake;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -16,10 +20,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
-import java.time.LocalDate;
+
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -53,10 +55,10 @@ public class DiaryController {
         Page<Diary> pageDiaries = service.findAllDiaries(token,page - 1, size);
         List<Diary> diaries = pageDiaries.getContent();
         return new ResponseEntity<>(
-                new MultiResponseDto<>(mapper.diariesToDiariesResponseDto(diaries), pageDiaries),
-                HttpStatus.OK);
+                new MultiDiaryResponseDto<>(mapper.diariesToDiariesResponseDto(diaries), pageDiaries,
+                        mapper.standardIntakeToStandardIntakeDtos(diaries.get(1).getMember().getStandardIntakes())),
+                        HttpStatus.OK);
     }
-
 
     @PatchMapping("/update/{diaries-id}")
     @ResponseStatus(HttpStatus.OK)

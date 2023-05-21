@@ -14,7 +14,7 @@ public interface MealMapper {
 
     MealPostDto toDTO(Meal meal);
 
-    Meal toEntity(MealPostDto mealPostDTO);
+    Meal mealPostDtoToMeal(MealPostDto mealPostDTO);
 
     Meal mealPatchDtoToMeal(MealPatchDto mealPatchDto);
 

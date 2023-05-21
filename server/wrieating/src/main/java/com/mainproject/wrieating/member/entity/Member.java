@@ -1,5 +1,6 @@
 package com.mainproject.wrieating.member.entity;
 
+import com.mainproject.wrieating.meal.entity.Meal;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,6 +59,9 @@ public class Member {
     // JWT
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<StandardIntake> standardIntakes = new ArrayList<>();
 
     public enum Activity{
         NONE_ACTIVE("매우 낮음"), // BMR * 1.2

@@ -36,8 +36,6 @@ public class DiaryService {
 
         Member member = memberService.findVerifiedMember(tokenizer.getMemberId(token));
 
-        existDiary(diary.getUserDate());
-
         diary.setMember(member);
 
         diaryRepository.save(diary);
@@ -84,11 +82,6 @@ public class DiaryService {
                 .orElseThrow(
                         () -> new BusinessLogicException(ExceptionCode.DIARY_NOT_FOUND)
                 );
-    }
-
-    private void existDiary(LocalDate userDate) { // 해당 날짜에 이미 다이어리가 존재하는지
-        if (diaryRepository.findByUserDate(userDate) != null)
-            throw new BusinessLogicException(ExceptionCode.DIARY_EXIST);
     }
 
     private void verifiedRequest(long diaryMemberId, long compareId) { // 다이어리 멤버랑 비교해서 일치하는지

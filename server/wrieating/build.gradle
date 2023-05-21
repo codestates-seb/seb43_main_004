@@ -3,6 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.11'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 //	id 'org.asciidoctor.convert' version '2.2.1'
+	id 'war'
 }
 
 group = 'com.mainproject'
@@ -34,8 +35,8 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
 	// db
-//	runtimeOnly 'com.mysql:mysql-connector-j'
-	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+//	runtimeOnly 'com.h2database:h2'
 
 	// archive
 	implementation 'org.apache.commons:commons-csv:1.8'

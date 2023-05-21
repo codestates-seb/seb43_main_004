@@ -20,6 +20,8 @@ public class MealPostDto {
     private int fat;
     private int sugar;
     private int salt;
+    @NotNull
+    private boolean custom;
 
     public enum MealType {
         BREAKFAST,

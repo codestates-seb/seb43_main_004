@@ -1,8 +1,7 @@
 package com.mainproject.wrieating.diary.dto;
 
 import com.mainproject.wrieating.dto.PageInfo;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.mainproject.wrieating.member.dto.StandardIntakeResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,12 +9,17 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class MultiDiaryResponseDto<T> {
     private List<T> data;
-    private List<StandardIntakeDto> standardIntake;
-    private List<WeekResponseDto> weekList;
     private PageInfo pageInfo;
+    private List<StandardIntakeResponseDto> standardIntakes;
+
+
+    public MultiDiaryResponseDto(List<T> data, Page page, List<StandardIntakeResponseDto> standardIntakeResponseDto) {
+        this.data = data;
+        this.pageInfo = new PageInfo(page.getNumber() + 1,
+                page.getSize(), page.getTotalElements(), page.getTotalPages());
+        this.standardIntakes = standardIntakeResponseDto;
+    }
 }

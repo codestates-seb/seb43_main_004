@@ -48,10 +48,10 @@ public class JwtTokenizer {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(Calendar.getInstance().getTime())
-                .setExpiration(expiration)
-                .signWith(key)
+                .setSubject(subject)    // 토큰 제목
+                .setIssuedAt(Calendar.getInstance().getTime()) // 발급시간
+                .setExpiration(expiration)  // 만료시간
+                .signWith(key)  // 알고리즘, 시크릿키
                 .compact();
     }
 
@@ -59,10 +59,10 @@ public class JwtTokenizer {
         Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
         return Jwts.builder()
-                .setSubject(subject)
-                .setIssuedAt(Calendar.getInstance().getTime())
-                .setExpiration(expiration)
-                .signWith(key)
+                .setSubject(subject)    // 토큰 제목
+                .setIssuedAt(Calendar.getInstance().getTime())  // 발급시간
+                .setExpiration(expiration)  // 만료시간
+                .signWith(key)  // 알고리즘, 시크릿키
                 .compact();
     }
 
@@ -87,6 +87,7 @@ public class JwtTokenizer {
                 .parseClaimsJws(jws);
     }
 
+    // 토큰 유효시간 얻는 메서드
     public Date getTokenExpiration(int expirationMinutes) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MINUTE, expirationMinutes);
