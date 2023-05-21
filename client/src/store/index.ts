@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
+import nutrientSlice from './slices/nutrientSlice'
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    nutrient: nutrientSlice,
+  },
 })
 
 export type RootState = ReturnType<typeof store.getState> // useSelector 타입 지정.

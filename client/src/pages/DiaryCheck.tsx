@@ -1,16 +1,19 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import CalendarPage from './Calendar'
-import Stats from './Stats'
+import CalendarPage from '../components/diary/Calendar'
+import Stats from '../components/diary/Stats'
 
 const DiaryCheck = () => {
   const [diaries, setDiaries] = useState<DataResponse | null>(null)
 
   const fetchData = () => {
     axios
-      .get<DataResponse>('http://localhost:4000/diaries')
+      .get<DataResponse>(`http://localhost:4000/diaries?page=1&size=1000`)
       .then((res) => setDiaries(res.data))
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   useEffect(() => {
@@ -61,7 +64,7 @@ export interface Intake {
 export interface DataResponse {
   data: Diary[]
   standardIntake: Intake[]
-  calcul: Intake[]
+  weekList: Intake[]
   comment: string
   pageInfo: {
     page: number
