@@ -69,6 +69,7 @@ const UserSignIn = () => {
       })
       .then((response) => {
         console.log(response.data)
+        navigate('/')
       })
       .catch((error) => {
         console.error(error)
