@@ -4,6 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Button from '../Common/Button'
 import Modal from '../Common/Modal'
+import MealList from './MealItem'
+import NutritionItem from './NutritionItem'
 
 const DiaryDetail = () => {
   const [diary, setDiary] = useState<Diary | null>(null)
@@ -16,12 +18,20 @@ const DiaryDetail = () => {
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
 
-  const onClickBtn = () => {
-    console.log('hi')
+  const handlePlusDiary = () => {
+    navigate(`/diaries/${id}/add`)
   }
 
   const onChangeModal = () => {
     setIsOpenModal((prev) => !prev)
+  }
+
+  const handleEditMeal = (mealData: Meal[]) => {
+    console.log(mealData)
+  }
+
+  const handleDeleteMeal = (mealData: Meal[]) => {
+    console.log(mealData)
   }
 
   // textarea 요소 있는 value의 마지막으로 커서 이동
@@ -35,10 +45,10 @@ const DiaryDetail = () => {
   const onChangeMemo = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMemoContent(e.target.value)
   }
-  // undefined이거나 null인 경우에 기본값 0
+  // 표준 섭취량과 계산된 영양성분으로 퍼센트를 계산하는 함수
   const calculatePercent = (nutrient: string) => {
     return (
-      ((diary?.calcul[0]?.[nutrient] ?? 0) /
+      ((diary?.dayList[0]?.[nutrient] ?? 0) /
         (diary?.standardIntake[0]?.[nutrient] ?? 0)) *
       100
     )
@@ -47,8 +57,8 @@ const DiaryDetail = () => {
   const onSendMemo = () => {
     axios
       .patch(`http://localhost:4000/diary/${id}`, { memo: memoContent })
-      .then((res) => {
-        console.log(`메모가 업데이트되었습니다. ${res}`) // toast창을 써야할 듯
+      .then(() => {
+        console.log(`메모가 업데이트되었습니다.`) // toast창을 써야할 듯
         setIsOpenMemo(true)
       })
       .catch((err) => {
@@ -112,73 +122,17 @@ const DiaryDetail = () => {
                   <span className="material-symbols-outlined">delete</span>
                   모든 기록 삭제
                 </Button>
-                <Button onClick={onClickBtn}>
+                <Button onClick={handlePlusDiary}>
                   <span className="material-symbols-outlined">edit</span>
                   식단 등록하기
                 </Button>
               </div>
             </h3>
-            <ul className="diary__lists">
-              {['아침', '점심', '저녁', '간식'].map((el, idx) => {
-                const mealData = diary.meal.filter((meal) => {
-                  const mealTypeMap: { [key: string]: string } = {
-                    아침: 'BREAKFAST',
-                    점심: 'LUNCH',
-                    저녁: 'DINNER',
-                    간식: 'SNACK',
-                  }
-                  return meal.mealType === mealTypeMap[el]
-                })
-                return (
-                  <li className="diary__list" key={idx}>
-                    <header>
-                      <p>{`${el} ${
-                        mealData
-                          ? mealData.reduce(
-                              (acc, cur) => {
-                                return { ...acc, kcal: acc.kcal + cur.kcal }
-                              },
-                              {
-                                foodName: '',
-                                mealType: '',
-                                intake: 0,
-                                kcal: 0,
-                              } as Meal
-                            ).kcal
-                          : 0
-                      }Kcal`}</p>
-                      {mealData.length !== 0 && (
-                        <div>
-                          <span className="material-symbols-outlined">
-                            edit
-                          </span>
-                          <span className="material-symbols-outlined">
-                            delete
-                          </span>
-                        </div>
-                      )}
-                    </header>
-                    <ul className="meal__lists">
-                      {mealData.length !== 0 ? (
-                        mealData.map((data, idx) => {
-                          return (
-                            <li className="meal__list" key={idx}>
-                              <p>{data.foodName}</p>
-                              <p>{data.intake}g</p>
-                              <span>{`${data.kcal}kcal`}</span>
-                            </li>
-                          )
-                        })
-                      ) : (
-                        <p className="meal__list__yet">
-                          아직 입력하지 않았어요.
-                        </p>
-                      )}
-                    </ul>
-                  </li>
-                )
-              })}
-            </ul>
+            <MealList
+              diary={diary}
+              handleEditMeal={handleEditMeal}
+              handleDeleteMeal={handleDeleteMeal}
+            />
             <div className="diary__memo">
               <header>
                 <p>메모</p>
@@ -210,60 +164,17 @@ const DiaryDetail = () => {
             <div className="status__container">
               <h2>오늘의 식단</h2>
               <NutritionBar>
-                <li>
-                  <header>
-                    <p>칼로리</p>
-                    <div>
-                      <span
-                        className={getColor(calculatePercent('kcal'))}
-                      >{`${diary.calcul[0]?.kcal}kcal`}</span>
-                      <span>{` / ${diary.standardIntake[0]?.kcal}kcal`}</span>
-                    </div>
-                  </header>
-                  <div className="status__bar">
-                    <NutritionBarItem
-                      width={calculatePercent('kcal')}
-                      color={getColor(calculatePercent('kcal'))}
-                    >
-                      &nbsp;
-                    </NutritionBarItem>
-                  </div>
-                </li>
-                {['탄수화물', '단백질', '지방', '당분'].map((el, idx) => {
-                  const nutrientTypeMap: { [key: string]: string } = {
-                    탄수화물: 'carbohydrate',
-                    단백질: 'protein',
-                    지방: 'fat',
-                    당분: 'sugar',
-                  }
-                  return (
-                    <li key={idx}>
-                      <header>
-                        <p>{el}</p>
-                        <div>
-                          <span
-                            className={getColor(
-                              calculatePercent(nutrientTypeMap[el])
-                            )}
-                          >{`${diary.calcul[0][nutrientTypeMap[el]]}g`}</span>
-                          <span>{` /${
-                            diary.standardIntake[0][nutrientTypeMap[el]]
-                          }g`}</span>
-                        </div>
-                      </header>
-                      <div className="status__bar">
-                        <NutritionBarItem
-                          width={calculatePercent(nutrientTypeMap[el])}
-                          color={getColor(
-                            calculatePercent(nutrientTypeMap[el])
-                          )}
-                        >
-                          &nbsp;
-                        </NutritionBarItem>
-                      </div>
-                    </li>
+                {['칼로리', '탄수화물', '단백질', '지방', '당분', '나트륨'].map(
+                  (el, idx) => (
+                    <NutritionItem
+                      key={idx}
+                      nutrientType={el}
+                      diary={diary}
+                      calculatePercent={calculatePercent}
+                      getColor={getColor}
+                    />
                   )
-                })}
+                )}
               </NutritionBar>
             </div>
             <div className="recipe__container">
@@ -298,16 +209,16 @@ interface Diary {
   diaryStatus: string
   meal: Meal[]
   standardIntake: StandardIntake[]
-  calcul: Calcul[]
+  dayList: DayList[]
   recipe: Recipe[]
   comment: string
 }
 
-interface Meal {
+export interface Meal {
   foodName: string
   mealType: string
   kcal: number
-  intake: number
+  servingSize: number
 }
 
 interface StandardIntake {
@@ -319,7 +230,7 @@ interface StandardIntake {
   [key: string]: number
 }
 
-interface Calcul {
+interface DayList {
   carbohydrate: number
   protein: number
   fat: number
@@ -389,6 +300,9 @@ const DiaryDetailWrapper = styled.div`
       p {
         font-size: 17px;
         font-weight: 600;
+      }
+      span {
+        cursor: pointer;
       }
     }
   }
@@ -464,6 +378,9 @@ const DiaryDetailWrapper = styled.div`
         font-size: 17px;
         font-weight: 600;
       }
+      span {
+        cursor: pointer;
+      }
     }
 
     textarea {
@@ -502,6 +419,12 @@ const DiaryDetailWrapper = styled.div`
       margin-right: 1.2rem;
     }
   }
+
+  .msg-box {
+    width: 40%;
+    max-width: 450px;
+    padding: 4rem;
+  }
 `
 
 // 동적인 가로 차트 스타일
@@ -530,7 +453,7 @@ const NutritionBar = styled.ul`
   }
 `
 
-const NutritionBarItem = styled.span<{
+export const NutritionBarItem = styled.span<{
   width: number
   color: string
 }>`
