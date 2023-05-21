@@ -6,7 +6,10 @@ import Radio from '../components/Common/Radio'
 import { genderList, activityScore } from '../utils/options'
 import { checkEmail, checkPassword } from '../utils/userfunc'
 import { ApiCaller } from '../utils/apiCaller'
-import { dtoReqEmailCheck, dtoReqVerifyEmail } from '../dto/members/dtoSignup'
+import {
+  dtoReqEmailCheck,
+  dtoReqVerifyEmail,
+} from '../dto/membership/members/dtoSignup'
 import { dtoResponse } from '../dto'
 import { debounce } from '../utils/timefunc'
 import axios, { AxiosResponse, AxiosError } from 'axios'
@@ -69,6 +72,8 @@ const UserSignUp = ({ social }: Props) => {
     ckAuth: '',
   })
 
+  console.log(nickName, gender, activity, height, weight, birth) // 빌드를 위한 콘솔
+
   const [error, setError] = useState<errorType>({
     email: '',
     auth: '',
@@ -112,7 +117,7 @@ const UserSignUp = ({ social }: Props) => {
   }
 
   // 인증번호 전송
-  const sendNumbers = async (email: string) => {
+  const sendNumbers = (email: string) => {
     const auth = { auth: '' }
     const msg = { email: '' }
     let isValid = false

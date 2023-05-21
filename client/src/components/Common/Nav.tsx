@@ -178,9 +178,9 @@ const StyledNav = styled.nav`
 
       li {
         margin-bottom: 2.5rem;
-      }
-      a.active {
-        border-bottom-width: 3px;
+        a.active {
+          border-bottom-width: 3px;
+        }
       }
 
       .depth-2 {
@@ -223,7 +223,7 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
             </div>
             <div>
               <p>고양고양이</p>
-              <Link to="/userpage">
+              <Link to="/userpage" onClick={handleMenu}>
                 마이페이지
                 <span className="material-icons-round">navigate_next</span>
               </Link>
@@ -232,24 +232,36 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
         ) : (
           <div className="login-box">
             <div className="material-icons-round">account_circle</div>
-            <Link to="/sign-in">로그인</Link>
+            <Link to="/sign-in" onClick={handleMenu}>
+              로그인
+            </Link>
           </div>
         )}
         <ul className="depth-1">
           <li>
-            <NavLink to="/diaries">식단일기</NavLink>
+            <NavLink to="/diaries" onClick={handleMenu}>
+              식단일기
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/">커뮤니티</NavLink>
+            <NavLink to="/community" onClick={handleMenu}>
+              커뮤니티
+            </NavLink>
           </li>
           <li>
-            <NavLink to="/">모아보기</NavLink>
+            <Link to="/" onClick={handleMenu}>
+              모아보기
+            </Link>
             <ul className="depth-2">
               <li>
-                <NavLink to="/">레시피</NavLink>
+                <NavLink to="/" onClick={handleMenu}>
+                  레시피
+                </NavLink>
               </li>
               <li>
-                <NavLink to="/nutrient">영양성분</NavLink>
+                <NavLink to="/nutrient" onClick={handleMenu}>
+                  영양성분
+                </NavLink>
               </li>
             </ul>
           </li>

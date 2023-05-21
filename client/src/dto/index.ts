@@ -3,9 +3,9 @@ export interface dtoResponse {
   status: string
 }
 
-export interface dtoResponsePage extends dtoResponse {
+export interface dtoResponsePage<T> extends dtoResponse {
   pageInfo: dtoPageInfo
-  data: any
+  data: T[]
 }
 
 interface dtoPageInfo {

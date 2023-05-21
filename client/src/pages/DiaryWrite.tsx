@@ -6,15 +6,19 @@ import Input from '../components/Common/Input'
 import FoodItem from '../components/diary/FoodItem'
 import axios from 'axios'
 import Modal from '../components/Common/Modal'
+import { useLocation, useParams } from 'react-router-dom'
 
 const StyledDiaryAdd = styled.main`
+  width: 98%;
+  max-width: 1250px;
+
   h2 {
-    font-size: ${({ theme }) => theme.fontSize.lgh};
+    font-size: ${({ theme }) => theme.fontSize.smmh};
     margin-bottom: 5rem;
   }
 
   h3 {
-    font-size: ${({ theme }) => theme.fontSize.mdh};
+    font-size: ${({ theme }) => theme.fontSize.smh};
   }
 
   button {
@@ -90,7 +94,7 @@ const StyledDiaryAdd = styled.main`
 
       .search-food-list {
         position: absolute;
-        top: 100%;
+        top: 70%;
         left: 0;
         width: 100%;
         border: 1px solid ${({ theme }) => theme.color.darkGray};
@@ -98,6 +102,8 @@ const StyledDiaryAdd = styled.main`
         overflow: hidden;
         box-shadow: ${({ theme }) => theme.shadow};
         z-index: 5;
+        max-height: 226px;
+        overflow-y: auto;
 
         li {
           display: flex;
@@ -213,11 +219,16 @@ const DiaryWrite = () => {
   const [isUnchecked, setIsUnchecked] = useState(false)
   const [isUnsaved, setIsUnsaved] = useState(false)
   const customId = useRef<number>(120) // 사용자등록 음식의 id. 영양성분 DB.length + 1
+  const param = useParams() // 일기 id 가져오기
+  const location = useLocation() // url 가져오기
+
+  // TODO: 페이지 넘어오게 되면 id로 일기 조회 데이터 가져오기
 
   // Todo : 검색리스트 가져오기. 추후 전역 스토어에 영양성분 db 가져오는것으로 대체할 예정
   const getSearchList = async () => {
     const res = await axios.get(
-      `http://localhost:3001/nutrient?title=${searchTxt}`
+      `http://localhost:4000/nutrient`
+      // ${url}/nutrient/search?page=1&size=10&search=${searchTxt}
     )
     setSearchList(res.data)
   }
@@ -302,22 +313,41 @@ const DiaryWrite = () => {
   const checkValidation = () => {
     // 유효성검사
     // 시간 선택했는지
-    // if (timeCheck === '') setIsUnchecked(true)
+    if (timeCheck === '') setIsUnchecked(true)
+
     // 빈칸이 있는지
-    // 배열 안의 객체를 순회해서 빈값이 있는지 확인
+    const values = []
+    for (const item of foodList) {
+      values.push(...Object.values(item))
+    }
+    const result = values.filter((el) => el === '').length
+    if (result > 0) setIsEmpty(true)
   }
 
-  const postDiary = () => {
+  const sendDiary = () => {
     checkValidation()
-    // console.log('post', '/diaries/{diary-id}/meal/write')
-    // console.log(timeCheck)
-    // console.log(foodList)
+    const sendData = foodList.map((item) => {
+      return {
+        mealType: timeCheck,
+        title: item.title,
+        carbohydrate: item.carbohydrate,
+        protein: item.protein,
+        fat: item.fat,
+        sugar: item.sugar,
+        salt: item.salt,
+        kcal: item.kcal,
+      }
+    })
+    console.log(sendData)
+
+    const sendType = location.pathname.split('/')[3]
+    if (sendType === 'add') {
+      console.log('post', `/diaries/${param.id}/meal/write`)
+    } else {
+      console.log('patch', `/diaries/${param.id}/meal/update/meal-id`)
+    }
   }
 
-  const patchDiary = () => {
-    // 수정하기 클릭시 api patch 전송
-    console.log('patch', '/diaries/{diary-id}/meal/update/{meal-id}')
-  }
   return (
     <>
       <StyledDiaryAdd>
@@ -406,44 +436,54 @@ const DiaryWrite = () => {
             )}
           </div>
         </div>
-        <Button onClick={postDiary}>
+        <Button
+          disabled={!timeCheck || foodList.length === 0}
+          onClick={sendDiary}
+        >
           <span className="material-icons-round">edit</span>
           일기 등록하기
         </Button>
+        {isEmpty && (
+          <Modal
+            state={isEmpty}
+            setState={setIsEmpty}
+            msg={`빈 칸이 있습니다.\n다시 확인하고 등록해주세요.`}
+            icon="error"
+          >
+            <Button onClick={() => setIsEmpty(false)}>확인</Button>
+          </Modal>
+        )}
+        {isUnchecked && (
+          <Modal
+            state={isUnchecked}
+            setState={setIsUnchecked}
+            msg={`식사시간을 선택하지 않으셨습니다.\n다시 확인하고 등록해주세요.`}
+            icon="error"
+          >
+            <Button onClick={() => setIsUnchecked(false)}>확인</Button>
+          </Modal>
+        )}
+        {/* 페이지 이동시 나타나는 모달 로직 짜야함 */}
+        {isUnsaved && (
+          <Modal
+            state={isUnsaved}
+            setState={setIsUnchecked}
+            msg={`작성중인 내용은 저장되지 않습니다.\n페이지를 나가시겠습니까?`}
+            icon="warning"
+          >
+            <Button
+              type="button"
+              outline={true}
+              onClick={() => setIsUnsaved(false)}
+            >
+              취소
+            </Button>
+            <Button onClick={() => setIsUnsaved(false)}>확인</Button>
+          </Modal>
+        )}
       </StyledDiaryAdd>
-      <Modal
-        state={isEmpty}
-        setState={setIsEmpty}
-        msg={`빈 칸이 있습니다.\n다시 확인하고 등록해주세요.`}
-        icon="error"
-      >
-        <Button onClick={() => setIsEmpty(false)}>확인</Button>
-      </Modal>
-      <Modal
-        state={isUnchecked}
-        setState={setIsUnchecked}
-        msg={`식사시간을 선택하지 않으셨습니다.\n다시 확인하고 등록해주세요.`}
-        icon="error"
-      >
-        <Button onClick={() => setIsUnchecked(false)}>확인</Button>
-      </Modal>
-      <Modal
-        state={isUnsaved}
-        setState={setIsUnchecked}
-        msg={`작성중인 내용은 저장되지 않습니다.\n페이지를 나가시겠습니까?`}
-        icon="warning"
-      >
-        <Button
-          type="button"
-          outline={true}
-          onClick={() => setIsUnsaved(false)}
-        >
-          취소
-        </Button>
-        <Button onClick={() => setIsUnsaved(false)}>확인</Button>
-      </Modal>
     </>
   )
 }
 
-export default DiaryWrite
+export default React.memo(DiaryWrite)

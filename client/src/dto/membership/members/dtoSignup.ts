@@ -1,3 +1,4 @@
+// dto 데이터
 export interface dtoReqSignup {
   email: string
   nickName: string
