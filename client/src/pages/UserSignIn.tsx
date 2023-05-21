@@ -5,6 +5,9 @@ import Button from '../components/Common/Button'
 import { useNavigate, Link } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import { checkEmail } from '../utils/userfunc'
+import axios from 'axios'
+import { API } from '../utils/API'
+import { getCookie, setCookie } from '../utils/Cookie'
 
 interface userType {
   email: string
@@ -25,13 +28,44 @@ const UserSignIn = () => {
     })
   }
 
-  const checkValid = () => {
+  // 로그인
+  const checkValid = async () => {
     if (!checkEmail(values.email) || values.password == '') {
       setError('이메일 혹은 비밀번호가 잘못되었거나 유효하지 않습니다.')
       return
     }
-    setError('')
-    navigate('/userpage')
+    // 액세스 토큰 발급
+    await axios
+      .post<userType>(`${API}/members/login`, values)
+      .then((response) => {
+        console.log(response.data)
+        const token = 'response.data.accessToken 토큰 들어가는 곳'
+        const current = new Date()
+        current.setMinutes(current.getMinutes() + 40)
+        setCookie('token', token, {
+          path: '/',
+          secure: true,
+          expires: current,
+          sameSite: 'none',
+        })
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+
+    // 발급 받은 토큰으로 /members/myprofile 호출
+    await axios
+      .get(`${API}/members/myprofile`, {
+        headers: {
+          Authorization: `Bearer ${getCookie('token')}`,
+        },
+      })
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   return (
@@ -57,9 +91,9 @@ const UserSignIn = () => {
         />
       </Form>
       <Button onClick={checkValid}>로그인</Button>
-      <Button outline="true" onClick={() => console.log('google social login')}>
+      {/* <Button outline="true" onClick={() => console.log('google social login')}>
         구글 계정으로 로그인
-      </Button>
+      </Button> */}
       <div className="padding-box">
         <span>비밀번호를 잊으셨나요?</span>
         <StyledLink to="/find-pwd">비밀번호 찾기</StyledLink>

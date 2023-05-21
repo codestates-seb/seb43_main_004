@@ -7,33 +7,32 @@ import { User } from '../utils/interface'
 
 const UserPage = () => {
   const [profile, setProfile] = useState<User>({
-    nickName: '',
-    gender: '',
+    nickName: 'nickname',
+    gender: 'male',
     height: 0,
     weight: 0,
-    activity: '',
-    icon: '',
+    activity: 'NONE_ACTIVE',
+    icon: 'ingredients',
   })
   const { nickName, gender, height, weight, activity, icon } = profile
-  useEffect(() => {
-    console.log('/mypage')
-    axios
-      .get(`${API}/profile/1`)
-      // .get(`${API}/members/mypage`)
-      .then((response) => {
-        console.log(response)
-        setProfile(response.data)
-        console.log(response.data)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }, [])
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`${API}/members/mypage`)
+  //     .then((response) => {
+  //       console.log(response)
+  //       setProfile(response.data)
+  //       console.log(response.data)
+  //     })
+  //     .catch((error) => {
+  //       console.error(error)
+  //     })
+  // }, [])
 
   return (
     <Container>
       <UserProfile>
-        <img src={icon} alt="프로필 아이콘" />
+        <img src={`/icons/${icon}.svg`} alt="프로필 아이콘" />
         <div>
           <div className="userinfo-top">
             <h1>{nickName}</h1>
@@ -60,8 +59,6 @@ const UserPage = () => {
         tabItem={[
           { name: '프로필 수정', path: '/userpage' }, // 프로필 수정 페이지가 기본이 된다고 가정...
           { name: '비밀번호 변경', path: '/userpage/change-pwd' },
-          { name: '내가 작성한 글', path: '/userpage/posts' },
-          { name: '내가 작성한 댓글', path: '/userpage/comments' },
         ]}
       />
     </Container>
@@ -69,6 +66,21 @@ const UserPage = () => {
 }
 const Container = styled.div`
   max-width: 88rem;
+`
+
+const ItemsWrapper = styled.div`
+  display: flex;
+  gap: 3rem;
+
+  > div span:first-child {
+    font-weight: 800;
+    margin-right: 1.4rem;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    flex-direction: column;
+    gap: 1rem;
+  }
 `
 
 const UserProfile = styled.div`
@@ -97,15 +109,8 @@ const UserProfile = styled.div`
   .userinfo-top {
     margin-bottom: 2rem;
   }
-`
 
-const ItemsWrapper = styled.div`
-  display: flex;
-  gap: 3rem;
-
-  > div span:first-child {
-    font-weight: 800;
-    margin-right: 1.4rem;
+  @media screen and (max-width: 500px) {
   }
 `
 
