@@ -69,14 +69,22 @@ const Radio = styled.div`
   }
 
   input {
-    position: relative;
-    top: -0.8rem;
-    left: -0.5rem;
-    opacity: 1;
     display: none;
 
     &:checked + span {
       opacity: 1;
+    }
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 9rem;
+
+    span {
+      font-size: 1.8rem;
+      position: absolute;
+      top: 6rem;
+      left: 6rem;
+      opacity: 0;
     }
   }
 `
