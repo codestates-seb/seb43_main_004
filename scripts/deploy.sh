@@ -16,6 +16,11 @@ export AWS_RDS_URL=${AWS_RDS_URL}
 # 빌드 디렉토리로 이동
 cd /home/ec2-user/action/server/wrieating/
 
+echo $profile
+echo $JWT_SECRET_KEY
+echo $AWS_RDS_PASSWORD
+echo $AWS_RDS_URL
+
 echo "> 현재 시간: $(date)" >> /home/ec2-user/action/deploy.log
 
 echo "> build 파일명: $JAR_NAME" >> /home/ec2-user/action/deploy.log
