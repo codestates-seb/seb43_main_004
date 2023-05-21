@@ -15,6 +15,7 @@ public class FoodData {
     private String foodName;
     private String foodRoughType;
     private String foodDetailType;
+    private int servingSize;
     private int kcal;
     private int carbohydrate;
     private int protein;

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class MealResponseDto {
 
+    private Long mealId;
     private String title;
     private Meal.MealType mealType;
     private int carbohydrate;
