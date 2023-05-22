@@ -2,92 +2,92 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import { styled } from 'styled-components'
+import etc from '../assets/etc.png'
 
 const StyledRecipeDetail = styled.main`
   width: 98%;
   max-width: 1250px;
 
-  .visual {
-    position: absolute;
-    top: 10rem;
-    left: 0;
-    width: 100%;
-    height: 30rem;
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
-
-  .title {
-    margin: 30rem 0 5rem;
-    text-align: center;
-
-    h2 {
-      font-size: ${({ theme }) => theme.fontSize.lgh};
-      margin-bottom: 3rem;
-    }
-
-    .tips {
-      font-size: ${({ theme }) => theme.fontSize.larger};
-      line-height: 1.5em;
-      word-break: keep-all;
-    }
-  }
-
-  .info {
+  .title-wrap {
     display: flex;
     justify-content: space-between;
     margin-bottom: 5rem;
 
-    h3 {
-      font-size: ${({ theme }) => theme.fontSize.smmh};
-      padding: 1.5rem 2rem;
+    .visual {
+      width: 50%;
+      overflow: hidden;
       border-radius: 1.5rem;
-      margin-bottom: 1rem;
+      background: url(${etc}) no-repeat 50% 50%
+        ${({ theme }) => theme.color.primary};
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
 
-    .ingredients {
-      width: 60%;
+    .info {
+      width: 45%;
 
-      h3 {
-        background-color: ${({ theme }) => theme.color.primary};
+      h2 {
+        font-size: ${({ theme }) => theme.fontSize.lgh};
+        margin-bottom: 2rem;
       }
 
-      div {
-        border: 1px solid ${({ theme }) => theme.color.lightGray};
-        border-radius: 1.5rem;
-        padding: 1.5rem 2rem;
+      .tips {
+        font-size: ${({ theme }) => theme.fontSize.larger};
         line-height: 1.5em;
         word-break: keep-all;
-        height: 152px;
+        margin-bottom: 3rem;
       }
-    }
-
-    .nutrient {
-      width: 35%;
 
       h3 {
-        border: 2px solid ${({ theme }) => theme.color.primary};
+        font-size: ${({ theme }) => theme.fontSize.smmh};
+        padding: 2rem;
+        border-radius: 1.5rem;
+        margin-bottom: 1rem;
       }
 
-      ul {
-        border: 1px solid ${({ theme }) => theme.color.lightGray};
-        border-radius: 1.5rem;
-        padding: 1.5rem 2rem;
+      .ingredients {
+        margin-bottom: 3rem;
 
-        li {
-          margin-bottom: 1rem;
+        h3 {
+          background-color: ${({ theme }) => theme.color.primary};
+        }
 
-          span {
-            font-weight: 600;
-          }
+        div {
+          border: 1px solid ${({ theme }) => theme.color.lightGray};
+          border-radius: 1.5rem;
+          padding: 2rem;
+          line-height: 1.5em;
+          word-break: keep-all;
+        }
+      }
 
-          &:last-child {
-            margin-bottom: 0;
+      .nutrient {
+        h3 {
+          border: 3px solid ${({ theme }) => theme.color.primary};
+        }
+
+        ul {
+          border: 1px solid ${({ theme }) => theme.color.lightGray};
+          border-radius: 1.5rem;
+          padding: 2rem;
+
+          li {
+            margin-bottom: 1rem;
+
+            span {
+              font-weight: 600;
+            }
+
+            &:last-child {
+              margin-bottom: 0;
+            }
           }
         }
       }
@@ -137,9 +137,16 @@ const StyledRecipeDetail = styled.main`
           width: 35%;
           border-radius: 1.5rem;
           overflow: hidden;
+          background: url(${etc}) no-repeat 50% 50%
+            ${({ theme }) => theme.color.primary};
+          display: flex;
+          justify-content: center;
+          align-items: center;
 
           img {
             width: 100%;
+            height: 100%;
+            object-fit: cover;
           }
         }
       }
@@ -172,39 +179,40 @@ const RecipeDetail = () => {
 
   return (
     <StyledRecipeDetail>
-      <div className="visual">
-        <img src={data.img} alt={data.rcpName} />
-      </div>
-      <div className="title">
-        <h2>{data.rcpName}</h2>
-        <p className="tips">{data.rcpNaTip}</p>
-      </div>
-      <div className="info">
-        <div className="ingredients">
-          <h3>필요한 재료</h3>
-          <div>{data.ingredients}</div>
+      <div className="title-wrap">
+        <div className="visual">
+          <img src={data.img} alt={data.rcpName} />
         </div>
-        <div className="nutrient">
-          <h3>영양성분</h3>
-          <ul>
-            <li>
-              <span>칼로리</span> : {data.kcal}kcal
-            </li>
-            <li>
-              <span>탄수화물</span> : {data.carbohydrate}kcal
-            </li>
-            <li>
-              <span>단백질</span> : {data.protein}kcal
-            </li>
-            <li>
-              <span>지방</span> : {data.fat}kcal
-            </li>
-            <li>
-              <span>나트륨</span> : {data.natrium}kcal
-            </li>
-          </ul>
+        <div className="info">
+          <h2>{data.rcpName}</h2>
+          <p className="tips">{data.rcpNaTip}</p>
+          <div className="ingredients">
+            <h3>필요한 재료</h3>
+            <div>{data.ingredients}</div>
+          </div>
+          <div className="nutrient">
+            <h3>영양성분</h3>
+            <ul>
+              <li>
+                <span>칼로리</span> : {data.kcal}kcal
+              </li>
+              <li>
+                <span>탄수화물</span> : {data.carbohydrate}kcal
+              </li>
+              <li>
+                <span>단백질</span> : {data.protein}kcal
+              </li>
+              <li>
+                <span>지방</span> : {data.fat}kcal
+              </li>
+              <li>
+                <span>나트륨</span> : {data.natrium}kcal
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
+
       <div className="recipe-step">
         <h3>
           <span>레시피</span>
