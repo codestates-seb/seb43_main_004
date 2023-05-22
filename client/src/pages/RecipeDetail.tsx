@@ -61,7 +61,8 @@ interface recipeDetailType {
 }
 
 const RecipeDetail = () => {
-  const url = process.env.REACT_APP_SERVER_URL
+  // const url = process.env.REACT_APP_SERVER_URL
+  const url = `http://localhost:4000`
   const { id } = useParams()
   const [data, setData] = useState<recipeDetailType>({
     recipeId: 0,
@@ -78,13 +79,20 @@ const RecipeDetail = () => {
   })
 
   const getData = async () => {
-    const res = await axios.get(`${url}/recipes/${id}`, {
+    const res = await axios.get(`${url}/recipes`, {
       headers: {
         'Content-Type': `application/json`,
         'ngrok-skip-browser-warning': '69420',
       },
     })
-    setData(res.data)
+    // const res = await axios.get(`${url}/recipes/${id}`, {
+    //   headers: {
+    //     'Content-Type': `application/json`,
+    //     'ngrok-skip-browser-warning': '69420',
+    //   },
+    // })
+    setData(res.data.data[4])
+    console.log(res.data.data[4])
   }
 
   useEffect(() => {
