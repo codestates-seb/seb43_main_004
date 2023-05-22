@@ -2,13 +2,9 @@ package com.mainproject.wrieating.auth.config;
 
 import com.mainproject.wrieating.auth.filter.JwtAuthenticationFilter;
 import com.mainproject.wrieating.auth.filter.JwtVerificationFilter;
-import com.mainproject.wrieating.auth.handler.MemberAccessDeniedHandler;
-import com.mainproject.wrieating.auth.handler.MemberAuthenticationEntryPoint;
-import com.mainproject.wrieating.auth.handler.MemberAuthenticationFailureHandler;
-import com.mainproject.wrieating.auth.handler.MemberAuthenticationSuccessHandler;
+import com.mainproject.wrieating.auth.handler.*;
 import com.mainproject.wrieating.auth.jwt.JwtTokenizer;
 import com.mainproject.wrieating.auth.utils.CustomAuthorityUtils;
-import com.mainproject.wrieating.auth.utils.JwtUtils;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -22,19 +18,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.Arrays;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @Configuration
 @EnableWebSecurity(debug = true)
 @AllArgsConstructor
@@ -83,31 +71,6 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    // TODO: 2023-05-19 cors
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//
-//        // setAllowedOrigins()을 통해 모든 출처(Origin)에 대해 스크립트 기반의 HTTP 통신을 허용하도록 설정
-//        // 이 설정은 운영 서버 환경에서 요구사항에 맞게 변경이 가능
-//        configuration.setAllowedOrigins(Arrays.asList("*"));
-//
-//        // setAllowedMethods()를 통해 파라미터로 지정한 HTTP Method에 대한 HTTP 통신을 허용
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
-//
-//        // UrlBasedCorsConfigurationSource 클래스의 객체를 생성
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//
-//        // 모든 URL에 앞에서 구성한 CORS 정책(CorsConfiguration)을 적용
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
-
-    @Bean
-    public JwtUtils jwtUtils() {
-        return new JwtUtils(jwtTokenizer());
-    }
-
     @Bean
     public JwtTokenizer jwtTokenizer() {
         return new JwtTokenizer();
@@ -123,7 +86,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtUtils(), authorityUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer(), authorityUtils);
 
             builder
                     .addFilter(jwtAuthenticationFilter)

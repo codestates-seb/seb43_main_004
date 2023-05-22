@@ -77,12 +77,8 @@ public class MemberService {
 
         Member findMember = findVerifiedMember(memberId);
 
-        if (verifiedMemberNickName(member.getNickName())){
-            throw new BusinessLogicException(ExceptionCode.NICKNAME_EXIST);
-        } else {
-            Optional.ofNullable(member.getNickName())
-                .ifPresent(name -> findMember.setNickName(name));}
-
+        Optional.ofNullable(member.getNickName())
+                .ifPresent(name -> findMember.setNickName(name));
         Optional.ofNullable(member.getBirth())
                 .map(birth -> {
                     findMember.setBirth(birth);
@@ -96,6 +92,8 @@ public class MemberService {
                 .ifPresent(weight -> findMember.setWeight(weight));
         Optional.ofNullable(member.getActivity())
                 .ifPresent(activity -> findMember.setActivity(activity));
+        Optional.ofNullable(member.getIcon())
+                .ifPresent(icon -> findMember.setIcon(icon));
 
         return memberRepository.save(findMember);
     }
@@ -114,8 +112,7 @@ public class MemberService {
             } else { // 현재 비밀번호와 new 비밀번호가 같을 시
                 throw new BusinessLogicException(ExceptionCode.PASSWORD_IDENTICAL);
             }
-        }
-        else {
+        } else {
             throw new BusinessLogicException(ExceptionCode.PASSWORD_MISMATCHED);
         }
     }
@@ -133,9 +130,7 @@ public class MemberService {
 
             // 변경된 멤버 정보를 저장합니다.
             return memberRepository.save(member);
-        }
-        else { // 이메일에 해당하는 멤버가 없는 경우 처리할 로직
-
+        } else { // 이메일에 해당하는 멤버가 없는 경우 처리할 로직
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         }
     }
