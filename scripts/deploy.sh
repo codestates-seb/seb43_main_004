@@ -16,11 +16,6 @@ export AWS_RDS_URL=${AWS_RDS_URL}
 # 빌드 디렉토리로 이동
 cd /home/ec2-user/action/server/wrieating/
 
-echo "> 제발------------------------: $profile" >> /home/ec2-user/action/deploy.log
-echo "> 찍혀주세요------------------: $JWT_SECRET_KEY" >> /home/ec2-user/action/deploy.log
-echo "> 한번만이라도----------------: $AWS_RDS_PASSWORD" >> /home/ec2-user/action/deploy.log
-echo "> 나와조세요....--------------: $AWS_RDS_URL" >> /home/ec2-user/action/deploy.log
-
 echo "> 현재 시간: $(date)" >> /home/ec2-user/action/deploy.log
 
 echo "> build 파일명: $JAR_NAME" >> /home/ec2-user/action/deploy.log
@@ -44,6 +39,6 @@ fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포"    >> /home/ec2-user/action/deploy.log
-sudo JWT_SECRET_KEY=$JWT_SECRET_KEY AWS_RDS_PASSWORD=$AWS_RDS_PASSWORD AWS_RDS_URL=$AWS_RDS_URL profile=$profile nohup java -jar $DEPLOY_JAR >> /home/ec2-user/action/deploy.log 2>/home/ec2-user/action/deploy_err.log &
+sudo nohup java -jar $DEPLOY_JAR >> /home/ec2-user/action/deploy.log 2>/home/ec2-user/action/deploy_err.log &
 
 echo "> 배포가 완료되었습니다." >> /home/ec2-user/action/deploy.log
