@@ -12,6 +12,7 @@ import grill from '../assets/grill.png'
 import steam from '../assets/steam.png'
 import stirFry from '../assets/stir-fry.png'
 import all from '../assets/all.png'
+import { useNavigate } from 'react-router-dom'
 
 const StyledRecipeArchive = styled.main`
   width: 98%;
@@ -112,22 +113,6 @@ interface recipeData {
 
 const RecipeArchive = () => {
   const url = process.env.REACT_APP_SERVER_URL
-
-  const [searchTxt, setSearchTxt] = useState('')
-  const [recipes, setRecipes] = useState<recipeData>({
-    data: [],
-    pageInfo: {
-      page: 0,
-      size: 0,
-      totalElements: 0,
-      totalPages: 0,
-    },
-  })
-  const [activePage, setActivePage] = useState(1)
-  const onChangePage = () => {
-    setActivePage(activePage)
-  }
-
   const types = [
     {
       img: all,
@@ -159,13 +144,29 @@ const RecipeArchive = () => {
     },
   ]
 
+  const [searchTxt, setSearchTxt] = useState('')
+  const [recipes, setRecipes] = useState<recipeData>({
+    data: [],
+    pageInfo: {
+      page: 0,
+      size: 0,
+      totalElements: 0,
+      totalPages: 0,
+    },
+  })
+  const [activePage, setActivePage] = useState(1)
+
+  const handlePageChange = (activePage: number) => {
+    setActivePage(activePage)
+  }
+
   const getData = async (keyword = '') => {
     if (keyword === '전체') {
       keyword = ''
     }
 
     const res = await axios.get(
-      `${url}/recipes?page=1&size=12&filter=${keyword}`,
+      `${url}/recipes?page=${activePage}&size=12&filter=${keyword}`,
       {
         headers: {
           'Content-Type': `application/json`,
@@ -173,7 +174,6 @@ const RecipeArchive = () => {
         },
       }
     )
-
     setRecipes(res.data)
   }
 
@@ -192,7 +192,7 @@ const RecipeArchive = () => {
 
   useEffect(() => {
     getData()
-  }, [])
+  }, [activePage])
 
   return (
     <StyledRecipeArchive>
@@ -242,7 +242,7 @@ const RecipeArchive = () => {
         <PaginationComponent
           activePage={activePage}
           totalItemsCount={recipes.pageInfo.totalElements}
-          onPageChange={onChangePage}
+          onPageChange={handlePageChange}
         />
       </div>
     </StyledRecipeArchive>

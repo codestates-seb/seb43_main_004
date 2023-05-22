@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { styled } from 'styled-components'
 import etc from '../assets/etc.png'
 
@@ -159,18 +159,23 @@ interface recipeDetailType {
 }
 
 const RecipeDetail = () => {
+  const navigate = useNavigate()
   const url = process.env.REACT_APP_SERVER_URL
   const { id } = useParams()
   const [data, setData] = useState<recipeDetailType>({})
 
   const getData = async () => {
-    const res = await axios.get(`${url}/recipes/${id}`, {
-      headers: {
-        'Content-Type': `application/json`,
-        'ngrok-skip-browser-warning': '69420',
-      },
-    })
-    setData(res.data)
+    try {
+      const res = await axios.get(`${url}/recipes/${id}`, {
+        headers: {
+          'Content-Type': `application/json`,
+          'ngrok-skip-browser-warning': '69420',
+        },
+      })
+      setData(res.data)
+    } catch (err: any) {
+      if (err.request.status === 404) navigate('/404')
+    }
   }
 
   useEffect(() => {
