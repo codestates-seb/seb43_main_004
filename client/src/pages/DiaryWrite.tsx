@@ -221,6 +221,8 @@ const DiaryWrite = () => {
   const customId = useRef<number>(120) // 사용자등록 음식의 id. get요청 한번 해서 totalElement로 저장해두기
   const param = useParams() // 일기 id는
   const location = useLocation() // url 가져오기
+  const diaryData = location.state?.meal || null // 식단 등록, 수정할 때 제공되는 데이터
+  console.log(diaryData)
 
   // TODO: 페이지 넘어오게 되면 id로 일기 조회 데이터 가져오기
   // 네비게이트로 데이터 넘겨준다 그걸로 가져오기

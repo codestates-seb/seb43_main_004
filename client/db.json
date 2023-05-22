@@ -24,7 +24,7 @@
         "fat": 47,
         "kcal": 2200,
         "sugar": 25,
-        "salt" : 2800
+        "salt" : 2300
       }
     ],
     "weekList": [
@@ -34,7 +34,7 @@
         "fat": 404,
         "kcal": 1750,
         "sugar": 125,
-        "salt": 2800
+        "salt": 13000
       }
     ],
     "comment": "탄수화물이 너무 많아요",
@@ -73,7 +73,7 @@
           "fat": 47,
           "kcal": 2200,
           "sugar": 25,
-          "salt": 2800
+          "salt": 2300
         }
       ],
       "dayList": [
@@ -100,28 +100,48 @@
           "foodName": "고등어 조림",
           "mealType": "BREAKFAST",
           "kcal": 600,
-          "servingSize": 100
+          "servingSize": 100,
+          "carbohydrate": 73,
+          "protein": 46,
+          "fat": 25,
+          "sugar": 70,
+          "salt": 25
         },
         {
           "mealId": 2,
           "foodName": "삼겹살",
           "mealType": "LUNCH",
           "kcal": 500,
-          "servingSize": 400
+          "servingSize": 400,
+          "carbohydrate": 73,
+          "protein": 46,
+          "fat": 25,
+          "sugar": 70,
+          "salt": 25
         },
         {
           "mealId": 3,
           "foodName": "삼양라면",
           "mealType": "DINNER",
           "kcal": 560,
-          "servingSize": 150
+          "servingSize": 150,
+          "carbohydrate": 73,
+          "protein": 46,
+          "fat": 25,
+          "sugar": 70,
+          "salt": 25
         },
         {
           "mealId": 4,
           "foodName": "김치",
           "mealType": "DINNER",
           "kcal": 65,
-          "servingSize": 80
+          "servingSize": 80,
+          "carbohydrate": 73,
+          "protein": 46,
+          "fat": 25,
+          "sugar": 70,
+          "salt": 25
         }
       ],
       "standardIntake": [
@@ -131,7 +151,7 @@
           "fat": 47,
           "kcal": 2200,
           "sugar": 25,
-          "salt": 2800
+          "salt": 2300
         }
       ],
       "dayList": [
@@ -168,7 +188,7 @@
           "fat": 47,
           "kcal": 2200,
           "sugar": 25,
-          "salt": 2800
+          "salt": 2300
         }
       ],
       "dayList": [
@@ -198,7 +218,7 @@
           "fat": 47,
           "kcal": 2200,
           "sugar": 25,
-          "salt": 2800
+          "salt": 2300
         }
       ],
       "dayList": [

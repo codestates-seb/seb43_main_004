@@ -159,7 +159,7 @@ const UserSignUp = ({ social }: Props) => {
     if (isValid) {
       // 인증번호 전송 api 호출
       await axios
-        .post(`${API}/members/sendemail`, emailData)
+        .post(`${API}/members/sendmail`, emailData)
         .then((response) => {
           console.log(response.data)
           // 가입된 이메일이 아니면
