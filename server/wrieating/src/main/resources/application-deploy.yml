@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: deploy
   # mysql db
   h2:
     console:
