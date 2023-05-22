@@ -8,6 +8,7 @@ const Stats = ({ diaries }: any) => {
   const { weekList, standardIntake } = diaries
   const intake = weekList && weekList[0] // 지난주 섭취량
   const standardIntakes = standardIntake && standardIntake[0] // 평균섭취량
+  console.log(diaries, weekList)
 
   const percentIntake = (nutrient: string) => {
     return (
@@ -59,6 +60,8 @@ const Stats = ({ diaries }: any) => {
     },
   ]
 
+  const filteredData = data.filter((item) => Number(item.value) > 5)
+
   // 통계부분
   const renderNutrientListItem = (nutrient: Nutrient) => {
     const nutrientIntake = intake?.[nutrient.id]
@@ -94,28 +97,46 @@ const Stats = ({ diaries }: any) => {
       <strong>{datum.label}</strong>: {datum.value}g
     </TooltipWrapper>
   )
+
+  const hasData = Object.values(weekList[0]).some((value) => value !== 0)
+  console.log(hasData)
+
   return (
     <StatsWrapper>
       <h3>지난주 통계</h3>
-      <div className="pie__container">
-        <ResponsivePie
-          data={data}
-          margin={{ top: 0, right: 70, bottom: 70, left: 70 }}
-          padAngle={0.8}
-          activeOuterRadiusOffset={6}
-          innerRadius={0.01} // chart 중간 빈공간 반지름
-          colors={(datum) => datum.data.color}
-          enableArcLinkLabels={false}
-          sortByValue={true}
-          tooltip={CustomTooltip}
-        />
-      </div>
-      <div className="pie__detail">
-        <p className="detail__Kcal">{`${intake?.kcal} Kcal`}</p>
-        <ul className="detail__container">
-          {data.map((nutrient) => renderNutrientListItem(nutrient))}
-        </ul>
-      </div>
+      {hasData ? (
+        <>
+          <div className="pie__container">
+            <ResponsivePie
+              data={filteredData}
+              margin={{ top: 0, right: 70, bottom: 70, left: 70 }}
+              padAngle={0.8}
+              activeOuterRadiusOffset={6}
+              innerRadius={0.01} // chart 중간 빈공간 반지름
+              colors={(datum) => datum.data.color}
+              enableArcLinkLabels={false}
+              sortByValue={true}
+              tooltip={CustomTooltip}
+            />
+          </div>
+          <div className="pie__detail">
+            <p className="detail__Kcal">{`${intake?.kcal} Kcal`}</p>
+            <ul className="detail__container">
+              {data.map((nutrient) => renderNutrientListItem(nutrient))}
+            </ul>
+          </div>
+        </>
+      ) : (
+        <div className="no__result__data">
+          <div className="round__gray"></div>
+          <p className="detail__Kcal">{`${intake?.kcal} Kcal`}</p>
+          <p>
+            지난주 식단기록이 존재하지 않습니다.
+            <br /> 꾸준한 기록을 통해 통계를 제공받아
+            <br /> 섭취한 영양성분을 확인하세요!
+          </p>
+        </div>
+      )}
     </StatsWrapper>
   )
 }
@@ -219,6 +240,27 @@ const StatsWrapper = styled.div`
 
     .flex {
       display: flex;
+    }
+  }
+
+  .no__result__data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    .round__gray {
+      margin: 3rem;
+      justify-self: center;
+      width: 160px;
+      height: 160px;
+      background-color: var(--color-light-gray);
+      border-radius: 50%;
+    }
+    p:last-child {
+      margin-top: 2rem;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
     }
   }
 `

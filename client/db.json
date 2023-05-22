@@ -29,11 +29,11 @@
     ],
     "weekList": [
       {
-        "carbohydrate": 1612,
-        "protein": 420,
-        "fat": 404,
-        "kcal": 1750,
-        "sugar": 125,
+        "carbohydrate": 1300,
+        "protein": 460,
+        "fat": 240,
+        "kcal": 2300,
+        "sugar": 130,
         "salt": 13000
       }
     ],
@@ -111,7 +111,7 @@
           "mealId": 2,
           "foodName": "삼겹살",
           "mealType": "LUNCH",
-          "kcal": 500,
+          "kcal": 700,
           "servingSize": 400,
           "carbohydrate": 73,
           "protein": 46,
@@ -159,7 +159,7 @@
           "carbohydrate": 180,
           "protein": 50,
           "fat": 60,
-          "kcal": 1725,
+          "kcal": 1925,
           "sugar": 0,
           "salt": 1200
         }

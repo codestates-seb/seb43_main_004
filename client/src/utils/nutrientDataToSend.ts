@@ -32,7 +32,6 @@ const sendNutrientDataToServer = (data: NutrientData): void => {
   //     .catch((error) => {
   //       // 전송 중 에러 발생한 경우 처리
   //     })
-  console.log(dataToSend)
 }
 
 export default sendNutrientDataToServer
