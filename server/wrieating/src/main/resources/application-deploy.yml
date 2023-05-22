@@ -29,7 +29,7 @@ spring:
     ansi:
       enabled: ALWAYS
   mail:
-    host: vpce-0deb22cc50f4b35ea-degr09dk.email-smtp.ap-northeast-2.vpce.amazonaws.com
+    host: smtp.gmail.com
     port: 587
     username: ${email}
     password: ${password}
