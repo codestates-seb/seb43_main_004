@@ -160,6 +160,12 @@ const RecipeArchive = () => {
     setActivePage(activePage)
   }
 
+  const handleSearchEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && searchTxt) {
+      getSearchData()
+    }
+  }
+
   const getData = async (keyword = '') => {
     if (keyword === '전체') {
       keyword = ''
@@ -221,6 +227,7 @@ const RecipeArchive = () => {
             value={searchTxt}
             placeholder="레시피의 이름을 입력해주세요."
             onChange={(e) => setSearchTxt(e.target.value)}
+            onKeyDown={(e) => handleSearchEnter(e)}
           />
           <Button type="button" onClick={getSearchData}>
             <span className="material-icons-round">search</span>
