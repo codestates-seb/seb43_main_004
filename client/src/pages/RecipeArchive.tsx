@@ -123,6 +123,10 @@ const RecipeArchive = () => {
       totalPages: 0,
     },
   })
+  const [activePage, setActivePage] = useState(1)
+  const onChangePage = () => {
+    setActivePage(activePage)
+  }
 
   const types = [
     {
@@ -235,7 +239,11 @@ const RecipeArchive = () => {
             })
           )}
         </ul>
-        <PaginationComponent totalItemsCount={recipes.pageInfo.totalElements} />
+        <PaginationComponent
+          activePage={activePage}
+          totalItemsCount={recipes.pageInfo.totalElements}
+          onPageChange={onChangePage}
+        />
       </div>
     </StyledRecipeArchive>
   )
