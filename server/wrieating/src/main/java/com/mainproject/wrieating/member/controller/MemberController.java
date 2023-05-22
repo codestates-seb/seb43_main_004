@@ -28,7 +28,7 @@ public class MemberController {
         this.memberMapper = memberMapper;
     }
 
-//     이메일 인증(회원가입시) & 이메일 중복 체크
+    // 이메일 인증(회원가입시) & 이메일 중복 체크
     @PostMapping("/members/sendmail")
     public ResponseEntity sendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
         String email = emailRequestDto.getEmail();
@@ -51,7 +51,7 @@ public class MemberController {
         }
     }
 
-//     이메일 인증(비밀번호 찾기시)
+    // 이메일 인증(비밀번호 찾기시)
     @PostMapping("/members/findpassword/sendmail")
     public ResponseEntity findpasswordSendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
         String email = emailRequestDto.getEmail();
