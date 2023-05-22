@@ -29,7 +29,7 @@ spring:
     ansi:
       enabled: ALWAYS
   mail:
-    host: smtp.gmail.com
+    host: email-smtp.ap-northeast-2.amazonaws.com
     port: 587
     username: ${email}
     password: ${password}
