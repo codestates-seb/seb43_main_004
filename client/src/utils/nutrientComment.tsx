@@ -9,7 +9,6 @@ const NutrientComments: React.FC<NutrientCommentsProps> = ({
     carbohydrate: '탄수화물',
     salt: '나트륨',
     sugar: '당분',
-    kcal: '칼로리',
   }
 
   const generateComment = (): string => {
@@ -18,12 +17,12 @@ const NutrientComments: React.FC<NutrientCommentsProps> = ({
 
     // 부족한 성분과 과다한 성분을 구분하여 배열에 추가
     Object.entries(nutrientStatistics).forEach(([nutrient, value]) => {
-      console.log(nutrient, value)
-
-      if (value < 80) {
-        lackingNutrients.push(nutrientComments[nutrient])
-      } else if (value > 120) {
-        excessiveNutrients.push(nutrientComments[nutrient])
+      if (nutrient !== 'kcal') {
+        if (value < 80) {
+          lackingNutrients.push(nutrientComments[nutrient])
+        } else if (value > 120) {
+          excessiveNutrients.push(nutrientComments[nutrient])
+        }
       }
     })
 
