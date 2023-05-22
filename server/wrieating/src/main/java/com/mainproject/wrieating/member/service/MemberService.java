@@ -6,16 +6,21 @@ import com.mainproject.wrieating.exception.BusinessLogicException;
 import com.mainproject.wrieating.exception.ExceptionCode;
 //import com.mainproject.wrieating.helper.email.EmailSender;
 //import com.mainproject.wrieating.helper.email.RandomGenerator;
+import com.mainproject.wrieating.helper.email.EmailSender;
+import com.mainproject.wrieating.helper.email.RandomGenerator;
 import com.mainproject.wrieating.member.dto.MemberPatchDeleteDto;
 import com.mainproject.wrieating.member.dto.MemberPostSignUpDto;
 import com.mainproject.wrieating.member.entity.Member;
+import com.mainproject.wrieating.member.entity.StandardIntake;
 import com.mainproject.wrieating.member.mapper.MemberMapper;
 import com.mainproject.wrieating.member.repository.MemberRepository;
+import com.mainproject.wrieating.member.repository.StandardIntakeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,19 +33,19 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final JwtTokenizer jwtTokenizer;
+    private final StandardIntakeRepository standardIntakeRepository;
 
-    // TODO: 2023-05-21 이메일 주석
-//    private final EmailSender emailSender;
+    private final EmailSender emailSender;
 
-//    public String sendVerificationEmail(String email) {
-//        // Verification Code 생성
-//        String verificationCode = RandomGenerator.generateRandomCode(6);
-//
-//        // 이메일 인증 메일 발송
-//        emailSender.sendVerificationEmail(email, verificationCode);
-//
-//        return verificationCode;
-//    }
+    public String sendVerificationEmail(String email) {
+        // Verification Code 생성
+        String verificationCode = RandomGenerator.generateRandomCode(6);
+
+        // 이메일 인증 메일 발송
+        emailSender.sendVerificationEmail(email, verificationCode);
+
+        return verificationCode;
+    }
 
     public MemberPostSignUpDto createMember(MemberPostSignUpDto memberDto){
         Member member = mapper.memberPostToMember(memberDto);
@@ -61,6 +66,8 @@ public class MemberService {
 
         Member savedMember = memberRepository.save(member);
         MemberPostSignUpDto savedMemberDto = mapper.memberToMemberPost(savedMember);
+
+        saveIntake(savedMember.getMemberId());
 
         return savedMemberDto;
     }
@@ -175,5 +182,72 @@ public class MemberService {
     @Transactional(readOnly = true)
     public boolean verifiedMemberNickName(String nickName) {
         return memberRepository.existsByNickName(nickName);
+    }
+
+    // standard intake 계산
+    private void saveIntake(long memberId) {
+        StandardIntake standardIntake = new StandardIntake();
+        Member member = findVerifiedMember(memberId);
+        int birth = member.getBirth().minusYears(LocalDate.now().getYear()).getYear();
+
+        if (member.getGender().equals("male")) {
+            int bmrMale = (int) (66.5 + (13.75 * member.getWeight()) - (5.003 * member.getHeight()) - (6.75 * birth));
+
+            calIntake(standardIntake, member, bmrMale);
+
+            standardIntakeRepository.save(standardIntake);
+        }
+
+        if (member.getGender().equals("female")){
+            int bmrFemale = (int) (655.1 + (9.563 * member.getWeight()) - (1.850 * member.getHeight()) - (4.676 * birth));
+
+            calIntake(standardIntake, member, bmrFemale);
+
+            standardIntakeRepository.save(standardIntake);
+        }
+    }
+
+    private void calIntake(StandardIntake standardIntake, Member member, int bmrFemale) {
+        if (member.getActivity().equals(Member.Activity.NONE_ACTIVE)) {
+            standardIntake.setMember(member);
+            standardIntake.setKcal((int) (bmrFemale * 1.2));
+            standardIntake.setCarbohydrate((int) (bmrFemale * 0.5));
+            standardIntake.setProtein((int) (bmrFemale * 0.15));
+            standardIntake.setFat((int) (bmrFemale * 0.25));
+            standardIntake.setSugar((int) ((bmrFemale * 1.2) * 0.1));
+            standardIntake.setSalt((int) (bmrFemale * 0.12));
+        } else if (member.getActivity().equals(Member.Activity.LIGHTLY_ACTIVE)) {
+            standardIntake.setMember(member);
+            standardIntake.setKcal((int) (bmrFemale * 1.375));
+            standardIntake.setCarbohydrate((int) (bmrFemale * 0.6));
+            standardIntake.setProtein((int) (bmrFemale * 0.17));
+            standardIntake.setFat((int) (bmrFemale * 0.3));
+            standardIntake.setSugar((int) ((bmrFemale * 1.375) * 0.1));
+            standardIntake.setSalt((int) (bmrFemale * 0.12));
+        } else if (member.getActivity().equals(Member.Activity.MODERATELY_ACTIVE)) {
+            standardIntake.setMember(member);
+            standardIntake.setKcal((int) (bmrFemale * 1.55));
+            standardIntake.setCarbohydrate((int) (bmrFemale * 0.7));
+            standardIntake.setProtein((int) (bmrFemale * 0.2));
+            standardIntake.setFat((int) (bmrFemale * 0.35));
+            standardIntake.setSugar((int) ((bmrFemale * 1.55) * 0.1));
+            standardIntake.setSalt((int) (bmrFemale * 0.12));
+        } else if (member.getActivity().equals(Member.Activity.VERY_ACTIVE)) {
+            standardIntake.setMember(member);
+            standardIntake.setKcal((int) (bmrFemale * 1.725));
+            standardIntake.setCarbohydrate((int) (bmrFemale * 0.8));
+            standardIntake.setProtein((int) (bmrFemale * 0.25));
+            standardIntake.setFat((int) (bmrFemale * 0.4));
+            standardIntake.setSugar((int) ((bmrFemale * 1.725) * 0.1));
+            standardIntake.setSalt((int) (bmrFemale * 0.12));
+        } else if (member.getActivity().equals(Member.Activity.EXTREMELY_ACTIVE)) {
+            standardIntake.setMember(member);
+            standardIntake.setKcal((int) (bmrFemale * 1.9));
+            standardIntake.setCarbohydrate((int) (bmrFemale * 0.9));
+            standardIntake.setProtein((int) (bmrFemale * 0.3));
+            standardIntake.setFat((int) (bmrFemale * 0.45));
+            standardIntake.setSugar((int) ((bmrFemale * 1.9) * 0.1));
+            standardIntake.setSalt((int) (bmrFemale * 0.12));
+        }
     }
 }

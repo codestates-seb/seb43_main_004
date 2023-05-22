@@ -1,5 +1,7 @@
 package com.mainproject.wrieating.dto;
 
+import com.mainproject.wrieating.diary.dto.StandardIntakeDto;
+import com.mainproject.wrieating.diary.dto.WeekResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,9 +11,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class MultiResponseDto<T> {
     private List<T> data;
     private PageInfo pageInfo;

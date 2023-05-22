@@ -3,11 +3,17 @@ package com.mainproject.wrieating.diary.mapper;
 import com.mainproject.wrieating.diary.dto.*;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.meal.dto.MealResponseDto;
+import com.mainproject.wrieating.meal.entity.Week;
+import com.mainproject.wrieating.member.dto.StandardIntakeResponseDto;
+import com.mainproject.wrieating.member.entity.StandardIntake;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,18 +39,35 @@ public interface DiaryMapper {
                 .comment(diary.getComment())
                 .meal(diary.getMealList().stream()
                         .map( meal ->
-                                {
-                                        MealResponseDto mealResponseDto = new MealResponseDto();
-                                        mealResponseDto.setMealId(meal.getMealId());
-                                        mealResponseDto.setMealType(meal.getMealType().toString());
-                                        mealResponseDto.setKcal(meal.getKcal());
-                                        mealResponseDto.setCarbohydrate(meal.getCarbohydrate());
-                                        mealResponseDto.setProtein(meal.getProtein());
-                                        mealResponseDto.setFat(meal.getFat());
-                                        mealResponseDto.setSugar(meal.getSugar());
-                                        mealResponseDto.setSalt(meal.getSalt());
-                                return mealResponseDto; }).collect(Collectors.toList())
-                        )
+                        {
+                            MealResponseDto mealResponseDto = new MealResponseDto();
+                            mealResponseDto.setMealId(meal.getMealId());
+                            mealResponseDto.setTitle(meal.getTitle());
+                            mealResponseDto.setMealType(meal.getMealType());
+                            mealResponseDto.setKcal(meal.getKcal());
+                            mealResponseDto.setCarbohydrate(meal.getCarbohydrate());
+                            mealResponseDto.setProtein(meal.getProtein());
+                            mealResponseDto.setFat(meal.getFat());
+                            mealResponseDto.setSugar(meal.getSugar());
+                            mealResponseDto.setSalt(meal.getSalt());
+                            return mealResponseDto; }).collect(Collectors.toList())
+                )
+                .standardIntakes(diary.getMember().getStandardIntakes().stream()
+                        .map(
+                                intake -> {
+                                    StandardIntakeResponseDto responseDto = new StandardIntakeResponseDto();
+                                    responseDto.setIntakeId(intake.getIntakeId());
+                                    responseDto.setMemberId(intake.getMember().getMemberId());
+                                    responseDto.setKcal(intake.getKcal());
+                                    responseDto.setCarbohydrate(intake.getCarbohydrate());
+                                    responseDto.setProtein(intake.getProtein());
+                                    responseDto.setFat(intake.getFat());
+                                    responseDto.setSugar(intake.getSugar());
+                                    responseDto.setSalt(intake.getSalt());
+
+                                    return responseDto;
+                                }
+                        ).collect(Collectors.toList()))
                 .build();
     };
 
@@ -57,5 +80,26 @@ public interface DiaryMapper {
                 .build();
     }
 
-    List<DiariesResponseDto> DiariesToDiariesResponseDto(List<Diary> diary);
+    List<DiariesResponseDto> diariesToDiariesResponseDto(List<Diary> diary);
+
+    // 멀티 리스폰스 객체 추가
+    // 다대다 매핑이 되어 있기 때문에 List형태로 응답하는 것임
+    default StandardIntakeResponseDto standardIntakeToStandardIntakeResponseDto(StandardIntake standardIntake) {
+            StandardIntakeResponseDto standardIntakeResponseDto = new StandardIntakeResponseDto();
+            standardIntakeResponseDto.setMemberId(standardIntake.getMember().getMemberId());
+            standardIntakeResponseDto.setIntakeId(standardIntake.getIntakeId());
+            standardIntakeResponseDto.setKcal(standardIntake.getKcal());
+            standardIntakeResponseDto.setCarbohydrate(standardIntake.getCarbohydrate());
+            standardIntakeResponseDto.setProtein(standardIntake.getProtein());
+            standardIntakeResponseDto.setFat(standardIntake.getFat());
+            standardIntakeResponseDto.setSugar(standardIntake.getSugar());
+            standardIntakeResponseDto.setSalt(standardIntake.getSalt());
+            return standardIntakeResponseDto;
+    }
+
+    List<StandardIntakeResponseDto> standardIntakeToStandardIntakeDtos(List<StandardIntake> standardIntake);
+
+    WeekResponseDto weekToWeekResponseDto(Week week);
+
+    List<WeekResponseDto> weekToWeekResponseDtos(List<Week> weekList);
 }
