@@ -34,34 +34,42 @@ const UserSignIn = () => {
       setError('이메일 혹은 비밀번호가 잘못되었거나 유효하지 않습니다.')
       return
     }
-    // 액세스 토큰 발급
+    // 액세스 토큰 발급(로그인)
     await axios
-      .post<userType>(`${API}/members/login`, values)
+      .post(`${API}/members/login`, values)
       .then((response) => {
         console.log(response.data)
-        const token = 'response.data.accessToken 토큰 들어가는 곳'
+        const tokenWithNoBearer = response.data.accessToken.substr(7)
+        console.log(tokenWithNoBearer)
+
         const current = new Date()
-        current.setMinutes(current.getMinutes() + 40)
-        setCookie('token', token, {
-          path: '/',
-          secure: true,
-          expires: current,
-          sameSite: 'none',
-        })
+
+        // 액세스 토큰
+        // setCookie('access', tokenWithNoBearer, {
+        //   path: '/',
+        //   secure: true,
+        //   expires: current.setMinutes(current.getMinutes() + 40),
+        //   // sameSite: 'none',
+        // })
+        localStorage.setItem('token', tokenWithNoBearer)
       })
       .catch((error) => {
-        console.error(error)
+        setError('존재하지 않는 계정입니다.')
       })
 
+    console.log(getCookie('token'))
     // 발급 받은 토큰으로 /members/myprofile 호출
-    await axios
+    axios
       .get(`${API}/members/myprofile`, {
         headers: {
           Authorization: `Bearer ${getCookie('token')}`,
+          'Content-Type': 'application / json',
+          'ngrok-skip-browser-warning': '69420', // 테스트 서버 이용할때는 붙였다가 삭제하면 됨
         },
       })
       .then((response) => {
         console.log(response.data)
+        navigate('/')
       })
       .catch((error) => {
         console.error(error)
