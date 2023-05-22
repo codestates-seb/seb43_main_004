@@ -1,6 +1,8 @@
 package com.mainproject.wrieating.diary.service;
 
 import com.mainproject.wrieating.auth.jwt.JwtTokenizer;
+import com.mainproject.wrieating.dataArchive.dbsource.recipedb.entity.RecipeData;
+import com.mainproject.wrieating.dataArchive.repository.RecipeArchiveRepository;
 import com.mainproject.wrieating.diary.dto.*;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.diary.mapper.DiaryMapper;
@@ -11,6 +13,8 @@ import com.mainproject.wrieating.meal.entity.Day;
 import com.mainproject.wrieating.meal.entity.Week;
 import com.mainproject.wrieating.meal.repository.MealRepository;
 import com.mainproject.wrieating.member.entity.Member;
+import com.mainproject.wrieating.member.entity.StandardIntake;
+import com.mainproject.wrieating.member.repository.StandardIntakeRepository;
 import com.mainproject.wrieating.member.service.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,6 +34,8 @@ public class DiaryService {
     private final JwtTokenizer tokenizer;
     private final MemberService memberService;
     private final MealRepository mealRepository;
+    private final RecipeArchiveRepository recipeRepository;
+    private final StandardIntakeRepository standardIntakeRepository;
 
     public void createDiary(String token, DiaryPostDto diaryPostDto) {
         Diary diary = mapper.diaryPostDtoToDiary(diaryPostDto);

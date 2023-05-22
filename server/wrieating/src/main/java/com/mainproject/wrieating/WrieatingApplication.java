@@ -6,20 +6,38 @@ import com.mainproject.wrieating.dataArchive.dbsource.fooddb.entity.FoodData;
 import com.mainproject.wrieating.dataArchive.dbsource.recipedb.RecipeCsvReader;
 import com.mainproject.wrieating.dataArchive.dbsource.recipedb.RecipeDataWriter;
 import com.mainproject.wrieating.dataArchive.dbsource.recipedb.entity.RecipeData;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 @SpringBootApplication
 public class WrieatingApplication extends SpringBootServletInitializer {
+	// 환경 변수 주입 확인
+//	@Value("${profile}")
+//	private String env1;
+//	@Value("${AWS_RDS_URL}")
+//	private String env2;
+//	@Value("${AWS_RDS_PASSWORD}")
+//	private String env3;
+//	@Value("${JWT_SECRET_KEY}")
+//	private String env4;
+//	@Value("${email}")
+//	private String env5;
+//	@Value("${password}")
+//	private String env6;
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(WrieatingApplication.class, args);
+
+
 
 		// 음식 아카이브 데이터 삽입
 //		String filePath1 = "/home/ec2-user/action/server/wrieating/src/main/resources/totalfooddb.csv";
@@ -46,8 +64,13 @@ public class WrieatingApplication extends SpringBootServletInitializer {
 		// 완료 - 주석 처리함
 	}
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(WrieatingApplication.class);
-	}
+//	@PostConstruct
+//	public void printEnvVariables() {
+//		System.out.println(env1);
+//		System.out.println(env2);
+//		System.out.println(env3);
+//		System.out.println(env4);
+//		System.out.println(env5);
+//		System.out.println(env6);
+//	}
 }
