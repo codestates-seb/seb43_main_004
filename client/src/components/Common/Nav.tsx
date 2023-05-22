@@ -254,7 +254,7 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
             </Link>
             <ul className="depth-2">
               <li>
-                <NavLink to="/" onClick={handleMenu}>
+                <NavLink to="/recipe" onClick={handleMenu}>
                   레시피
                 </NavLink>
               </li>
