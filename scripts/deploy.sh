@@ -6,7 +6,7 @@ JAR_NAME=$(basename $BUILD_JAR)
 source ~/.bash_profile
 
 # 환경변수 설정
-export profile=deploy
+export profile=${profile}
 export JWT_SECRET_KEY=${JWT_SECRET_KEY}
 export AWS_RDS_PASSWORD=${AWS_RDS_PASSWORD}
 export AWS_RDS_URL=${AWS_RDS_URL}
