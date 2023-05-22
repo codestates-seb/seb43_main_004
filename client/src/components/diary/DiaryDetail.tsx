@@ -1,22 +1,33 @@
 import axios from 'axios'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Button from '../Common/Button'
 import Modal from '../Common/Modal'
 import MealList from './MealItem'
 import NutritionItem from './NutritionItem'
+import sendNutrientDataToServer from '../../utils/nutrientDataToSend'
 
 const DiaryDetail = () => {
   const [diary, setDiary] = useState<Diary | null>(null)
+
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'] // 요일을 구하기 위한 배열
   const [memoContent, setMemoContent] = useState(diary?.memo)
   const [isOpenMemo, setIsOpenMemo] = useState(true)
   const [isOpenModal, setIsOpenModal] = useState(false)
+  const [nutrientStatistics, setNutrientStatistics] = useState({})
+  console.log(nutrientStatistics)
 
   const navigate = useNavigate()
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
+
+  const updateNutrientStatistics = (nutrientType: string, percent: number) => {
+    setNutrientStatistics((prevStatistics: Record<string, number>) => ({
+      ...prevStatistics,
+      [nutrientType]: percent,
+    }))
+  }
 
   // 식단 등록하기 버튼을 누르면 실행
   const handlePlusDiary = () => {
@@ -75,6 +86,7 @@ const DiaryDetail = () => {
       100
     )
   }
+
   // 메모 작성 / 수정 함수
   const onSendMemo = () => {
     axios
@@ -116,6 +128,10 @@ const DiaryDetail = () => {
       setMemoContent(diary.memo)
     }
   }, [diary])
+
+  useEffect(() => {
+    sendNutrientDataToServer(nutrientStatistics)
+  }, [nutrientStatistics])
 
   return (
     <Wrapper>
@@ -196,6 +212,7 @@ const DiaryDetail = () => {
                       diary={diary}
                       calculatePercent={calculatePercent}
                       getColor={getColor}
+                      updateNutrientStatistics={updateNutrientStatistics}
                     />
                   )
                 )}
