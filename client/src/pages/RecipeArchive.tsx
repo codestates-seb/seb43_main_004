@@ -167,6 +167,7 @@ const RecipeArchive = () => {
   }
 
   const getData = async (keyword = '') => {
+    if (keyword !== '') setActivePage(1)
     if (keyword === '전체') {
       keyword = ''
     }
