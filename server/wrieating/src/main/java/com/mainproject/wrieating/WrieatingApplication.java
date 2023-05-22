@@ -17,14 +17,6 @@ import java.util.List;
 
 @SpringBootApplication
 public class WrieatingApplication {
-	@Value("${profile}")
-	private String env1;
-	@Value("${AWS_RDS_URL}")
-	private String env2;
-	@Value("${AWS_RDS_PASSWORD}")
-	private String env3;
-	@Value("${JWT_SECRET_KEY}")
-	private String env4;
 
 	public static void main(String[] args) {
 		SpringApplication.run(WrieatingApplication.class, args);
@@ -56,13 +48,5 @@ public class WrieatingApplication {
 //			System.err.println("Error saving data to database: " + e.getMessage());
 //		}
 		// 완료 - 주석 처리함
-	}
-	
-	@PostConstruct
-	public void printEnvVariables() {
-		System.out.println(env1);
-		System.out.println(env2);
-		System.out.println(env3);
-		System.out.println(env4);
 	}
 }
