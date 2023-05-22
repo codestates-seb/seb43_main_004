@@ -7,6 +7,7 @@ import Modal from '../Common/Modal'
 import MealList from './MealItem'
 import NutritionItem from './NutritionItem'
 import sendNutrientDataToServer from '../../utils/nutrientDataToSend'
+import NutrientComments from '../../utils/nutrientComment'
 
 const DiaryDetail = () => {
   const [diary, setDiary] = useState<Diary | null>(null)
@@ -222,7 +223,7 @@ const DiaryDetail = () => {
               <h2>추천 레시피</h2>
               {diary.recipe.length !== 0 ? (
                 <ul className="recipe__lists">
-                  <p>코멘트 공간입니다.</p>
+                  <NutrientComments nutrientStatistics={nutrientStatistics} />
                   {diary &&
                     diary.recipe.map((el, idx) => {
                       return (
@@ -406,7 +407,7 @@ const DiaryDetailWrapper = styled.div`
       text-align: center;
       margin-top: 1rem;
       font-size: 2.5rem;
-      margin-bottom: 3.5rem;
+      margin-bottom: 2rem;
     }
 
     p {
@@ -471,6 +472,12 @@ const DiaryDetailWrapper = styled.div`
     width: 40%;
     max-width: 450px;
     padding: 4rem;
+  }
+
+  .comment {
+    margin-bottom: 2rem;
+    font-size: 15px;
+    font-weight: 500;
   }
 `
 
