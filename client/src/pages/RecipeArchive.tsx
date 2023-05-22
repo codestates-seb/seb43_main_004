@@ -167,10 +167,12 @@ const RecipeArchive = () => {
   }
 
   const getData = async (keyword = '') => {
+    // 필터링시 1페이지부터 보게
     if (keyword !== '') setActivePage(1)
     if (keyword === '전체') {
       keyword = ''
     }
+    setSearchTxt('')
 
     const res = await axios.get(
       `${url}/recipes?page=${activePage}&size=12&filter=${keyword}`,
@@ -186,7 +188,7 @@ const RecipeArchive = () => {
 
   const getSearchData = async () => {
     const res = await axios.get(
-      `${url}/recipes/search?page=1&size=12&search=${searchTxt}`,
+      `${url}/recipes/search?page=${activePage}&size=12&search=${searchTxt}`,
       {
         headers: {
           'Content-Type': `application/json`,
@@ -198,7 +200,11 @@ const RecipeArchive = () => {
   }
 
   useEffect(() => {
-    getData()
+    if (searchTxt) {
+      getSearchData()
+    } else {
+      getData()
+    }
   }, [activePage])
 
   return (
