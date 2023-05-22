@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: ${profile}
   # mysql db
   h2:
     console:
