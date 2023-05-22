@@ -24,12 +24,19 @@ const StyledRecipeItem = styled.li`
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: all 0.3s;
+    }
+  }
+
+  &:hover {
+    .recipe-img img {
+      transform: scale(1.3);
     }
   }
 
   .name {
     font-size: ${({ theme }) => theme.fontSize.large};
-    font-weight: 500;
+    font-weight: 700;
     margin-top: 2rem;
   }
 `
