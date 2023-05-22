@@ -30,30 +30,30 @@ spring:
   output:
     ansi:
       enabled: ALWAYS
-#  mail:
-#    host: smtp.gmail.com
-#    port: 587
-#    username: ${email}
-#    password: ${password}
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
-#            required: true
-#email:
-#  sender:
-#    man: ${email}
-#    password: ${password}
-#logging:
-#  level:
-#    org:
-#      hibernate:
-#        type:
-#          descriptor:
-#            sql:
-#              BasicBinder: trace
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${email}
+    password: ${password}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+email:
+  sender:
+    man: ${email}
+    password: ${password}
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql:
+              BasicBinder: trace
 #jwt
 mail:
   address:

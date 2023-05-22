@@ -6,6 +6,8 @@ import com.mainproject.wrieating.exception.BusinessLogicException;
 import com.mainproject.wrieating.exception.ExceptionCode;
 //import com.mainproject.wrieating.helper.email.EmailSender;
 //import com.mainproject.wrieating.helper.email.RandomGenerator;
+import com.mainproject.wrieating.helper.email.EmailSender;
+import com.mainproject.wrieating.helper.email.RandomGenerator;
 import com.mainproject.wrieating.member.dto.MemberPatchDeleteDto;
 import com.mainproject.wrieating.member.dto.MemberPostSignUpDto;
 import com.mainproject.wrieating.member.entity.Member;
@@ -33,18 +35,17 @@ public class MemberService {
     private final JwtTokenizer jwtTokenizer;
     private final StandardIntakeRepository standardIntakeRepository;
 
-    // TODO: 2023-05-21 이메일 주석
-//    private final EmailSender emailSender;
+    private final EmailSender emailSender;
 
-//    public String sendVerificationEmail(String email) {
-//        // Verification Code 생성
-//        String verificationCode = RandomGenerator.generateRandomCode(6);
-//
-//        // 이메일 인증 메일 발송
-//        emailSender.sendVerificationEmail(email, verificationCode);
-//
-//        return verificationCode;
-//    }
+    public String sendVerificationEmail(String email) {
+        // Verification Code 생성
+        String verificationCode = RandomGenerator.generateRandomCode(6);
+
+        // 이메일 인증 메일 발송
+        emailSender.sendVerificationEmail(email, verificationCode);
+
+        return verificationCode;
+    }
 
     public MemberPostSignUpDto createMember(MemberPostSignUpDto memberDto){
         Member member = mapper.memberPostToMember(memberDto);

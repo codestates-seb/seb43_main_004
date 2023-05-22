@@ -1,6 +1,7 @@
 package com.mainproject.wrieating.diary.dto;
 
 
+import com.mainproject.wrieating.dataArchive.dbsource.recipedb.entity.RecipeData;
 import com.mainproject.wrieating.meal.dto.MealResponseDto;
 import com.mainproject.wrieating.meal.entity.Day;
 import com.mainproject.wrieating.member.dto.StandardIntakeResponseDto;
@@ -24,4 +25,5 @@ public class DiaryResponseDto {
     private List<MealResponseDto> meal; // 식사 리스트
     private List<Day> dayList; // 하루 식사 칼로리, 탄, 단, 지 리스트
     private List<StandardIntakeResponseDto> standardIntakes;
+    private List<RecipeData> recipeList;
 }
