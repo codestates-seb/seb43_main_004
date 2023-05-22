@@ -221,6 +221,8 @@ const DiaryWrite = () => {
   const customId = useRef<number>(120) // 사용자등록 음식의 id. 영양성분 DB.length + 1
   const param = useParams() // 일기 id 가져오기
   const location = useLocation() // url 가져오기
+  const diaryData = location.state?.meal || null // 식단 등록, 수정할 때 제공되는 데이터
+  console.log(diaryData)
 
   // TODO: 페이지 넘어오게 되면 id로 일기 조회 데이터 가져오기
 

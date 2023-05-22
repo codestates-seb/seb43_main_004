@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { KeyboardEvent } from 'react'
+
 import styled, { css } from 'styled-components'
 // 폴더 인식이 안되서 잠깐 주석추가
 
@@ -14,6 +15,7 @@ interface inputProps {
   disabled?: boolean
   onChange(e: React.ChangeEvent<HTMLInputElement>): void
   onBlur?(e: React.FocusEvent<HTMLInputElement>): void
+  onKeyDown?(e: KeyboardEvent<HTMLInputElement>): void
 }
 
 const Input = (props: inputProps) => {

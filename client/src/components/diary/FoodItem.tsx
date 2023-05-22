@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import Input from '../Common/Input'
 import { FoodList } from '../../pages/DiaryWrite'
+import { useLocation } from 'react-router-dom'
 
 const StyledFoodItem = styled.li`
   position: relative;
