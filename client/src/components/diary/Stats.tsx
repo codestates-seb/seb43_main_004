@@ -28,36 +28,66 @@ const Stats = ({ diaries }: any) => {
 
   const data = [
     {
-      id: '탄수화물',
+      id: 'carbohydrate',
       label: '탄수화물',
       value: `${intake.carbohydrate}`,
       color: '#14B8A6',
     },
     {
-      id: '단백질',
+      id: 'protein',
       label: '단백질',
       value: `${intake.protein}`,
       color: '#F59E0B',
     },
     {
-      id: '지방',
+      id: 'fat',
       label: '지방',
       value: `${intake.fat}`,
       color: '#FACC15',
     },
     {
-      id: '당류',
+      id: 'sugar',
       label: '당류',
       value: `${intake.sugar}`,
       color: '#3B82F6',
     },
     {
-      id: '나트륨',
+      id: 'salt',
       label: '나트륨',
       value: `${intake.salt / 1000}`,
       color: '#6366F1',
     },
   ]
+
+  // 통계부분
+  const renderNutrientListItem = (nutrient: Nutrient) => {
+    const nutrientIntake = intake?.[nutrient.id]
+    const nutrientPercentIntake = percentIntake(nutrient.id)
+    const nutrientClassName = getSugarClassName(nutrient.id)
+
+    const nutrientStatus =
+      Number(nutrientPercentIntake) > 120
+        ? '과다'
+        : Number(nutrientPercentIntake) < 80
+        ? '부족'
+        : '적정'
+
+    return (
+      <li className="nutrient__list" key={nutrient.id}>
+        <div className="flex">
+          <div
+            className="stats__color"
+            style={{ backgroundColor: nutrient.color }}
+          ></div>
+          <p>{nutrient.label}</p>
+        </div>
+        <div className="flex">
+          <p>{nutrientPercentIntake}%</p>
+          <p className={nutrientClassName}>{nutrientStatus}</p>
+        </div>
+      </li>
+    )
+  }
 
   const CustomTooltip = ({ datum }: { datum: any }) => (
     <TooltipWrapper>
@@ -73,7 +103,7 @@ const Stats = ({ diaries }: any) => {
           margin={{ top: 0, right: 70, bottom: 70, left: 70 }}
           padAngle={0.8}
           activeOuterRadiusOffset={6}
-          innerRadius={0.6} // chart 중간 빈공간 반지름
+          innerRadius={0.01} // chart 중간 빈공간 반지름
           colors={(datum) => datum.data.color}
           enableArcLinkLabels={false}
           sortByValue={true}
@@ -83,65 +113,18 @@ const Stats = ({ diaries }: any) => {
       <div className="pie__detail">
         <p className="detail__Kcal">{`${intake?.kcal} Kcal`}</p>
         <ul className="detail__container">
-          <li className="nutrient__list">
-            <p>탄수화물</p>
-            <p>{percentIntake('carbohydrate')}%</p>
-            <p className={getSugarClassName('carbohydrate')}>
-              {Number(percentIntake('carbohydrate')) > 120
-                ? '과다'
-                : Number(percentIntake('carbohydrate')) < 80
-                ? '부족'
-                : '적정'}
-            </p>
-          </li>
-          <li className="nutrient__list">
-            <p>단백질</p>
-            <p>{percentIntake('protein')}%</p>
-            <p className={getSugarClassName('protein')}>
-              {Number(percentIntake('protein')) > 120
-                ? '과다'
-                : Number(percentIntake('protein')) < 80
-                ? '부족'
-                : '적정'}
-            </p>
-          </li>
-          <li className="nutrient__list">
-            <p>지방</p>
-            <p>{percentIntake('fat')}%</p>
-            <p className={getSugarClassName('fat')}>
-              {Number(percentIntake('fat')) > 120
-                ? '과다'
-                : Number(percentIntake('fat')) < 80
-                ? '부족'
-                : '적정'}
-            </p>
-          </li>
-          <li className="nutrient__list">
-            <p>당</p>
-            <p>{percentIntake('sugar')}%</p>
-            <p className={getSugarClassName('sugar')}>
-              {Number(percentIntake('sugar')) > 120
-                ? '과다'
-                : Number(percentIntake('sugar')) < 80
-                ? '부족'
-                : '적정'}
-            </p>
-          </li>
-          <li className="nutrient__list">
-            <p>나트륨</p>
-            <p>{percentIntake('salt')}%</p>
-            <p className={getSugarClassName('salt')}>
-              {Number(percentIntake('salt')) > 120
-                ? '과다'
-                : Number(percentIntake('salt')) < 80
-                ? '부족'
-                : '적정'}
-            </p>
-          </li>
+          {data.map((nutrient) => renderNutrientListItem(nutrient))}
         </ul>
       </div>
     </StatsWrapper>
   )
+}
+
+interface Nutrient {
+  id: string
+  label: string
+  value: string
+  color: string
 }
 
 const StatsWrapper = styled.div`
@@ -191,25 +174,26 @@ const StatsWrapper = styled.div`
     width: 150px;
     display: flex;
     white-space: nowrap;
+    justify-content: space-between;
 
     p {
       margin-bottom: 0.9rem;
     }
 
     p:first-child {
-      flex: 6;
+      flex: 8;
     }
 
     p:nth-child(2) {
       font-weight: 500;
-      flex: 2;
-      margin-right: 0.4rem;
+      flex: 1;
     }
 
     p:last-child {
       font-weight: 700;
-      flex: 2;
+      flex: 1;
       justify-items: center;
+      margin-left: 0.5rem;
     }
 
     .excessive {
@@ -222,6 +206,19 @@ const StatsWrapper = styled.div`
 
     .appropriate {
       color: #4c7031;
+    }
+
+    .stats__color {
+      position: relative;
+      top: 3px;
+      width: 8px;
+      height: 8px;
+      margin-right: 1rem;
+      border-radius: 50%;
+    }
+
+    .flex {
+      display: flex;
     }
   }
 `

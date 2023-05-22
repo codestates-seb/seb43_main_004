@@ -18,16 +18,16 @@ const DiaryDetail = () => {
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
 
-  const mealTypes = ['아침', '점심', '저녁', '간식']
-  const mealTypeMap: { [key: string]: string } = {
-    아침: 'BREAKFAST',
-    점심: 'LUNCH',
-    저녁: 'DINNER',
-    간식: 'SNACK',
-  }
-
   // 식단 등록하기 버튼을 누르면 실행
   const handlePlusDiary = () => {
+    const mealTypes = ['아침', '점심', '저녁', '간식']
+    const mealTypeMap: { [key: string]: string } = {
+      아침: 'BREAKFAST',
+      점심: 'LUNCH',
+      저녁: 'DINNER',
+      간식: 'SNACK',
+    }
+
     // mealType에 따라 식단이 등록되어있는지 확인할 수 있는 변수ㄴ
     const isPlanner = mealTypes.map((el) => {
       const hasData = diary?.meal.some(
