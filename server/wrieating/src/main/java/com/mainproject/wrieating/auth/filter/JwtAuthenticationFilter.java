@@ -49,15 +49,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication authResult) throws ServletException, IOException{
         Member member = (Member) authResult.getPrincipal();
 
-
+        // 토큰 정보 담기
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
 
         // 응답헤더에 담기
-        response.setHeader("Authorization", "Bearer " + accessToken);
-        response.setHeader("Refresh", refreshToken);
-
-        this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
+//        response.setHeader("Authorization", "Bearer " + accessToken);
+//        response.setHeader("Refresh", refreshToken);
 
         // 응답바디에 담기
         LoginResponseDto responseBody = new LoginResponseDto();
@@ -67,6 +65,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
+
+        this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
 
     private String delegateAccessToken(Member member) {
