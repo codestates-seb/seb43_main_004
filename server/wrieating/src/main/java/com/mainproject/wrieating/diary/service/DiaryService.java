@@ -37,6 +37,7 @@ public class DiaryService {
     private final RecipeArchiveRepository recipeRepository;
     private final StandardIntakeRepository standardIntakeRepository;
 
+
     public void createDiary(String token, DiaryPostDto diaryPostDto) {
         Diary diary = mapper.diaryPostDtoToDiary(diaryPostDto);
 
@@ -93,5 +94,54 @@ public class DiaryService {
         if (diaryMemberId != compareId) {
             throw new BusinessLogicException(ExceptionCode.MEMBER_MISMATCHED);
         }
+    }
+
+
+    public RecipeData recommendRecipeData(List<String> nutrients) {
+
+        // 클라이언트로부터 받은 성분들을 기반으로 쿼리를 생성
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("SELECT rd.* FROM recipedata rd ");
+
+        for (int i = 0; i < nutrients.size(); i++) {
+            String nutrient = nutrients.get(i);
+            int minValue = 0;
+
+            // 각 성분에 따른 최소값을 설정
+            switch (nutrient) {
+                case "kcal":
+                    minValue = 500;
+                    break;
+                case "carbohydrate":
+                    minValue = 32;
+                    break;
+                case "protein":
+                    minValue = 15;
+                    break;
+                case "fat":
+                    minValue = 20;
+                    break;
+                case "natrium ":
+                    minValue = 600;
+                    break;
+
+            }
+
+            if (i == 0) {
+                queryBuilder.append("WHERE ");
+            } else {
+                queryBuilder.append("AND ");
+            }
+
+            queryBuilder.append("rd.").append(nutrient).append(" >= ").append(minValue);
+        }
+
+        queryBuilder.append(" ORDER BY RAND() LIMIT 1");
+
+        // 쿼리를 실행하여 추천 음식 성분 데이터를 조회합니다.
+        String query = queryBuilder.toString();
+        RecipeData recommendedRecipeData = recipeRepository.findRandomRecipeDataWithCustomQuery(query);
+
+        return recommendedRecipeData;
     }
 }

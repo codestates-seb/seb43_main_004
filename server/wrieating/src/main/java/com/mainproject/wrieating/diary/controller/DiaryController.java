@@ -51,6 +51,17 @@ public class DiaryController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
+    @PatchMapping("/{diaries-id}")
+    public ResponseEntity recipeRecommend(@RequestBody NutrientData nutrientData) {
+
+        response.save(nutrientData);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+
+
     @GetMapping
     public ResponseEntity getDiaries(@RequestHeader(name = "Authorization") String token,
                                      @Positive @RequestParam int page,
