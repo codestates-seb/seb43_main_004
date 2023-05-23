@@ -79,8 +79,7 @@ const UserSignIn = () => {
       })
       .then((response) => {
         dispatch(__getUser(response.data.data))
-        // navigate('/diaries')
-        navigate('/userpage')
+        navigate('/')
       })
       .catch((error) => {
         console.error(error)
