@@ -1,7 +1,7 @@
 package com.mainproject.wrieating.auth.filter;
 
+import com.mainproject.wrieating.auth.jwt.JwtTokenizer;
 import com.mainproject.wrieating.auth.utils.CustomAuthorityUtils;
-import com.mainproject.wrieating.auth.utils.JwtUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,19 +19,19 @@ import java.util.List;
 import java.util.Map;
 
 public class JwtVerificationFilter extends OncePerRequestFilter {
-    private final JwtUtils jwtUtils;
+    private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
 
-    public JwtVerificationFilter(JwtUtils jwtUtils,
+    public JwtVerificationFilter(JwtTokenizer jwtTokenizer,
                                  CustomAuthorityUtils authorityUtils) {
-        this.jwtUtils = jwtUtils;
+        this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            Map<String, Object> claims = jwtUtils.getJwsClaimsFromRequest(request);
+            Map<String, Object> claims = verifyJws(request);
             setAuthenticationToContext(claims);
         } catch (SignatureException se) {
             request.setAttribute("exception", se);
@@ -50,13 +50,13 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         return authorization == null || !authorization.startsWith("Bearer");
     }
 
-//    private Map<String, Object> verifyJws(HttpServletRequest request) {
-//        String jws = request.getHeader("Authorization").replace("Bearer ", "");
-//        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-//        Map<String, Object> claims = jwtUtils.getClaims(jws, base64EncodedSecretKey).getBody();
-//
-//        return claims;
-//    }
+    private Map<String, Object> verifyJws(HttpServletRequest request) {
+        String jws = request.getHeader("Authorization").replace("Bearer ", "");
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
+
+        return claims;
+    }
 
     private void setAuthenticationToContext(Map<String, Object> claims) {
         String email = (String) claims.get("email");

@@ -1,5 +1,4 @@
 #!/bin/bash
-# 빌드 파일의 이름이 콘텐츠와 다르다면 다음 줄의 .jar 파일 이름을 수정하시기 바랍니다.
 BUILD_JAR=$(ls /home/ec2-user/action/server/wrieating/build/libs/wrieating-0.0.1-SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 
@@ -7,11 +6,12 @@ JAR_NAME=$(basename $BUILD_JAR)
 source ~/.bash_profile
 
 # 환경변수 설정
-export profile=deploy
-export PATH=$PATH:/home/ec2-user/tools/gradle-7.3.3/bin
+export profile=${profile}
 export JWT_SECRET_KEY=${JWT_SECRET_KEY}
 export AWS_RDS_PASSWORD=${AWS_RDS_PASSWORD}
 export AWS_RDS_URL=${AWS_RDS_URL}
+export email=${email}
+export password=${password}
 
 # 빌드 디렉토리로 이동
 cd /home/ec2-user/action/server/wrieating/
@@ -39,6 +39,6 @@ fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포"    >> /home/ec2-user/action/deploy.log
-sudo nohup java -jar $DEPLOY_JAR >> /home/ec2-user/action/deploy.log 2>/home/ec2-user/action/deploy_err.log &
+sudo JWT_SECRET_KEY=$JWT_SECRET_KEY AWS_RDS_PASSWORD=$AWS_RDS_PASSWORD AWS_RDS_URL=$AWS_RDS_URL profile=$profile email=$email password=$password nohup java -jar -Dspring.profiles.active=deploy $DEPLOY_JAR >> /home/ec2-user/action/deploy.log 2>/home/ec2-user/action/deploy_err.log &
 
 echo "> 배포가 완료되었습니다." >> /home/ec2-user/action/deploy.log

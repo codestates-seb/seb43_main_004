@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: ${profile}
   # mysql db
   h2:
     console:
@@ -60,8 +58,8 @@ mail:
     admin: admin@gmail.com
 jwt:
   key: ${JWT_SECRET_KEY}
-  access-token-expiration-minutes: 40
-  refresh-token-expiration-minutes: 420
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 1440
 
 server:
   error:
