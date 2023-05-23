@@ -8,6 +8,7 @@ import MealList from './MealItem'
 import NutritionItem from './NutritionItem'
 import sendNutrientDataToServer from '../../utils/nutrientDataToSend'
 import NutrientComments from '../../utils/nutrientComment'
+import { getCookie } from '../../utils/Cookie'
 
 const DiaryDetail = () => {
   const [diary, setDiary] = useState<Diary | null>(null)
@@ -50,6 +51,7 @@ const DiaryDetail = () => {
       )
       return { mealType: el, hasData }
     })
+
     navigate(`/diaries/${id}/add`, { state: { meal: isPlanner } })
   }
 
@@ -58,17 +60,18 @@ const DiaryDetail = () => {
   }
 
   // 수정 버튼을 누르면 실행
-  const handleEditMeal = (mealData: Meal[]) => {
+  const handleEditMeal = (mealData: Meal[] | { [key: string]: string }) => {
     navigate(`/diaries/${id}/update`, { state: { meal: mealData } })
   }
 
   // 식사 시간별로 삭제
-  const handleDeleteMeal = (mealData: Meal[]) => {
-    mealData.map((meal) => {
-      axios.delete(
-        `${process.env.REACT_APP_SERVER_URL}/diaries/${id}/meal/delete/${meal.mealId}`
-      )
-    })
+  const handleDeleteMeal = (mealData: Meal[] | { [key: string]: string }) => {
+    Array.isArray(mealData) &&
+      mealData.map((meal) => {
+        axios.delete(
+          `${process.env.REACT_APP_SERVER_URL}/diaries/${id}/meal/delete/${meal.mealId}`
+        )
+      })
   }
 
   // textarea 요소 있는 value의 마지막으로 커서 이동
@@ -83,20 +86,37 @@ const DiaryDetail = () => {
     setMemoContent(e.target.value)
   }
   // 표준 섭취량과 계산된 영양성분으로 퍼센트를 계산하는 함수
-  const calculatePercent = (nutrient: string) => {
-    return (
-      ((diary?.dayList[0]?.[nutrient] ?? 0) /
-        (diary?.standardIntake[0]?.[nutrient] ?? 0)) *
-      100
-    )
+  const calculatePercent = (nutrientKey: string, totalNutrientKey: string) => {
+    const dayListValue = diary?.dayList[0]?.[totalNutrientKey]
+    const standardIntakeValue = diary?.standardIntakes[0]?.[nutrientKey]
+
+    if (
+      dayListValue !== null &&
+      standardIntakeValue !== null &&
+      dayListValue !== undefined &&
+      standardIntakeValue !== undefined
+    ) {
+      return (dayListValue / standardIntakeValue) * 100
+    }
+    return 0
   }
 
   // 메모 작성 / 수정 함수
   const onSendMemo = () => {
     axios
-      .patch(`${process.env.REACT_APP_SERVER_URL}/diaries/update/${id}}`, {
-        memo: memoContent,
-      })
+      .patch(
+        `${process.env.REACT_APP_SERVER_URL}/diaries/update/${id}}`,
+        {
+          memo: memoContent,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': '69420',
+            Authorization: `Bearer ${getCookie('access')}`,
+          },
+        }
+      )
       .then(() => {
         console.log(`메모가 업데이트되었습니다.`) // toast창을 써야할 듯
         setIsOpenMemo(true)
@@ -107,18 +127,12 @@ const DiaryDetail = () => {
   }
 
   const onDeleteDiary = () => {
-    axios.delete(`http://localhost:4000/diary/${id}`).then(() => {
-      setIsOpenModal((prev) => !prev)
-      navigate(`/diaries`)
-    })
-  }
-
-  // 퍼센트에 따른 색상 지정(차트 그래프, 성분량 글씨에 적용됨)
-  const getColor = (percent: number) => {
-    if (percent === 0) return ''
-    if (percent < 80) return 'F2AE1C'
-    if (percent <= 120) return '4C7031'
-    return 'C50000'
+    axios
+      .delete(`${process.env.REACT_APP_SERVER_URL}/diaries/delete/${id}`)
+      .then(() => {
+        setIsOpenModal((prev) => !prev)
+        navigate(`/diaries`)
+      })
   }
 
   // 이모지를 제공하는 함수
@@ -138,10 +152,26 @@ const DiaryDetail = () => {
     }
   }
 
+  // 퍼센트에 따른 색상 지정(차트 그래프, 성분량 글씨에 적용됨)
+  const getColor = (percent: number) => {
+    if (percent === 0) return ''
+    if (percent < 80) return 'F2AE1C'
+    if (percent <= 120) return '4C7031'
+    return 'C50000'
+  }
+
   useEffect(() => {
-    axios.get(`http://localhost:4000/diary/${id}`).then((res) => {
-      setDiary(res.data)
-    })
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/diaries/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': '69420',
+          Authorization: `Bearer ${getCookie('access')}`,
+        },
+      })
+      .then((res) => {
+        setDiary(res.data)
+      })
   }, [])
 
   useEffect(() => {
@@ -153,16 +183,38 @@ const DiaryDetail = () => {
   // 통계 전송 + 이모지 반영s
   useEffect(() => {
     const data = sendNutrientDataToServer(nutrientStatistics)
-    // 여기에 리턴받은 데이터 전송하는 로직 구현해야함
 
+    // 여기에 리턴받은 데이터 전송하는 로직 구현해야함
     // 이모지를 제공하는 로직
     const emoji = getEmoji(
       data['deficient'].length,
       data['appropriate'].length,
       data['excessive'].length
     )
-
     // 임시적으로 상태에 저장해둠 -> 이모지를 전송하는 로직 구현해야함
+    if (emoji !== diary?.diaryStatus) {
+      axios
+        .patch(
+          `${process.env.REACT_APP_SERVER_URL}/diaries/update/${id}`,
+          {
+            diaryStatus: emoji,
+            statistics: data,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'ngrok-skip-browser-warning': '69420',
+              Authorization: `Bearer ${getCookie('access')}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
     setSaveEmoji(emoji)
   }, [nutrientStatistics])
 
@@ -256,7 +308,7 @@ const DiaryDetail = () => {
             </div>
             <div className="recipe__container">
               <h2>추천 레시피</h2>
-              {diary.recipe.length !== 0 ? (
+              {diary.recipe && diary.recipe.length !== 0 ? (
                 <ul className="recipe__lists">
                   <NutrientComments nutrientStatistics={nutrientStatistics} />
                   {diary &&
@@ -270,7 +322,9 @@ const DiaryDetail = () => {
                     })}
                 </ul>
               ) : (
-                <p>아직 등록된 음식이 없어 추천이 불가능합니다.</p>
+                <p className="no__statistics">
+                  {`아직 등록된 음식이 없어\n 추천이 불가능합니다.`}
+                </p>
               )}
             </div>
           </div>
@@ -285,7 +339,7 @@ interface Diary {
   memo: string
   diaryStatus: string
   meal: Meal[]
-  standardIntake: StandardIntake[]
+  standardIntakes: StandardIntakes[]
   dayList: DayList[]
   recipe: Recipe[]
   comment: string
@@ -293,7 +347,7 @@ interface Diary {
 
 export interface Meal {
   mealId: number
-  foodName: string
+  title: string
   mealType: string
   kcal: number
   servingSize: number
@@ -304,7 +358,7 @@ export interface Meal {
   salt: number
 }
 
-interface StandardIntake {
+interface StandardIntakes {
   carbohydrate: number
   protein: number
   fat: number
@@ -314,11 +368,11 @@ interface StandardIntake {
 }
 
 interface DayList {
-  carbohydrate: number
-  protein: number
-  fat: number
-  kcal: number
-  sugar: number
+  totalCarbohydrate: number
+  totalProtein: number
+  totalFat: number
+  totalKcal: number
+  totalSugar: number
   [key: string]: number
 }
 
@@ -511,6 +565,10 @@ const DiaryDetailWrapper = styled.div`
       border-radius: 8px;
       margin-right: 1.2rem;
     }
+  }
+
+  .no__statistics {
+    text-align: center;
   }
 
   .msg-box {

@@ -5,8 +5,9 @@ import 'react-calendar/dist/Calendar.css'
 // import { DataResponse } from './DiaryCheck'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { getCookie } from '../../utils/Cookie'
 
-const CalendarPage = ({ diaries }) => {
+const CalendarPage = ({ diaries, fetchData }) => {
   const [value, onChange] = useState(new Date())
   const navigate = useNavigate()
 
@@ -16,20 +17,32 @@ const CalendarPage = ({ diaries }) => {
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
     )
     const dateString = selectedDate.toISOString().split('T')[0]
+
     const diaryData = diaries.data.find(
       (diary) => diary.userDate === dateString
     )
     if (diaryData) {
       // 해당 날짜에 대한 일기 데이터가 이미 존재하는 경우
-      navigate(`/diaries/${diaryData.id}`)
+      navigate(`/diaries/${diaryData.diaryId}`)
     } else {
       // 해당 날짜에 대한 일기 데이터가 없는 경우
       axios
-        .post(`${process.env.REACT_APP_SERVER_URI}`, newDiary)
+        .post(
+          `${process.env.REACT_APP_SERVER_URL}/diaries/write`,
+          {
+            userDate: `${dateString}`,
+            memo: '',
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'ngrok-skip-browser-warning': '69420',
+              Authorization: `Bearer ${getCookie('access')}`,
+            },
+          }
+        )
         .then((res) => {
-          console.log(res)
-          // 여기서 diaries 상태를 최신화 해줘야할듯
-          navigate(`/diaries/${diaryData.id}`)
+          navigate(`/diaries/${res.data.diaryId}`)
         })
         .catch((err) => {
           console.log(err)
@@ -66,13 +79,13 @@ const CalendarPage = ({ diaries }) => {
         onClickDay={onChangeHandler}
         tileContent={tileContent}
       />
-      <h1>
+      {/* <h1>
         {new Date(value).toLocaleDateString('ko', {
           year: 'numeric',
           month: 'short',
           day: 'numeric',
         })}
-      </h1>
+      </h1> */}
     </Container>
   )
 }

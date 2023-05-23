@@ -3,13 +3,23 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import CalendarPage from '../components/diary/Calendar'
 import Stats from '../components/diary/Stats'
+import { getCookie } from '../utils/Cookie'
 
 const DiaryCheck = () => {
   const [diaries, setDiaries] = useState<DataResponse | null>(null)
 
   const fetchData = () => {
     axios
-      .get<DataResponse>(`http://localhost:4000/diaries?page=1&size=1000`)
+      .get<DataResponse>(
+        `${process.env.REACT_APP_SERVER_URL}/diaries?page=1&size=1000`,
+        {
+          headers: {
+            'Content-Type': 'application / json',
+            'ngrok-skip-browser-warning': '69420',
+            Authorization: `Bearer ${getCookie('access')}`,
+          },
+        }
+      )
       .then((res) => setDiaries(res.data))
       .catch((err) => {
         console.log(err)
@@ -26,7 +36,7 @@ const DiaryCheck = () => {
       <ContainerWrapper>
         {diaries && (
           <>
-            <CalendarPage diaries={diaries} />
+            <CalendarPage diaries={diaries} fetchData={fetchData} />
             <Stats diaries={diaries} />
           </>
         )}
