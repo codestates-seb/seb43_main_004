@@ -385,6 +385,7 @@ const DiaryWrite = () => {
           fat: item.fat,
           sugar: item.totalSugar,
           salt: item.salt,
+          servingSize: item.servingSize,
         }
       }
     })
