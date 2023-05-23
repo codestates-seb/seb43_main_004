@@ -218,10 +218,11 @@ const DiaryWrite = () => {
   // 모달 상태
   const [isEmpty, setIsEmpty] = useState(false)
   const [isUnchecked, setIsUnchecked] = useState(false)
-  const customId = useRef<number>(120) // 사용자등록 음식의 id. get요청 한번 해서 totalElement로 저장해두기
-  const param = useParams() // 일기 id는
-  const location = useLocation() // url 가져오기
+  const customId = useRef<number>(0) // 사용자등록 음식의 id. get요청 한번 해서 totalElement로 저장해두기
+  const param = useParams()
+  const location = useLocation()
   const diaryData = location.state?.meal || null // 식단 등록, 수정할 때 제공되는 데이터
+  console.log(diaryData)
 
   const debounce = <T extends (...args: any[]) => any>(
     fn: T,
@@ -251,11 +252,9 @@ const DiaryWrite = () => {
             },
           }
         )
-        console.log(res.data.data)
         setSearchList(res.data.data)
       } catch (error) {
         setSearchList([])
-        console.log(error)
       }
     }, 300),
     []
@@ -266,29 +265,6 @@ const DiaryWrite = () => {
     getSearchList(e.target.value)
   }
 
-  // const getSearchList = async () => {
-  //   const res = await axios.get(
-  //     `${url}/nutrient/search?page=1&size=10&search=${searchTxt}`,
-  //     {
-  //       headers: {
-  //         'Content-Type': `application/json`,
-  //         'ngrok-skip-browser-warning': '69420',
-  //       },
-  //     }
-  //   )
-  //   setSearchList(res.data.data)
-  // }
-
-  // useEffect(() => {
-  //   // 검색어 자동완성
-  //   if (searchTxt !== '') {
-  //     getSearchList()
-  //   } else {
-  //     setSearchList([])
-  //   }
-  // }, [searchTxt])
-
-  // 함수
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTimeCheck(e.target.id)
   }
@@ -391,12 +367,28 @@ const DiaryWrite = () => {
     console.log(sendData)
 
     const sendType = location.pathname.split('/')[3]
-    if (sendType === 'add') {
-      console.log('post', `/diaries/${param.id}/meal/write`)
-    } else {
-      console.log('patch', `/diaries/${param.id}/meal/update/meal-id`)
-    }
+    const sendUrl =
+      sendType === 'add'
+        ? `/diaries/${param.id}/meal/write`
+        : `/diaries/${param.id}/meal/update/${param.id}`
+    console.log(sendType, sendUrl)
   }
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const res = await axios.get(`${url}/nutrient?page=1&size=1`, {
+          headers: {
+            'Content-Type': `application/json`,
+            'ngrok-skip-browser-warning': '69420',
+          },
+        })
+        customId.current = res.data.pageInfo.totalElements
+      } catch (error) {
+        console.log(error)
+      }
+    })()
+  }, [])
 
   return (
     <>
