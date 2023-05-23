@@ -172,7 +172,7 @@ export interface FoodList {
   totalSugar: number
   salt: number
   custom?: boolean | undefined
-  [key: string]: string | number | boolean | undefined
+  [key: string]: string | number | boolean | undefined | null
 }
 
 const DiaryWrite = () => {
@@ -186,7 +186,7 @@ const DiaryWrite = () => {
   const [searchList, setSearchList] = useState<FoodList[]>([]) // 자동완성 검색어의 목록
   const [stage, setStage] = useState<FoodList | null>(null)
   const [isEdit, setIsEdit] = useState(false)
-  const [foodList, setFoodList] = useState<FoodList[]>([]) // 음식 리스트
+  const [foodList, setFoodList] = useState<any[]>([]) // 음식 리스트
   const [isEmpty, setIsEmpty] = useState(false) // 모달 상태
   const customId = useRef<number>(0) // custom 음식의 id
 
@@ -263,46 +263,47 @@ const DiaryWrite = () => {
   const checkValidation = () => {
     // 유효성검사
     // 빈칸이 있는지
-    for (const item in stage) {
-      if (!stage[item]) {
-        setIsEmpty(true)
-      }
-    }
+    // for (const item in stage) {
+    //   if (!stage[item]) {
+    //     setIsEmpty(true)
+    //   }
+    // }
   }
 
   const sendDiary = () => {
     checkValidation()
-    const sendData = foodList.map((item) => {
-      if (item.custom) {
-        return {
-          diaryId: param.id,
-          title: item.foodName,
-          mealType: 'ddd',
-          kcal: item.kcal,
-          carbohydrate: item.carbohydrate,
-          protein: item.protein,
-          fat: item.fat,
-          sugar: item.totalSugar,
-          salt: item.salt,
-          custom: item.custom,
-          servingSize: item.servingSize,
-        }
-      } else {
-        return {
-          diaryId: param.id,
-          title: item.foodName,
-          mealType: 'ddd',
-          kcal: item.kcal,
-          carbohydrate: item.carbohydrate,
-          protein: item.protein,
-          fat: item.fat,
-          sugar: item.totalSugar,
-          salt: item.salt,
-          servingSize: item.servingSize,
-        }
-      }
-    })
-    console.log(sendData)
+    setFoodList([stage, ...foodList])
+    // const sendData = foodList.map((item) => {
+    //   if (item.custom) {
+    //     return {
+    //       diaryId: param.id,
+    //       title: item.foodName,
+    //       mealType: 'ddd',
+    //       kcal: item.kcal,
+    //       carbohydrate: item.carbohydrate,
+    //       protein: item.protein,
+    //       fat: item.fat,
+    //       sugar: item.totalSugar,
+    //       salt: item.salt,
+    //       custom: item.custom,
+    //       servingSize: item.servingSize,
+    //     }
+    //   } else {
+    //     return {
+    //       diaryId: param.id,
+    //       title: item.foodName,
+    //       mealType: 'ddd',
+    //       kcal: item.kcal,
+    //       carbohydrate: item.carbohydrate,
+    //       protein: item.protein,
+    //       fat: item.fat,
+    //       sugar: item.totalSugar,
+    //       salt: item.salt,
+    //       servingSize: item.servingSize,
+    //     }
+    //   }
+    // })
+    // console.log(sendData)
   }
 
   useEffect(() => {
@@ -374,7 +375,6 @@ const DiaryWrite = () => {
                 key={stage.foodId}
                 data={stage}
                 setStage={setStage}
-                delete={deleteFoodItem}
                 custom={stage.custom}
               />
               <div className="btns">
@@ -408,14 +408,12 @@ const DiaryWrite = () => {
               </li>
             ) : (
               foodList.map((data, idx) => (
-                <li key={idx}>{data.foodName}</li>
-                // <FoodItem
-                //   key={data.foodId}
-                //   data={data}
-                //   setInfo={setFoodInfo}
-                //   delete={deleteFoodItem}
-                //   custom={data.custom}
-                // />
+                <li key={idx}>
+                  <div className="title">
+                    <p>{data.foodName}</p>
+                    <div></div>
+                  </div>
+                </li>
               ))
             )}
           </ul>
