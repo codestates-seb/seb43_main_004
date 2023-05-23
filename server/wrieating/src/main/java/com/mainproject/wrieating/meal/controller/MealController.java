@@ -2,6 +2,7 @@ package com.mainproject.wrieating.meal.controller;
 
 import com.mainproject.wrieating.meal.dto.MealPatchDto;
 import com.mainproject.wrieating.meal.dto.MealPostDto;
+import com.mainproject.wrieating.meal.dto.MealPostResponseDto;
 import com.mainproject.wrieating.meal.dto.MealResponseDto;
 import com.mainproject.wrieating.meal.mapper.MealMapper;
 import com.mainproject.wrieating.meal.service.MealService;
@@ -25,7 +26,7 @@ public class MealController {
     @PostMapping("/write")
     public ResponseEntity createMeal(@Positive @PathVariable("diaries-id") Long diaryId,
                                      @RequestBody MealPostDto mealPostDto) {
-        MealResponseDto responseDto = mealService.createMeal(diaryId, mealPostDto);
+        MealPostResponseDto responseDto = mealService.createMeal(diaryId, mealPostDto);
 
         return new ResponseEntity<>(responseDto,HttpStatus.CREATED);
     }

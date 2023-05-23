@@ -9,6 +9,7 @@ import com.mainproject.wrieating.exception.BusinessLogicException;
 import com.mainproject.wrieating.exception.ExceptionCode;
 import com.mainproject.wrieating.meal.dto.MealPatchDto;
 import com.mainproject.wrieating.meal.dto.MealPostDto;
+import com.mainproject.wrieating.meal.dto.MealPostResponseDto;
 import com.mainproject.wrieating.meal.dto.MealResponseDto;
 import com.mainproject.wrieating.meal.entity.Meal;
 import com.mainproject.wrieating.meal.mapper.MealMapper;
@@ -29,7 +30,7 @@ public class MealService {
     private final MealMapper mapper;
     private final DiaryService diaryService;
 
-    public MealResponseDto createMeal(Long diaryId, MealPostDto mealPostDto) {
+    public MealPostResponseDto createMeal(Long diaryId, MealPostDto mealPostDto) {
         Diary diary = diaryService.findVerifiedDiary(diaryId);
         Meal meal = mapper.mealPostDtoToMeal(mealPostDto);
 
@@ -48,7 +49,7 @@ public class MealService {
                 foodArchiveRepository.save(foodData);
             }
 
-            return mapper.mealToMealResponseDto(mealRepository.save(meal));
+            return mapper.MealToMealPostResponseDto(mealRepository.save(meal));
         }
 
     public void updateMeal(Long diaryId, Long mealId, MealPatchDto mealPatchDto) {
