@@ -28,10 +28,13 @@ const device = {
   mobile: `screen and (max-width: 768px)`,
 }
 
+const shadow = `0 2px 4px rgba(74,74,74,0.15)`
+
 const Theme = {
   fontSize,
   color,
   device,
+  shadow,
 }
 
 export default Theme

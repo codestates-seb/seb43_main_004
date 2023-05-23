@@ -31,6 +31,7 @@ const Input = (props: inputProps) => {
     disabled,
     onChange,
     onBlur,
+    onKeyDown,
   } = props
 
   return (
@@ -41,6 +42,7 @@ const Input = (props: inputProps) => {
         placeholder={placeholder}
         onChange={onChange}
         onBlur={onBlur}
+        onKeyDown={onKeyDown}
         disabled={disabled}
         name={name}
         value={value}
