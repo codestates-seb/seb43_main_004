@@ -1,22 +1,37 @@
 import axios from 'axios'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Button from '../Common/Button'
 import Modal from '../Common/Modal'
 import MealList from './MealItem'
 import NutritionItem from './NutritionItem'
+import sendNutrientDataToServer from '../../utils/nutrientDataToSend'
+import NutrientComments from '../../utils/nutrientComment'
 
 const DiaryDetail = () => {
   const [diary, setDiary] = useState<Diary | null>(null)
+
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'] // 요일을 구하기 위한 배열
   const [memoContent, setMemoContent] = useState(diary?.memo)
   const [isOpenMemo, setIsOpenMemo] = useState(true)
   const [isOpenModal, setIsOpenModal] = useState(false)
+  const [saveEmoji, setSaveEmoji] = useState('')
+  const [nutrientStatistics, setNutrientStatistics] = useState<{
+    [key: string]: number
+  }>({})
 
   const navigate = useNavigate()
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
+
+  // 통계를 낸 영양소를 저장하는 함수 (퍼센트로 저장)
+  const updateNutrientStatistics = (nutrientType: string, percent: number) => {
+    setNutrientStatistics((prevStatistics: Record<string, number>) => ({
+      ...prevStatistics,
+      [nutrientType]: percent,
+    }))
+  }
 
   // 식단 등록하기 버튼을 누르면 실행
   const handlePlusDiary = () => {
@@ -75,6 +90,7 @@ const DiaryDetail = () => {
       100
     )
   }
+
   // 메모 작성 / 수정 함수
   const onSendMemo = () => {
     axios
@@ -105,6 +121,23 @@ const DiaryDetail = () => {
     return 'C50000'
   }
 
+  // 이모지를 제공하는 함수
+  const getEmoji = (
+    deficientCount: number,
+    appropriateCount: number,
+    excessiveCount: number
+  ) => {
+    if (deficientCount >= 3) {
+      return '😵' // 부족한 항목에 대한 이모지 반환
+    } else if (appropriateCount >= 3) {
+      return '😄' // 적정한 항목에 대한 이모지 반환
+    } else if (excessiveCount >= 3) {
+      return '😭' // 과다한 항목에 대한 이모지 반환
+    } else {
+      return '🫥' // 기본 이모지 반환
+    }
+  }
+
   useEffect(() => {
     axios.get(`http://localhost:4000/diary/${id}`).then((res) => {
       setDiary(res.data)
@@ -116,6 +149,22 @@ const DiaryDetail = () => {
       setMemoContent(diary.memo)
     }
   }, [diary])
+
+  // 통계 전송 + 이모지 반영s
+  useEffect(() => {
+    const data = sendNutrientDataToServer(nutrientStatistics)
+    // 여기에 리턴받은 데이터 전송하는 로직 구현해야함
+
+    // 이모지를 제공하는 로직
+    const emoji = getEmoji(
+      data['deficient'].length,
+      data['appropriate'].length,
+      data['excessive'].length
+    )
+
+    // 임시적으로 상태에 저장해둠 -> 이모지를 전송하는 로직 구현해야함
+    setSaveEmoji(emoji)
+  }, [nutrientStatistics])
 
   return (
     <Wrapper>
@@ -136,11 +185,14 @@ const DiaryDetail = () => {
           </Modal>
           <div className="diary__container">
             <h3 className="diary__header">
-              <p>{`${new Date(diary.userDate).getMonth() + 1}월 ${new Date(
-                diary.userDate
-              ).getDate()}일 ${
-                weekdays[new Date(diary.userDate).getDay()]
-              }요일`}</p>
+              <div className="diary__header__title">
+                <p>{`${new Date(diary.userDate).getMonth() + 1}월 ${new Date(
+                  diary.userDate
+                ).getDate()}일 ${
+                  weekdays[new Date(diary.userDate).getDay()]
+                }요일`}</p>
+                <div className="header__emoji">{saveEmoji}</div>
+              </div>
               <div className="diary__header__btn">
                 <Button onClick={onChangeModal} outline={true}>
                   <span className="material-symbols-outlined">delete</span>
@@ -196,6 +248,7 @@ const DiaryDetail = () => {
                       diary={diary}
                       calculatePercent={calculatePercent}
                       getColor={getColor}
+                      updateNutrientStatistics={updateNutrientStatistics}
                     />
                   )
                 )}
@@ -205,7 +258,7 @@ const DiaryDetail = () => {
               <h2>추천 레시피</h2>
               {diary.recipe.length !== 0 ? (
                 <ul className="recipe__lists">
-                  <p>코멘트 공간입니다.</p>
+                  <NutrientComments nutrientStatistics={nutrientStatistics} />
                   {diary &&
                     diary.recipe.map((el, idx) => {
                       return (
@@ -217,7 +270,7 @@ const DiaryDetail = () => {
                     })}
                 </ul>
               ) : (
-                <p>아직 등록된 일기가 없어 추천이 불가능합니다.</p>
+                <p>아직 등록된 음식이 없어 추천이 불가능합니다.</p>
               )}
             </div>
           </div>
@@ -314,8 +367,18 @@ const DiaryDetailWrapper = styled.div`
         font-family: 'yg-jalnan';
         margin-right: 0.5rem;
       }
+
+      .diary__header__title {
+        display: flex;
+        align-items: center;
+      }
+
       .diary__header__btn {
         display: flex;
+      }
+
+      .header__emoji {
+        font-size: 24px;
       }
     }
   }
@@ -389,7 +452,7 @@ const DiaryDetailWrapper = styled.div`
       text-align: center;
       margin-top: 1rem;
       font-size: 2.5rem;
-      margin-bottom: 3.5rem;
+      margin-bottom: 2rem;
     }
 
     p {
@@ -454,6 +517,12 @@ const DiaryDetailWrapper = styled.div`
     width: 40%;
     max-width: 450px;
     padding: 4rem;
+  }
+
+  .comment {
+    margin-bottom: 2rem;
+    font-size: 15px;
+    font-weight: 500;
   }
 `
 
