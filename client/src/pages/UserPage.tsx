@@ -1,33 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Tab from '../components/Common/Tab'
-import axios from 'axios'
-import { API } from '../utils/API'
-import { User } from '../utils/interface'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store'
 
 const UserPage = () => {
-  const [profile, setProfile] = useState<User>({
-    nickName: 'nickname',
-    gender: 'male',
-    height: 0,
-    weight: 0,
-    activity: 'NONE_ACTIVE',
-    icon: 'ingredients',
-  })
-  const { nickName, gender, height, weight, activity, icon } = profile
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`${API}/members/mypage`)
-  //     .then((response) => {
-  //       console.log(response)
-  //       setProfile(response.data)
-  //       console.log(response.data)
-  //     })
-  //     .catch((error) => {
-  //       console.error(error)
-  //     })
-  // }, [])
+  const userInfo = useSelector((state: RootState) => state.profile.data)
+  const { nickName, gender, height, weight, activity, icon } = userInfo
 
   return (
     <Container>
