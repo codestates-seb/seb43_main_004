@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import nutrientTypeMap from '../../utils/nutrientTypeMap'
+import totalNutrientTypeMap from '../../utils/totalNutritionType'
 import { NutritionBarItem } from './DiaryDetail'
 
 interface NutritionItemProps {
@@ -8,11 +9,11 @@ interface NutritionItemProps {
     dayList: {
       [key: string]: number
     }[]
-    standardIntake: {
+    standardIntakes: {
       [key: string]: number
     }[]
   }
-  calculatePercent: (key: string) => number
+  calculatePercent: (nutrientKey: string, totalNutrientKey: string) => number
   getColor: (percent: number) => string
   updateNutrientStatistics: (nutrientType: string, percent: number) => void
 }
@@ -28,28 +29,42 @@ const NutritionItem: React.FC<NutritionItemProps> = ({
   const nutrientKey = Object.keys(nutrientTypeMap).find(
     (key) => nutrientTypeMap[key] === nutrientType
   )
-  if (nutrientKey) {
-    const percent = calculatePercent(nutrientKey)
+
+  const totalNutrientKey = Object.keys(totalNutrientTypeMap).find(
+    (key) => totalNutrientTypeMap[key] === nutrientType
+  )
+
+  if (totalNutrientKey && nutrientKey) {
+    const percent = calculatePercent(nutrientKey, totalNutrientKey)
+
     // nutrientType, percent가 변경 될 때만 실행되도록 (그전에는 무한 렌더링 발생해서..)
     useEffect(() => {
-      updateNutrientStatistics(nutrientKey, percent)
-    }, [nutrientKey, percent])
+      updateNutrientStatistics(totalNutrientKey, percent)
+    }, [totalNutrientKey, percent])
 
     return (
       <li>
         <header>
           <p>{nutrientType}</p>
           <div>
-            <span className={getColor(percent)}>{`${
-              diary.dayList[0][nutrientKey]
-            }${
-              nutrientType === '나트륨'
-                ? 'mg'
-                : nutrientType === '칼로리'
-                ? 'kcal'
-                : 'g'
-            }`}</span>
-            <span>{` / ${diary.standardIntake[0][nutrientKey]}${
+            <span className={getColor(percent)}>
+              {diary.dayList[0][totalNutrientKey] !== undefined
+                ? `${diary.dayList[0][totalNutrientKey]}${
+                    nutrientType === '나트륨'
+                      ? 'mg'
+                      : nutrientType === '칼로리'
+                      ? 'kcal'
+                      : 'g'
+                  }`
+                : `0${
+                    nutrientType === '나트륨'
+                      ? 'mg'
+                      : nutrientType === '칼로리'
+                      ? 'kcal'
+                      : 'g'
+                  }`}
+            </span>
+            <span>{` / ${diary.standardIntakes[0]?.[nutrientKey]?.toFixed(0)}${
               nutrientType === '나트륨'
                 ? 'mg'
                 : nutrientType === '칼로리'
