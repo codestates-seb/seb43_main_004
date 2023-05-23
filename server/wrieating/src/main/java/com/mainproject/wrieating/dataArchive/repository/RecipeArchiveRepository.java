@@ -16,8 +16,8 @@ public interface RecipeArchiveRepository extends JpaRepository<RecipeData, Long>
     @Query("SELECT r FROM RecipeData r WHERE r.rcpName LIKE '%' || :keyword || '%'")
     Page<RecipeData> findRecipeByKeyword(@Param("keyword") String keyword,  Pageable pageable);
 
-    @Query(value = "SELECT rd.* FROM recipedata rd WHERE <custom_query_here> ORDER BY RAND() LIMIT 1", nativeQuery = true)
-    RecipeData findRandomRecipeDataWithCustomQuery(@Param("custom_query_here") String customQuery);
+    @Query(value = "SELECT rd.* FROM RecipeData rd WHERE <custom_query_here> ORDER BY RAND() LIMIT 3", nativeQuery = true)
+    List<RecipeData> findRandomRecipeDataWithCustomQuery(@Param("custom_query_here") String customQuery);
 
 
 }

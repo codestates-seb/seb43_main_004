@@ -35,7 +35,7 @@ public class RecipeCsvReader {
             data.setCarbohydrate((int) Double.parseDouble(record.get("carbohydrate")));
             data.setProtein((int) Double.parseDouble(record.get("protein")));
             data.setFat((int) Double.parseDouble(record.get("fat")));
-            data.setNatrium((int) Double.parseDouble(record.get("natrium")));
+            data.setSalt((int) Double.parseDouble(record.get("natrium")));
             data.setImg(record.get("img"));
             data.setIngredients(record.get("ingredients"));
             data.setManual01(record.get("MANUAL01"));

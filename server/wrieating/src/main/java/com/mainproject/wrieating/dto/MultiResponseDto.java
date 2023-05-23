@@ -1,9 +1,5 @@
 package com.mainproject.wrieating.dto;
 
-import com.mainproject.wrieating.diary.dto.StandardIntakeDto;
-import com.mainproject.wrieating.diary.dto.WeekResponseDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;

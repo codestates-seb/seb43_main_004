@@ -1,6 +1,7 @@
 package com.mainproject.wrieating.diary.controller;
 
 import com.mainproject.wrieating.auth.jwt.JwtTokenizer;
+import com.mainproject.wrieating.dataArchive.dto.RecipesResponseDto;
 import com.mainproject.wrieating.diary.dto.*;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.diary.mapper.DiaryMapper;
@@ -51,13 +52,17 @@ public class DiaryController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
-    @PatchMapping("/{diaries-id}")
-    public ResponseEntity recipeRecommend(@RequestBody NutrientData nutrientData) {
+    @PostMapping("/recommend-recipe")
+    public ResponseEntity recipeRecommend(@RequestBody NutrientBalanceDto nutrientBalanceDto) {
+        List<String> deficientNutrients = nutrientBalanceDto.getDeficient();
+        List<String> appropriateNutrients = nutrientBalanceDto.getAppropriate();
+        List<String> excessiveNutrients = nutrientBalanceDto.getExcessive();
 
-        response.save(nutrientData);
+        List<RecipesResponseDto> response = service.recommendRecipesByNutrientBalance(deficientNutrients, appropriateNutrients, excessiveNutrients);
 
+        // 바로 응답을 시켜야할지
+        // 들고있다가 전체조회할때 내보내야할지
         return new ResponseEntity<>(response, HttpStatus.OK);
-
     }
 
 
