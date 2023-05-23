@@ -36,7 +36,7 @@ const UserPage = () => {
       </UserProfile>
       <Tab
         tabItem={[
-          { name: '프로필 수정', path: '/userpage' }, // 프로필 수정 페이지가 기본이 된다고 가정...
+          { name: '프로필 수정', path: '/userpage' },
           { name: '비밀번호 변경', path: '/userpage/change-pwd' },
         ]}
       />

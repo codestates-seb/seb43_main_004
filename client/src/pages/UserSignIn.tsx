@@ -85,7 +85,6 @@ const UserSignIn = () => {
       .catch((error) => {
         console.error(error)
       })
-    console.log(store.getState())
   }
 
   return (
