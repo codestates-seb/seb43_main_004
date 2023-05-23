@@ -8,6 +8,9 @@ import { checkEmail } from '../utils/userfunc'
 import axios from 'axios'
 import { API } from '../utils/API'
 import { getCookie, setCookie } from '../utils/Cookie'
+import { __getUser } from '../store/slices/profileSlice'
+import { useDispatch } from 'react-redux'
+import { store } from '../store'
 
 interface userType {
   email: string
@@ -18,6 +21,7 @@ const UserSignIn = () => {
   const navigate = useNavigate()
   const [values, setValues] = useState<userType>({ email: '', password: '' })
   const [error, setError] = useState<string>('')
+  const dispatch = useDispatch()
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -38,42 +42,50 @@ const UserSignIn = () => {
     await axios
       .post(`${API}/members/login`, values)
       .then((response) => {
-        console.log(response.data)
         const tokenWithNoBearer = response.data.accessToken.substr(7)
-        console.log(tokenWithNoBearer)
+        const tokenForReissue = response.data.refreshToken
 
         const current = new Date()
+        current.setMinutes(current.getMinutes() + 40)
 
         // 액세스 토큰
-        // setCookie('access', tokenWithNoBearer, {
-        //   path: '/',
-        //   secure: true,
-        //   expires: current.setMinutes(current.getMinutes() + 40),
-        //   // sameSite: 'none',
-        // })
-        localStorage.setItem('token', tokenWithNoBearer)
+        setCookie('access', tokenWithNoBearer, {
+          path: '/',
+          secure: true,
+          expires: current,
+          sameSite: 'none',
+        })
+        // 리프레시 토큰
+        current.setMinutes(current.getMinutes() + 420)
+        setCookie('refresh', tokenForReissue, {
+          path: '/',
+          secure: true,
+          expires: current,
+          sameSite: 'none',
+        })
       })
       .catch((error) => {
         setError('존재하지 않는 계정입니다.')
       })
 
-    console.log(getCookie('token'))
-    // 발급 받은 토큰으로 /members/myprofile 호출
-    axios
+    // 발급받은 토큰으로 유저 정보 얻어오기
+    await axios
       .get(`${API}/members/myprofile`, {
         headers: {
-          Authorization: `Bearer ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('access')}`,
           'Content-Type': 'application / json',
           'ngrok-skip-browser-warning': '69420', // 테스트 서버 이용할때는 붙였다가 삭제하면 됨
         },
       })
       .then((response) => {
-        console.log(response.data)
-        navigate('/')
+        dispatch(__getUser(response.data.data))
+        // navigate('/diaries')
+        navigate('/userpage')
       })
       .catch((error) => {
         console.error(error)
       })
+    console.log(store.getState())
   }
 
   return (
@@ -99,9 +111,6 @@ const UserSignIn = () => {
         />
       </Form>
       <Button onClick={checkValid}>로그인</Button>
-      {/* <Button outline="true" onClick={() => console.log('google social login')}>
-        구글 계정으로 로그인
-      </Button> */}
       <div className="padding-box">
         <span>비밀번호를 잊으셨나요?</span>
         <StyledLink to="/find-pwd">비밀번호 찾기</StyledLink>

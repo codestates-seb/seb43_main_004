@@ -11,9 +11,24 @@ import { API } from '../../utils/API'
 import { User } from '../../utils/interface'
 import Modal from '../Common/Modal'
 import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '../../store'
+import { getCookie } from '../../utils/Cookie'
+import { __editUser } from '../../store/slices/profileSlice'
+
+interface noticeType {
+  nickName: string
+  nickNameOk: string
+  birth: string
+  height: string
+  weight: string
+}
 
 const EditProfile = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const userInfo = useSelector((state: RootState) => state.profile.data)
   const [profile, setProfile] = useState<User>({
     email: '',
     nickName: '',
@@ -24,10 +39,20 @@ const EditProfile = () => {
     activity: 'NONE_ACTIVE',
     icon: 'ingredients',
   })
-  const [isOk, setIsOk] = useState<boolean>(false) // 닉네임 입력란 토글
-  const [del, setDel] = useState<boolean>(false) // 탈퇴 확인
   const { email, nickName, gender, birth, height, weight, activity, icon } =
     profile
+
+  const [isActive, setIsActive] = useState<boolean>(false) // 닉네임 입력란 토글
+  const [nameCheck, setNameCheck] = useState<string>(userInfo.nickName) // 닉네임 비교
+  const [del, setDel] = useState<boolean>(false) // 탈퇴 확인
+  const [notice, setNotice] = useState<noticeType>({
+    // 메세지 관리
+    nickName: '',
+    nickNameOk: '',
+    birth: '',
+    height: '',
+    weight: '',
+  })
 
   // 모달 핸들링
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -38,7 +63,6 @@ const EditProfile = () => {
   }
   const closeModal = () => {
     if (del) {
-      // 회원 탈퇴
       deleteUser()
       return
     }
@@ -49,28 +73,97 @@ const EditProfile = () => {
     const { name, value } = e.target
 
     setProfile({ ...profile, [name]: value })
-    console.log(name, value)
   }
 
   // 닉네임 중복 체크
+  const cantUse = 'cant-use'
+  const checkNickname = () => {
+    const msg = { nickName: '', nickNameOk: '' }
+
+    if (userInfo.nickName === nickName) {
+      msg.nickName = '현재 사용중인 닉네임입니다.'
+      setNotice({ ...notice, ...msg })
+      return
+    }
+
+    axios
+      .post(
+        `${API}/members/nicknamecheck`,
+        { nickName },
+        {
+          headers: {
+            Authorization: `Bearer ${getCookie('access')}`,
+          },
+        }
+      )
+      .then((response) => {
+        if (response.data.data === false) {
+          setNameCheck(nickName)
+          msg.nickNameOk = '사용할 수 있는 닉네임입니다.'
+        } else {
+          setNameCheck(cantUse)
+          msg.nickName = '중복된 닉네임입니다.'
+        }
+        setNotice({ ...notice, ...msg })
+      })
+  }
 
   // 프로필 수정
   const updateProfile = () => {
-    // isOk === true -> 닉네임 필드 !== '' && 변경하려는 닉네임 !== 현재 닉네임 -> 닉네임 중복 여부 검증 후 프로필 수정 가능
-    // isOk === false -> 바로 프로필 수정 가능
-    axios
-      .patch(`${API}/members/mypage/update`, {
-        headers: {
-          Authorization: 'Bearer ${token}',
-        },
-      })
-      .then((response) => {
-        console.log(response)
-        openModal('프로필이 성공적으로 수정되었습니다.')
-      })
-      .then((error) => {
-        console.log(error)
-      })
+    const msg = { nickName: '', weight: '', height: '', birth: '' }
+    let isBlank = false
+
+    for (const key in profile) {
+      if (profile[key] === '') {
+        isBlank = true
+      }
+    }
+
+    if ((!isActive && nameCheck === cantUse) || nameCheck !== nickName) {
+      openModal('닉네임 중복 확인 필요')
+      return
+    }
+
+    if (weight <= 0) {
+      msg.weight = '유효하지 않은 값입니다.'
+    }
+    if (height <= 0) {
+      msg.height = '유효하지 않은 값입니다.'
+    }
+    if (birth === '') {
+      msg.birth = '생년월일을 입력해주세요.'
+    }
+
+    if (isBlank) {
+      setNotice({ ...notice, ...msg })
+    } else {
+      axios
+        .patch(
+          `${API}/members/mypage/update`,
+          {
+            nickName,
+            birth,
+            gender,
+            height,
+            weight,
+            activity,
+            icon,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${getCookie('access')}`,
+            },
+          }
+        )
+        .then((response) => {
+          dispatch(__editUser(response.data.data))
+          openModal('프로필이 성공적으로 수정되었습니다.')
+          setNotice({ ...notice, ...msg })
+        })
+        .then((error) => {
+          console.error(error)
+        })
+    }
   }
 
   // 회원탈퇴
@@ -83,7 +176,7 @@ const EditProfile = () => {
     axios
       .delete(`${API}/members/leaveid`, {
         headers: {
-          Authorization: 'Bearer ${token}',
+          Authorization: `Bearer ${getCookie('access')}`,
         },
       })
       .then((response) => {
@@ -95,17 +188,21 @@ const EditProfile = () => {
       })
   }
 
+  // 로그아웃 테스트
+  const logout = () => {
+    axios
+      .post(`${API}/members/logout`, {
+        headers: {
+          Authorization: `Bearer ${getCookie('access')}`,
+        },
+      })
+      .then((response) => {
+        console.log(response)
+        // navigate('/sign-in')
+      })
+  }
   useEffect(() => {
-    // axios
-    //   .get(`${API}/profile/1`)
-    //   // .get(`${API}/members/mypage`)
-    //   .then((response) => {
-    //     setProfile(response.data)
-    //     console.log(response.data)
-    //   })
-    //   .catch((error) => {
-    //     console.error(error)
-    //   })
+    setProfile(userInfo)
   }, [])
 
   return (
@@ -134,16 +231,18 @@ const EditProfile = () => {
                 type="text"
                 name="nickName"
                 value={nickName}
-                disabled={!isOk}
+                disabled={!isActive}
+                success={notice.nickNameOk}
+                error={notice.nickName}
                 onChange={handleInput}
               />
-              {!isOk ? (
+              {!isActive ? (
                 <div>
-                  <Button onClick={() => setIsOk(true)}>닉네임 변경</Button>
+                  <Button onClick={() => setIsActive(true)}>닉네임 변경</Button>
                 </div>
               ) : (
                 <div>
-                  <Button onClick={() => console.log('gg')}>중복확인</Button>
+                  <Button onClick={checkNickname}>중복확인</Button>
                 </div>
               )}
             </div>
@@ -158,6 +257,7 @@ const EditProfile = () => {
               type="date"
               name="birth"
               value={birth}
+              error={notice.birth}
               onChange={handleInput}
             />
             <Input
@@ -165,6 +265,7 @@ const EditProfile = () => {
               type="number"
               name="height"
               value={height}
+              error={notice.height}
               onChange={handleInput}
             />
             <Input
@@ -172,6 +273,7 @@ const EditProfile = () => {
               type="number"
               name="weight"
               value={weight}
+              error={notice.weight}
               onChange={handleInput}
             />
           </GridContainer>
@@ -193,6 +295,7 @@ const EditProfile = () => {
             >
               회원탈퇴
             </Button>
+            <Button onClick={logout}>로그아웃</Button>
             <Button onClick={updateProfile}>저장하기</Button>
           </ButtonWrapper>
         </Wrapper>
@@ -228,8 +331,8 @@ const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   column-gap: 2.4rem;
-  row-gap: 1.8rem;
-  margin: 1.8rem 0;
+  row-gap: 2.4rem;
+  margin: 1.8rem 0 2.4rem 0;
 
   .flex-div {
     display: flex;

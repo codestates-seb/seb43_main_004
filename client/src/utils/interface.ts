@@ -1,4 +1,6 @@
 export interface User {
+  [key: string]: any
+  memberId?: number
   email?: string
   gender: string
   nickName: string
