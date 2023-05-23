@@ -13,7 +13,8 @@ public enum ExceptionCode {
     DIARY_NOT_FOUND(404, "Diary not found"),
     DIARY_EXIST(400, "Diary already exist"),
     FOOD_NOT_FOUND(404,"Food data not found"),
-    RECIPE_NOT_FOUND(404, "Recipe data not found");
+    RECIPE_NOT_FOUND(404, "Recipe data not found"),
+    MEAL_NOT_FOUND(404,"Meal not found");
 
     @Getter
     private int status;

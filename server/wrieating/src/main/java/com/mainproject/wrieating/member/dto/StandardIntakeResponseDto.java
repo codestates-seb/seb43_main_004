@@ -9,10 +9,10 @@ import lombok.*;
 public class StandardIntakeResponseDto {
     private Long intakeId;
     private Long memberId;
-    private Integer kcal;
-    private Integer carbohydrate;
-    private Integer protein;
-    private Integer fat;
-    private Integer sugar;
-    private Integer salt;
+    private double kcal;
+    private double carbohydrate;
+    private double protein;
+    private double fat;
+    private double sugar;
+    private double salt;
 }

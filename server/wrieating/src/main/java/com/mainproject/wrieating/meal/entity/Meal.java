@@ -27,6 +27,9 @@ public class Meal {
     @Column(nullable = true)
     private int kcal;
 
+    @Column
+    private int servingSize;
+
     @Column(nullable = true)
     private int carbohydrate;
 

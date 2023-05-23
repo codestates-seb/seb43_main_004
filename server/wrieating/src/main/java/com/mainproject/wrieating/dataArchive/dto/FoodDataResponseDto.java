@@ -18,5 +18,5 @@ public class FoodDataResponseDto {
     private int protein;
     private int fat;
     private int totalSugar;
-    private int natrium;
+    private int salt;
 }

@@ -35,7 +35,7 @@ public class FoodCsvReader {
             data.setFat((int) Double.parseDouble(record.get("지방(g)")));
             data.setCarbohydrate((int) Double.parseDouble(record.get("탄수화물(g)")));
             data.setTotalSugar((int) Double.parseDouble(record.get("총당류(g)")));
-            data.setNatrium((int) Double.parseDouble(record.get("나트륨(㎎)")));
+            data.setSalt((int) Double.parseDouble(record.get("나트륨(㎎)")));
 
             dataList.add(data);
         }

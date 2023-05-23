@@ -12,11 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public interface MealMapper {
 
-    MealPostDto toDTO(Meal meal);
+    MealPostDto MealToMealPostDto(Meal meal);
 
     Meal mealPostDtoToMeal(MealPostDto mealPostDTO);
-
-    Meal mealPatchDtoToMeal(MealPatchDto mealPatchDto);
 
     MealResponseDto mealToMealResponseDto(Meal meal);
 }

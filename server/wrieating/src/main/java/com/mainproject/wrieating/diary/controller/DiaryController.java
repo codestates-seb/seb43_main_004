@@ -38,10 +38,10 @@ public class DiaryController {
     private final JwtTokenizer tokenizer;
 
     @PostMapping("/write")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void postDiary(@RequestHeader(name = "Authorization") String token,
+    public ResponseEntity postDiary(@RequestHeader(name = "Authorization") String token,
                           @Validated @RequestBody DiaryPostDto diaryPostDto) {
-        service.createDiary(token,diaryPostDto);
+        DiaryPostResponseDto responseDto = service.createDiary(token,diaryPostDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @GetMapping("/{diaries-id}")
