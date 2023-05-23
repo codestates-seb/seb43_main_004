@@ -211,18 +211,41 @@ export interface FoodList {
 const DiaryWrite = () => {
   // 상태 & 변수
   const url = process.env.REACT_APP_SERVER_URL
-  const [timeCheck, setTimeCheck] = useState('') // 식사시간 상태
-  const [searchTxt, setSearchTxt] = useState('') // 검색 인풋에서 사용할 상태
-  const [searchList, setSearchList] = useState<FoodList[]>([]) // 자동완성 검색어의 목록
-  const [foodList, setFoodList] = useState<FoodList[]>([]) // 등록할 음식 리스트의 상태
-  // 모달 상태
-  const [isEmpty, setIsEmpty] = useState(false)
-  const [isUnchecked, setIsUnchecked] = useState(false)
-  const customId = useRef<number>(0) // 사용자등록 음식의 id. get요청 한번 해서 totalElement로 저장해두기
   const param = useParams()
   const location = useLocation()
   const diaryData = location.state?.meal || null // 식단 등록, 수정할 때 제공되는 데이터
+  const sendType = location.pathname.split('/')[3]
   console.log(diaryData)
+  const [timeCheck, setTimeCheck] = useState(
+    sendType === 'add' ? '' : diaryData[0].mealType
+  ) // 식사시간 상태
+  const [searchTxt, setSearchTxt] = useState('') // 검색 인풋 상태
+  const [searchList, setSearchList] = useState<FoodList[]>([]) // 자동완성 검색어의 목록
+  const [foodList, setFoodList] = useState<FoodList[]>(
+    sendType === 'add' ? [] : diaryData
+  ) // 등록할 음식 리스트의 상태
+  const [isEmpty, setIsEmpty] = useState(false) // 모달 상태
+  const [isUnchecked, setIsUnchecked] = useState(false) // 모달 상태
+  const customId = useRef<number>(0) // custom 음식의 id
+
+  const mealTime = [
+    {
+      id: 'BREAKFAST',
+      label: '아침',
+    },
+    {
+      id: 'LUNCH',
+      label: '점심',
+    },
+    {
+      id: 'DINNER',
+      label: '저녁',
+    },
+    {
+      id: 'SNACK',
+      label: '간식',
+    },
+  ]
 
   const debounce = <T extends (...args: any[]) => any>(
     fn: T,
@@ -240,6 +263,7 @@ const DiaryWrite = () => {
     }
   }
 
+  // 검색요청
   const getSearchList = useCallback(
     debounce(async (value) => {
       try {
@@ -366,7 +390,6 @@ const DiaryWrite = () => {
     })
     console.log(sendData)
 
-    const sendType = location.pathname.split('/')[3]
     const sendUrl =
       sendType === 'add'
         ? `/diaries/${param.id}/meal/write`
@@ -375,19 +398,23 @@ const DiaryWrite = () => {
   }
 
   useEffect(() => {
-    ;(async () => {
-      try {
-        const res = await axios.get(`${url}/nutrient?page=1&size=1`, {
-          headers: {
-            'Content-Type': `application/json`,
-            'ngrok-skip-browser-warning': '69420',
-          },
-        })
-        customId.current = res.data.pageInfo.totalElements
-      } catch (error) {
-        console.log(error)
-      }
-    })()
+    if (sendType === 'add') {
+      ;(async () => {
+        try {
+          const res = await axios.get(`${url}/nutrient?page=1&size=1`, {
+            headers: {
+              'Content-Type': `application/json`,
+              'ngrok-skip-browser-warning': '69420',
+            },
+          })
+          customId.current = res.data.pageInfo.totalElements
+        } catch (error) {
+          console.log(error)
+        }
+      })()
+    } else {
+      customId.current = diaryData[diaryData.length - 1].mealId + 1
+    }
   }, [])
 
   return (
@@ -397,32 +424,59 @@ const DiaryWrite = () => {
         <div className="when">
           <h3>언제 먹었나요?</h3>
           <ul className="meal-time">
-            {diaryData.map((data: any, idx: number) => {
-              return (
-                <li key={idx}>
-                  <input
-                    type="radio"
-                    name="mealType"
-                    id={data.mealType}
-                    disabled={data.hasData}
-                    checked={timeCheck === data.mealType}
-                    onChange={handleTimeChange}
-                  />
-                  <label htmlFor={data.mealType}>
-                    {timeCheck === data.mealType ? (
-                      <span className="material-icons-round">
-                        check_circle_outline
-                      </span>
-                    ) : (
-                      <span className="material-icons-round">
-                        radio_button_unchecked
-                      </span>
-                    )}
-                    <span>{data.mealType}</span>
-                  </label>
-                </li>
-              )
-            })}
+            {sendType === 'add'
+              ? diaryData.map((data: any, idx: number) => {
+                  return (
+                    <li key={idx}>
+                      <input
+                        type="radio"
+                        name="mealType"
+                        id={data.mealType}
+                        disabled={data.hasData}
+                        checked={timeCheck === data.mealType}
+                        onChange={handleTimeChange}
+                      />
+                      <label htmlFor={data.mealType}>
+                        {timeCheck === data.mealType ? (
+                          <span className="material-icons-round">
+                            check_circle_outline
+                          </span>
+                        ) : (
+                          <span className="material-icons-round">
+                            radio_button_unchecked
+                          </span>
+                        )}
+                        <span>{data.mealType}</span>
+                      </label>
+                    </li>
+                  )
+                })
+              : mealTime.map((data: any, idx: number) => {
+                  return (
+                    <li key={idx}>
+                      <input
+                        type="radio"
+                        name="mealType"
+                        id={data.id}
+                        disabled={data.id !== diaryData[0].mealType}
+                        checked={data.id === diaryData[0].mealType}
+                        onChange={handleTimeChange}
+                      />
+                      <label htmlFor={data.id}>
+                        {timeCheck === data.id ? (
+                          <span className="material-icons-round">
+                            check_circle_outline
+                          </span>
+                        ) : (
+                          <span className="material-icons-round">
+                            radio_button_unchecked
+                          </span>
+                        )}
+                        <span>{data.label}</span>
+                      </label>
+                    </li>
+                  )
+                })}
           </ul>
         </div>
         <div className="what">
