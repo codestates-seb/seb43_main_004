@@ -4,17 +4,17 @@
       {
         "id": "1",
         "userDate": "2023-05-12",
-        "diaryStatus": "\\u{1F600}"
+        "diaryStatus": "🫥"
       },
       {
         "id": "2",
         "userDate": "2023-05-13",
-        "diaryStatus": "\\u{1F62D}"
+        "diaryStatus": "😵"
       },
       {
         "id": "3",
         "userDate": "2023-05-16",
-        "diaryStatus": "\\u{1F62D}"
+        "diaryStatus": "🫥"
       }
     ],
     "standardIntake": [
@@ -93,7 +93,7 @@
       "id": 2,
       "userDate": "2023-05-13",
       "memo": "오늘은 등, 이두, 삼두 운동과 유산소 30분을 했다. 오랜만에 하는 운동이라 그런지 근육통이 안사라지네요 ㅜㅜ",
-      "diaryStatus": "이모지",
+      "diaryStatus": "",
       "meal": [
         {
           "mealId": 1,

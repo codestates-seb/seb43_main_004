@@ -16,13 +16,16 @@ const DiaryDetail = () => {
   const [memoContent, setMemoContent] = useState(diary?.memo)
   const [isOpenMemo, setIsOpenMemo] = useState(true)
   const [isOpenModal, setIsOpenModal] = useState(false)
-  const [nutrientStatistics, setNutrientStatistics] = useState({})
-  console.log(nutrientStatistics)
+  const [saveEmoji, setSaveEmoji] = useState('')
+  const [nutrientStatistics, setNutrientStatistics] = useState<{
+    [key: string]: number
+  }>({})
 
   const navigate = useNavigate()
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
 
+  // 통계를 낸 영양소를 저장하는 함수 (퍼센트로 저장)
   const updateNutrientStatistics = (nutrientType: string, percent: number) => {
     setNutrientStatistics((prevStatistics: Record<string, number>) => ({
       ...prevStatistics,
@@ -118,6 +121,23 @@ const DiaryDetail = () => {
     return 'C50000'
   }
 
+  // 이모지를 제공하는 함수
+  const getEmoji = (
+    deficientCount: number,
+    appropriateCount: number,
+    excessiveCount: number
+  ) => {
+    if (deficientCount >= 3) {
+      return '😵' // 부족한 항목에 대한 이모지 반환
+    } else if (appropriateCount >= 3) {
+      return '😄' // 적정한 항목에 대한 이모지 반환
+    } else if (excessiveCount >= 3) {
+      return '😭' // 과다한 항목에 대한 이모지 반환
+    } else {
+      return '🫥' // 기본 이모지 반환
+    }
+  }
+
   useEffect(() => {
     axios.get(`http://localhost:4000/diary/${id}`).then((res) => {
       setDiary(res.data)
@@ -130,8 +150,20 @@ const DiaryDetail = () => {
     }
   }, [diary])
 
+  // 통계 전송 + 이모지 반영s
   useEffect(() => {
-    sendNutrientDataToServer(nutrientStatistics)
+    const data = sendNutrientDataToServer(nutrientStatistics)
+    // 여기에 리턴받은 데이터 전송하는 로직 구현해야함
+
+    // 이모지를 제공하는 로직
+    const emoji = getEmoji(
+      data['deficient'].length,
+      data['appropriate'].length,
+      data['excessive'].length
+    )
+
+    // 임시적으로 상태에 저장해둠 -> 이모지를 전송하는 로직 구현해야함
+    setSaveEmoji(emoji)
   }, [nutrientStatistics])
 
   return (
@@ -153,11 +185,14 @@ const DiaryDetail = () => {
           </Modal>
           <div className="diary__container">
             <h3 className="diary__header">
-              <p>{`${new Date(diary.userDate).getMonth() + 1}월 ${new Date(
-                diary.userDate
-              ).getDate()}일 ${
-                weekdays[new Date(diary.userDate).getDay()]
-              }요일`}</p>
+              <div className="diary__header__title">
+                <p>{`${new Date(diary.userDate).getMonth() + 1}월 ${new Date(
+                  diary.userDate
+                ).getDate()}일 ${
+                  weekdays[new Date(diary.userDate).getDay()]
+                }요일`}</p>
+                <div className="header__emoji">{saveEmoji}</div>
+              </div>
               <div className="diary__header__btn">
                 <Button onClick={onChangeModal} outline={true}>
                   <span className="material-symbols-outlined">delete</span>
@@ -332,8 +367,18 @@ const DiaryDetailWrapper = styled.div`
         font-family: 'yg-jalnan';
         margin-right: 0.5rem;
       }
+
+      .diary__header__title {
+        display: flex;
+        align-items: center;
+      }
+
       .diary__header__btn {
         display: flex;
+      }
+
+      .header__emoji {
+        font-size: 24px;
       }
     }
   }

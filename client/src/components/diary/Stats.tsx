@@ -99,7 +99,6 @@ const Stats = ({ diaries }: any) => {
   )
 
   const hasData = Object.values(weekList[0]).some((value) => value !== 0)
-  console.log(hasData)
 
   return (
     <StatsWrapper>
