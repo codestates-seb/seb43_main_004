@@ -249,7 +249,7 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
             </NavLink>
           </li>
           <li>
-            <Link to="/" onClick={handleMenu}>
+            <Link to="/recipe" onClick={handleMenu}>
               모아보기
             </Link>
             <ul className="depth-2">
