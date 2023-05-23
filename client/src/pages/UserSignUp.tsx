@@ -67,6 +67,7 @@ const UserSignUp = ({ social }: Props) => {
   const { email, nickName, password } = values
 
   const [ckPassword, setCkPassword] = useState<string>('')
+  const [nameCheck, setNameCheck] = useState<string>('') // 닉네임 비교
   const [authNums, setAuthNums] = useState<authentication>({
     auth: '',
     ckAuth: '',
@@ -94,7 +95,7 @@ const UserSignUp = ({ social }: Props) => {
     setModalMsg(msg)
   }
   const closeModal = () => {
-    if (!isEmpty) {
+    if (!isEmpty && nameCheck === nickName) {
       navigate('/sign-in')
       return
     }
@@ -130,12 +131,11 @@ const UserSignUp = ({ social }: Props) => {
       email: email,
     }
 
-    // 이메일이 정상적으로 입력되었는지 확인 후 인증번호 전송 api 호출(중복체크까지 진행)
+    // 이메일이 정상적으로 입력되었는지 확인 후 이메일 중복 체크
     if (checkEmail(email)) {
       await axios
         .post(`${API}/members/emailcheck`, emailData)
         .then((response) => {
-          console.log(response.data)
           // 가입된 이메일이 아니면
           if (response.data.data === false) {
             isValid = true
@@ -144,7 +144,7 @@ const UserSignUp = ({ social }: Props) => {
             )
             setError({ ...error, ...msg })
           } else {
-            msg.email = '중복된 이메일입니다.'
+            msg.email = '이미 사용 중인 이메일입니다.'
             setError({ ...error, ...msg })
           }
         })
@@ -161,15 +161,13 @@ const UserSignUp = ({ social }: Props) => {
       await axios
         .post(`${API}/members/sendmail`, emailData)
         .then((response) => {
-          console.log(response.data)
           // 가입된 이메일이 아니면
           if (response.data.isactive === false) {
             auth.auth = response.data.message
             setAuthNums({ ...authNums, ...auth })
-            // openModal('인증번호가 전송되었습니다. \n이메일을 확인해주세요.')
             setError({ ...error, ...msg })
           } else {
-            msg.email = '중복된 이메일입니다.'
+            msg.email = '이미 사용 중인 이메일입니다.'
             setError({ ...error, ...msg })
           }
         })
@@ -205,11 +203,10 @@ const UserSignUp = ({ social }: Props) => {
       openModal('인증이 완료되었습니다.')
       setError({ ...error, ...msg })
     }
-
-    console.log(authNums)
   }
 
   // 닉네임 중복확인
+  const cantUse = 'cant-use'
   const checkDuplicate = () => {
     const msg = { nickName: '' }
     setError({ ...error, ...msg })
@@ -221,18 +218,19 @@ const UserSignUp = ({ social }: Props) => {
     }
 
     axios
-      .post(`${API}/members/nicknamecheck`, { nickName: nickName })
+      .post(`${API}/members/nicknamecheck`, { nickName })
       .then((response) => {
-        console.log(response)
         // 중복 여부에 따른 분기
         if (response.data.data === false) {
           setError({ ...error, ...msg })
           msg.nickName = '사용 가능한 닉네임입니다.'
           setSuccess({ ...success, ...msg })
+          setNameCheck(nickName)
         } else {
           setSuccess({ ...success, ...msg })
-          msg.nickName = '중복된 닉네임입니다.'
+          msg.nickName = '이미 사용 중인 닉네임입니다.'
           setError({ ...error, ...msg })
+          setNameCheck(cantUse)
         }
       })
       .catch((error) => {
@@ -267,7 +265,6 @@ const UserSignUp = ({ social }: Props) => {
         }
       }
 
-      // 구글 로그인 할 때는 다른 조건문이 필요할듯
       if (
         !isBlank &&
         isConfirm &&
@@ -286,10 +283,14 @@ const UserSignUp = ({ social }: Props) => {
   // 가입하기 - 모든 값이 유효한 경우 버튼 활성화
   const registerUser = () => {
     // ApiCaller<userInfo, dtoResponse>('POST', 'members/signup', values)
+    if (nameCheck !== nickName || nameCheck === cantUse) {
+      openModal('닉네임 중복 확인 필요')
+      return
+    }
+
     axios
       .post(`${API}/members/signup`, values)
       .then((response) => {
-        console.log(response)
         openModal('회원가입이 완료되었습니다. \n로그인 페이지로 이동합니다.')
       })
       .catch((error) => {
