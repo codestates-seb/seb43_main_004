@@ -7,6 +7,7 @@ import FoodItem from '../components/diary/FoodItem'
 import axios from 'axios'
 import Modal from '../components/Common/Modal'
 import { useLocation, useParams } from 'react-router-dom'
+import { getCookie } from '../utils/Cookie'
 
 const StyledDiaryAdd = styled.main`
   width: 98%;
@@ -172,6 +173,12 @@ const StyledDiaryAdd = styled.main`
         align-items: center;
         gap: 1rem;
         margin-top: 3rem;
+
+        p {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
       }
     }
   }
@@ -234,7 +241,7 @@ const DiaryWrite = () => {
   const param = useParams()
   const location = useLocation()
   const diaryData = location.state?.meal || null // 식단 등록, 수정할 때 제공되는 데이터
-  // console.log(diaryData)
+  console.log(diaryData)
   const [searchTxt, setSearchTxt] = useState('') // 검색 인풋 상태
   const [searchList, setSearchList] = useState<FoodList[]>([]) // 자동완성 검색어의 목록
   const [stage, setStage] = useState<FoodList | null>(null)
@@ -326,50 +333,57 @@ const DiaryWrite = () => {
     setSearchTxt('')
   }
 
-  const checkValidation = () => {
-    // 유효성검사
-    // 빈칸이 있는지
-    // for (const item in stage) {
-    //   if (!stage[item]) {
-    //     setIsEmpty(true)
-    //   }
-    // }
-  }
+  const sendDiary = async () => {
+    if (stage?.foodName === '' || stage?.servingSize === 0) {
+      setIsEmpty(true)
+      return
+    }
 
-  const sendDiary = () => {
-    checkValidation()
-    setFoodList([stage, ...foodList])
-    // const sendData = foodList.map((item) => {
-    //   if (item.custom) {
-    //     return {
-    //       diaryId: param.id,
-    //       title: item.foodName,
-    //       mealType: 'ddd',
-    //       kcal: item.kcal,
-    //       carbohydrate: item.carbohydrate,
-    //       protein: item.protein,
-    //       fat: item.fat,
-    //       sugar: item.totalSugar,
-    //       salt: item.salt,
-    //       custom: item.custom,
-    //       servingSize: item.servingSize,
-    //     }
-    //   } else {
-    //     return {
-    //       diaryId: param.id,
-    //       title: item.foodName,
-    //       mealType: 'ddd',
-    //       kcal: item.kcal,
-    //       carbohydrate: item.carbohydrate,
-    //       protein: item.protein,
-    //       fat: item.fat,
-    //       sugar: item.totalSugar,
-    //       salt: item.salt,
-    //       servingSize: item.servingSize,
-    //     }
-    //   }
-    // })
-    // console.log(sendData)
+    const newData = {
+      diaryId: param.id,
+      title: stage?.foodName,
+      mealType: 'LUNCH',
+      kcal: stage?.kcal,
+      servingSize: stage?.servingSize,
+      carbohydrate: stage?.carbohydrate,
+      protein: stage?.protein,
+      fat: stage?.fat,
+      sugar: stage?.totalSugar,
+      salt: stage?.salt,
+      custom: stage?.custom,
+    }
+
+    try {
+      if (isEdit) {
+        const res = await axios.patch(
+          `${url}/diaries/${param.id}/meal/update/${stage?.mealId}`,
+          newData,
+          {
+            headers: {
+              'Content-Type': 'application / json',
+              'ngrok-skip-browser-warning': '69420',
+              Authorization: `Bearer ${getCookie('access')}`,
+            },
+          }
+        )
+        console.log(res)
+      } else {
+        const res = await axios.post(
+          `${url}/diaries/${param.id}/meal/write`,
+          newData,
+          {
+            headers: {
+              'Content-Type': 'application / json',
+              'ngrok-skip-browser-warning': '69420',
+              Authorization: `Bearer ${getCookie('access')}`,
+            },
+          }
+        )
+        console.log(res)
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   useEffect(() => {

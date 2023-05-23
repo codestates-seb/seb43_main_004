@@ -127,12 +127,12 @@ const FoodItem = (props: FoodItemProps) => {
   }
 
   const handleIncrease = () => {
-    setStage({ ...data, servingSize: data.servingSize + 100 })
+    setStage({ ...data, servingSize: Number(data.servingSize) + 100 })
   }
 
   const handleDecrease = () => {
     if (data.servingSize - 100 >= 0) {
-      setStage({ ...data, servingSize: data.servingSize - 100 })
+      setStage({ ...data, servingSize: Number(data.servingSize) - 100 })
     }
   }
 
