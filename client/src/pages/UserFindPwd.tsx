@@ -5,7 +5,6 @@ import Input from '../components/Common/Input'
 import { useNavigate } from 'react-router-dom'
 import { checkEmail, checkPassword } from '../utils/userfunc'
 import Modal from '../components/Common/Modal'
-import { API } from '../utils/API'
 import axios from 'axios'
 
 interface AuthInfo {
@@ -72,19 +71,12 @@ const UserFindPwd = () => {
       setError({ ...error, ...msg })
       return
     }
-    // 이메일이 정상적으로 입력되었는지 확인 후 인증번호 전송
-    // if (checkEmail(email)) {
-    //   // api 호출
-    //   openModal('인증번호가 전송되었습니다. \n이메일을 확인해주세요.')
-    //   setAuthNums('1111')
-    //   setError({ ...error, ...msg })
-    // } else {
-    //   msg.email = '이메일이 유효하지 않습니다.'
-    //   setError({ ...error, ...msg })
-    // }
+
     if (checkEmail(email)) {
       await axios
-        .post(`${API}/members/emailcheck`, { email: email })
+        .post(`${process.env.REACT_APP_SERVER_URL}/members/emailcheck`, {
+          email: email,
+        })
         .then((response) => {
           console.log(response.data)
           // 가입된 이메일이면
@@ -110,7 +102,10 @@ const UserFindPwd = () => {
     if (isValid) {
       // 인증번호 전송 api 호출
       await axios
-        .post(`${API}/members/findpassword/sendmail`, { email })
+        .post(
+          `${process.env.REACT_APP_SERVER_URL}/members/findpassword/sendmail`,
+          { email }
+        )
         .then((response) => {
           console.log(response.data)
           // 가입된 이메일이면
@@ -160,7 +155,7 @@ const UserFindPwd = () => {
     } else {
       // 비밀번호 변경 API 호출
       axios
-        .patch(`${API}/members/findpassword`, {
+        .patch(`${process.env.REACT_APP_SERVER_URL}/members/findpassword`, {
           email: email,
           newPassword: password,
         })

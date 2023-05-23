@@ -7,7 +7,6 @@ import Radio from '../Common/Radio'
 import Icons from '../User/Icons'
 import { genderList, activityScore, icons } from '../../utils/options'
 import axios from 'axios'
-import { API } from '../../utils/API'
 import { User } from '../../utils/interface'
 import Modal from '../Common/Modal'
 import { useNavigate } from 'react-router-dom'
@@ -92,7 +91,7 @@ const EditProfile = () => {
 
     axios
       .post(
-        `${API}/members/nicknamecheck`,
+        `${process.env.REACT_APP_SERVER_URL}/members/nicknamecheck`,
         { nickName },
         {
           headers: {
@@ -143,7 +142,7 @@ const EditProfile = () => {
     } else {
       axios
         .patch(
-          `${API}/members/mypage/update`,
+          `${process.env.REACT_APP_SERVER_URL}/members/mypage/update`,
           {
             nickName,
             birth,
@@ -178,7 +177,7 @@ const EditProfile = () => {
     )
 
     axios
-      .delete(`${API}/members/leaveId`, {
+      .delete(`${process.env.REACT_APP_SERVER_URL}/members/leaveId`, {
         headers: {
           Authorization: `Bearer ${getCookie('access')}`,
         },

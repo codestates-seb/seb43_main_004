@@ -13,7 +13,6 @@ import {
 import { dtoResponse } from '../dto'
 import { debounce } from '../utils/timefunc'
 import axios, { AxiosResponse, AxiosError } from 'axios'
-import { API } from '../utils/API'
 import Modal from '../components/Common/Modal'
 import { useNavigate } from 'react-router-dom'
 
@@ -134,7 +133,10 @@ const UserSignUp = ({ social }: Props) => {
     // 이메일이 정상적으로 입력되었는지 확인 후 이메일 중복 체크
     if (checkEmail(email)) {
       await axios
-        .post(`${API}/members/emailcheck`, emailData)
+        .post(
+          `${process.env.REACT_APP_SERVER_URL}/members/emailcheck`,
+          emailData
+        )
         .then((response) => {
           // 가입된 이메일이 아니면
           if (response.data.data === false) {
@@ -159,7 +161,7 @@ const UserSignUp = ({ social }: Props) => {
     if (isValid) {
       // 인증번호 전송 api 호출
       await axios
-        .post(`${API}/members/sendmail`, emailData)
+        .post(`${process.env.REACT_APP_SERVER_URL}/members/sendmail`, emailData)
         .then((response) => {
           // 가입된 이메일이 아니면
           if (response.data.isactive === false) {
@@ -218,7 +220,9 @@ const UserSignUp = ({ social }: Props) => {
     }
 
     axios
-      .post(`${API}/members/nicknamecheck`, { nickName })
+      .post(`${process.env.REACT_APP_SERVER_URL}/members/nicknamecheck`, {
+        nickName,
+      })
       .then((response) => {
         // 중복 여부에 따른 분기
         if (response.data.data === false) {
@@ -289,7 +293,7 @@ const UserSignUp = ({ social }: Props) => {
     }
 
     axios
-      .post(`${API}/members/signup`, values)
+      .post(`${process.env.REACT_APP_SERVER_URL}/members/signup`, values)
       .then((response) => {
         openModal('회원가입이 완료되었습니다. \n로그인 페이지로 이동합니다.')
       })
