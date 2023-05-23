@@ -121,6 +121,59 @@ const StyledDiaryAdd = styled.main`
       text-align: center;
       font-family: 'yg-jalnan';
     }
+
+    ul {
+      border: 1px solid ${({ theme }) => theme.color.lightGray};
+      border-radius: 1.5rem;
+      overflow: hidden;
+      max-height: 1000px;
+      overflow-y: auto;
+    }
+
+    li {
+      border-bottom: 1px solid ${({ theme }) => theme.color.lightGray};
+      padding: 2rem;
+
+      .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        > p {
+          font-size: ${({ theme }) => theme.fontSize.larger};
+          font-weight: 700;
+        }
+
+        .intake {
+          display: flex;
+          align-items: center;
+          gap: 5rem;
+
+          .kcal {
+            font-weight: 500;
+          }
+        }
+
+        .btns {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+
+          button {
+            font-size: ${({ theme }) => theme.fontSize.larger};
+          }
+        }
+      }
+
+      .food-info {
+        color: ${({ theme }) => theme.color.darkGray};
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 3rem;
+      }
+    }
   }
 
   @media ${({ theme }) => theme.device.mobile} {
@@ -250,12 +303,25 @@ const DiaryWrite = () => {
     setStage(newItem)
   }
 
-  const deleteFoodItem = (title: string) => {
+  const deleteFoodItem = async (id: number) => {
     console.log('delete')
+    const res = await axios.delete(`${url}/diaries/diaryId/meal/delete/${id}`, {
+      headers: {
+        'Content-Type': `application/json`,
+        'ngrok-skip-browser-warning': '69420',
+      },
+    })
+    console.log(res)
+  }
+
+  const editToStage = (data: FoodList) => {
+    setStage(data)
+    setIsEdit(true)
   }
 
   const addToStage = (item: FoodList) => {
     setStage(item)
+    setIsEdit(false)
     setSearchList([])
     setSearchTxt('')
   }
@@ -411,7 +477,45 @@ const DiaryWrite = () => {
                 <li key={idx}>
                   <div className="title">
                     <p>{data.foodName}</p>
-                    <div></div>
+                    <div className="intake">
+                      <p>섭취량(g) : {data.servingSize}</p>
+                      <p className="kcal">{data.kcal}kcal</p>
+                      <div className="btns">
+                        <button type="button" onClick={() => editToStage(data)}>
+                          <span className="material-icons-round">edit</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => deleteFoodItem(data.mealId)}
+                        >
+                          <span className="material-icons-round">
+                            delete_outline
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="food-info">
+                    <p>
+                      <span>탄수화물</span>
+                      <span>{data.carbohydrate}g</span>
+                    </p>
+                    <p>
+                      <span>단백질</span>
+                      <span>{data.protein}g</span>
+                    </p>
+                    <p>
+                      <span>지방</span>
+                      <span>{data.fat}g</span>
+                    </p>
+                    <p>
+                      <span>당류</span>
+                      <span>{data.protein}g</span>
+                    </p>
+                    <p>
+                      <span>나트륨</span>
+                      <span>{data.fat}mg</span>
+                    </p>
                   </div>
                 </li>
               ))
