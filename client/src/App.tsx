@@ -35,7 +35,6 @@ function App() {
             <Route path="/diaries" element={<DiaryCheck />} />
             <Route path="/diaries/:id" element={<DiaryDetail />} />
             <Route path="/diaries/:id/add" element={<DiaryWrite />} />
-            <Route path="/diaries/:id/update" element={<DiaryWrite />} />
             <Route path="/community" element={<UpdateReady />} />
             <Route path="/nutrient" element={<FoodArchive />} />
             <Route path="/recipe" element={<RecipeArchive />} />

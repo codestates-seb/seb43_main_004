@@ -36,7 +36,6 @@ const StyledFoodItem = styled.li`
       justify-content: space-between;
       align-items: center;
       gap: 3rem;
-      margin-right: 5rem;
 
       .intake-counter {
         display: flex;
@@ -62,11 +61,13 @@ const StyledFoodItem = styled.li`
       }
     }
   }
-  .btn-food-delete {
+
+  .btns {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     font-size: ${({ theme }) => theme.fontSize.smh};
-    position: absolute;
-    top: 2.5rem;
-    right: 2rem;
+    gap: 1rem;
   }
 
   .food-info {
@@ -109,13 +110,14 @@ const StyledFoodItem = styled.li`
 
 interface FoodItemProps {
   data: FoodList
-  setInfo: (id: number, content: { [key: string]: number | string }) => void
+  // setInfo: (id: number, content: { [key: string]: number | string }) => void
+  setStage: React.Dispatch<React.SetStateAction<FoodList | null>>
   delete: (title: string) => void
   custom?: boolean
 }
 
 const FoodItem = (props: FoodItemProps) => {
-  const { custom, data, delete: deleteItem, setInfo } = props
+  const { custom, data, delete: deleteItem, setStage } = props
 
   const id = data.foodId
   const [origin, setOrigin] = useState({ ...data }) // 보존해둘 데이터 원본
@@ -124,16 +126,19 @@ const FoodItem = (props: FoodItemProps) => {
   const handleIntakeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 숫자만 입력가능
     if (isNaN(Number(e.target.value))) return
-    setInfo(id, { servingSize: Number(e.target.value) })
+    // setInfo(id, { servingSize: Number(e.target.value) })
+    setStage({ ...data, servingSize: Number(e.target.value) })
   }
 
   const handleIncrease = () => {
-    setInfo(id, { servingSize: data.servingSize + 100 })
+    // setInfo(id, { servingSize: data.servingSize + 100 })
+    setStage({ ...data, servingSize: data.servingSize + 100 })
   }
 
   const handleDecrease = () => {
     if (data.servingSize - 100 >= 0) {
-      setInfo(id, { servingSize: data.servingSize - 100 })
+      // setInfo(id, { servingSize: data.servingSize - 100 })
+      setStage({ ...data, servingSize: data.servingSize - 100 })
     }
   }
 
@@ -142,7 +147,8 @@ const FoodItem = (props: FoodItemProps) => {
       // 섭취량에 따라 영양소 값 변화
       const ratio = data.servingSize / defaultIntake
       if (ratio === 1) {
-        setInfo(id, {
+        setStage({
+          ...data,
           kcal: origin.kcal,
           carbohydrate: origin.carbohydrate,
           protein: origin.protein,
@@ -150,8 +156,17 @@ const FoodItem = (props: FoodItemProps) => {
           totalSugar: origin.totalSugar,
           salt: origin.salt,
         })
+        // setInfo(id, {
+        //   kcal: origin.kcal,
+        //   carbohydrate: origin.carbohydrate,
+        //   protein: origin.protein,
+        //   fat: origin.fat,
+        //   totalSugar: origin.totalSugar,
+        //   salt: origin.salt,
+        // })
       } else {
-        setInfo(id, {
+        setStage({
+          ...data,
           kcal: Number((origin.kcal * ratio).toFixed(2)),
           carbohydrate: Number((origin.carbohydrate * ratio).toFixed(2)),
           protein: Number((origin.protein * ratio).toFixed(2)),
@@ -159,6 +174,14 @@ const FoodItem = (props: FoodItemProps) => {
           totalSugar: Number((origin.totalSugar * ratio).toFixed(2)),
           salt: Number((origin.salt * ratio).toFixed(2)),
         })
+        // setInfo(id, {
+        //   kcal: Number((origin.kcal * ratio).toFixed(2)),
+        //   carbohydrate: Number((origin.carbohydrate * ratio).toFixed(2)),
+        //   protein: Number((origin.protein * ratio).toFixed(2)),
+        //   fat: Number((origin.fat * ratio).toFixed(2)),
+        //   totalSugar: Number((origin.totalSugar * ratio).toFixed(2)),
+        //   salt: Number((origin.salt * ratio).toFixed(2)),
+        // })
       }
     }
 
@@ -171,23 +194,34 @@ const FoodItem = (props: FoodItemProps) => {
     const { name, value } = e.target
     if (name !== 'foodName' && isNaN(Number(value))) return
     if (name === 'foodName') {
-      setInfo(id, { [name]: value })
+      // setInfo(id, { [name]: value })
+      setStage({ ...data, [name]: value })
     } else {
-      setInfo(id, { [name]: Number(value) })
+      // setInfo(id, { [name]: Number(value) })
+      setStage({ ...data, [name]: Number(value) })
     }
   }
 
   return (
     <StyledFoodItem>
+      <div className="btns">
+        <button
+          type="button"
+          className="btn-food-edit"
+          onClick={() => deleteItem(data.foodName)}
+        >
+          <span className="material-icons-round">edit</span>
+        </button>
+        <button
+          type="button"
+          className="btn-food-delete"
+          onClick={() => deleteItem(data.foodName)}
+        >
+          <span className="material-icons-round">close</span>
+        </button>
+      </div>
       {custom ? (
         <>
-          <button
-            type="button"
-            className="btn-food-delete"
-            onClick={() => deleteItem(data.foodName)}
-          >
-            <span className="material-icons-round">close</span>
-          </button>
           <div className="food-title">
             <Input
               label="음식명"
@@ -261,13 +295,6 @@ const FoodItem = (props: FoodItemProps) => {
         </>
       ) : (
         <>
-          <button
-            type="button"
-            className="btn-food-delete"
-            onClick={() => deleteItem(data.foodName)}
-          >
-            <span className="material-icons-round">close</span>
-          </button>
           <div className="food-title">
             <p className="food-name">{data.foodName}</p>
             <div className="food-intake">
