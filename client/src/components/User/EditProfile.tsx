@@ -75,12 +75,16 @@ const EditProfile = () => {
     setProfile({ ...profile, [name]: value })
   }
 
-  // 닉네임 중복 체크
+  // 닉네임 중복 확인
   const cantUse = 'cant-use'
   const checkNickname = () => {
     const msg = { nickName: '', nickNameOk: '' }
 
-    if (userInfo.nickName === nickName) {
+    if (nickName.trim() === '') {
+      msg.nickName = '닉네임을 입력해주세요.'
+      setNotice({ ...notice, ...msg })
+      return
+    } else if (userInfo.nickName === nickName) {
       msg.nickName = '현재 사용중인 닉네임입니다.'
       setNotice({ ...notice, ...msg })
       return
@@ -174,7 +178,7 @@ const EditProfile = () => {
     )
 
     axios
-      .delete(`${API}/members/leaveid`, {
+      .delete(`${API}/members/leaveId`, {
         headers: {
           Authorization: `Bearer ${getCookie('access')}`,
         },
@@ -185,20 +189,6 @@ const EditProfile = () => {
       })
       .catch((error) => {
         console.error(error)
-      })
-  }
-
-  // 로그아웃 테스트
-  const logout = () => {
-    axios
-      .post(`${API}/members/logout`, {
-        headers: {
-          Authorization: `Bearer ${getCookie('access')}`,
-        },
-      })
-      .then((response) => {
-        console.log(response)
-        // navigate('/sign-in')
       })
   }
   useEffect(() => {
@@ -295,7 +285,6 @@ const EditProfile = () => {
             >
               회원탈퇴
             </Button>
-            <Button onClick={logout}>로그아웃</Button>
             <Button onClick={updateProfile}>저장하기</Button>
           </ButtonWrapper>
         </Wrapper>
