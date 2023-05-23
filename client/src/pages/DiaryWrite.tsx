@@ -210,6 +210,7 @@ export interface FoodList {
 
 const DiaryWrite = () => {
   // 상태 & 변수
+  const url = process.env.REACT_APP_SERVER_URL
   const [timeCheck, setTimeCheck] = useState('') // 식사시간 상태
   const [searchTxt, setSearchTxt] = useState('') // 검색 인풋에서 사용할 상태
   const [searchList, setSearchList] = useState<FoodList[]>([]) // 자동완성 검색어의 목록
@@ -224,14 +225,15 @@ const DiaryWrite = () => {
   const diaryData = location.state?.meal || null // 식단 등록, 수정할 때 제공되는 데이터
   console.log(diaryData)
 
-  // TODO: 페이지 넘어오게 되면 id로 일기 조회 데이터 가져오기
-  // 네비게이트로 데이터 넘겨준다 그걸로 가져오기
-
-  // Todo : 검색리스트 가져오기. 추후 전역 스토어에 영양성분 db 가져오는것으로 대체할 예정
   const getSearchList = async () => {
     const res = await axios.get(
-      `http://localhost:4000/nutrient?search=${searchTxt}`
-      // ${url}/nutrient/search?page=1&size=10&search=${searchTxt}
+      `${url}/nutrient/search?page=1&size=10&search=${searchTxt}`,
+      {
+        headers: {
+          'Content-Type': `application/json`,
+          'ngrok-skip-browser-warning': '69420',
+        },
+      }
     )
     setSearchList(res.data)
   }
