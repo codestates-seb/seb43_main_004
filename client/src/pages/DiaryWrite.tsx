@@ -196,15 +196,15 @@ const StyledDiaryAdd = styled.main`
 `
 
 export interface FoodList {
-  nutrientId: number
-  title: string
-  intake: number
+  foodId: number
+  foodName: string
+  servingSize: number
+  kcal: number
   carbohydrate: number
   protein: number
   fat: number
-  sugar: number
+  totalSugar: number
   salt: number
-  kcal: number
   custom?: boolean | undefined
 }
 
@@ -218,58 +218,75 @@ const DiaryWrite = () => {
   // 모달 상태
   const [isEmpty, setIsEmpty] = useState(false)
   const [isUnchecked, setIsUnchecked] = useState(false)
-  const [isUnsaved, setIsUnsaved] = useState(false)
   const customId = useRef<number>(120) // 사용자등록 음식의 id. get요청 한번 해서 totalElement로 저장해두기
   const param = useParams() // 일기 id는
   const location = useLocation() // url 가져오기
   const diaryData = location.state?.meal || null // 식단 등록, 수정할 때 제공되는 데이터
-  console.log(diaryData)
 
-  const getSearchList = async () => {
-    const res = await axios.get(
-      `${url}/nutrient/search?page=1&size=10&search=${searchTxt}`,
-      {
-        headers: {
-          'Content-Type': `application/json`,
-          'ngrok-skip-browser-warning': '69420',
-        },
-      }
-    )
-    setSearchList(res.data)
+  const debounce = <T extends (...args: any[]) => any>(
+    fn: T,
+    delay: number
+  ) => {
+    let timeout: ReturnType<typeof setTimeout>
+
+    return (...args: Parameters<T>): ReturnType<T> => {
+      let result: any
+      if (timeout) clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        result = fn(...args)
+      }, delay)
+      return result
+    }
   }
 
-  useEffect(() => {
-    // 검색어 자동완성
-    if (searchTxt !== '') {
-      getSearchList()
-    } else {
-      setSearchList([])
-    }
-  }, [searchTxt])
+  const getSearchList = useCallback(
+    debounce(async (value) => {
+      try {
+        const res = await axios.get(
+          `${url}/nutrient/search?page=1&size=10&search=${value}`,
+          {
+            headers: {
+              'Content-Type': `application/json`,
+              'ngrok-skip-browser-warning': '69420',
+            },
+          }
+        )
+        console.log(res.data.data)
+        setSearchList(res.data.data)
+      } catch (error) {
+        setSearchList([])
+        console.log(error)
+      }
+    }, 300),
+    []
+  )
 
-  // Todo: 오늘 일기 데이터 가져와서 상태 및 배열 생성. 식사가 기록되지 않은것만 isDisabled false 처리
-  const mealTime = [
-    {
-      label: '아침',
-      id: 'breakfast',
-      isDisabled: true,
-    },
-    {
-      label: '점심',
-      id: 'lunch',
-      isDisabled: true,
-    },
-    {
-      label: '저녁',
-      id: 'dinner',
-      isDisabled: false,
-    },
-    {
-      label: '간식',
-      id: 'snack',
-      isDisabled: false,
-    },
-  ]
+  const handleSearchOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTxt(e.target.value)
+    getSearchList(e.target.value)
+  }
+
+  // const getSearchList = async () => {
+  //   const res = await axios.get(
+  //     `${url}/nutrient/search?page=1&size=10&search=${searchTxt}`,
+  //     {
+  //       headers: {
+  //         'Content-Type': `application/json`,
+  //         'ngrok-skip-browser-warning': '69420',
+  //       },
+  //     }
+  //   )
+  //   setSearchList(res.data.data)
+  // }
+
+  // useEffect(() => {
+  //   // 검색어 자동완성
+  //   if (searchTxt !== '') {
+  //     getSearchList()
+  //   } else {
+  //     setSearchList([])
+  //   }
+  // }, [searchTxt])
 
   // 함수
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -278,15 +295,15 @@ const DiaryWrite = () => {
 
   const createCustomFoodItem = () => {
     const newItem: FoodList = {
-      nutrientId: customId.current,
-      title: '',
-      intake: 100,
+      foodId: customId.current,
+      foodName: '',
+      servingSize: 100,
+      kcal: 0,
       carbohydrate: 0,
       protein: 0,
       fat: 0,
-      sugar: 0,
+      totalSugar: 0,
       salt: 0,
-      kcal: 0,
       custom: true,
     }
     customId.current++
@@ -295,7 +312,7 @@ const DiaryWrite = () => {
   }
 
   const deleteFoodItem = (title: string) => {
-    setFoodList(foodList.filter((item) => item.title !== title))
+    setFoodList(foodList.filter((item) => item.foodName !== title))
   }
 
   const addToFoodList = (item: FoodList) => {
@@ -308,7 +325,7 @@ const DiaryWrite = () => {
     (id: number, content: { [key: string]: number | string }) => {
       setFoodList(
         foodList.map((item) =>
-          item.nutrientId === id ? { ...item, ...content } : item
+          item.foodId === id ? { ...item, ...content } : item
         )
       )
     },
@@ -331,17 +348,44 @@ const DiaryWrite = () => {
 
   const sendDiary = () => {
     checkValidation()
-    // 사용자가 등록한 음식은 custom:true 항목 추가해주기
     const sendData = foodList.map((item) => {
-      return {
-        mealType: timeCheck,
-        title: item.title,
-        carbohydrate: item.carbohydrate,
-        protein: item.protein,
-        fat: item.fat,
-        sugar: item.sugar,
-        salt: item.salt,
-        kcal: item.kcal,
+      let time = ''
+      if (timeCheck === '아침') {
+        time = 'BREAKFAST'
+      } else if (timeCheck === '점심') {
+        time = 'LUNCH'
+      } else if (timeCheck === '저녁') {
+        time = 'DINNER'
+      } else {
+        time = 'SNACK'
+      }
+
+      if (item.custom) {
+        return {
+          diaryId: param.id,
+          title: item.foodName,
+          mealType: time,
+          kcal: item.kcal,
+          carbohydrate: item.carbohydrate,
+          protein: item.protein,
+          fat: item.fat,
+          sugar: item.totalSugar,
+          salt: item.salt,
+          custom: item.custom,
+          servingSize: item.servingSize,
+        }
+      } else {
+        return {
+          diaryId: param.id,
+          title: item.foodName,
+          mealType: time,
+          kcal: item.kcal,
+          carbohydrate: item.carbohydrate,
+          protein: item.protein,
+          fat: item.fat,
+          sugar: item.totalSugar,
+          salt: item.salt,
+        }
       }
     })
     console.log(sendData)
@@ -361,19 +405,19 @@ const DiaryWrite = () => {
         <div className="when">
           <h3>언제 먹었나요?</h3>
           <ul className="meal-time">
-            {mealTime.map((time) => {
+            {diaryData.map((data: any, idx: number) => {
               return (
-                <li key={time.id}>
+                <li key={idx}>
                   <input
                     type="radio"
                     name="mealType"
-                    id={time.id}
-                    disabled={time.isDisabled}
-                    checked={timeCheck === time.id}
+                    id={data.mealType}
+                    disabled={data.hasData}
+                    checked={timeCheck === data.mealType}
                     onChange={handleTimeChange}
                   />
-                  <label htmlFor={time.id}>
-                    {timeCheck === time.id ? (
+                  <label htmlFor={data.mealType}>
+                    {timeCheck === data.mealType ? (
                       <span className="material-icons-round">
                         check_circle_outline
                       </span>
@@ -382,7 +426,7 @@ const DiaryWrite = () => {
                         radio_button_unchecked
                       </span>
                     )}
-                    <span>{time.label}</span>
+                    <span>{data.mealType}</span>
                   </label>
                 </li>
               )
@@ -403,21 +447,22 @@ const DiaryWrite = () => {
               placeholder="음식의 이름을 입력해 주세요."
               name="search-food"
               value={searchTxt}
-              onChange={(e) => setSearchTxt(e.target.value)}
+              onChange={(e) => handleSearchOnChange(e)}
             />
-            {searchList.length > 0 && (
+            {searchTxt.length > 0 && (
               <ul className="search-food-list">
-                {searchList.map((item) => {
-                  return (
-                    <li
-                      key={item.nutrientId}
-                      onClick={() => addToFoodList(item)}
-                    >
-                      <span className="food-name">{item.title}</span>
-                      <span className="material-icons-round">add</span>
-                    </li>
-                  )
-                })}
+                {searchList.length === 0 ? (
+                  <li>검색 결과가 없습니다.</li>
+                ) : (
+                  searchList.map((item) => {
+                    return (
+                      <li key={item.foodId} onClick={() => addToFoodList(item)}>
+                        <span className="food-name">{item.foodName}</span>
+                        <span className="material-icons-round">add</span>
+                      </li>
+                    )
+                  })
+                )}
               </ul>
             )}
           </div>
@@ -431,7 +476,7 @@ const DiaryWrite = () => {
               <ul>
                 {foodList.map((data) => (
                   <FoodItem
-                    key={data.nutrientId}
+                    key={data.foodId}
                     data={data}
                     setInfo={setFoodInfo}
                     delete={deleteFoodItem}
@@ -467,24 +512,6 @@ const DiaryWrite = () => {
             icon="error"
           >
             <Button onClick={() => setIsUnchecked(false)}>확인</Button>
-          </Modal>
-        )}
-        {/* 페이지 이동시 나타나는 모달 로직 짜야함 */}
-        {isUnsaved && (
-          <Modal
-            state={isUnsaved}
-            setState={setIsUnchecked}
-            msg={`작성중인 내용은 저장되지 않습니다.\n페이지를 나가시겠습니까?`}
-            icon="warning"
-          >
-            <Button
-              type="button"
-              outline={true}
-              onClick={() => setIsUnsaved(false)}
-            >
-              취소
-            </Button>
-            <Button onClick={() => setIsUnsaved(false)}>확인</Button>
           </Modal>
         )}
       </StyledDiaryAdd>

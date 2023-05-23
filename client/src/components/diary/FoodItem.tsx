@@ -71,6 +71,7 @@ const StyledFoodItem = styled.li`
 
   .food-info {
     color: ${({ theme }) => theme.color.darkGray};
+    gap: 1rem;
 
     p {
       display: flex;
@@ -116,37 +117,37 @@ interface FoodItemProps {
 const FoodItem = (props: FoodItemProps) => {
   const { custom, data, delete: deleteItem, setInfo } = props
 
-  const id = data.nutrientId
+  const id = data.foodId
   const [origin, setOrigin] = useState({ ...data }) // 보존해둘 데이터 원본
-  const defaultIntake = origin.intake // 기본 섭취량
+  const defaultIntake = origin.servingSize // 기본 섭취량
 
   const handleIntakeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 숫자만 입력가능
     if (isNaN(Number(e.target.value))) return
-    setInfo(id, { intake: Number(e.target.value) })
+    setInfo(id, { servingSize: Number(e.target.value) })
   }
 
   const handleIncrease = () => {
-    setInfo(id, { intake: data.intake + 100 })
+    setInfo(id, { servingSize: data.servingSize + 100 })
   }
 
   const handleDecrease = () => {
-    if (data.intake - 100 >= 0) {
-      setInfo(id, { intake: data.intake - 100 })
+    if (data.servingSize - 100 >= 0) {
+      setInfo(id, { servingSize: data.servingSize - 100 })
     }
   }
 
   useEffect(() => {
     const changeAmount = () => {
       // 섭취량에 따라 영양소 값 변화
-      const ratio = data.intake / defaultIntake
+      const ratio = data.servingSize / defaultIntake
       if (ratio === 1) {
         setInfo(id, {
           kcal: origin.kcal,
           carbohydrate: origin.carbohydrate,
           protein: origin.protein,
           fat: origin.fat,
-          sugar: origin.sugar,
+          totalSugar: origin.totalSugar,
           salt: origin.salt,
         })
       } else {
@@ -155,7 +156,7 @@ const FoodItem = (props: FoodItemProps) => {
           carbohydrate: Number((origin.carbohydrate * ratio).toFixed(2)),
           protein: Number((origin.protein * ratio).toFixed(2)),
           fat: Number((origin.fat * ratio).toFixed(2)),
-          sugar: Number((origin.sugar * ratio).toFixed(2)),
+          totalSugar: Number((origin.totalSugar * ratio).toFixed(2)),
           salt: Number((origin.salt * ratio).toFixed(2)),
         })
       }
@@ -164,12 +165,12 @@ const FoodItem = (props: FoodItemProps) => {
     if (!custom) {
       changeAmount()
     }
-  }, [data.intake])
+  }, [data.servingSize])
 
   const customOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    if (name !== 'title' && isNaN(Number(value))) return
-    if (name === 'title') {
+    if (name !== 'foodName' && isNaN(Number(value))) return
+    if (name === 'foodName') {
       setInfo(id, { [name]: value })
     } else {
       setInfo(id, { [name]: Number(value) })
@@ -183,7 +184,7 @@ const FoodItem = (props: FoodItemProps) => {
           <button
             type="button"
             className="btn-food-delete"
-            onClick={() => deleteItem(data.title)}
+            onClick={() => deleteItem(data.foodName)}
           >
             <span className="material-icons-round">close</span>
           </button>
@@ -192,8 +193,8 @@ const FoodItem = (props: FoodItemProps) => {
               label="음식명"
               type="text"
               placeholder="음식명"
-              name="title"
-              value={data.title}
+              name="foodName"
+              value={data.foodName}
               onChange={customOnChange}
             />
             <div className="food-intake">
@@ -201,8 +202,8 @@ const FoodItem = (props: FoodItemProps) => {
                 label="1인분 기준 섭취량(g)"
                 type="text"
                 placeholder="g"
-                name="intake"
-                value={data.intake.toString()}
+                name="servingSize"
+                value={data.servingSize.toString()}
                 onChange={customOnChange}
               />
               <Input
@@ -244,8 +245,8 @@ const FoodItem = (props: FoodItemProps) => {
               label="당류"
               type="text"
               placeholder="g"
-              name="sugar"
-              value={data.sugar.toString()}
+              name="totalSugar"
+              value={data.totalSugar.toString()}
               onChange={customOnChange}
             />
             <Input
@@ -263,12 +264,12 @@ const FoodItem = (props: FoodItemProps) => {
           <button
             type="button"
             className="btn-food-delete"
-            onClick={() => deleteItem(data.title)}
+            onClick={() => deleteItem(data.foodName)}
           >
             <span className="material-icons-round">close</span>
           </button>
           <div className="food-title">
-            <p className="food-name">{data.title}</p>
+            <p className="food-name">{data.foodName}</p>
             <div className="food-intake">
               <p>섭취량(g)</p>
               <div className="intake-counter">
@@ -281,7 +282,7 @@ const FoodItem = (props: FoodItemProps) => {
                 </button>
                 <input
                   type="text"
-                  value={data.intake}
+                  value={data.servingSize}
                   onChange={(e) => handleIntakeChange(e)}
                 />
                 <button
