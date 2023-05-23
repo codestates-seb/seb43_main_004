@@ -5,8 +5,9 @@ import Input from '../Common/Input'
 import Button from '../Common/Button'
 import { checkPassword } from '../../utils/userfunc'
 import Modal from '../Common/Modal'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { API } from '../../utils/API'
+import { getCookie } from '../../utils/Cookie'
 
 interface pwdType {
   currentPassword: string
@@ -71,26 +72,28 @@ const ChangePwd = () => {
     if (!isValid) {
       setError(msg)
     } else {
-      // api 호출
+      // 비밀번호 변경 api 호출
       axios
         .patch(
           `${API}/members/mypage/passwordupdate`,
-          { currentpw: currentPassword, newpw: newPassword },
+          { curPassword: currentPassword, newPassword: newPassword },
           {
             headers: {
-              Authorization: 'Bearer ${token}',
+              Authorization: `Bearer ${getCookie('access')}`,
             },
           }
         )
         .then((response) => {
-          console.log(response)
-          // 현재 비밀번호가 올바른지는 서버에서 판단할 예정
-          // 클라이언트에선 응답값에 따라 적절히 처리만 해주면 됨
           setError(msg)
           setIsOpen(true)
+          setPassword({ ...password, ...msg })
         })
-        .then((error) => {
-          console.log(error)
+        .catch((error: AxiosError) => {
+          // 400 에러 (현재 비밀번호를 잘못 입력했을 때)
+          if (error.response?.status === 400) {
+            msg.currentPassword = '현재 비밀번호가 유효하지 않습니다.'
+            setError(msg)
+          }
         })
     }
   }
@@ -105,6 +108,7 @@ const ChangePwd = () => {
               label="현재 비밀번호"
               placeholder="현재 비밀번호"
               name="currentPassword"
+              value={currentPassword}
               error={error.currentPassword}
               onChange={handleInput}
             />
@@ -113,6 +117,7 @@ const ChangePwd = () => {
               label="새 비밀번호"
               placeholder="새 비밀번호"
               name="newPassword"
+              value={newPassword}
               error={error.newPassword}
               onChange={handleInput}
             />
@@ -121,6 +126,7 @@ const ChangePwd = () => {
               label="새 비밀번호 확인"
               placeholder="비밀번호 확인"
               name="ckPassword"
+              value={ckPassword}
               error={error.ckPassword}
               onChange={handleInput}
             />
