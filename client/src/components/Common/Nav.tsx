@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import logo from '../../assets/logo.png'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
+import { removeCookie, getCookie } from '../../utils/Cookie'
 
 const StyledNavBg = styled.div`
   width: 100%;
@@ -195,20 +197,40 @@ interface NavProps {
   handleMenu(): void
 }
 
+interface userType {
+  nickName: string
+  icon: string
+}
+
 const Nav = ({ menuOpen, handleMenu }: NavProps) => {
-  // 확인용 임시 state
-  const [isLogin, setIsLogin] = useState(true)
+  const navigate = useNavigate()
+  const userInfo = useSelector((state: RootState) => state.profile.data)
+  const [user, setUser] = useState<userType>({ nickName: '', icon: '' })
+  const { nickName, icon } = user
+  const [isLogin, setIsLogin] = useState(false)
+
+  const logout = () => {
+    removeCookie('access', { path: '/' })
+    removeCookie('refresh', { path: '/' })
+    localStorage.removeItem('profileState')
+    navigate('/sign-in')
+    setIsLogin(false)
+  }
+
+  useEffect(() => {
+    if (getCookie('access')) {
+      setUser(userInfo)
+      setIsLogin(true)
+    }
+  }, [userInfo])
+
   return (
     <>
       <StyledNavBg className={menuOpen ? 'open' : ''} onClick={handleMenu} />
       <StyledNav className={menuOpen ? 'open' : ''}>
         <div className="btn-box">
           {isLogin && (
-            <button
-              type="button"
-              className="btn-logout"
-              onClick={() => setIsLogin(false)}
-            >
+            <button type="button" className="btn-logout" onClick={logout}>
               <span className="material-icons-round">power_settings_new</span>
             </button>
           )}
@@ -219,10 +241,10 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
         {isLogin ? (
           <div className="user-box">
             <div className="profile">
-              <img src={logo} alt="user profile" />
+              <img src={`/icons/${icon}.svg`} alt="user profile" />
             </div>
             <div>
-              <p>고양고양이</p>
+              <p>{nickName}</p>
               <Link to="/userpage" onClick={handleMenu}>
                 마이페이지
                 <span className="material-icons-round">navigate_next</span>

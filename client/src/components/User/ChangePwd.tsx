@@ -6,7 +6,6 @@ import Button from '../Common/Button'
 import { checkPassword } from '../../utils/userfunc'
 import Modal from '../Common/Modal'
 import axios, { AxiosError } from 'axios'
-import { API } from '../../utils/API'
 import { getCookie } from '../../utils/Cookie'
 
 interface pwdType {
@@ -75,7 +74,7 @@ const ChangePwd = () => {
       // 비밀번호 변경 api 호출
       axios
         .patch(
-          `${API}/members/mypage/passwordupdate`,
+          `${process.env.REACT_APP_SERVER_URL}/members/mypage/passwordupdate`,
           { curPassword: currentPassword, newPassword: newPassword },
           {
             headers: {

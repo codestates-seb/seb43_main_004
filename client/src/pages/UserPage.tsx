@@ -8,6 +8,25 @@ const UserPage = () => {
   const userInfo = useSelector((state: RootState) => state.profile.data)
   const { nickName, gender, height, weight, activity, icon } = userInfo
 
+  let activeLevel
+  switch (activity) {
+    case 'NONE_ACTIVE':
+      activeLevel = '매우 낮음'
+      break
+    case 'LIGHTLY_ACTIVE':
+      activeLevel = '낮음'
+      break
+    case 'MODERATELY_ACTIVE':
+      activeLevel = '보통'
+      break
+    case 'VERY_ACTIVE':
+      activeLevel = '높음'
+      break
+    case 'EXTREMELY_ACTIVE':
+      activeLevel = '매우 높음'
+      break
+  }
+
   return (
     <Container>
       <UserProfile>
@@ -15,7 +34,7 @@ const UserPage = () => {
         <div>
           <div className="userinfo-top">
             <h1>{nickName}</h1>
-            <span>{gender}</span>
+            <span>{gender === 'male' ? '남성' : '여성'}</span>
           </div>
 
           <ItemsWrapper>
@@ -29,14 +48,14 @@ const UserPage = () => {
             </div>
             <div>
               <span>활동수준</span>
-              <span>{activity}</span>
+              <span>{activeLevel}</span>
             </div>
           </ItemsWrapper>
         </div>
       </UserProfile>
       <Tab
         tabItem={[
-          { name: '프로필 수정', path: '/userpage' }, // 프로필 수정 페이지가 기본이 된다고 가정...
+          { name: '프로필 수정', path: '/userpage' },
           { name: '비밀번호 변경', path: '/userpage/change-pwd' },
         ]}
       />
