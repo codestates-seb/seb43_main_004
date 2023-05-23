@@ -6,11 +6,9 @@ import { useNavigate, Link } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import { checkEmail } from '../utils/userfunc'
 import axios from 'axios'
-import { API } from '../utils/API'
 import { getCookie, setCookie } from '../utils/Cookie'
 import { __getUser } from '../store/slices/profileSlice'
 import { useDispatch } from 'react-redux'
-import { store } from '../store'
 
 interface userType {
   email: string
@@ -40,7 +38,7 @@ const UserSignIn = () => {
     }
     // 액세스 토큰 발급(로그인)
     await axios
-      .post(`${API}/members/login`, values)
+      .post(`${process.env.REACT_APP_SERVER_URL}/members/login`, values)
       .then((response) => {
         const tokenWithNoBearer = response.data.accessToken.substr(7)
         const tokenForReissue = response.data.refreshToken
@@ -70,7 +68,7 @@ const UserSignIn = () => {
 
     // 발급받은 토큰으로 유저 정보 얻어오기
     await axios
-      .get(`${API}/members/myprofile`, {
+      .get(`${process.env.REACT_APP_SERVER_URL}/members/myprofile`, {
         headers: {
           Authorization: `Bearer ${getCookie('access')}`,
           'Content-Type': 'application / json',
@@ -79,13 +77,11 @@ const UserSignIn = () => {
       })
       .then((response) => {
         dispatch(__getUser(response.data.data))
-        // navigate('/diaries')
-        navigate('/userpage')
+        navigate('/')
       })
       .catch((error) => {
         console.error(error)
       })
-    console.log(store.getState())
   }
 
   return (
