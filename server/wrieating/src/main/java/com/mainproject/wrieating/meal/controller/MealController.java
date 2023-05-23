@@ -1,20 +1,15 @@
 package com.mainproject.wrieating.meal.controller;
 
-import com.mainproject.wrieating.diary.entity.Diary;
-import com.mainproject.wrieating.diary.repository.DiaryRepository;
 import com.mainproject.wrieating.meal.dto.MealPatchDto;
 import com.mainproject.wrieating.meal.dto.MealPostDto;
-import com.mainproject.wrieating.meal.dto.MealResponseDto;
-import com.mainproject.wrieating.meal.entity.Meal;
 import com.mainproject.wrieating.meal.mapper.MealMapper;
 import com.mainproject.wrieating.meal.service.MealService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
+
 
 @CrossOrigin
 @RestController
@@ -26,20 +21,24 @@ public class MealController {
     private final MealMapper mapper;
 
     @PostMapping("/write")
-    public ResponseEntity<MealPostDto> createMeal(@PathVariable("diaries-id") Long diaryId, @RequestBody MealPostDto mealPostDto) {
-        Meal createdMeal = mealService.createMeal(diaryId, mealPostDto);
-        return ResponseEntity.ok(mapper.toDTO(createdMeal));
+    @ResponseStatus(HttpStatus.OK)
+    public void createMeal(@Positive @PathVariable("diaries-id") Long diaryId,
+                           @RequestBody MealPostDto mealPostDto) {
+        mealService.createMeal(diaryId, mealPostDto);
     }
 
     @PatchMapping("/update/{meal-id}")
-    public ResponseEntity<MealResponseDto> updateMeal(@PathVariable("diaries-id") Long diaryId, @PathVariable("meal-id") Long mealId, @RequestBody MealPatchDto mealPatchDto) {
-        Meal updatedMeal = mealService.updateMeal(diaryId, mealId, mealPatchDto);
-        return ResponseEntity.ok(mapper.mealToMealResponseDto(updatedMeal));
+    @ResponseStatus(HttpStatus.OK)
+    public void updateMeal(@Positive @PathVariable("diaries-id") Long diaryId,
+                           @Positive @PathVariable("meal-id") Long mealId,
+                           @RequestBody MealPatchDto mealPatchDto) {
+        mealService.updateMeal(diaryId, mealId, mealPatchDto);
     }
 
     @DeleteMapping("/delete/{meal-id}")
-    public ResponseEntity<Void> deleteMeal(@PathVariable("diaries-id") Long diaryId, @PathVariable("meal-id") Long mealId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMeal(@Positive @PathVariable("diaries-id") Long diaryId,
+                           @Positive @PathVariable("meal-id") Long mealId) {
         mealService.deleteMeal(diaryId, mealId);
-        return ResponseEntity.noContent().build();
     }
 }

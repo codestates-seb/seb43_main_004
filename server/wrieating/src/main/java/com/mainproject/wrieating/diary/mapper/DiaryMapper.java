@@ -28,6 +28,8 @@ public interface DiaryMapper {
         return diary;
     };
 
+    DiaryPostResponseDto diaryToDiaryPostResponseDto(Diary diary);
+
     default DiaryResponseDto diaryToDiaryResponseDto(Diary diary) {
 
         return DiaryResponseDto.builder()

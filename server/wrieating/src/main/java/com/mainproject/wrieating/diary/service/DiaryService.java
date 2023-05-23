@@ -37,14 +37,16 @@ public class DiaryService {
     private final RecipeArchiveRepository recipeRepository;
     private final StandardIntakeRepository standardIntakeRepository;
 
-    public void createDiary(String token, DiaryPostDto diaryPostDto) {
+    public DiaryPostResponseDto createDiary(String token, DiaryPostDto diaryPostDto) {
         Diary diary = mapper.diaryPostDtoToDiary(diaryPostDto);
 
         Member member = memberService.findVerifiedMember(tokenizer.getMemberId(token));
 
         diary.setMember(member);
 
-        diaryRepository.save(diary);
+        Diary response = diaryRepository.save(diary);
+
+        return mapper.diaryToDiaryPostResponseDto(response);
     }
 
     public DiaryResponseDto findDiary(String token,Long diaryId) {
@@ -81,8 +83,8 @@ public class DiaryService {
         diaryRepository.deleteById(diaryId);
     }
 
-
-    private Diary findVerifiedDiary(long diaryId) { // 다이어리 아이디 있나 검증
+    // meal 에서 사용할 것
+    public Diary findVerifiedDiary(long diaryId) { // 다이어리 아이디 있나 검증
         return diaryRepository.findById(diaryId)
                 .orElseThrow(
                         () -> new BusinessLogicException(ExceptionCode.DIARY_NOT_FOUND)

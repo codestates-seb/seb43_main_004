@@ -14,8 +14,9 @@ public class MealPostDto {
     private Long mealId;
     private String title;
     private Meal.MealType mealType;
-    private int carbohydrate;
     private int kcal;
+    private int servingSize;
+    private int carbohydrate;
     private int protein;
     private int fat;
     private int sugar;

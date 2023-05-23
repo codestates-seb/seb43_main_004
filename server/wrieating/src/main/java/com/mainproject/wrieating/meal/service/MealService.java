@@ -4,6 +4,9 @@ import com.mainproject.wrieating.dataArchive.dbsource.fooddb.entity.FoodData;
 import com.mainproject.wrieating.dataArchive.repository.FoodArchiveRepository;
 import com.mainproject.wrieating.diary.entity.Diary;
 import com.mainproject.wrieating.diary.repository.DiaryRepository;
+import com.mainproject.wrieating.diary.service.DiaryService;
+import com.mainproject.wrieating.exception.BusinessLogicException;
+import com.mainproject.wrieating.exception.ExceptionCode;
 import com.mainproject.wrieating.meal.dto.MealPatchDto;
 import com.mainproject.wrieating.meal.dto.MealPostDto;
 import com.mainproject.wrieating.meal.entity.Meal;
@@ -23,80 +26,64 @@ public class MealService {
     private final DiaryRepository diaryRepository;
     private final FoodArchiveRepository foodArchiveRepository;
     private final MealMapper mapper;
+    private final DiaryService diaryService;
 
     public Meal createMeal(Long diaryId, MealPostDto mealPostDto) {
-        Optional<Diary> optionalDiary = diaryRepository.findById(diaryId);
+        Diary diary = diaryService.findVerifiedDiary(diaryId);
         Meal meal = mapper.mealPostDtoToMeal(mealPostDto);
-        if (optionalDiary.isPresent()) {
-            Diary diary = optionalDiary.get();
+
             meal.setDiary(diary);
 
             if (mealPostDto.isCustom()) {
                 FoodData foodData = new FoodData();
                 foodData.setFoodName(meal.getTitle());
                 foodData.setKcal(meal.getKcal());
+                foodData.setServingSize(meal.getServingSize());
                 foodData.setCarbohydrate(meal.getCarbohydrate());
                 foodData.setProtein(meal.getProtein());
                 foodData.setFat(meal.getFat());
                 foodData.setTotalSugar(meal.getSugar());
-                foodData.setNatrium(meal.getSalt());
+                foodData.setSalt(meal.getSalt());
                 foodArchiveRepository.save(foodData);
             }
 
             return mealRepository.save(meal);
         }
-        throw new IllegalArgumentException("Diary not found with ID: " + diaryId);
-    }
 
-    public Meal updateMeal(Long diaryId, Long mealId, MealPatchDto mealPatchDto) {
-        Optional<Diary> optionalDiary = diaryRepository.findById(diaryId);
-        if (optionalDiary.isPresent()) {
-            Diary diary = optionalDiary.get();
-            Optional<Meal> optionalMeal = diary.getMealList().stream()
-                    .filter(m -> m.getMealId().equals(mealId))
-                    .findFirst();
-            if (optionalMeal.isPresent()) {
-                Meal existingMeal = optionalMeal.get();
-                if (mealPatchDto.getTitle() != null) {
-                    existingMeal.setTitle(mealPatchDto.getTitle());
-                }
-                if (mealPatchDto.getMealType() != null) {
-                    existingMeal.setMealType(mealPatchDto.getMealType());
-                }
-                if (mealPatchDto.getKcal() != 0) {
-                    existingMeal.setKcal(mealPatchDto.getKcal());
-                }
-                // 나머지 필드들도 동일한 방식으로 업데이트
+    public void updateMeal(Long diaryId, Long mealId, MealPatchDto mealPatchDto) {
+        diaryService.findVerifiedDiary(diaryId);
+        Meal meal = verifiedMeal(mealId);
 
-                return mealRepository.save(existingMeal);
-            }
-            throw new IllegalArgumentException("Meal not found with ID: " + mealId);
-        }
-        throw new IllegalArgumentException("Diary not found with ID: " + diaryId);
+        Optional.ofNullable(mealPatchDto.getTitle())
+                .ifPresent(meal::setTitle);
+        Optional.ofNullable(mealPatchDto.getKcal())
+                .ifPresent(meal::setKcal);
+        Optional.ofNullable(mealPatchDto.getCarbohydrate())
+                .ifPresent(meal::setCarbohydrate);
+        Optional.ofNullable(mealPatchDto.getProtein())
+                .ifPresent(meal::setProtein);
+        Optional.ofNullable(mealPatchDto.getFat())
+                .ifPresent(meal::setFat);
+        Optional.ofNullable(mealPatchDto.getSugar())
+                .ifPresent(meal::setSugar);
+        Optional.ofNullable(mealPatchDto.getSalt())
+                .ifPresent(meal::setSalt);
+
+        mealRepository.save(meal);
     }
 
 
     public void deleteMeal(Long diaryId, Long mealId) {
-        Optional<Diary> optionalDiary = diaryRepository.findById(diaryId);
-        if (optionalDiary.isPresent()) {
-            Diary diary = optionalDiary.get();
-            Optional<Meal> optionalMeal = diary.getMealList().stream()
-                    .filter(m -> m.getMealId().equals(mealId))
-                    .findFirst();
-            if (optionalMeal.isPresent()) {
-                Meal meal = optionalMeal.get();
-                mealRepository.delete(meal);
-            } else {
-                throw new IllegalArgumentException("Meal not found with ID: " + mealId);
-            }
-        } else {
-            throw new IllegalArgumentException("Diary not found with ID: " + diaryId);
-        }
+        diaryService.findVerifiedDiary(diaryId);
+        Meal meal = verifiedMeal(mealId);
+
+        
     }
 
-
-    public Meal findMeal(long mealId) {
+    private Meal verifiedMeal(long mealId) {
         return mealRepository.findById(mealId)
-                .orElseThrow(() -> new RuntimeException("No data"));
+                .orElseThrow(
+                        () -> new BusinessLogicException(ExceptionCode.MEAL_NOT_FOUND)
+                );
     }
 }

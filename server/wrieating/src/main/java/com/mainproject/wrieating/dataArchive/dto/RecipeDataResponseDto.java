@@ -21,7 +21,7 @@ public class RecipeDataResponseDto {
     private int carbohydrate;
     private int protein;
     private int fat;
-    private int natrium;
+    private int salt;
     private String img;
     private String ingredients;
     private String manual01;

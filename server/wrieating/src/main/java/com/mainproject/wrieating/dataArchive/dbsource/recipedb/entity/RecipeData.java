@@ -19,7 +19,7 @@ public class RecipeData {
     private int carbohydrate;
     private int protein;
     private int fat;
-    private int natrium;
+    private int salt;
     private String img;
     @Column(columnDefinition = "TEXT")
     private String ingredients;

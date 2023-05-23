@@ -183,10 +183,10 @@ public class MemberService {
     private void saveIntake(long memberId) {
         StandardIntake standardIntake = new StandardIntake();
         Member member = findVerifiedMember(memberId);
-        int birth = member.getBirth().minusYears(LocalDate.now().getYear()).getYear();
+        int birth = LocalDate.now().minusYears(member.getBirth().getYear()).getYear();
 
         if (member.getGender().equals("male")) {
-            int bmrMale = (int) (66.5 + (13.75 * member.getWeight()) - (5.003 * member.getHeight()) - (6.75 * birth));
+            double bmrMale = 66.5 + (13.75 * member.getWeight()) + (5.003 * member.getHeight()) - (6.75 * birth);
 
             calIntake(standardIntake, member, bmrMale);
 
@@ -194,7 +194,7 @@ public class MemberService {
         }
 
         if (member.getGender().equals("female")){
-            int bmrFemale = (int) (655.1 + (9.563 * member.getWeight()) - (1.850 * member.getHeight()) - (4.676 * birth));
+            double bmrFemale = 655.1 + (9.563 * member.getWeight()) + (1.850 * member.getHeight()) - (4.676 * birth);
 
             calIntake(standardIntake, member, bmrFemale);
 
@@ -202,47 +202,47 @@ public class MemberService {
         }
     }
 
-    private void calIntake(StandardIntake standardIntake, Member member, int bmrFemale) {
+    private void calIntake(StandardIntake standardIntake, Member member, double bmr) {
         if (member.getActivity().equals(Member.Activity.NONE_ACTIVE)) {
             standardIntake.setMember(member);
-            standardIntake.setKcal((int) (bmrFemale * 1.2));
-            standardIntake.setCarbohydrate((int) (bmrFemale * 0.5));
-            standardIntake.setProtein((int) (bmrFemale * 0.15));
-            standardIntake.setFat((int) (bmrFemale * 0.25));
-            standardIntake.setSugar((int) ((bmrFemale * 1.2) * 0.1));
-            standardIntake.setSalt((int) (bmrFemale * 0.12));
+            standardIntake.setKcal(bmr * 1.2);
+            standardIntake.setCarbohydrate((bmr * 0.5)/4);
+            standardIntake.setProtein((bmr * 0.15)/4);
+            standardIntake.setFat((bmr * 0.25)/9);
+            standardIntake.setSugar(((bmr * 1.2) * 0.1)/4);
+            standardIntake.setSalt((bmr * 0.12)*10);
         } else if (member.getActivity().equals(Member.Activity.LIGHTLY_ACTIVE)) {
             standardIntake.setMember(member);
-            standardIntake.setKcal((int) (bmrFemale * 1.375));
-            standardIntake.setCarbohydrate((int) (bmrFemale * 0.6));
-            standardIntake.setProtein((int) (bmrFemale * 0.17));
-            standardIntake.setFat((int) (bmrFemale * 0.3));
-            standardIntake.setSugar((int) ((bmrFemale * 1.375) * 0.1));
-            standardIntake.setSalt((int) (bmrFemale * 0.12));
+            standardIntake.setKcal(bmr * 1.375);
+            standardIntake.setCarbohydrate((bmr * 0.6)/4);
+            standardIntake.setProtein((bmr * 0.17)/4);
+            standardIntake.setFat((bmr * 0.3)/9);
+            standardIntake.setSugar(((bmr * 1.375) * 0.1)/4);
+            standardIntake.setSalt((bmr * 0.12)*10);
         } else if (member.getActivity().equals(Member.Activity.MODERATELY_ACTIVE)) {
             standardIntake.setMember(member);
-            standardIntake.setKcal((int) (bmrFemale * 1.55));
-            standardIntake.setCarbohydrate((int) (bmrFemale * 0.7));
-            standardIntake.setProtein((int) (bmrFemale * 0.2));
-            standardIntake.setFat((int) (bmrFemale * 0.35));
-            standardIntake.setSugar((int) ((bmrFemale * 1.55) * 0.1));
-            standardIntake.setSalt((int) (bmrFemale * 0.12));
+            standardIntake.setKcal((bmr * 1.55));
+            standardIntake.setCarbohydrate((bmr * 0.7)/4);
+            standardIntake.setProtein((bmr * 0.2)/4);
+            standardIntake.setFat((bmr * 0.35)/9);
+            standardIntake.setSugar(((bmr * 1.55) * 0.1)/4);
+            standardIntake.setSalt((bmr * 0.12)*10);
         } else if (member.getActivity().equals(Member.Activity.VERY_ACTIVE)) {
             standardIntake.setMember(member);
-            standardIntake.setKcal((int) (bmrFemale * 1.725));
-            standardIntake.setCarbohydrate((int) (bmrFemale * 0.8));
-            standardIntake.setProtein((int) (bmrFemale * 0.25));
-            standardIntake.setFat((int) (bmrFemale * 0.4));
-            standardIntake.setSugar((int) ((bmrFemale * 1.725) * 0.1));
-            standardIntake.setSalt((int) (bmrFemale * 0.12));
+            standardIntake.setKcal(bmr * 1.725);
+            standardIntake.setCarbohydrate((bmr * 0.8)/4);
+            standardIntake.setProtein((bmr * 0.25)/4);
+            standardIntake.setFat((bmr * 0.4)/9);
+            standardIntake.setSugar(((bmr * 1.725) * 0.1)/4);
+            standardIntake.setSalt((bmr * 0.12)*10);
         } else if (member.getActivity().equals(Member.Activity.EXTREMELY_ACTIVE)) {
             standardIntake.setMember(member);
-            standardIntake.setKcal((int) (bmrFemale * 1.9));
-            standardIntake.setCarbohydrate((int) (bmrFemale * 0.9));
-            standardIntake.setProtein((int) (bmrFemale * 0.3));
-            standardIntake.setFat((int) (bmrFemale * 0.45));
-            standardIntake.setSugar((int) ((bmrFemale * 1.9) * 0.1));
-            standardIntake.setSalt((int) (bmrFemale * 0.12));
+            standardIntake.setKcal(bmr * 1.9);
+            standardIntake.setCarbohydrate((bmr * 0.9)/4);
+            standardIntake.setProtein((bmr * 0.3)/4);
+            standardIntake.setFat((bmr * 0.45)/9);
+            standardIntake.setSugar(((bmr * 1.9) * 0.1)/4);
+            standardIntake.setSalt((bmr * 0.12)*10);
         }
     }
 }

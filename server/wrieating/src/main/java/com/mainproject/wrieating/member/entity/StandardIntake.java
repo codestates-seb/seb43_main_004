@@ -20,20 +20,20 @@ public class StandardIntake {
     private Member member;
 
     @Column(nullable = false)
-    private Integer kcal;
+    private double kcal;
 
     @Column(nullable = false)
-    private Integer carbohydrate;
+    private double carbohydrate;
 
     @Column(nullable = false)
-    private Integer protein;
+    private double protein;
 
     @Column(nullable = false)
-    private Integer fat;
+    private double fat;
 
     @Column(nullable = false)
-    private Integer sugar;
+    private double sugar;
 
     @Column(nullable = false)
-    private Integer salt;
+    private double salt;
 }
