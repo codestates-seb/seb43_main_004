@@ -1,64 +1,48 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
-// import { DataResponse } from './DiaryCheck'
+import { DataResponse } from '../../pages/DiaryCheck'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { getCookie } from '../../utils/Cookie'
 
-const CalendarPage = ({ diaries }) => {
+const MobileCalendarPage = ({ diaries }: { diaries: DataResponse }) => {
   const [value, onChange] = useState(new Date())
   const navigate = useNavigate()
 
-  const newDiary = {
-    // json-server에서 post 요청을 위해 사용하는 목업 데이터
-    id: 4,
-    userDate: '2023-05-15',
-    memo: '',
-    diaryStatus: '',
-    meal: [],
-    standardIntake: [
-      {
-        carbohydrate: 225,
-        protein: 60,
-        fat: 47,
-        kcal: 2200,
-        sugar: 25,
-      },
-    ],
-    calcul: [
-      {
-        carbohydrate: 0,
-        protein: 0,
-        fat: 0,
-        kcal: 0,
-        sugar: 0,
-      },
-    ],
-    recipe: [],
-    comment: '',
-  }
-
-  const onChangeHandler = (date) => {
+  const onChangeHandler = (date: Date) => {
     //  브라우저의 기본 동작 때문에 선택한 날짜가 한국 표준시로 인해 하루 전으로 인식되서 코드 추가
     const selectedDate = new Date(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
     )
     const dateString = selectedDate.toISOString().split('T')[0]
+    const isPreviousMonth = date.getMonth() !== value.getMonth()
+
     const diaryData = diaries.data.find(
       (diary) => diary.userDate === dateString
     )
     if (diaryData) {
-      // 해당 날짜에 대한 일기 데이터가 이미 존재하는 경우
-      navigate(`/diaries/${diaryData.id}`)
-    } else {
+      navigate(`/diaries/${diaryData.diaryId}`)
+    } else if (!isPreviousMonth) {
       // 해당 날짜에 대한 일기 데이터가 없는 경우
       axios
-        .post('http://localhost:4000/diary', newDiary)
+        .post(
+          `${process.env.REACT_APP_SERVER_URL}/diaries/write`,
+          {
+            userDate: `${dateString}`,
+            memo: '',
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'ngrok-skip-browser-warning': '69420',
+              Authorization: `Bearer ${getCookie('access')}`,
+            },
+          }
+        )
         .then((res) => {
-          console.log(res)
-          // 여기서 diaries 상태를 최신화 해줘야할듯
-          navigate(`/diaries/${diaryData.id}`)
+          navigate(`/diaries/${res.data.diaryId}`)
         })
         .catch((err) => {
           console.log(err)
@@ -66,13 +50,20 @@ const CalendarPage = ({ diaries }) => {
     }
   }
 
-  // 이모지를 사용하게 되면 쓸 코드
-  const dateWithEmoji = {
-    '2023-05-12': '\u{1F600}',
-    '2023-05-13': '\u{1F62D}',
-    '2023-05-16': '\u{1F62D}',
-  }
-  const tileContent = ({ date }) => {
+  // 이모지를 사용하는 법
+  // const dateWithEmoji = {
+  //   '2023-05-12': '\u{1F600}',
+  //   '2023-05-13': '\u{1F62D}',
+  //   '2023-05-16': '\u{1F62D}',
+  // }
+
+  const dateWithEmoji: { [key: string]: string } = {}
+
+  diaries.data.forEach((item) => {
+    dateWithEmoji[item.userDate] = item.diaryStatus
+  })
+
+  const tileContent = ({ date }: { date: Date }) => {
     const a = new Date(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
     )
@@ -83,19 +74,12 @@ const CalendarPage = ({ diaries }) => {
   return (
     <Container>
       <Calendar
-        onChange={onChange}
+        onChange={(value) => onChange(value as Date)}
         value={value}
         locale="en-US"
         onClickDay={onChangeHandler}
         tileContent={tileContent}
       />
-      <h1>
-        {new Date(value).toLocaleDateString('ko', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })}
-      </h1>
     </Container>
   )
 }
@@ -192,6 +176,25 @@ const Container = styled.div`
   h1 {
     margin-top: 1rem;
   }
+
+  @media (max-width: 850px) {
+    .react-calendar {
+      width: 420px;
+      border: 0.4px solid var(--color-light-gray);
+      border-radius: 15px;
+      .emoji {
+        font-size: 3.6rem;
+      }
+    }
+    .react-calendar__month-view__days {
+      button {
+        height: 70px;
+        font-size: 13px;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 400;
+      }
+    }
+  }
 `
 
-export default CalendarPage
+export default MobileCalendarPage

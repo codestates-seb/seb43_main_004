@@ -2,8 +2,8 @@ import React from 'react'
 import { Meal } from './DiaryDetail'
 interface MealListProps {
   diary: { meal: Meal[] }
-  handleEditMeal: (mealData: Meal[]) => void
-  handleDeleteMeal: (mealData: Meal[]) => void
+  handleEditMeal: (mealData: Meal[] | { [key: string]: string }) => void
+  handleDeleteMeal: (mealData: Meal[] | { [key: string]: string }) => void
 }
 
 const MealList: React.FC<MealListProps> = ({
@@ -23,41 +23,44 @@ const MealList: React.FC<MealListProps> = ({
   return (
     <ul>
       {mealTypes.map((el, idx) => {
-        const mealData = diary.meal.filter(
-          (meal) => meal.mealType === mealTypeMap[el]
-        )
+        const mealData =
+          diary.meal.length !== 0 &&
+          diary.meal.filter((meal) => meal.mealType === mealTypeMap[el])
+            .length !== 0
+            ? diary.meal.filter((meal) => meal.mealType === mealTypeMap[el])
+            : { mealType: mealTypeMap[el] }
+
         return (
           <li className="diary__list" key={idx}>
             <header>
               <p>
                 {`${el} ${
-                  mealData.length
+                  Array.isArray(mealData) && mealData.length !== 0
                     ? mealData.reduce((acc, cur) => acc + cur.kcal, 0)
                     : 0
                 }Kcal`}
               </p>
-              {mealData.length !== 0 && (
-                <div>
-                  <span
-                    className="material-symbols-outlined"
-                    onClick={() => handleEditMeal(mealData)}
-                  >
-                    edit
-                  </span>
-                  <span
-                    className="material-symbols-outlined"
-                    onClick={() => handleDeleteMeal(mealData)}
-                  >
-                    delete
-                  </span>
-                </div>
-              )}
+
+              <div>
+                <span
+                  className="material-symbols-outlined"
+                  onClick={() => handleEditMeal(mealData)}
+                >
+                  edit
+                </span>
+                <span
+                  className="material-symbols-outlined"
+                  onClick={() => handleDeleteMeal(mealData)}
+                >
+                  delete
+                </span>
+              </div>
             </header>
             <ul className="meal__lists">
-              {mealData.length !== 0 ? (
+              {Array.isArray(mealData) && mealData.length !== 0 ? (
                 mealData.map((data, idx) => (
                   <li className="meal__list" key={idx}>
-                    <p>{data.foodName}</p>
+                    <p>{data.title}</p>
                     <p>{data.servingSize}g</p>
                     <span>{`${data.kcal}kcal`}</span>
                   </li>
