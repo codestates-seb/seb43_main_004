@@ -7,6 +7,7 @@ import FoodItem from '../components/diary/FoodItem'
 import axios from 'axios'
 import Modal from '../components/Common/Modal'
 import { useLocation, useParams } from 'react-router-dom'
+import { getCookie } from '../utils/Cookie'
 
 const StyledDiaryAdd = styled.main`
   width: 98%;
@@ -28,60 +29,10 @@ const StyledDiaryAdd = styled.main`
     font-weight: 700;
   }
 
-  & > button {
-    margin: 0 auto;
-  }
+  .food-edit {
+    margin-bottom: 1rem;
 
-  .when {
-    margin-bottom: 5rem;
-
-    h3 {
-      margin-bottom: 3rem;
-    }
-
-    .meal-time {
-      display: flex;
-      justify-content: flex-start;
-      gap: 1rem;
-
-      label {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-        border: 2px solid ${({ theme }) => theme.color.point};
-        border-radius: 1.5rem;
-        color: ${({ theme }) => theme.color.point};
-        font-weight: 700;
-        font-size: ${({ theme }) => theme.fontSize.large};
-        padding: 1.5rem 2rem;
-        cursor: pointer;
-
-        .material-icons-round {
-          font-size: ${({ theme }) => theme.fontSize.smh};
-        }
-      }
-
-      input {
-        display: none;
-
-        &:disabled + label {
-          border-color: ${({ theme }) => theme.color.lightGray};
-          color: ${({ theme }) => theme.color.lightGray};
-        }
-
-        &:checked + label {
-          color: ${({ theme }) => theme.color.white};
-          background-color: ${({ theme }) => theme.color.point};
-        }
-      }
-    }
-  }
-
-  .what {
-    margin-bottom: 10rem;
-
-    .what-title {
+    .title {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -90,7 +41,6 @@ const StyledDiaryAdd = styled.main`
 
     .search-food {
       position: relative;
-      margin-bottom: 3rem;
 
       .search-food-list {
         position: absolute;
@@ -128,13 +78,107 @@ const StyledDiaryAdd = styled.main`
         }
       }
     }
+  }
 
-    .food-list {
-      h3 {
-        text-align: center;
+  .food-stage {
+    margin-bottom: 10rem;
+
+    .empty {
+      border: 5px dashed ${({ theme }) => theme.color.lightGray};
+      padding: 5rem 0;
+      border-radius: 1.5rem;
+      text-align: center;
+
+      h4 {
+        font-size: ${({ theme }) => theme.fontSize.smh};
+        color: ${({ theme }) => theme.color.lightGray};
+      }
+    }
+
+    .full {
+      padding: 2rem;
+      border: 1px solid ${({ theme }) => theme.color.lightGray};
+      border-radius: 1.5rem;
+
+      > .btns {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+    }
+  }
+
+  .food-list {
+    h3 {
+      margin-bottom: 2rem;
+    }
+
+    .empty {
+      color: ${({ theme }) => theme.color.darkGray};
+      line-height: 1.5em;
+      font-size: ${({ theme }) => theme.fontSize.smh};
+      text-align: center;
+      font-family: 'yg-jalnan';
+    }
+
+    ul {
+      border: 1px solid ${({ theme }) => theme.color.lightGray};
+      border-radius: 1.5rem;
+      overflow: hidden;
+      max-height: 1000px;
+      overflow-y: auto;
+    }
+
+    li {
+      border-bottom: 1px solid ${({ theme }) => theme.color.lightGray};
+      padding: 2rem;
+
+      .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        > p {
+          font-size: ${({ theme }) => theme.fontSize.larger};
+          font-weight: 700;
+        }
+
+        .intake {
+          display: flex;
+          align-items: center;
+          gap: 5rem;
+
+          .kcal {
+            font-weight: 500;
+          }
+        }
+
+        .btns {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+
+          button {
+            font-size: ${({ theme }) => theme.fontSize.larger};
+          }
+        }
+      }
+
+      .food-info {
         color: ${({ theme }) => theme.color.darkGray};
-        line-height: 1.5em;
-        margin-top: 10rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 3rem;
+
+        p {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
       }
     }
   }
@@ -153,243 +197,286 @@ const StyledDiaryAdd = styled.main`
       font-size: ${({ theme }) => theme.fontSize.small};
     }
 
-    .when {
-      margin-bottom: 3rem;
-
-      h3 {
+    .food-edit {
+      .title {
         margin-bottom: 2rem;
       }
+    }
 
-      .meal-time {
-        gap: 0.5rem;
+    .food-stage {
+      margin-bottom: 5rem;
 
-        label {
-          font-size: ${({ theme }) => theme.fontSize.small};
-          padding: 0.5rem 1rem;
-          gap: 0.5rem;
-
-          .material-icons-round {
-            font-size: ${({ theme }) => theme.fontSize.middle};
-          }
+      .empty {
+        h4 {
+          font-size: ${({ theme }) => theme.fontSize.large};
         }
       }
     }
 
-    .what {
-      margin-bottom: 5rem;
-
-      .what-title {
-        margin-bottom: 2rem;
-      }
-
-      .search-food {
-        margin-bottom: 2rem;
-      }
-
-      .food-list {
-        h3 {
-          margin-top: 5rem;
-        }
+    .food-list {
+      .empty {
+        font-size: ${({ theme }) => theme.fontSize.large};
       }
     }
   }
 `
 
 export interface FoodList {
-  nutrientId: number
-  title: string
-  intake: number
+  foodId: number
+  foodName: string
+  servingSize: number
+  kcal: number
   carbohydrate: number
   protein: number
   fat: number
   sugar: number
   salt: number
-  kcal: number
   custom?: boolean | undefined
+  title?: string
+  [key: string]: string | number | boolean | undefined | null
 }
 
 const DiaryWrite = () => {
   // 상태 & 변수
-  const [timeCheck, setTimeCheck] = useState('') // 식사시간 상태
-  const [searchTxt, setSearchTxt] = useState('') // 검색 인풋에서 사용할 상태
-  const [searchList, setSearchList] = useState<FoodList[]>([]) // 자동완성 검색어의 목록
-  const [foodList, setFoodList] = useState<FoodList[]>([]) // 등록할 음식 리스트의 상태
-  // 모달 상태
-  const [isEmpty, setIsEmpty] = useState(false)
-  const [isUnchecked, setIsUnchecked] = useState(false)
-  const [isUnsaved, setIsUnsaved] = useState(false)
-  const customId = useRef<number>(120) // 사용자등록 음식의 id. get요청 한번 해서 totalElement로 저장해두기
-  const param = useParams() // 일기 id는
-  const location = useLocation() // url 가져오기
+  const url = process.env.REACT_APP_SERVER_URL
+  const param = useParams()
+  const location = useLocation()
   const diaryData = location.state?.meal || null // 식단 등록, 수정할 때 제공되는 데이터
-  console.log(diaryData)
+  const thisMealType = Array.isArray(diaryData)
+    ? diaryData[0].mealType
+    : diaryData.mealType
 
-  // TODO: 페이지 넘어오게 되면 id로 일기 조회 데이터 가져오기
-  // 네비게이트로 데이터 넘겨준다 그걸로 가져오기
+  const [searchTxt, setSearchTxt] = useState('') // 검색 인풋 상태
+  const [searchList, setSearchList] = useState<FoodList[]>([]) // 자동완성 검색어의 목록
+  const [stage, setStage] = useState<FoodList | null>(null)
+  const [isEdit, setIsEdit] = useState(false)
+  const [foodList, setFoodList] = useState<any[]>([]) // 음식 리스트
+  const [isEmpty, setIsEmpty] = useState(false) // 모달 상태
+  const customId = useRef<number>(0) // custom 음식의 id
 
-  // Todo : 검색리스트 가져오기. 추후 전역 스토어에 영양성분 db 가져오는것으로 대체할 예정
-  const getSearchList = async () => {
-    const res = await axios.get(
-      `http://localhost:4000/nutrient?search=${searchTxt}`
-      // ${url}/nutrient/search?page=1&size=10&search=${searchTxt}
-    )
-    setSearchList(res.data)
-  }
-
-  useEffect(() => {
-    // 검색어 자동완성
-    if (searchTxt !== '') {
-      getSearchList()
-    } else {
-      setSearchList([])
-    }
-  }, [searchTxt])
-
-  // Todo: 오늘 일기 데이터 가져와서 상태 및 배열 생성. 식사가 기록되지 않은것만 isDisabled false 처리
-  const mealTime = [
+  const mealTypeLabel = [
     {
-      label: '아침',
-      id: 'breakfast',
-      isDisabled: true,
+      mealType: 'BREAKFAST',
+      label: '☀️ 아침에 ',
     },
     {
-      label: '점심',
-      id: 'lunch',
-      isDisabled: true,
+      mealType: 'LUNCH',
+      label: '🌤️ 점심에 ',
     },
     {
-      label: '저녁',
-      id: 'dinner',
-      isDisabled: false,
+      mealType: 'DINNER',
+      label: '🌙 저녁에 ',
     },
     {
-      label: '간식',
-      id: 'snack',
-      isDisabled: false,
+      mealType: 'SNACK',
+      label: '🍪 간식으로 ',
     },
   ]
 
-  // 함수
-  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTimeCheck(e.target.id)
+  const debounce = <T extends (...args: any[]) => any>(
+    fn: T,
+    delay: number
+  ) => {
+    let timeout: ReturnType<typeof setTimeout>
+
+    return (...args: Parameters<T>): ReturnType<T> => {
+      let result: any
+      if (timeout) clearTimeout(timeout)
+      timeout = setTimeout(() => {
+        result = fn(...args)
+      }, delay)
+      return result
+    }
+  }
+
+  // 검색요청
+  const getSearchList = useCallback(
+    debounce(async (value) => {
+      try {
+        const res = await axios.get(
+          `${url}/nutrient/search?page=1&size=10&search=${value}`,
+          {
+            headers: {
+              'Content-Type': `application/json`,
+              'ngrok-skip-browser-warning': '69420',
+            },
+          }
+        )
+        setSearchList(res.data.data)
+      } catch (error) {
+        setSearchList([])
+      }
+    }, 300),
+    []
+  )
+
+  const handleSearchOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTxt(e.target.value)
+    getSearchList(e.target.value)
   }
 
   const createCustomFoodItem = () => {
     const newItem: FoodList = {
-      nutrientId: customId.current,
-      title: '',
-      intake: 100,
+      foodId: customId.current,
+      foodName: '',
+      servingSize: 100,
+      kcal: 0,
       carbohydrate: 0,
       protein: 0,
       fat: 0,
       sugar: 0,
       salt: 0,
-      kcal: 0,
       custom: true,
     }
     customId.current++
 
-    setFoodList([newItem, ...foodList])
+    setStage(newItem)
+    setIsEdit(false)
   }
 
-  const deleteFoodItem = (title: string) => {
-    setFoodList(foodList.filter((item) => item.title !== title))
+  const deleteFoodItem = async (id: number) => {
+    const res = await axios.delete(
+      `${url}/diaries/${param.id}/meal/delete/${id}`,
+      {
+        headers: {
+          'Content-Type': `application/json`,
+          'ngrok-skip-browser-warning': '69420',
+        },
+      }
+    )
+    getNewList()
   }
 
-  const addToFoodList = (item: FoodList) => {
-    setFoodList([item, ...foodList])
+  const editToStage = (data: FoodList) => {
+    setStage(data)
+    console.log(data)
+
+    setIsEdit(true)
+  }
+
+  const addToStage = (item: FoodList) => {
+    setStage(item)
+    setIsEdit(false)
     setSearchList([])
     setSearchTxt('')
   }
 
-  const setFoodInfo = useCallback(
-    (id: number, content: { [key: string]: number | string }) => {
-      setFoodList(
-        foodList.map((item) =>
-          item.nutrientId === id ? { ...item, ...content } : item
-        )
-      )
-    },
-    [foodList]
-  )
-
-  const checkValidation = () => {
-    // 유효성검사
-    // 시간 선택했는지
-    if (timeCheck === '') setIsUnchecked(true)
-
-    // 빈칸이 있는지
-    const values = []
-    for (const item of foodList) {
-      values.push(...Object.values(item))
+  const sendDiary = async () => {
+    if (stage?.foodName === '' || stage?.servingSize === 0) {
+      setIsEmpty(true)
+      return
     }
-    const result = values.filter((el) => el === '').length
-    if (result > 0) setIsEmpty(true)
-  }
-
-  const sendDiary = () => {
-    checkValidation()
-    // 사용자가 등록한 음식은 custom:true 항목 추가해주기
-    const sendData = foodList.map((item) => {
-      return {
-        mealType: timeCheck,
-        title: item.title,
-        carbohydrate: item.carbohydrate,
-        protein: item.protein,
-        fat: item.fat,
-        sugar: item.sugar,
-        salt: item.salt,
-        kcal: item.kcal,
+    let newData = {}
+    if (stage?.custom) {
+      newData = {
+        diaryId: param.id,
+        title: stage?.foodName,
+        mealType: thisMealType,
+        kcal: stage?.kcal,
+        servingSize: stage?.servingSize,
+        carbohydrate: stage?.carbohydrate,
+        protein: stage?.protein,
+        fat: stage?.fat,
+        sugar: stage?.sugar,
+        salt: stage?.salt,
+        custom: stage.custom,
       }
-    })
-    console.log(sendData)
-
-    const sendType = location.pathname.split('/')[3]
-    if (sendType === 'add') {
-      console.log('post', `/diaries/${param.id}/meal/write`)
     } else {
-      console.log('patch', `/diaries/${param.id}/meal/update/meal-id`)
+      newData = {
+        diaryId: param.id,
+        title: stage?.foodName,
+        mealType: thisMealType,
+        kcal: stage?.kcal,
+        servingSize: stage?.servingSize,
+        carbohydrate: stage?.carbohydrate,
+        protein: stage?.protein,
+        fat: stage?.fat,
+        sugar: stage?.sugar,
+        salt: stage?.salt,
+      }
+    }
+    console.log(newData)
+
+    try {
+      if (isEdit) {
+        const res = await axios.patch(
+          `${url}/diaries/${param.id}/meal/update/${stage?.mealId}`,
+          newData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'ngrok-skip-browser-warning': '69420',
+              Authorization: `Bearer ${getCookie('access')}`,
+            },
+          }
+        )
+      } else {
+        const res = await axios.post(
+          `${url}/diaries/${param.id}/meal/write`,
+          newData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'ngrok-skip-browser-warning': '69420',
+              Authorization: `Bearer ${getCookie('access')}`,
+            },
+          }
+        )
+      }
+      setStage(null)
+      getNewList()
+    } catch (err) {
+      console.log(err)
     }
   }
+
+  const getNewList = async () => {
+    const res = await axios.get(`${url}/diaries/${param.id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+        Authorization: `Bearer ${getCookie('access')}`,
+      },
+    })
+
+    setFoodList(res.data.meal.filter((el: any) => el.mealType === thisMealType))
+    console.log(res.data.meal.filter((el: any) => el.mealType === thisMealType))
+  }
+
+  useEffect(() => {
+    if (foodList.length === 0) {
+      ;(async () => {
+        try {
+          const res = await axios.get(`${url}/nutrient?page=1&size=1`, {
+            headers: {
+              'Content-Type': `application/json`,
+              'ngrok-skip-browser-warning': '69420',
+            },
+          })
+          customId.current = res.data.pageInfo.totalElements
+        } catch (error) {
+          console.log(error)
+        }
+      })()
+    } else {
+      customId.current = diaryData[diaryData.length - 1].mealId + 1
+    }
+    getNewList()
+  }, [])
 
   return (
     <>
       <StyledDiaryAdd>
         <h2>나의 식단일기</h2>
-        <div className="when">
-          <h3>언제 먹었나요?</h3>
-          <ul className="meal-time">
-            {mealTime.map((time) => {
-              return (
-                <li key={time.id}>
-                  <input
-                    type="radio"
-                    name="mealType"
-                    id={time.id}
-                    disabled={time.isDisabled}
-                    checked={timeCheck === time.id}
-                    onChange={handleTimeChange}
-                  />
-                  <label htmlFor={time.id}>
-                    {timeCheck === time.id ? (
-                      <span className="material-icons-round">
-                        check_circle_outline
-                      </span>
-                    ) : (
-                      <span className="material-icons-round">
-                        radio_button_unchecked
-                      </span>
-                    )}
-                    <span>{time.label}</span>
-                  </label>
-                </li>
-              )
-            })}
-          </ul>
-        </div>
-        <div className="what">
-          <div className="what-title">
-            <h3>무엇을 먹었나요?</h3>
+        <div className="food-edit">
+          <div className="title">
+            <h3>
+              {
+                mealTypeLabel.filter((el) => el.mealType === thisMealType)[0]
+                  .label
+              }
+              먹었어요
+            </h3>
             <Button onClick={createCustomFoodItem}>
               <span className="material-icons-round">edit</span>
               직접 등록하기
@@ -401,52 +488,118 @@ const DiaryWrite = () => {
               placeholder="음식의 이름을 입력해 주세요."
               name="search-food"
               value={searchTxt}
-              onChange={(e) => setSearchTxt(e.target.value)}
+              onChange={(e) => handleSearchOnChange(e)}
             />
-            {searchList.length > 0 && (
+            {searchTxt.length > 0 && (
               <ul className="search-food-list">
-                {searchList.map((item) => {
-                  return (
-                    <li
-                      key={item.nutrientId}
-                      onClick={() => addToFoodList(item)}
-                    >
-                      <span className="food-name">{item.title}</span>
-                      <span className="material-icons-round">add</span>
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
-          </div>
-          <div className="food-list">
-            {foodList.length === 0 ? (
-              <h3>
-                아직 등록된 음식이 없어요. <br />
-                오늘 먹은 음식을 등록해주세요!
-              </h3>
-            ) : (
-              <ul>
-                {foodList.map((data) => (
-                  <FoodItem
-                    key={data.nutrientId}
-                    data={data}
-                    setInfo={setFoodInfo}
-                    delete={deleteFoodItem}
-                    custom={data.custom}
-                  />
-                ))}
+                {searchList.length === 0 ? (
+                  <li>검색 결과가 없습니다.</li>
+                ) : (
+                  searchList.map((item) => {
+                    return (
+                      <li key={item.foodId} onClick={() => addToStage(item)}>
+                        <span className="food-name">{item.foodName}</span>
+                        <span className="material-icons-round">add</span>
+                      </li>
+                    )
+                  })
+                )}
               </ul>
             )}
           </div>
         </div>
-        <Button
-          disabled={!timeCheck || foodList.length === 0}
-          onClick={sendDiary}
-        >
-          <span className="material-icons-round">edit</span>
-          일기 등록하기
-        </Button>
+        <div className="food-stage">
+          {stage === null ? (
+            <div className="empty">
+              <h4>검색이나 직접 등록하기로 원하는 음식을 선택해주세요.</h4>
+            </div>
+          ) : (
+            <div className="full">
+              <FoodItem
+                key={stage.foodId}
+                data={stage}
+                setStage={setStage}
+                custom={stage.custom}
+              />
+              <div className="btns">
+                <Button
+                  type="button"
+                  outline={true}
+                  onClick={() => setStage(null)}
+                >
+                  취소하기
+                </Button>
+                {isEdit ? (
+                  <Button type="button" onClick={sendDiary}>
+                    수정하기
+                  </Button>
+                ) : (
+                  <Button type="button" onClick={sendDiary}>
+                    등록하기
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="food-list">
+          <h3>전체 {foodList.length}개</h3>
+          <ul>
+            {foodList.length === 0 ? (
+              <li className="empty">
+                아직 등록된 음식이 없어요. <br />
+                오늘 먹은 음식을 등록해주세요!
+              </li>
+            ) : (
+              foodList.map((data, idx) => (
+                <li key={idx}>
+                  <div className="title">
+                    <p>{data.title}</p>
+                    <div className="intake">
+                      <p>섭취량(g) : {data.servingSize}</p>
+                      <p className="kcal">{data.kcal}kcal</p>
+                      <div className="btns">
+                        <button type="button" onClick={() => editToStage(data)}>
+                          <span className="material-icons-round">edit</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => deleteFoodItem(data.mealId)}
+                        >
+                          <span className="material-icons-round">
+                            delete_outline
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="food-info">
+                    <p>
+                      <span>탄수화물</span>
+                      <span>{data.carbohydrate}g</span>
+                    </p>
+                    <p>
+                      <span>단백질</span>
+                      <span>{data.protein}g</span>
+                    </p>
+                    <p>
+                      <span>지방</span>
+                      <span>{data.fat}g</span>
+                    </p>
+                    <p>
+                      <span>당류</span>
+                      <span>{data.protein}g</span>
+                    </p>
+                    <p>
+                      <span>나트륨</span>
+                      <span>{data.fat}mg</span>
+                    </p>
+                  </div>
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
         {isEmpty && (
           <Modal
             state={isEmpty}
@@ -455,34 +608,6 @@ const DiaryWrite = () => {
             icon="error"
           >
             <Button onClick={() => setIsEmpty(false)}>확인</Button>
-          </Modal>
-        )}
-        {isUnchecked && (
-          <Modal
-            state={isUnchecked}
-            setState={setIsUnchecked}
-            msg={`식사시간을 선택하지 않으셨습니다.\n다시 확인하고 등록해주세요.`}
-            icon="error"
-          >
-            <Button onClick={() => setIsUnchecked(false)}>확인</Button>
-          </Modal>
-        )}
-        {/* 페이지 이동시 나타나는 모달 로직 짜야함 */}
-        {isUnsaved && (
-          <Modal
-            state={isUnsaved}
-            setState={setIsUnchecked}
-            msg={`작성중인 내용은 저장되지 않습니다.\n페이지를 나가시겠습니까?`}
-            icon="warning"
-          >
-            <Button
-              type="button"
-              outline={true}
-              onClick={() => setIsUnsaved(false)}
-            >
-              취소
-            </Button>
-            <Button onClick={() => setIsUnsaved(false)}>확인</Button>
           </Modal>
         )}
       </StyledDiaryAdd>

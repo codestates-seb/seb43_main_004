@@ -25,7 +25,8 @@ const fontSize = {
 
 // 반응형 모바일 사이즈(태블릿 ~ 모바일)
 const device = {
-  mobile: `screen and (max-width: 768px)`,
+  tablet: `screen and (max-width: 768px)`,
+  mobile: `screen and (max-width: 360px)`,
 }
 
 const shadow = `0 2px 4px rgba(74,74,74,0.15)`
