@@ -28,6 +28,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @AllArgsConstructor
 public class SecurityConfiguration implements WebMvcConfigurer {
     private final CustomAuthorityUtils authorityUtils;
+    private final CustomCorsConfiguration corsConfiguration;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -36,7 +37,8 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .and()
 
                 .csrf().disable()
-                .cors(withDefaults())
+                .cors().configurationSource(corsConfiguration)
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
 
@@ -73,15 +75,18 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         // 아카이브
                         .antMatchers(HttpMethod.GET,"/recipes/**").permitAll()
                         .antMatchers(HttpMethod.GET,"/nutrient/**").permitAll()
+
+                        // 레시피 추천
+                        .antMatchers(HttpMethod.POST,"/recommend-recipe").hasRole("USER")
                 );
 
         return http.build();
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("http://localhost:3000");
-    }
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**").allowedOrigins("http://localhost:3000");
+//    }
 
     // PasswordEncoder Beans 객체 생성
     @Bean

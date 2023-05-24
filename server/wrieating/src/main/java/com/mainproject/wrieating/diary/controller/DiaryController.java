@@ -26,7 +26,6 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/diaries")
 @AllArgsConstructor
