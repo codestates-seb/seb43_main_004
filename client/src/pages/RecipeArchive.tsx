@@ -174,29 +174,37 @@ const RecipeArchive = () => {
     }
     setSearchTxt('')
 
-    const res = await axios.get(
-      `${url}/recipes?page=${activePage}&size=12&filter=${keyword}`,
-      {
-        headers: {
-          'Content-Type': `application/json`,
-          'ngrok-skip-browser-warning': '69420',
-        },
-      }
-    )
-    setRecipes(res.data)
+    try {
+      const res = await axios.get(
+        `${url}/recipes?page=${activePage}&size=12&filter=${keyword}`,
+        {
+          headers: {
+            'Content-Type': `application/json`,
+            'ngrok-skip-browser-warning': '69420',
+          },
+        }
+      )
+      setRecipes(res.data)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const getSearchData = async () => {
-    const res = await axios.get(
-      `${url}/recipes/search?page=${activePage}&size=12&search=${searchTxt}`,
-      {
-        headers: {
-          'Content-Type': `application/json`,
-          'ngrok-skip-browser-warning': '69420',
-        },
-      }
-    )
-    setRecipes(res.data)
+    try {
+      const res = await axios.get(
+        `${url}/recipes/search?page=${activePage}&size=12&search=${searchTxt}`,
+        {
+          headers: {
+            'Content-Type': `application/json`,
+            'ngrok-skip-browser-warning': '69420',
+          },
+        }
+      )
+      setRecipes(res.data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {

@@ -440,7 +440,6 @@ const DiaryWrite = () => {
     })
 
     setFoodList(res.data.meal.filter((el: any) => el.mealType === thisMealType))
-    console.log(res.data.meal.filter((el: any) => el.mealType === thisMealType))
   }
 
   useEffect(() => {
