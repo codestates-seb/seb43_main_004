@@ -44,7 +44,7 @@ const UserSignIn = () => {
         const tokenForReissue = response.data.refreshToken
 
         const current = new Date()
-        current.setMinutes(current.getMinutes() + 1)
+        current.setMinutes(current.getMinutes() + 30)
 
         // 액세스 토큰
         setCookie('access', tokenWithNoBearer, {
