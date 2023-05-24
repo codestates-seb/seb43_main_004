@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Positive;
 
 
-@CrossOrigin
 @RestController
 @AllArgsConstructor
 @RequestMapping("/diaries/{diaries-id}/meal")
