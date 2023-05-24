@@ -1,1 +1,2 @@
-export const API = 'https://1a56-175-213-102-16.ngrok-free.app'
+export const API =
+  'https://wrieating-LB-737079984.ap-northeast-2.elb.amazonaws.com'
