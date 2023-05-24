@@ -48,7 +48,8 @@ const NutritionItem: React.FC<NutritionItemProps> = ({
           <p>{nutrientType}</p>
           <div>
             <span className={getColor(percent)}>
-              {diary.dayList[0][totalNutrientKey] !== undefined
+              {diary.dayList[0][totalNutrientKey] !== undefined &&
+              diary.dayList[0][totalNutrientKey] !== null
                 ? `${diary.dayList[0][totalNutrientKey]}${
                     nutrientType === '나트륨'
                       ? 'mg'

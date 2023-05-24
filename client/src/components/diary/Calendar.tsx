@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
-// import { DataResponse } from './DiaryCheck'
+import { DataResponse } from '../../pages/DiaryCheck'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { getCookie } from '../../utils/Cookie'
 
-const CalendarPage = ({ diaries, fetchData }) => {
+const CalendarPage = ({ diaries }: { diaries: DataResponse }) => {
   const [value, onChange] = useState(new Date())
   const navigate = useNavigate()
 
-  const onChangeHandler = (date) => {
+  const onChangeHandler = (date: Date) => {
     //  브라우저의 기본 동작 때문에 선택한 날짜가 한국 표준시로 인해 하루 전으로 인식되서 코드 추가
     const selectedDate = new Date(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
@@ -57,12 +57,13 @@ const CalendarPage = ({ diaries, fetchData }) => {
   //   '2023-05-16': '\u{1F62D}',
   // }
 
-  const dateWithEmoji = {}
+  const dateWithEmoji: { [key: string]: string } = {}
+
   diaries.data.forEach((item) => {
     dateWithEmoji[item.userDate] = item.diaryStatus
   })
-
-  const tileContent = ({ date }) => {
+  console.log(dateWithEmoji)
+  const tileContent = ({ date }: { date: Date }) => {
     const a = new Date(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
     )
@@ -73,7 +74,7 @@ const CalendarPage = ({ diaries, fetchData }) => {
   return (
     <Container>
       <Calendar
-        onChange={onChange}
+        onChange={(value) => onChange(value as Date)}
         value={value}
         locale="en-US"
         onClickDay={onChangeHandler}

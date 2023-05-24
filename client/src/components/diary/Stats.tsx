@@ -1,18 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ResponsivePie } from '@nivo/pie'
-// import { DataResponse } from './DiaryCheck'
+import { DataResponse } from '../../pages/DiaryCheck'
 
-const Stats = ({ diaries }: any) => {
+const Stats = ({ diaries }: { diaries: DataResponse }) => {
   // 백엔드 데이터가 만들어지면 any에서  DataResponse로 변경 에정
-  const { weekList, standardIntake } = diaries
+  const { weekList, standardIntakes } = diaries
   const intake = weekList && weekList[0] // 지난주 섭취량
-  const standardIntakes = standardIntake && standardIntake[0] // 평균섭취량
-  console.log(diaries, weekList)
+  const standardIntake = standardIntakes && standardIntakes[0] // 평균섭취량
 
   const percentIntake = (nutrient: string) => {
     return (
-      (intake?.[nutrient] / 7 / standardIntakes?.[nutrient]) *
+      (intake?.[nutrient] / 7 / standardIntake?.[nutrient]) *
       100
     ).toFixed(0)
   }
