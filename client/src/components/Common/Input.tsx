@@ -38,6 +38,7 @@ const Input = (props: inputProps) => {
     <InputWrapper>
       {label && <StyledLabel htmlFor={label}>{label}</StyledLabel>}
       <StyledInput
+        id={label}
         type={type}
         placeholder={placeholder}
         onChange={onChange}
