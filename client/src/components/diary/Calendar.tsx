@@ -12,19 +12,22 @@ const CalendarPage = ({ diaries }: { diaries: DataResponse }) => {
   const navigate = useNavigate()
 
   const onChangeHandler = (date: Date) => {
+    console.log(date)
+
     //  브라우저의 기본 동작 때문에 선택한 날짜가 한국 표준시로 인해 하루 전으로 인식되서 코드 추가
     const selectedDate = new Date(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
     )
     const dateString = selectedDate.toISOString().split('T')[0]
+    const isPreviousMonth = date.getMonth() !== value.getMonth()
+    console.log(isPreviousMonth)
 
     const diaryData = diaries.data.find(
       (diary) => diary.userDate === dateString
     )
     if (diaryData) {
-      // 해당 날짜에 대한 일기 데이터가 이미 존재하는 경우
       navigate(`/diaries/${diaryData.diaryId}`)
-    } else {
+    } else if (!isPreviousMonth) {
       // 해당 날짜에 대한 일기 데이터가 없는 경우
       axios
         .post(

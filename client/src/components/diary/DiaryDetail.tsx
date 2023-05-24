@@ -12,7 +12,6 @@ import { getCookie } from '../../utils/Cookie'
 
 const DiaryDetail = () => {
   const [diary, setDiary] = useState<Diary | null>(null)
-  console.log(diary)
 
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'] // 요일을 구하기 위한 배열
   const [memoContent, setMemoContent] = useState(diary?.memo)
@@ -26,7 +25,6 @@ const DiaryDetail = () => {
   const navigate = useNavigate()
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
-  console.log(saveEmoji)
 
   // 통계를 낸 영양소를 저장하는 함수 (퍼센트로 저장)
   const updateNutrientStatistics = (nutrientType: string, percent: number) => {
@@ -36,26 +34,26 @@ const DiaryDetail = () => {
     }))
   }
 
-  // 식단 등록하기 버튼을 누르면 실행
-  const handlePlusDiary = () => {
-    const mealTypes = ['아침', '점심', '저녁', '간식']
-    const mealTypeMap: { [key: string]: string } = {
-      아침: 'BREAKFAST',
-      점심: 'LUNCH',
-      저녁: 'DINNER',
-      간식: 'SNACK',
-    }
+  // // 식단 등록하기 버튼을 누르면 실행
+  // const handlePlusDiary = () => {
+  //   const mealTypes = ['아침', '점심', '저녁', '간식']
+  //   const mealTypeMap: { [key: string]: string } = {
+  //     아침: 'BREAKFAST',
+  //     점심: 'LUNCH',
+  //     저녁: 'DINNER',
+  //     간식: 'SNACK',
+  //   }
 
-    // mealType에 따라 식단이 등록되어있는지 확인할 수 있는 변수ㄴ
-    const isPlanner = mealTypes.map((el) => {
-      const hasData = diary?.meal.some(
-        (meal) => meal.mealType === mealTypeMap[el]
-      )
-      return { mealType: el, hasData }
-    })
+  //   // mealType에 따라 식단이 등록되어있는지 확인할 수 있는 변수ㄴ
+  //   const isPlanner = mealTypes.map((el) => {
+  //     const hasData = diary?.meal.some(
+  //       (meal) => meal.mealType === mealTypeMap[el]
+  //     )
+  //     return { mealType: el, hasData }
+  //   })
 
-    navigate(`/diaries/${id}/add`, { state: { meal: isPlanner } })
-  }
+  //   navigate(`/diaries/${id}/add`, { state: { meal: isPlanner } })
+  // }
 
   const onChangeModal = () => {
     setIsOpenModal((prev) => !prev)
@@ -187,7 +185,6 @@ const DiaryDetail = () => {
   // 통계 전송 + 이모지 반영s
   useEffect(() => {
     const data = sendNutrientDataToServer(nutrientStatistics)
-    console.log(data)
 
     // 여기에 리턴받은 데이터 전송하는 로직 구현해야함
     // 이모지를 제공하는 로직
@@ -254,10 +251,10 @@ const DiaryDetail = () => {
                   <span className="material-symbols-outlined">delete</span>
                   모든 기록 삭제
                 </Button>
-                <Button onClick={handlePlusDiary}>
+                {/* <Button onClick={handlePlusDiary}>
                   <span className="material-symbols-outlined">edit</span>
                   식단 등록하기
-                </Button>
+                </Button> */}
               </div>
             </h3>
             <MealList
@@ -387,9 +384,16 @@ interface Recipe {
 
 const Wrapper = styled.div`
   max-width: 1150px;
-  width: calc(100% - 400px);
+  width: calc(100% - 25rem);
   white-space: nowrap;
   margin-bottom: 3rem;
+
+  @media (max-width: 1150px) {
+    .wrapper {
+      max-width: none;
+      width: 100%;
+    }
+  }
   h2 {
     font-size: 28px;
     margin-bottom: 20px;
