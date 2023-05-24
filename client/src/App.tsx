@@ -22,7 +22,7 @@ import useTokenCheck from './store/hooks/useTokenCheck'
 
 function App() {
   const location = useLocation()
-  useTokenCheck()
+  // useTokenCheck()
 
   return (
     <div className="App">
