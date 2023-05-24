@@ -218,7 +218,7 @@ const UserSignUp = ({ social }: Props) => {
     }
 
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/members/nicknamecheck`, {
+      .post(`${API}/members/nicknamecheck`, {
         nickName,
       })
       .then((response) => {
