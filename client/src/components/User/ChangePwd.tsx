@@ -68,6 +68,11 @@ const ChangePwd = () => {
       isValid = false
     }
 
+    if (currentPassword === newPassword) {
+      msg.newPassword = '이미 사용 중인 비밀번호로 변경할 수 없습니다.'
+      isValid = false
+    }
+
     if (!isValid) {
       setError(msg)
     } else {
