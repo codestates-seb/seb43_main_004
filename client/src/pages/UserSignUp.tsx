@@ -12,7 +12,7 @@ import {
 } from '../dto/membership/members/dtoSignup'
 import { dtoResponse } from '../dto'
 import { debounce } from '../utils/timefunc'
-import axios, { AxiosResponse, AxiosError } from 'axios'
+import axios from 'axios'
 import Modal from '../components/Common/Modal'
 import { useNavigate } from 'react-router-dom'
 
@@ -302,7 +302,9 @@ const UserSignUp = ({ social }: Props) => {
         openModal('회원가입이 완료되었습니다. \n로그인 페이지로 이동합니다.')
       })
       .catch((error) => {
-        console.error(error)
+        if (axios.isAxiosError(error)) {
+          navigate(`/error/${error.response?.data.status}`)
+        }
       })
   }
 
