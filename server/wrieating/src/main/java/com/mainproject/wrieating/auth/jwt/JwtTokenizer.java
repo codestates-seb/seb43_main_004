@@ -104,8 +104,12 @@ public class JwtTokenizer {
     }
 
     public Long getMemberId(String token) {
-        long memberId = parseToken(token).get("memberId", Long.class);
-        return memberId;
+        if (token == null) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_UNAUTHORIZED);
+        } else {
+            long memberId = parseToken(token).get("memberId", Long.class);
+            return memberId;
+        }
     }
 
     private Claims parseToken(String token) {

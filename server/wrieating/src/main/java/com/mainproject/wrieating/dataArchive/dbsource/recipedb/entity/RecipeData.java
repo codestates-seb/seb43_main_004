@@ -12,6 +12,7 @@ public class RecipeData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long recipeId;
+    @Column
     private String rcpName;
     private String rcpWay;
     private String rcpPat;
@@ -19,7 +20,8 @@ public class RecipeData {
     private int carbohydrate;
     private int protein;
     private int fat;
-    private int natrium;
+    private int salt;
+    @Column
     private String img;
     @Column(columnDefinition = "TEXT")
     private String ingredients;

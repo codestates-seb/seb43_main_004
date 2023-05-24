@@ -14,7 +14,7 @@ public class FoodDataWriter {
     public static void saveDataToDatabase(List<FoodData> dataList) throws IOException, SQLException {
         try (Connection conn = DatabaseConnection.getConnection()) {
             String query =
-                    "INSERT INTO food_data (food_name, food_rough_Type, food_detail_type, serving_size, kcal, carbohydrate, fat, protein,  total_sugar, natrium) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "INSERT INTO food_data (food_name, food_rough_Type, food_detail_type, serving_size, kcal, carbohydrate, fat, protein,  total_sugar, salt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             for (FoodData data : dataList) {
                 PreparedStatement pstmt = conn.prepareStatement(query);
@@ -27,7 +27,7 @@ public class FoodDataWriter {
                 pstmt.setInt(7, data.getFat());
                 pstmt.setInt(8, data.getProtein());
                 pstmt.setInt(9, data.getTotalSugar());
-                pstmt.setInt(10, data.getNatrium());
+                pstmt.setInt(10, data.getSalt());
 
                 pstmt.executeUpdate();
                 pstmt.close();

@@ -25,5 +25,4 @@ public class DiaryResponseDto {
     private List<MealResponseDto> meal; // 식사 리스트
     private List<Day> dayList; // 하루 식사 칼로리, 탄, 단, 지 리스트
     private List<StandardIntakeResponseDto> standardIntakes;
-    private List<RecipeData> recipeList;
 }

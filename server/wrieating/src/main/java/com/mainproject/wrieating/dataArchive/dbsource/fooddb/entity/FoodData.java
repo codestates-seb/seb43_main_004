@@ -21,5 +21,5 @@ public class FoodData {
     private int protein;
     private int fat;
     private int totalSugar;
-    private int natrium;
+    private int salt;
 }

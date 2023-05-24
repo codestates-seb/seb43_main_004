@@ -27,6 +27,9 @@ public class Meal {
     @Column(nullable = true)
     private int kcal;
 
+    @Column
+    private int servingSize;
+
     @Column(nullable = true)
     private int carbohydrate;
 
@@ -41,6 +44,8 @@ public class Meal {
 
     @Column(nullable = true)
     private int salt;
+
+    private boolean isCustom;
 
     @ManyToOne
     @JoinColumn(name = "diary_id", nullable = false)

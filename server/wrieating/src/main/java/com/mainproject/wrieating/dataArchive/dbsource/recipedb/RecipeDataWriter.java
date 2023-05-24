@@ -12,7 +12,7 @@ import java.util.List;
 public class RecipeDataWriter {
     public static void saveDataToDatabase(List<RecipeData> dataList) throws IOException, SQLException {
         try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO recipe_data (rcp_name, rcp_way, rcp_pat, kcal, carbohydrate, protein, fat, natrium, img, ingredients, manual01, manual_img01, manual02, manual_img02, manual03, manual_img03, manual04, manual_img04, manual05, manual_img05, manual06, manual_img06, rcp_na_tip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO recipe_data (rcp_name, rcp_way, rcp_pat, kcal, carbohydrate, protein, fat, salt, img, ingredients, manual01, manual_img01, manual02, manual_img02, manual03, manual_img03, manual04, manual_img04, manual05, manual_img05, manual06, manual_img06, rcp_na_tip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             for (RecipeData data : dataList) {
                 PreparedStatement pstmt = conn.prepareStatement(query);
@@ -23,7 +23,7 @@ public class RecipeDataWriter {
                 pstmt.setInt(5, data.getCarbohydrate());
                 pstmt.setInt(6, data.getProtein());
                 pstmt.setInt(7, data.getFat());
-                pstmt.setInt(8, data.getNatrium());
+                pstmt.setInt(8, data.getSalt());
                 pstmt.setString(9, data.getImg());
                 pstmt.setString(10, data.getIngredients());
                 pstmt.setString(11, data.getManual01());

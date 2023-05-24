@@ -50,7 +50,7 @@ public class EmailSender {
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             msg.setSubject("Email 인증 코드");
 
-            String content = "Wrieating 인증 코드입니다: " + verificationCode;
+            String content = "안녕하세요! 당신의 건강에 도움을 드릴 Wrieating 입니다!\n가입해주셔서 감사합니다.\nWrieating 회원가입 인증 코드입니다 : " + verificationCode;
             msg.setText(content);
 
             // 메일 보내기

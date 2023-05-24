@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class RecipesResponseDto {
-    private Long recipeId;
+    private long recipeId;
     private String img;
     private String rcpName;
     private String rcpWay;
