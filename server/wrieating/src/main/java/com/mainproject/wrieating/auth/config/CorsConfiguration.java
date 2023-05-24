@@ -11,7 +11,8 @@ public class CorsConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("http://localhost:3000", "d37e9ewzht4md2.cloudfront.net")
+                .allowedOriginPatterns("http://localhost:3000", "d37e9ewzht4md2.cloudfront.net",
+                        "wrieating.kro.kr")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true)
