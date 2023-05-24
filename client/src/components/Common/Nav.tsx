@@ -272,11 +272,11 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
               식단일기
             </NavLink>
           </li>
-          <li>
+          {/* <li>
             <NavLink to="/community" onClick={handleMenu}>
               커뮤니티
             </NavLink>
-          </li>
+          </li> */}
           <li>
             <Link to="/recipe" onClick={handleMenu}>
               모아보기
