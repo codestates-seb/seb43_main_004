@@ -46,12 +46,14 @@ public interface DiaryMapper {
                             mealResponseDto.setMealId(meal.getMealId());
                             mealResponseDto.setTitle(meal.getTitle());
                             mealResponseDto.setMealType(meal.getMealType());
+                            mealResponseDto.setServingSize(meal.getServingSize());
                             mealResponseDto.setKcal(meal.getKcal());
                             mealResponseDto.setCarbohydrate(meal.getCarbohydrate());
                             mealResponseDto.setProtein(meal.getProtein());
                             mealResponseDto.setFat(meal.getFat());
                             mealResponseDto.setSugar(meal.getSugar());
                             mealResponseDto.setSalt(meal.getSalt());
+                            mealResponseDto.setCustom(meal.isCustom());
                             return mealResponseDto; }).collect(Collectors.toList())
                 )
                 .standardIntakes(diary.getMember().getStandardIntakes().stream()
