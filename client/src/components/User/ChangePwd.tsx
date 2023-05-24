@@ -56,7 +56,8 @@ const ChangePwd = () => {
       msg.newPassword = '새 비밀번호를 입력해주세요.'
       isValid = false
     } else if (!checkPassword(newPassword)) {
-      msg.newPassword = '최소 8자, 영문+숫자 조합으로 구성되어야 합니다.'
+      msg.newPassword =
+        '최소 8자, 영문+숫자+특수문자 조합으로 구성되어야 합니다.'
       isValid = false
     }
 
@@ -65,6 +66,11 @@ const ChangePwd = () => {
       isValid = false
     } else if (newPassword !== ckPassword) {
       msg.ckPassword = '새 비밀번호와 일치하지 않습니다.'
+      isValid = false
+    }
+
+    if (currentPassword === newPassword) {
+      msg.newPassword = '이미 사용 중인 비밀번호로 변경할 수 없습니다.'
       isValid = false
     }
 

@@ -18,9 +18,12 @@ import UpdateReady from './pages/UpdateReady'
 import Landing from './pages/Landing'
 import RecipeArchive from './pages/RecipeArchive'
 import RecipeDetail from './pages/RecipeDetail'
+import useTokenCheck from './store/hooks/useTokenCheck'
 
 function App() {
   const location = useLocation()
+  useTokenCheck()
+
   return (
     <div className="App">
       <Header />
@@ -47,7 +50,8 @@ function App() {
               <Route path="" element={<EditProfile />} />
               <Route path="change-pwd" element={<ChangePwd />} />
             </Route>
-            <Route path="/*" element={<NotFound error="404" />} />
+            <Route path="/error/:error" element={<NotFound />} />
+            <Route path="/*" element={<NotFound />} />
           </Routes>
         </div>
       )}

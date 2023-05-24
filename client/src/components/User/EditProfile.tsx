@@ -83,6 +83,10 @@ const EditProfile = () => {
       msg.nickName = '닉네임을 입력해주세요.'
       setNotice({ ...notice, ...msg })
       return
+    } else if (nickName.length > 8) {
+      msg.nickName = '사용할 수 없는 닉네임입니다 (8자 초과)'
+      setNotice({ ...notice, ...msg })
+      return
     } else if (userInfo.nickName === nickName) {
       msg.nickName = '현재 사용중인 닉네임입니다.'
       setNotice({ ...notice, ...msg })
