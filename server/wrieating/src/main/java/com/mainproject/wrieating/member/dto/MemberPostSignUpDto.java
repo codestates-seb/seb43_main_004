@@ -8,20 +8,24 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 public class MemberPostSignUpDto {  //회원가입 post
-    @NotBlank
-    @Email
+
+    @NotNull
+    @Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "유효한 이메일 주소를 입력해주세요.")
     private String email;
 
-    @NotBlank
+    @NotNull
+    @Pattern(regexp = "^[a-zA-Z가-힣0-9@#$%^&+=*_-]{1,8}$")
     private String nickName;
 
-    @NotBlank
+    @NotNull
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@!%*#?&])[A-Za-z\\d$@!%*#?&]{8,}$")
     private String password;
 
     @NotNull
