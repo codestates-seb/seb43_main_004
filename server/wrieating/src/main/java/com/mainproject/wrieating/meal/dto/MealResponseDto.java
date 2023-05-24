@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MealResponseDto {
-
     private Long mealId;
     private String title;
     private Meal.MealType mealType;
@@ -24,5 +23,4 @@ public class MealResponseDto {
         DINNER,
         SNACK
     }
-
 }

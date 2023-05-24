@@ -9,6 +9,8 @@ import com.mainproject.wrieating.exception.BusinessLogicException;
 import com.mainproject.wrieating.exception.ExceptionCode;
 import com.mainproject.wrieating.meal.dto.MealPatchDto;
 import com.mainproject.wrieating.meal.dto.MealPostDto;
+import com.mainproject.wrieating.meal.dto.MealPostResponseDto;
+import com.mainproject.wrieating.meal.dto.MealResponseDto;
 import com.mainproject.wrieating.meal.entity.Meal;
 import com.mainproject.wrieating.meal.mapper.MealMapper;
 import com.mainproject.wrieating.meal.repository.MealRepository;
@@ -28,7 +30,7 @@ public class MealService {
     private final MealMapper mapper;
     private final DiaryService diaryService;
 
-    public Meal createMeal(Long diaryId, MealPostDto mealPostDto) {
+    public MealPostResponseDto createMeal(Long diaryId, MealPostDto mealPostDto) {
         Diary diary = diaryService.findVerifiedDiary(diaryId);
         Meal meal = mapper.mealPostDtoToMeal(mealPostDto);
 
@@ -47,7 +49,7 @@ public class MealService {
                 foodArchiveRepository.save(foodData);
             }
 
-            return mealRepository.save(meal);
+            return mapper.MealToMealPostResponseDto(mealRepository.save(meal));
         }
 
     public void updateMeal(Long diaryId, Long mealId, MealPatchDto mealPatchDto) {
@@ -74,10 +76,12 @@ public class MealService {
 
 
     public void deleteMeal(Long diaryId, Long mealId) {
-        diaryService.findVerifiedDiary(diaryId);
+        Diary diary = diaryService.findVerifiedDiary(diaryId);
         Meal meal = verifiedMeal(mealId);
 
-        
+        diary.setMealList(null);
+
+        mealRepository.delete(meal);
     }
 
     private Meal verifiedMeal(long mealId) {
