@@ -5,6 +5,7 @@ export const checkEmail = (email: string): boolean => {
 
 export const checkPassword = (password: string): boolean => {
   // 8자 이상, 문자와 숫자 포함
-  const pwdRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+  const pwdRegex =
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/
   return pwdRegex.test(password)
 }

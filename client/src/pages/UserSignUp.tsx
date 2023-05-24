@@ -251,7 +251,7 @@ const UserSignUp = ({ social }: Props) => {
     const msg = { password: '', ckPassword: '' }
 
     if (!checkPassword(password)) {
-      msg.password = '최소 8자, 영문+숫자 조합으로 구성되어야 합니다.'
+      msg.password = '최소 8자, 영문+숫자+특수문자 조합으로 구성되어야 합니다.'
       setError({ ...error, ...msg })
     } else if (password !== ckPassword) {
       msg.ckPassword = '비밀번호가 일치하지 않습니다.'
@@ -376,7 +376,7 @@ const UserSignUp = ({ social }: Props) => {
                 label="비밀번호"
                 type="password"
                 name="password"
-                placeholder="영문+숫자 조합하여 최소 8자 이상"
+                placeholder="영문, 숫자, 특수문자를 조합하여 최소 8자 이상"
                 error={error.password}
                 onChange={handleInput}
                 onBlur={isValidPassword}
