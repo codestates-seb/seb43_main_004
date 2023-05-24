@@ -55,6 +55,24 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         //멤버십
                         .antMatchers(HttpMethod.POST, "/members/signup").permitAll()
                         .antMatchers(HttpMethod.POST, "/members/login").permitAll()
+                        .antMatchers(HttpMethod.POST, "/members/emailcheck").permitAll()
+                        .antMatchers(HttpMethod.POST, "/members/sendmail").permitAll()
+                        .antMatchers(HttpMethod.POST, "/members/findpassword/sendmail").permitAll()
+                        .antMatchers(HttpMethod.POST, "/members/nicknamecheck").permitAll()
+                        .antMatchers(HttpMethod.PATCH, "/members/mypage/update").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/members/mypage/passwordupdate").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/members/findpassword").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/members/myprofile").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/members/leaveid").hasRole("USER")
+                        // 일기 관리
+                        .antMatchers(HttpMethod.POST, "/diaries/**").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/diaries/**").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/diaries/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/diaries/**").hasRole("USER")
+
+                        // 아카이브
+                        .antMatchers(HttpMethod.GET,"/recipes/**").permitAll()
+                        .antMatchers(HttpMethod.GET,"/nutrient/**").permitAll()
                 );
 
         return http.build();
