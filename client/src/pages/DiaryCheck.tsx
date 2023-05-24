@@ -54,7 +54,7 @@ const DiaryCheck = () => {
   return (
     <DiaryPageWrapper>
       <h2>나의 식단일기</h2>
-      <ContainerWrapper windowWidth={windowWidth}>
+      <ContainerWrapper width={windowWidth}>
         {diaries &&
           (windowWidth > 560 ? (
             <>
@@ -100,8 +100,8 @@ export const DiaryPageWrapper = styled.div`
 const ContainerWrapper = styled.div<ContainerWrapperProps>`
   display: flex;
 
-  ${({ windowWidth }) =>
-    windowWidth <= 560 &&
+  ${({ width }) =>
+    width <= 560 &&
     css`
       flex-direction: column;
       align-items: center;
@@ -138,7 +138,7 @@ export interface DataResponse {
 }
 
 interface ContainerWrapperProps {
-  windowWidth: number
+  width: number
 }
 
 export default DiaryCheck

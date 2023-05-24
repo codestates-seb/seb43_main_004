@@ -1,1 +1,1 @@
-export const API = 'https://api.wrieating.kro.kr'
+export const API = 'https://1a56-175-213-102-16.ngrok-free.app'
