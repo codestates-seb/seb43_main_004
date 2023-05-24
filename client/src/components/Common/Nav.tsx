@@ -137,6 +137,8 @@ const StyledNav = styled.nav`
   }
 
   @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
+
     .btn-box {
       button {
         font-size: ${({ theme }) => theme.fontSize.smmh};
@@ -189,6 +191,11 @@ const StyledNav = styled.nav`
         font-size: ${({ theme }) => theme.fontSize.larger};
       }
     }
+  }
+
+  @media screen and (max-width: 360px) {
+    width: 95%;
+    padding: 2rem 3rem;
   }
 `
 
