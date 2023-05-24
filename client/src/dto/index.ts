@@ -3,7 +3,7 @@ export interface dtoResponse {
   status: string
 }
 
-export interface dtoResponsePage<T> extends dtoResponse {
+export interface dtoResponsePage<T> {
   pageInfo: dtoPageInfo
   data: T[]
 }

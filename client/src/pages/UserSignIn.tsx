@@ -5,6 +5,10 @@ import Button from '../components/Common/Button'
 import { useNavigate, Link } from 'react-router-dom'
 import logo from '../assets/logo.png'
 import { checkEmail } from '../utils/userfunc'
+import axios from 'axios'
+import { getCookie, setCookie } from '../utils/Cookie'
+import { __getUser } from '../store/slices/profileSlice'
+import { useDispatch } from 'react-redux'
 
 interface userType {
   email: string
@@ -15,6 +19,7 @@ const UserSignIn = () => {
   const navigate = useNavigate()
   const [values, setValues] = useState<userType>({ email: '', password: '' })
   const [error, setError] = useState<string>('')
+  const dispatch = useDispatch()
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -25,13 +30,58 @@ const UserSignIn = () => {
     })
   }
 
-  const checkValid = () => {
+  // 로그인
+  const checkValid = async () => {
     if (!checkEmail(values.email) || values.password == '') {
       setError('이메일 혹은 비밀번호가 잘못되었거나 유효하지 않습니다.')
       return
     }
-    setError('')
-    navigate('/userpage')
+    // 액세스 토큰 발급(로그인)
+    await axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/members/login`, values)
+      .then((response) => {
+        const tokenWithNoBearer = response.data.accessToken.substr(7)
+        const tokenForReissue = response.data.refreshToken
+
+        const current = new Date()
+        current.setMinutes(current.getMinutes() + 40)
+
+        // 액세스 토큰
+        setCookie('access', tokenWithNoBearer, {
+          path: '/',
+          secure: true,
+          expires: current,
+          sameSite: 'none',
+        })
+        // 리프레시 토큰
+        current.setMinutes(current.getMinutes() + 420)
+        setCookie('refresh', tokenForReissue, {
+          path: '/',
+          secure: true,
+          expires: current,
+          sameSite: 'none',
+        })
+      })
+      .catch((error) => {
+        setError('존재하지 않는 계정입니다.')
+      })
+
+    // 발급받은 토큰으로 유저 정보 얻어오기
+    await axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/members/myprofile`, {
+        headers: {
+          Authorization: `Bearer ${getCookie('access')}`,
+          'Content-Type': 'application / json',
+          'ngrok-skip-browser-warning': '69420', // 테스트 서버 이용할때는 붙였다가 삭제하면 됨
+        },
+      })
+      .then((response) => {
+        dispatch(__getUser(response.data.data))
+        navigate('/')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   return (
@@ -57,9 +107,6 @@ const UserSignIn = () => {
         />
       </Form>
       <Button onClick={checkValid}>로그인</Button>
-      <Button outline="true" onClick={() => console.log('google social login')}>
-        구글 계정으로 로그인
-      </Button>
       <div className="padding-box">
         <span>비밀번호를 잊으셨나요?</span>
         <StyledLink to="/find-pwd">비밀번호 찾기</StyledLink>

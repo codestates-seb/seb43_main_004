@@ -4,17 +4,17 @@
       {
         "id": "1",
         "userDate": "2023-05-12",
-        "diaryStatus": "\\u{1F600}"
+        "diaryStatus": "🫥"
       },
       {
         "id": "2",
         "userDate": "2023-05-13",
-        "diaryStatus": "\\u{1F62D}"
+        "diaryStatus": "😵"
       },
       {
         "id": "3",
         "userDate": "2023-05-16",
-        "diaryStatus": "\\u{1F62D}"
+        "diaryStatus": "🫥"
       }
     ],
     "standardIntake": [
@@ -23,16 +23,18 @@
         "protein": 60,
         "fat": 47,
         "kcal": 2200,
-        "sugar": 25
+        "sugar": 25,
+        "salt" : 2300
       }
     ],
-    "calcul": [
+    "weekList": [
       {
-        "carbohydrate": 1612,
-        "protein": 420,
-        "fat": 404,
-        "kcal": 1750,
-        "sugar": 125
+        "carbohydrate": 1300,
+        "protein": 460,
+        "fat": 240,
+        "kcal": 2300,
+        "sugar": 130,
+        "salt": 13000
       }
     ],
     "comment": "탄수화물이 너무 많아요",
@@ -70,16 +72,18 @@
           "protein": 60,
           "fat": 47,
           "kcal": 2200,
-          "sugar": 25
+          "sugar": 25,
+          "salt": 2300
         }
       ],
-      "calcul": [
+      "dayList": [
         {
           "carbohydrate": 0,
           "protein": 0,
           "fat": 0,
           "kcal": 0,
-          "sugar": 0
+          "sugar": 0,
+          "salt": 0
         }
       ],
       "recipe": [],
@@ -88,32 +92,56 @@
     {
       "id": 2,
       "userDate": "2023-05-13",
-      "memo": "오늘은 등, 이두, 삼두 운동과 유산소 30분을 했다. 오랜만에 하는 운동이라 그런지 근육통이 안사라지네..",
-      "diaryStatus": "이모지",
+      "memo": "오늘은 등, 이두, 삼두 운동과 유산소 30분을 했다. 오랜만에 하는 운동이라 그런지 근육통이 안사라지네요 ㅜㅜ",
+      "diaryStatus": "",
       "meal": [
         {
+          "mealId": 1,
           "foodName": "고등어 조림",
           "mealType": "BREAKFAST",
           "kcal": 600,
-          "intake": 180
+          "servingSize": 100,
+          "carbohydrate": 73,
+          "protein": 46,
+          "fat": 25,
+          "sugar": 70,
+          "salt": 25
         },
         {
+          "mealId": 2,
           "foodName": "삼겹살",
           "mealType": "LUNCH",
-          "kcal": 500,
-          "intake": 120
+          "kcal": 700,
+          "servingSize": 400,
+          "carbohydrate": 73,
+          "protein": 46,
+          "fat": 25,
+          "sugar": 70,
+          "salt": 25
         },
         {
+          "mealId": 3,
           "foodName": "삼양라면",
           "mealType": "DINNER",
           "kcal": 560,
-          "intake": 100
+          "servingSize": 150,
+          "carbohydrate": 73,
+          "protein": 46,
+          "fat": 25,
+          "sugar": 70,
+          "salt": 25
         },
         {
+          "mealId": 4,
           "foodName": "김치",
           "mealType": "DINNER",
           "kcal": 65,
-          "intake": 80
+          "servingSize": 80,
+          "carbohydrate": 73,
+          "protein": 46,
+          "fat": 25,
+          "sugar": 70,
+          "salt": 25
         }
       ],
       "standardIntake": [
@@ -122,16 +150,18 @@
           "protein": 60,
           "fat": 47,
           "kcal": 2200,
-          "sugar": 25
+          "sugar": 25,
+          "salt": 2300
         }
       ],
-      "calcul": [
+      "dayList": [
         {
           "carbohydrate": 180,
           "protein": 50,
           "fat": 60,
-          "kcal": 1725,
-          "sugar": 0
+          "kcal": 1925,
+          "sugar": 0,
+          "salt": 1200
         }
       ],
       "recipe": [
@@ -157,16 +187,18 @@
           "protein": 60,
           "fat": 47,
           "kcal": 2200,
-          "sugar": 25
+          "sugar": 25,
+          "salt": 2300
         }
       ],
-      "calcul": [
+      "dayList": [
         {
           "carbohydrate": 0,
           "protein": 0,
           "fat": 0,
           "kcal": 0,
-          "sugar": 0
+          "sugar": 0,
+          "salt": 0
         }
       ],
       "recipe": [],
@@ -185,16 +217,18 @@
           "protein": 60,
           "fat": 47,
           "kcal": 2200,
-          "sugar": 25
+          "sugar": 25,
+          "salt": 2300
         }
       ],
-      "calcul": [
+      "dayList": [
         {
           "carbohydrate": 0,
           "protein": 0,
           "fat": 0,
           "kcal": 0,
-          "sugar": 0
+          "sugar": 0,
+          "salt": 0
         }
       ],
       "recipe": [],
@@ -204,6 +238,16 @@
   "nutrient": {
     "data": [
       {
+        "id": 1,
+        "foodName": "밥",
+        "carbohydrate": 30,
+        "protein": 3,
+        "fat": 9,
+        "kcal": 400,
+        "sugar": 0
+      },
+      {
+        "id": 2,
         "foodName": "새우 볶음밥",
         "carbohydrate": 30,
         "protein": 33,
@@ -212,7 +256,8 @@
         "sugar": 10
       },
       {
-        "foodName": "새우 볶음밥",
+        "id": 3,
+        "foodName": "감자 볶음밥",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -220,7 +265,8 @@
         "sugar": 10
       },
       {
-        "foodName": "새우 볶음밥",
+        "id": 4,
+        "foodName": "닭튀김",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -228,7 +274,8 @@
         "sugar": 10
       },
       {
-        "foodName": "새우 볶음밥",
+        "id": 5,
+        "foodName": "새우초밥",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -236,7 +283,8 @@
         "sugar": 10
       },
       {
-        "foodName": "새우 볶음밥",
+        "id": 6,
+        "foodName": "새우 튀김",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -244,7 +292,8 @@
         "sugar": 10
       },
       {
-        "foodName": "새우 볶음밥",
+        "id": 7,
+        "foodName": "햇반",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -252,7 +301,8 @@
         "sugar": 10
       },
       {
-        "foodName": "새우 볶음밥",
+        "id": 8,
+        "foodName": "삼겹살",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -260,7 +310,8 @@
         "sugar": 10
       },
       {
-        "foodName": "새우 볶음밥",
+        "id": 9,
+        "foodName": "닭볶음탕",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -268,36 +319,153 @@
         "sugar": 10
       },
       {
-        "foodName": "새우 볶음밥",
+        "id": 10,
+        "foodName": "닭똥집 튀김",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
         "kcal": 500,
         "sugar": 10
+      }
+    ],
+    "pageInfo": {
+      "page": 1,
+      "size": 10,
+      "totalElements": 12,
+      "totalPages": 1
+    }
+  },
+  "recipes": {
+    "data": [
+      {
+        "recipeId": 1,
+        "rcpName": "버섯 두유 소스 볶음",
+        "rcpWay": "볶기",
+        "rcpPat": "반찬",
+        "kcal": 285,
+        "carbohydrate": 17,
+        "protein": 9,
+        "fat": 20,
+        "natrium": 53,
+        "img": "http://www.foodsafetykorea.go.kr/uploadimg/cook/10_00018_1.png",
+        "ingredients": "버섯볶음 새송이버섯 100g(3개), 올리브유 10g(2작은술) 두유 소스 두유 20g(1⅓큰술), 생크림 10g(2작은술), 청양고추 5g(1/2개), 후추 약간 곁들임 새싹채소 20g",
+        "manual01": "1. 새송이버섯은 굵게 채썬 후 달군 프라이팬에 기름을 두르고 노릇하게 볶는다.a",
+        "manualImg01": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_1.png",
+        "manual02": "2. 소스 팬에 두유, 생크림, 청양고추, 후추를 넣고 약한 불에 뭉근하게 졸인다.b",
+        "manualImg02": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_2.png",
+        "manual03": "3. 볶은 새송이버섯을 소스에 넣고 고루 섞어 가며 조금 더 볶아 접시에 담은 후 새싹채소를 함께 곁들인다.c",
+        "manualImg03": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_3.png",
+        "manual04": "",
+        "manualImg04": "",
+        "manual05": "",
+        "manualImg05": "",
+        "manual06": "",
+        "manualImg06": "",
+        "rcpNaTip": "두유와 생크림으로 고소한 맛을 내어 짠맛을 대신해 줘요. 두유는 식사대용으로 먹을 정도로 영양이 우수하며, 두유를 소스에 사용하면 생크림 사용량을 줄일 수 있어 지방섭취를 줄일 수 있어요. 두유 200ml에 125kcal의 열량이 있으므로 당뇨 환자의 경우 한잔 정도가 적당해요"
       },
       {
-        "foodName": "새우 볶음밥",
-        "carbohydrate": 30,
-        "protein": 33,
-        "fat": 9,
-        "kcal": 500,
-        "sugar": 10
+        "recipeId": 2,
+        "rcpName": "버섯 두유 소스 볶음",
+        "rcpWay": "볶기",
+        "rcpPat": "반찬",
+        "kcal": 285,
+        "carbohydrate": 17,
+        "protein": 9,
+        "fat": 20,
+        "natrium": 53,
+        "img": "http://www.foodsafetykorea.go.kr/uploadimg/cook/10_00018_1.png",
+        "ingredients": "버섯볶음 새송이버섯 100g(3개), 올리브유 10g(2작은술) 두유 소스 두유 20g(1⅓큰술), 생크림 10g(2작은술), 청양고추 5g(1/2개), 후추 약간 곁들임 새싹채소 20g",
+        "manual01": "1. 새송이버섯은 굵게 채썬 후 달군 프라이팬에 기름을 두르고 노릇하게 볶는다.a",
+        "manualImg01": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_1.png",
+        "manual02": "2. 소스 팬에 두유, 생크림, 청양고추, 후추를 넣고 약한 불에 뭉근하게 졸인다.b",
+        "manualImg02": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_2.png",
+        "manual03": "3. 볶은 새송이버섯을 소스에 넣고 고루 섞어 가며 조금 더 볶아 접시에 담은 후 새싹채소를 함께 곁들인다.c",
+        "manualImg03": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_3.png",
+        "manual04": "",
+        "manualImg04": "",
+        "manual05": "",
+        "manualImg05": "",
+        "manual06": "",
+        "manualImg06": "",
+        "rcpNaTip": "두유와 생크림으로 고소한 맛을 내어 짠맛을 대신해 줘요. 두유는 식사대용으로 먹을 정도로 영양이 우수하며, 두유를 소스에 사용하면 생크림 사용량을 줄일 수 있어 지방섭취를 줄일 수 있어요. 두유 200ml에 125kcal의 열량이 있으므로 당뇨 환자의 경우 한잔 정도가 적당해요"
       },
       {
-        "foodName": "새우 볶음밥",
-        "carbohydrate": 30,
-        "protein": 33,
-        "fat": 9,
-        "kcal": 500,
-        "sugar": 10
+        "recipeId": 3,
+        "rcpName": "버섯 두유 소스 볶음",
+        "rcpWay": "볶기",
+        "rcpPat": "반찬",
+        "kcal": 285,
+        "carbohydrate": 17,
+        "protein": 9,
+        "fat": 20,
+        "natrium": 53,
+        "img": "http://www.foodsafetykorea.go.kr/uploadimg/cook/10_00018_1.png",
+        "ingredients": "버섯볶음 새송이버섯 100g(3개), 올리브유 10g(2작은술) 두유 소스 두유 20g(1⅓큰술), 생크림 10g(2작은술), 청양고추 5g(1/2개), 후추 약간 곁들임 새싹채소 20g",
+        "manual01": "1. 새송이버섯은 굵게 채썬 후 달군 프라이팬에 기름을 두르고 노릇하게 볶는다.a",
+        "manualImg01": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_1.png",
+        "manual02": "2. 소스 팬에 두유, 생크림, 청양고추, 후추를 넣고 약한 불에 뭉근하게 졸인다.b",
+        "manualImg02": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_2.png",
+        "manual03": "3. 볶은 새송이버섯을 소스에 넣고 고루 섞어 가며 조금 더 볶아 접시에 담은 후 새싹채소를 함께 곁들인다.c",
+        "manualImg03": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_3.png",
+        "manual04": "",
+        "manualImg04": "",
+        "manual05": "",
+        "manualImg05": "",
+        "manual06": "",
+        "manualImg06": "",
+        "rcpNaTip": "두유와 생크림으로 고소한 맛을 내어 짠맛을 대신해 줘요. 두유는 식사대용으로 먹을 정도로 영양이 우수하며, 두유를 소스에 사용하면 생크림 사용량을 줄일 수 있어 지방섭취를 줄일 수 있어요. 두유 200ml에 125kcal의 열량이 있으므로 당뇨 환자의 경우 한잔 정도가 적당해요"
       },
       {
-        "foodName": "새우 볶음밥",
-        "carbohydrate": 30,
-        "protein": 33,
-        "fat": 9,
-        "kcal": 500,
-        "sugar": 10
+        "recipeId": 4,
+        "rcpName": "버섯 두유 소스 볶음",
+        "rcpWay": "볶기",
+        "rcpPat": "반찬",
+        "kcal": 285,
+        "carbohydrate": 17,
+        "protein": 9,
+        "fat": 20,
+        "natrium": 53,
+        "img": "http://www.foodsafetykorea.go.kr/uploadimg/cook/10_00018_1.png",
+        "ingredients": "버섯볶음 새송이버섯 100g(3개), 올리브유 10g(2작은술) 두유 소스 두유 20g(1⅓큰술), 생크림 10g(2작은술), 청양고추 5g(1/2개), 후추 약간 곁들임 새싹채소 20g",
+        "manual01": "1. 새송이버섯은 굵게 채썬 후 달군 프라이팬에 기름을 두르고 노릇하게 볶는다.a",
+        "manualImg01": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_1.png",
+        "manual02": "2. 소스 팬에 두유, 생크림, 청양고추, 후추를 넣고 약한 불에 뭉근하게 졸인다.b",
+        "manualImg02": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_2.png",
+        "manual03": "3. 볶은 새송이버섯을 소스에 넣고 고루 섞어 가며 조금 더 볶아 접시에 담은 후 새싹채소를 함께 곁들인다.c",
+        "manualImg03": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_3.png",
+        "manual04": "",
+        "manualImg04": "",
+        "manual05": "",
+        "manualImg05": "",
+        "manual06": "",
+        "manualImg06": "",
+        "rcpNaTip": "두유와 생크림으로 고소한 맛을 내어 짠맛을 대신해 줘요. 두유는 식사대용으로 먹을 정도로 영양이 우수하며, 두유를 소스에 사용하면 생크림 사용량을 줄일 수 있어 지방섭취를 줄일 수 있어요. 두유 200ml에 125kcal의 열량이 있으므로 당뇨 환자의 경우 한잔 정도가 적당해요"
+      },
+      {
+        "recipeId": 5,
+        "rcpName": "버섯 두유 소스 볶음",
+        "rcpWay": "볶기",
+        "rcpPat": "반찬",
+        "kcal": 285,
+        "carbohydrate": 17,
+        "protein": 9,
+        "fat": 20,
+        "natrium": 53,
+        "img": "http://www.foodsafetykorea.go.kr/uploadimg/cook/10_00018_1.png",
+        "ingredients": "버섯볶음 새송이버섯 100g(3개), 올리브유 10g(2작은술) 두유 소스 두유 20g(1⅓큰술), 생크림 10g(2작은술), 청양고추 5g(1/2개), 후추 약간 곁들임 새싹채소 20g",
+        "manual01": "1. 새송이버섯은 굵게 채썬 후 달군 프라이팬에 기름을 두르고 노릇하게 볶는다.a",
+        "manualImg01": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_1.png",
+        "manual02": "2. 소스 팬에 두유, 생크림, 청양고추, 후추를 넣고 약한 불에 뭉근하게 졸인다.b",
+        "manualImg02": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_2.png",
+        "manual03": "3. 볶은 새송이버섯을 소스에 넣고 고루 섞어 가며 조금 더 볶아 접시에 담은 후 새싹채소를 함께 곁들인다.c",
+        "manualImg03": "http://www.foodsafetykorea.go.kr/uploadimg/cook/20_00018_3.png",
+        "manual04": "",
+        "manualImg04": "",
+        "manual05": "",
+        "manualImg05": "",
+        "manual06": "",
+        "manualImg06": "",
+        "rcpNaTip": "두유와 생크림으로 고소한 맛을 내어 짠맛을 대신해 줘요. 두유는 식사대용으로 먹을 정도로 영양이 우수하며, 두유를 소스에 사용하면 생크림 사용량을 줄일 수 있어 지방섭취를 줄일 수 있어요. 두유 200ml에 125kcal의 열량이 있으므로 당뇨 환자의 경우 한잔 정도가 적당해요"
       }
     ],
     "pageInfo": {

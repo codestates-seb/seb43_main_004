@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import logo from '../../assets/logo.png'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store'
+import { removeCookie, getCookie } from '../../utils/Cookie'
 
 const StyledNavBg = styled.div`
   width: 100%;
@@ -18,7 +20,7 @@ const StyledNavBg = styled.div`
   &.open {
     visibility: visible;
     opacity: 1;
-    z-index: 9;
+    z-index: 99;
   }
 `
 
@@ -26,7 +28,7 @@ const StyledNav = styled.nav`
   font-family: 'yg-jalnan';
   width: 50%;
   height: 100%;
-  padding: 6rem;
+  padding: 3rem 5rem;
   background: ${({ theme }) => theme.color.primary};
   position: fixed;
   top: 0;
@@ -42,10 +44,10 @@ const StyledNav = styled.nav`
 
   .btn-box {
     align-self: flex-end;
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
 
     button {
-      font-size: ${({ theme }) => theme.fontSize.lgl};
+      font-size: ${({ theme }) => theme.fontSize.lgh};
     }
   }
 
@@ -54,9 +56,9 @@ const StyledNav = styled.nav`
     display: flex;
     align-items: center;
     border-bottom: 1px solid ${({ theme }) => theme.color.darkGray};
-    padding-bottom: 5rem;
-    margin-bottom: 5rem;
-    gap: 5rem;
+    padding-bottom: 3rem;
+    margin-bottom: 3rem;
+    gap: 3rem;
 
     div:first-of-type {
       font-size: 13rem;
@@ -91,7 +93,7 @@ const StyledNav = styled.nav`
     a {
       color: ${({ theme }) => theme.color.darkGray};
       font-family: 'Pretendard', sans-serif;
-      font-size: ${({ theme }) => theme.fontSize.smh};
+      font-size: ${({ theme }) => theme.fontSize.larger};
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -104,14 +106,10 @@ const StyledNav = styled.nav`
   }
 
   .depth-1 {
-    font-size: ${({ theme }) => theme.fontSize.mdh};
+    font-size: ${({ theme }) => theme.fontSize.smmh};
 
     li {
-      margin-bottom: 3.5rem;
-      &.active a {
-        color: ${({ theme }) => theme.color.point};
-        border-bottom: 5px solid ${({ theme }) => theme.color.point};
-      }
+      margin-bottom: 3rem;
     }
 
     a {
@@ -120,17 +118,27 @@ const StyledNav = styled.nav`
       &:hover {
         color: ${({ theme }) => theme.color.point};
       }
+      &.active {
+        color: ${({ theme }) => theme.color.point};
+        border-bottom: 5px solid ${({ theme }) => theme.color.point};
+      }
     }
 
     .depth-2 {
       font-size: ${({ theme }) => theme.fontSize.smh};
       li {
-        margin-top: 3rem;
+        margin-bottom: 2rem;
+
+        &:first-child {
+          margin-top: 2rem;
+        }
       }
     }
   }
 
   @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
+
     .btn-box {
       button {
         font-size: ${({ theme }) => theme.fontSize.smmh};
@@ -165,25 +173,29 @@ const StyledNav = styled.nav`
       }
 
       a {
-        font-size: ${({ theme }) => theme.fontSize.large};
+        font-size: ${({ theme }) => theme.fontSize.middle};
       }
     }
 
     .depth-1 {
-      font-size: ${({ theme }) => theme.fontSize.smmh};
+      font-size: ${({ theme }) => theme.fontSize.smh};
 
       li {
         margin-bottom: 2.5rem;
+        a.active {
+          border-bottom-width: 3px;
+        }
       }
 
       .depth-2 {
-        font-size: ${({ theme }) => theme.fontSize.smh};
-
-        li {
-          margin-top: 2rem;
-        }
+        font-size: ${({ theme }) => theme.fontSize.larger};
       }
     }
+  }
+
+  @media screen and (max-width: 360px) {
+    width: 95%;
+    padding: 2rem 3rem;
   }
 `
 
@@ -192,20 +204,40 @@ interface NavProps {
   handleMenu(): void
 }
 
+interface userType {
+  nickName: string
+  icon: string
+}
+
 const Nav = ({ menuOpen, handleMenu }: NavProps) => {
-  // 확인용 임시 state
-  const [isLogin, setIsLogin] = useState(true)
+  const navigate = useNavigate()
+  const userInfo = useSelector((state: RootState) => state.profile.data)
+  const [user, setUser] = useState<userType>({ nickName: '', icon: '' })
+  const { nickName, icon } = user
+  const [isLogin, setIsLogin] = useState(false)
+
+  const logout = () => {
+    removeCookie('access', { path: '/' })
+    removeCookie('refresh', { path: '/' })
+    localStorage.removeItem('profileState')
+    navigate('/sign-in')
+    setIsLogin(false)
+  }
+
+  useEffect(() => {
+    if (getCookie('access')) {
+      setUser(userInfo)
+      setIsLogin(true)
+    }
+  }, [userInfo])
+
   return (
     <>
       <StyledNavBg className={menuOpen ? 'open' : ''} onClick={handleMenu} />
       <StyledNav className={menuOpen ? 'open' : ''}>
         <div className="btn-box">
           {isLogin && (
-            <button
-              type="button"
-              className="btn-logout"
-              onClick={() => setIsLogin(false)}
-            >
+            <button type="button" className="btn-logout" onClick={logout}>
               <span className="material-icons-round">power_settings_new</span>
             </button>
           )}
@@ -216,11 +248,11 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
         {isLogin ? (
           <div className="user-box">
             <div className="profile">
-              <img src={logo} alt="user profile" />
+              <img src={`/icons/${icon}.svg`} alt="user profile" />
             </div>
             <div>
-              <p>고양고양이</p>
-              <Link to="/">
+              <p>{nickName}</p>
+              <Link to="/userpage" onClick={handleMenu}>
                 마이페이지
                 <span className="material-icons-round">navigate_next</span>
               </Link>
@@ -229,24 +261,36 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
         ) : (
           <div className="login-box">
             <div className="material-icons-round">account_circle</div>
-            <Link to="/">로그인</Link>
+            <Link to="/sign-in" onClick={handleMenu}>
+              로그인
+            </Link>
           </div>
         )}
         <ul className="depth-1">
-          <li className="active">
-            <Link to="/">식단일기</Link>
-          </li>
           <li>
-            <Link to="/">통계 보기</Link>
+            <NavLink to="/diaries" onClick={handleMenu}>
+              식단일기
+            </NavLink>
           </li>
+          {/* <li>
+            <NavLink to="/community" onClick={handleMenu}>
+              커뮤니티
+            </NavLink>
+          </li> */}
           <li>
-            <Link to="/">모아보기</Link>
+            <Link to="/recipe" onClick={handleMenu}>
+              모아보기
+            </Link>
             <ul className="depth-2">
               <li>
-                <Link to="/">레시피</Link>
+                <NavLink to="/recipe" onClick={handleMenu}>
+                  레시피
+                </NavLink>
               </li>
               <li>
-                <Link to="/">영양성분</Link>
+                <NavLink to="/nutrient" onClick={handleMenu}>
+                  영양성분
+                </NavLink>
               </li>
             </ul>
           </li>

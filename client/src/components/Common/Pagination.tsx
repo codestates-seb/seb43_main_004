@@ -49,15 +49,15 @@ const PaginationWrapper = styled.div`
 
 type paginatorProps = {
   totalItemsCount: number
+  activePage: number
+  onPageChange: (pageNumber: number) => void
 }
 
-const PaginationComponent = ({ totalItemsCount }: paginatorProps) => {
-  const [activePage, setActivePage] = useState(1)
-
-  const handlePageChange = (pageNumber: number) => {
-    setActivePage(pageNumber)
-  }
-
+const PaginationComponent = ({
+  totalItemsCount,
+  activePage,
+  onPageChange,
+}: paginatorProps) => {
   return (
     <PaginationWrapper>
       <ReactPaginate
@@ -67,7 +67,7 @@ const PaginationComponent = ({ totalItemsCount }: paginatorProps) => {
         pageRangeDisplayed={5}
         prevPageText={'‹'}
         nextPageText={'›'}
-        onChange={handlePageChange}
+        onChange={onPageChange}
       />
     </PaginationWrapper>
   )

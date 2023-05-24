@@ -1,7 +1,7 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import './App.css'
-import DiaryCheck from './components/diary/DiaryCheck'
+import DiaryCheck from './pages/DiaryCheck'
 import DiaryDetail from './components/diary/DiaryDetail'
 import Header from './components/Common/Header'
 import Footer from './components/Common/Footer'
@@ -13,21 +13,35 @@ import UserPage from './pages/UserPage'
 import EditProfile from './components/User/EditProfile'
 import ChangePwd from './components/User/ChangePwd'
 import FoodArchive from './components/archieve/FoodArchivePage'
+import DiaryWrite from './pages/DiaryWrite'
+import UpdateReady from './pages/UpdateReady'
+import Landing from './pages/Landing'
+import RecipeArchive from './pages/RecipeArchive'
+import RecipeDetail from './pages/RecipeDetail'
 
 function App() {
+  const location = useLocation()
   return (
     <div className="App">
       <Header />
-      <div className="contents">
-        <div className="Wrapper">
+      {location.pathname === '/' ? (
+        <Routes>
+          <Route path="/" element={<Landing />} />
+        </Routes>
+      ) : (
+        <div className="wrapper">
           <Routes>
-            <Route path="/" element={<DiaryCheck />} />
             <Route path="/diaries" element={<DiaryCheck />} />
             <Route path="/diaries/:id" element={<DiaryDetail />} />
+            <Route path="/diaries/:id/add" element={<DiaryWrite />} />
+            <Route path="/diaries/:id/update" element={<DiaryWrite />} />
+            <Route path="/community" element={<UpdateReady />} />
             <Route path="/nutrient" element={<FoodArchive />} />
+            <Route path="/recipe" element={<RecipeArchive />} />
+            <Route path="/recipe/:id" element={<RecipeDetail />} />
             <Route path="/sign-in" element={<UserSignIn />} />
             <Route path="/sign-up" element={<UserSignUp social={false} />} />
-            <Route path="/register" element={<UserSignUp social={true} />} />
+            {/* <Route path="/register" element={<UserSignUp social={true} />} /> */}
             <Route path="/find-pwd" element={<UserFindPwd />} />
             <Route path="/userpage" element={<UserPage />}>
               <Route path="" element={<EditProfile />} />
@@ -36,7 +50,7 @@ function App() {
             <Route path="/*" element={<NotFound error="404" />} />
           </Routes>
         </div>
-      </div>
+      )}
       <Footer />
     </div>
   )

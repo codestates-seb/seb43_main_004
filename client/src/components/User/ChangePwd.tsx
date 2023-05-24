@@ -4,6 +4,9 @@ import TabFrame from './TabFrame'
 import Input from '../Common/Input'
 import Button from '../Common/Button'
 import { checkPassword } from '../../utils/userfunc'
+import Modal from '../Common/Modal'
+import axios, { AxiosError } from 'axios'
+import { getCookie } from '../../utils/Cookie'
 
 interface pwdType {
   currentPassword: string
@@ -24,6 +27,9 @@ const ChangePwd = () => {
   })
 
   const { currentPassword, newPassword, ckPassword } = password
+
+  // 모달 핸들링
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   // 비밀번호 입력값 핸들링
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,51 +71,97 @@ const ChangePwd = () => {
     if (!isValid) {
       setError(msg)
     } else {
-      // api 호출
-      // 현재 비밀번호가 유효하지 않습니다.
-      // 현재 비밀번호가 올바르고, 새 비밀번호도 제대로 입력되었다면 비밀번호 변경 모달 띄우기
-      alert('비밀번호가 변경되었습니다.') // 비밀번호 변경
+      // 비밀번호 변경 api 호출
+      axios
+        .patch(
+          `${process.env.REACT_APP_SERVER_URL}/members/mypage/passwordupdate`,
+          { curPassword: currentPassword, newPassword: newPassword },
+          {
+            headers: {
+              Authorization: `Bearer ${getCookie('access')}`,
+            },
+          }
+        )
+        .then((response) => {
+          setError(msg)
+          setIsOpen(true)
+          setPassword({ ...password, ...msg })
+        })
+        .catch((error: AxiosError) => {
+          // 400 에러 (현재 비밀번호를 잘못 입력했을 때)
+          if (error.response?.status === 400) {
+            msg.currentPassword = '현재 비밀번호가 유효하지 않습니다.'
+            setError(msg)
+          }
+        })
     }
   }
 
   return (
-    <TabFrame title="비밀번호 변경">
-      <Form>
-        <Input
-          type="password"
-          label="현재 비밀번호"
-          placeholder="현재 비밀번호"
-          name="currentPassword"
-          error={error.currentPassword}
-          onChange={handleInput}
-        />
-        <Input
-          type="password"
-          label="새 비밀번호"
-          placeholder="새 비밀번호"
-          name="newPassword"
-          error={error.newPassword}
-          onChange={handleInput}
-        />
-        <Input
-          type="password"
-          label="새 비밀번호 확인"
-          placeholder="비밀번호 확인"
-          name="ckPassword"
-          error={error.ckPassword}
-          onChange={handleInput}
-        />
-        <Button onClick={changePassword}>변경하기</Button>
-      </Form>
-    </TabFrame>
+    <>
+      <TabFrame title="비밀번호 변경">
+        <Wrapper>
+          <Form>
+            <Input
+              type="password"
+              label="현재 비밀번호"
+              placeholder="현재 비밀번호"
+              name="currentPassword"
+              value={currentPassword}
+              error={error.currentPassword}
+              onChange={handleInput}
+            />
+            <Input
+              type="password"
+              label="새 비밀번호"
+              placeholder="새 비밀번호"
+              name="newPassword"
+              value={newPassword}
+              error={error.newPassword}
+              onChange={handleInput}
+            />
+            <Input
+              type="password"
+              label="새 비밀번호 확인"
+              placeholder="비밀번호 확인"
+              name="ckPassword"
+              value={ckPassword}
+              error={error.ckPassword}
+              onChange={handleInput}
+            />
+            <Button onClick={changePassword}>변경하기</Button>
+          </Form>
+        </Wrapper>
+      </TabFrame>
+      <Modal
+        state={isOpen}
+        setState={setIsOpen}
+        msg="비밀번호가 성공적으로 변경되었습니다."
+      >
+        <Button onClick={() => setIsOpen(false)}>확인</Button>
+      </Modal>
+    </>
   )
 }
 
+const Wrapper = styled.div`
+  width: 63.7rem;
+  min-height: 40rem;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 88vw;
+  }
+`
+
 const Form = styled.form`
-  width: 30rem;
+  width: 35rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  > button {
+    margin-top: 0.8rem;
+  }
 `
 
 export default ChangePwd

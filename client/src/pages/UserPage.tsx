@@ -1,43 +1,40 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import Tab from '../components/Common/Tab'
-import axios from 'axios'
-import { API } from '../utils/API'
-import { User } from '../utils/interface'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store'
 
 const UserPage = () => {
-  const [profile, setProfile] = useState<User>({
-    nickName: '',
-    gender: '',
-    height: 0,
-    weight: 0,
-    activity: '',
-    icon: '',
-  })
-  const { nickName, gender, height, weight, activity, icon } = profile
-  useEffect(() => {
-    console.log('/mypage')
-    axios
-      .get(`${API}/profile/1`)
-      // .get(`${API}/members/mypage`)
-      .then((response) => {
-        console.log(response)
-        setProfile(response.data)
-        console.log(response.data)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }, [])
+  const userInfo = useSelector((state: RootState) => state.profile.data)
+  const { nickName, gender, height, weight, activity, icon } = userInfo
+
+  let activeLevel
+  switch (activity) {
+    case 'NONE_ACTIVE':
+      activeLevel = '매우 낮음'
+      break
+    case 'LIGHTLY_ACTIVE':
+      activeLevel = '낮음'
+      break
+    case 'MODERATELY_ACTIVE':
+      activeLevel = '보통'
+      break
+    case 'VERY_ACTIVE':
+      activeLevel = '높음'
+      break
+    case 'EXTREMELY_ACTIVE':
+      activeLevel = '매우 높음'
+      break
+  }
 
   return (
     <Container>
       <UserProfile>
-        <img src={icon} alt="프로필 아이콘" />
+        <img src={`/icons/${icon}.svg`} alt="프로필 아이콘" />
         <div>
           <div className="userinfo-top">
             <h1>{nickName}</h1>
-            <span>{gender}</span>
+            <span>{gender === 'male' ? '남성' : '여성'}</span>
           </div>
 
           <ItemsWrapper>
@@ -51,17 +48,15 @@ const UserPage = () => {
             </div>
             <div>
               <span>활동수준</span>
-              <span>{activity}</span>
+              <span>{activeLevel}</span>
             </div>
           </ItemsWrapper>
         </div>
       </UserProfile>
       <Tab
         tabItem={[
-          { name: '프로필 수정', path: '/userpage' }, // 프로필 수정 페이지가 기본이 된다고 가정...
+          { name: '프로필 수정', path: '/userpage' },
           { name: '비밀번호 변경', path: '/userpage/change-pwd' },
-          { name: '내가 작성한 글', path: '/userpage/posts' },
-          { name: '내가 작성한 댓글', path: '/userpage/comments' },
         ]}
       />
     </Container>
@@ -69,6 +64,21 @@ const UserPage = () => {
 }
 const Container = styled.div`
   max-width: 88rem;
+`
+
+const ItemsWrapper = styled.div`
+  display: flex;
+  gap: 3rem;
+
+  > div span:first-child {
+    font-weight: 800;
+    margin-right: 1.4rem;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    flex-direction: column;
+    gap: 1rem;
+  }
 `
 
 const UserProfile = styled.div`
@@ -97,15 +107,8 @@ const UserProfile = styled.div`
   .userinfo-top {
     margin-bottom: 2rem;
   }
-`
 
-const ItemsWrapper = styled.div`
-  display: flex;
-  gap: 3rem;
-
-  > div span:first-child {
-    font-weight: 800;
-    margin-right: 1.4rem;
+  @media screen and (max-width: 500px) {
   }
 `
 
