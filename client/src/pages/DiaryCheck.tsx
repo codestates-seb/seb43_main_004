@@ -7,6 +7,7 @@ import { getCookie } from '../utils/Cookie'
 
 const DiaryCheck = () => {
   const [diaries, setDiaries] = useState<DataResponse | null>(null)
+  console.log(diaries)
 
   const fetchData = () => {
     axios
@@ -36,7 +37,7 @@ const DiaryCheck = () => {
       <ContainerWrapper>
         {diaries && (
           <>
-            <CalendarPage diaries={diaries} fetchData={fetchData} />
+            <CalendarPage diaries={diaries} />
             <Stats diaries={diaries} />
           </>
         )}
@@ -68,12 +69,13 @@ export interface Intake {
   fat: number
   kcal: number
   sugar: number
+  salt: number
   [key: string]: number // 인덱스 시그니처 추가
 }
 
 export interface DataResponse {
   data: Diary[]
-  standardIntake: Intake[]
+  standardIntakes: Intake[]
   weekList: Intake[]
   comment: string
   pageInfo: {
