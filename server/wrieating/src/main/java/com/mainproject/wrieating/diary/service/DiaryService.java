@@ -81,7 +81,7 @@ public class DiaryService {
     }
 
     // meal 에서 사용할 것
-    private Diary findVerifiedDiary(long diaryId) { // 다이어리 아이디 있나 검증
+    public Diary findVerifiedDiary(long diaryId) { // 다이어리 아이디 있나 검증
         return diaryRepository.findById(diaryId)
                 .orElseThrow(
                         () -> new BusinessLogicException(ExceptionCode.DIARY_NOT_FOUND)
@@ -97,7 +97,8 @@ public class DiaryService {
     public List<RecipesResponseDto> recommendRecipesByNutrientBalance(List<String> deficientNutrients, List<String> appropriateNutrients, List<String> excessiveNutrients) {
 
         StringBuilder queryBuilder = new StringBuilder(); // 생성
-        queryBuilder.append("SELECT rd.* FROM recipedata rd "); // SELECT rd.* FROM recipedata rd
+//        queryBuilder.append("SELECT * FROM RECIPE_DATA rd "); // SELECT rd.* FROM recipedata rd
+        queryBuilder.append("SELECT rd.recipeId, rd.img, rd.rcpName FROM RecipeData rd ");
 
         // 부족한 성분에 대한 쿼리 조건 추가
         if (!deficientNutrients.isEmpty()) {
@@ -134,7 +135,7 @@ public class DiaryService {
             } //SELECT rd.* FROM recipedata rd WHERE rd.carbohydrate >= 32 AND rd.kcal >= 500 AND rd.fat >=20
         }
 
-        // 적절한 성분에 대한 쿼리 조건 추가
+//         적절한 성분에 대한 쿼리 조건 추가
         if (!appropriateNutrients.isEmpty()) {
             if (deficientNutrients.isEmpty()) {
                 queryBuilder.append("WHERE ");
@@ -179,7 +180,7 @@ public class DiaryService {
             } //SELECT rd.* FROM recipedata rd WHERE rd.carbohydrate >= 32 AND rd.kcal >= 500 AND rd.fat >=20 AND rd.salt BETWEEN 240 AND 600
         }
 
-        // 과다한 성분에 대한 쿼리 조건 추가
+//         과다한 성분에 대한 쿼리 조건 추가
         if (!excessiveNutrients.isEmpty()) {
             if (deficientNutrients.isEmpty() && appropriateNutrients.isEmpty()) {
                 queryBuilder.append("WHERE ");
@@ -225,7 +226,12 @@ public class DiaryService {
 
         // 쿼리를 실행하여 추천 음식 성분 데이터를 조회합니다.
         String query = queryBuilder.toString();
+        System.out.println(query);
+
         List<RecipeData> recommendedRecipeData = recipeRepository.findRandomRecipeDataWithCustomQuery(query);
+
+        System.out.println(recommendedRecipeData);
+
 
         List<RecipesResponseDto> recipesResponseList = new ArrayList<>();
 

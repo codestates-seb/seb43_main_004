@@ -60,8 +60,7 @@ public class DiaryController {
 
         List<RecipesResponseDto> response = service.recommendRecipesByNutrientBalance(deficientNutrients, appropriateNutrients, excessiveNutrients);
 
-        // 바로 응답을 시켜야할지
-        // 들고있다가 전체조회할때 내보내야할지
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
