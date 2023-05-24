@@ -154,7 +154,7 @@ const UserSignUp = ({ social }: Props) => {
           setError({ ...error, ...msg })
         })
     } else {
-      msg.email = '이메일이 유효하지 않습니다.'
+      msg.email = '이메일 형식이 올바르지 않습니다.'
       setError({ ...error, ...msg })
     }
 
@@ -215,6 +215,10 @@ const UserSignUp = ({ social }: Props) => {
 
     if (nickName.trim() === '') {
       msg.nickName = '닉네임을 입력해주세요.'
+      setError({ ...error, ...msg })
+      return
+    } else if (nickName.length > 8) {
+      msg.nickName = '사용할 수 없는 닉네임입니다 (8자 초과)'
       setError({ ...error, ...msg })
       return
     }
@@ -318,7 +322,7 @@ const UserSignUp = ({ social }: Props) => {
                   label="이메일"
                   type="email"
                   name="email"
-                  placeholder="email"
+                  placeholder="이메일"
                   error={error.email}
                   disabled={isConfirm}
                   onChange={handleInput}
@@ -337,7 +341,7 @@ const UserSignUp = ({ social }: Props) => {
                   label="인증번호"
                   type="text"
                   name="ckAuth"
-                  placeholder="0000"
+                  placeholder="인증번호"
                   error={error.auth}
                   success={isConfirm ? success.auth : ''}
                   disabled={isConfirm}
@@ -357,7 +361,7 @@ const UserSignUp = ({ social }: Props) => {
               label="닉네임"
               type="text"
               name="nickName"
-              placeholder="홍길순"
+              placeholder="8자 이내의 문자열"
               error={error.nickName}
               success={success.nickName}
               onChange={handleInput}
