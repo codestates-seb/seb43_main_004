@@ -48,17 +48,30 @@ public class EmailSender {
             Message msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(from));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-            msg.setSubject("Email 인증 코드");
+            msg.setSubject("Wrieating!- Email 인증 코드입니다.");
 
-            String content = "안녕하세요! 당신의 건강에 도움을 드릴 Wrieating 입니다!\n가입해주셔서 감사합니다.\nWrieating 회원가입 인증 코드입니다 : " + verificationCode;
+            String content =
+                    "안녕하세요! 당신의 건강에 도움을 드릴 Wrieating 입니다! \n"
+                    + "가입해주셔서 감사합니다.\n"
+                    + "Wrieating 회원가입 인증 코드입니다 : "
+                    + verificationCode;
             msg.setText(content);
 
             // 메일 보내기
             Transport.send(msg);
 
-            System.out.println("Su.");
+            System.out.println("Success.");
             System.out.println("Authentication code: " + verificationCode);
+        } catch (AuthenticationFailedException e) {
+            // mail 발신 계정의 정보가 잘못된 경우
+            System.out.println("Authentication failed. Check your username and password.");
+            e.printStackTrace();
+        } catch (SendFailedException e) {
+            // 수신자의 이메일 주소가 유효하지 않거나 도달할 수 없는 경우
+            System.out.println("Failed to send email to recipient.");
+            e.printStackTrace();
         } catch (MessagingException e) {
+            //  SMTP 서버와의 통신 문제나 메일 전송 중에 예기치 않은 오류가 발생할 경우
             System.out.println("Error sending email.");
             e.printStackTrace();
         }

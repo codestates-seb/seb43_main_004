@@ -4,8 +4,6 @@ import com.mainproject.wrieating.auth.jwt.JwtTokenizer;
 import com.mainproject.wrieating.auth.utils.CustomAuthorityUtils;
 import com.mainproject.wrieating.exception.BusinessLogicException;
 import com.mainproject.wrieating.exception.ExceptionCode;
-//import com.mainproject.wrieating.helper.email.EmailSender;
-//import com.mainproject.wrieating.helper.email.RandomGenerator;
 import com.mainproject.wrieating.helper.email.EmailSender;
 import com.mainproject.wrieating.helper.email.RandomGenerator;
 import com.mainproject.wrieating.member.dto.MemberPatchDeleteDto;
@@ -19,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDate;
 import java.util.List;
