@@ -1,38 +1,56 @@
 import React from 'react'
 import styled from 'styled-components'
 import Button from '../components/Common/Button'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
-interface Props {
-  error: string
-}
+const errorCase = [
+  {
+    code: '403',
+    icon: 'error',
+    title: '페이지에 접근할 수 없습니다.',
+    msg: '해당 페이지를 볼 수 있는 권한을 가지고 있지 않습니다.',
+  },
+  {
+    code: '404',
+    icon: 'error',
+    title: '요청하신 페이지를 찾을 수 없습니다.',
+    msg: '입력한 주소가 잘못되었거나 요청하신 페이지의 주소가 삭제되어 찾을 수 없습니다. 서비스 이용에 불편을 드려 죄송합니다.',
+  },
+  {
+    code: '500',
+    icon: 'pending',
+    title: '페이지를 표시할 수 없습니다.',
+    msg: '서버의 일시적인 장애나 네트워크 문제로 인해 예상하지 못한 오류가 발생했습니다. 잠시 후에 다시 시도해 주세요.',
+  },
+]
 
-const NotFound = ({ error }: Props) => {
+const NotFound = () => {
+  const { error } = useParams()
   const navigate = useNavigate()
+
+  let code
+  switch (error) {
+    case undefined:
+      code = errorCase[1]
+      break
+    case '403':
+      code = errorCase[0]
+      break
+    case '404':
+      code = errorCase[1]
+      break
+    case '500':
+      code = errorCase[2]
+      break
+    default:
+      code = errorCase[2]
+  }
 
   return (
     <ErrorWrapper>
-      {error === '404' ? (
-        <>
-          <Icon className="material-symbols-outlined">error</Icon>
-          <h1>404 error</h1>
-          <div>
-            죄송합니다. 페이지를 찾을 수 없습니다. <br />
-            존재하지 않는 주소를 입력하셨거나 <br />
-            요청하신 페이지의 주소가 변경, 삭제되어 찾을 수 없습니다.
-          </div>
-        </>
-      ) : (
-        <>
-          <Icon className="material-symbols-outlined">pending</Icon>
-          <h1>500 error</h1>
-          <div>
-            예상하지 못한 오류가 발생했습니다. <br />
-            서버의 일시적인 장애이거나 네트워크 문제일 수 있습니다. <br />
-            잠시 후에 다시 시도해 주세요.
-          </div>
-        </>
-      )}
+      <Icon className="material-symbols-outlined">{code.icon}</Icon>
+      <h1>{code.title}</h1>
+      <div>{code.msg}</div>
       <Button onClick={() => navigate(-1)}>이전으로</Button>
     </ErrorWrapper>
   )
@@ -40,10 +58,11 @@ const NotFound = ({ error }: Props) => {
 
 const Icon = styled.span`
   font-size: 6rem;
+  margin-bottom: 1.4rem;
 `
 
 const ErrorWrapper = styled.div`
-  width: 50rem;
+  width: 55srem;
   text-align: center;
 
   h1 {
