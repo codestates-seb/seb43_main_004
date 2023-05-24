@@ -183,6 +183,11 @@ const FoodItem = (props: FoodItemProps) => {
       {custom ? (
         <>
           <div className="food-title">
+            {data.foodName ? (
+              <p className="food-name">{data.foodName}</p>
+            ) : (
+              <p className="food-name">{data.title}</p>
+            )}
             <Input
               label="음식명"
               type="text"
@@ -256,7 +261,11 @@ const FoodItem = (props: FoodItemProps) => {
       ) : (
         <>
           <div className="food-title">
-            <p className="food-name">{data.foodName}</p>
+            {data.foodName ? (
+              <p className="food-name">{data.foodName}</p>
+            ) : (
+              <p className="food-name">{data.title}</p>
+            )}
             <div className="food-intake">
               <p>섭취량(g)</p>
               <div className="intake-counter">

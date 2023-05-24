@@ -250,6 +250,25 @@ const DiaryWrite = () => {
   const [isEmpty, setIsEmpty] = useState(false) // 모달 상태
   const customId = useRef<number>(0) // custom 음식의 id
 
+  const mealType = [
+    {
+      mealType: 'BREAKFAST',
+      label: '☀️ 아침',
+    },
+    {
+      mealType: 'LUNCH',
+      label: '🌤️ 점심',
+    },
+    {
+      mealType: 'DINNER',
+      label: '🌙 저녁',
+    },
+    {
+      mealType: 'SNACK',
+      label: '🍪 간식',
+    },
+  ]
+
   const debounce = <T extends (...args: any[]) => any>(
     fn: T,
     delay: number
@@ -338,42 +357,58 @@ const DiaryWrite = () => {
       setIsEmpty(true)
       return
     }
-
-    const newData = {
-      diaryId: param.id,
-      title: stage?.foodName,
-      mealType: 'LUNCH',
-      kcal: stage?.kcal,
-      servingSize: stage?.servingSize,
-      carbohydrate: stage?.carbohydrate,
-      protein: stage?.protein,
-      fat: stage?.fat,
-      sugar: stage?.totalSugar,
-      salt: stage?.salt,
-      custom: stage?.custom,
+    let newData = {}
+    if (stage?.custom) {
+      newData = {
+        diaryId: param.id,
+        title: stage?.foodName,
+        mealType: diaryData.mealType,
+        kcal: stage?.kcal,
+        servingSize: stage?.servingSize,
+        carbohydrate: stage?.carbohydrate,
+        protein: stage?.protein,
+        fat: stage?.fat,
+        sugar: stage?.totalSugar,
+        salt: stage?.salt,
+        custom: stage.custom,
+      }
+    } else {
+      newData = {
+        diaryId: param.id,
+        title: stage?.foodName,
+        mealType: diaryData.mealType,
+        kcal: stage?.kcal,
+        servingSize: stage?.servingSize,
+        carbohydrate: stage?.carbohydrate,
+        protein: stage?.protein,
+        fat: stage?.fat,
+        sugar: stage?.totalSugar,
+        salt: stage?.salt,
+      }
     }
 
     try {
       if (isEdit) {
-        const res = await axios.patch(
-          `${url}/diaries/${param.id}/meal/update/${stage?.mealId}`,
-          newData,
-          {
-            headers: {
-              'Content-Type': 'application / json',
-              'ngrok-skip-browser-warning': '69420',
-              Authorization: `Bearer ${getCookie('access')}`,
-            },
-          }
-        )
-        console.log(res)
+        // const res = await axios.patch(
+        //   `${url}/diaries/${param.id}/meal/update/${stage?.mealId}`,
+        //   newData,
+        //   {
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       'ngrok-skip-browser-warning': '69420',
+        //       Authorization: `Bearer ${getCookie('access')}`,
+        //     },
+        //   }
+        // )
+        // console.log(res)
+        console.log(`${url}/diaries/${param.id}/meal/update/${stage?.mealId}`)
       } else {
         const res = await axios.post(
           `${url}/diaries/${param.id}/meal/write`,
           newData,
           {
             headers: {
-              'Content-Type': 'application / json',
+              'Content-Type': 'application/json',
               'ngrok-skip-browser-warning': '69420',
               Authorization: `Bearer ${getCookie('access')}`,
             },
@@ -381,9 +416,23 @@ const DiaryWrite = () => {
         )
         console.log(res)
       }
+      getNewList()
     } catch (err) {
       console.log(err)
     }
+  }
+
+  const getNewList = async () => {
+    const res = await axios.get(`${url}/diaries/${param.id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': '69420',
+        Authorization: `Bearer ${getCookie('access')}`,
+      },
+    })
+    console.log(res.data.meal)
+
+    setFoodList(res.data.meal)
   }
 
   useEffect(() => {
@@ -404,6 +453,8 @@ const DiaryWrite = () => {
     } else {
       customId.current = diaryData[diaryData.length - 1].mealId + 1
     }
+    // TODO: post, patch, delete 요청 후 일기데이터를 get 하는 로직 필요함
+    getNewList()
   }, [])
 
   return (
@@ -412,7 +463,13 @@ const DiaryWrite = () => {
         <h2>나의 식단일기</h2>
         <div className="food-edit">
           <div className="title">
-            <h3>☀️ 아침에 먹었어요</h3>
+            <h3>
+              {
+                mealType.filter((el) => el.mealType === diaryData.mealType)[0]
+                  .label
+              }
+              에 먹었어요
+            </h3>
             <Button onClick={createCustomFoodItem}>
               <span className="material-icons-round">edit</span>
               직접 등록하기
@@ -490,7 +547,7 @@ const DiaryWrite = () => {
               foodList.map((data, idx) => (
                 <li key={idx}>
                   <div className="title">
-                    <p>{data.foodName}</p>
+                    <p>{data.title}</p>
                     <div className="intake">
                       <p>섭취량(g) : {data.servingSize}</p>
                       <p className="kcal">{data.kcal}kcal</p>
