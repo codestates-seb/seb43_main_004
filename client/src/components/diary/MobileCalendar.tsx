@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { getCookie } from '../../utils/Cookie'
 
-const CalendarPage = ({ diaries }: { diaries: DataResponse }) => {
+const MobileCalendarPage = ({ diaries }: { diaries: DataResponse }) => {
   const [value, onChange] = useState(new Date())
   const navigate = useNavigate()
 
@@ -80,13 +80,6 @@ const CalendarPage = ({ diaries }: { diaries: DataResponse }) => {
         onClickDay={onChangeHandler}
         tileContent={tileContent}
       />
-      {/* <h1>
-        {new Date(value).toLocaleDateString('ko', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })}
-      </h1> */}
     </Container>
   )
 }
@@ -202,25 +195,6 @@ const Container = styled.div`
       }
     }
   }
-
-  @media (max-width: 710px) {
-    .react-calendar {
-      width: 320px;
-      border: 0.4px solid var(--color-light-gray);
-      border-radius: 15px;
-      .emoji {
-        font-size: 2.2rem;
-      }
-    }
-    .react-calendar__month-view__days {
-      button {
-        height: 55px;
-        font-size: 10px;
-        font-family: 'Pretendard', sans-serif;
-        font-weight: 400;
-      }
-    }
-  }
 `
 
-export default CalendarPage
+export default MobileCalendarPage

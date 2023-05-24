@@ -1,13 +1,21 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import CalendarPage from '../components/diary/Calendar'
 import Stats from '../components/diary/Stats'
+import MobileCalendarPage from '../components/diary/MobileCalendar'
+import MobileStats from '../components/diary/MobileStats'
 import { getCookie } from '../utils/Cookie'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState } from '../store'
+import { setScreenSize } from '../store/slices/screenSizeSlice'
+import { debounce } from '../utils/timefunc'
 
 const DiaryCheck = () => {
   const [diaries, setDiaries] = useState<DataResponse | null>(null)
-  console.log(diaries)
+
+  const windowWidth = useSelector((state: RootState) => state.screenSize.width)
+  const dispatch = useDispatch()
 
   const fetchData = () => {
     axios
@@ -31,16 +39,34 @@ const DiaryCheck = () => {
     fetchData()
   }, [])
 
+  useEffect(() => {
+    const handleResize = debounce(() => {
+      dispatch(setScreenSize({ width: window.innerWidth }))
+    }, 200)
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [dispatch])
+
   return (
     <DiaryPageWrapper>
       <h2>나의 식단일기</h2>
-      <ContainerWrapper>
-        {diaries && (
-          <>
-            <CalendarPage diaries={diaries} />
-            <Stats diaries={diaries} />
-          </>
-        )}
+      <ContainerWrapper windowWidth={windowWidth}>
+        {diaries &&
+          (windowWidth > 560 ? (
+            <>
+              <CalendarPage diaries={diaries} />
+              <Stats diaries={diaries} />
+            </>
+          ) : (
+            <>
+              <MobileCalendarPage diaries={diaries} />
+              <MobileStats diaries={diaries} />
+            </>
+          ))}
       </ContainerWrapper>
     </DiaryPageWrapper>
   )
@@ -51,10 +77,35 @@ export const DiaryPageWrapper = styled.div`
     font-size: 28px;
     margin-bottom: 20px;
   }
+
+  @media (max-width: 850px) {
+    h2 {
+      font-size: 22px;
+    }
+  }
+
+  @media (max-width: 710px) {
+    h2 {
+      font-size: 18px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    h2 {
+      text-align: center;
+    }
+  }
 `
 
-const ContainerWrapper = styled.div`
+const ContainerWrapper = styled.div<ContainerWrapperProps>`
   display: flex;
+
+  ${({ windowWidth }) =>
+    windowWidth <= 560 &&
+    css`
+      flex-direction: column;
+      align-items: center;
+    `}
 `
 
 export interface Diary {
@@ -84,6 +135,10 @@ export interface DataResponse {
     totalElements: number
     totalPages: number
   }
+}
+
+interface ContainerWrapperProps {
+  windowWidth: number
 }
 
 export default DiaryCheck
