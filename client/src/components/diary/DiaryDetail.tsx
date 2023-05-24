@@ -12,6 +12,7 @@ import { getCookie } from '../../utils/Cookie'
 
 const DiaryDetail = () => {
   const [diary, setDiary] = useState<Diary | null>(null)
+  console.log(diary)
 
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'] // 요일을 구하기 위한 배열
   const [memoContent, setMemoContent] = useState(diary?.memo)
@@ -25,6 +26,7 @@ const DiaryDetail = () => {
   const navigate = useNavigate()
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
+  console.log(saveEmoji)
 
   // 통계를 낸 영양소를 저장하는 함수 (퍼센트로 저장)
   const updateNutrientStatistics = (nutrientType: string, percent: number) => {
@@ -105,7 +107,7 @@ const DiaryDetail = () => {
   const onSendMemo = () => {
     axios
       .patch(
-        `${process.env.REACT_APP_SERVER_URL}/diaries/update/${id}}`,
+        `${process.env.REACT_APP_SERVER_URL}/diaries/update/${id}`,
         {
           memo: memoContent,
         },
@@ -141,6 +143,8 @@ const DiaryDetail = () => {
     appropriateCount: number,
     excessiveCount: number
   ) => {
+    console.log(deficientCount, appropriateCount, excessiveCount)
+
     if (deficientCount >= 3) {
       return '😵' // 부족한 항목에 대한 이모지 반환
     } else if (appropriateCount >= 3) {
@@ -148,7 +152,7 @@ const DiaryDetail = () => {
     } else if (excessiveCount >= 3) {
       return '😭' // 과다한 항목에 대한 이모지 반환
     } else {
-      return '🫥' // 기본 이모지 반환
+      return '😵'
     }
   }
 
@@ -183,6 +187,7 @@ const DiaryDetail = () => {
   // 통계 전송 + 이모지 반영s
   useEffect(() => {
     const data = sendNutrientDataToServer(nutrientStatistics)
+    console.log(data)
 
     // 여기에 리턴받은 데이터 전송하는 로직 구현해야함
     // 이모지를 제공하는 로직
@@ -191,6 +196,7 @@ const DiaryDetail = () => {
       data['appropriate'].length,
       data['excessive'].length
     )
+    setSaveEmoji(emoji)
     // 임시적으로 상태에 저장해둠 -> 이모지를 전송하는 로직 구현해야함
     if (emoji !== diary?.diaryStatus) {
       axios
@@ -198,7 +204,6 @@ const DiaryDetail = () => {
           `${process.env.REACT_APP_SERVER_URL}/diaries/update/${id}`,
           {
             diaryStatus: emoji,
-            statistics: data,
           },
           {
             headers: {
@@ -208,14 +213,13 @@ const DiaryDetail = () => {
             },
           }
         )
-        .then((res) => {
-          console.log(res)
+        .then(() => {
+          console.log(diary?.diaryStatus, saveEmoji)
         })
         .catch((err) => {
           console.log(err)
         })
     }
-    setSaveEmoji(emoji)
   }, [nutrientStatistics])
 
   return (
@@ -243,7 +247,7 @@ const DiaryDetail = () => {
                 ).getDate()}일 ${
                   weekdays[new Date(diary.userDate).getDay()]
                 }요일`}</p>
-                <div className="header__emoji">{saveEmoji}</div>
+                <div className="header__emoji">{diary.diaryStatus}</div>
               </div>
               <div className="diary__header__btn">
                 <Button onClick={onChangeModal} outline={true}>
@@ -450,6 +454,10 @@ const DiaryDetailWrapper = styled.div`
       }
       span {
         cursor: pointer;
+        transition: all 0.2s linear;
+      }
+      span:hover {
+        transform: scale(1.2);
       }
     }
   }
@@ -527,6 +535,10 @@ const DiaryDetailWrapper = styled.div`
       }
       span {
         cursor: pointer;
+        transition: all 0.2s linear;
+      }
+      span:hover {
+        transform: scale(1.2);
       }
     }
 
