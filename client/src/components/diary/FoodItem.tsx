@@ -147,7 +147,7 @@ const FoodItem = (props: FoodItemProps) => {
           carbohydrate: origin.carbohydrate,
           protein: origin.protein,
           fat: origin.fat,
-          totalSugar: origin.totalSugar,
+          sugar: origin.sugar,
           salt: origin.salt,
         })
       } else {
@@ -157,7 +157,7 @@ const FoodItem = (props: FoodItemProps) => {
           carbohydrate: Number((origin.carbohydrate * ratio).toFixed(2)),
           protein: Number((origin.protein * ratio).toFixed(2)),
           fat: Number((origin.fat * ratio).toFixed(2)),
-          totalSugar: Number((origin.totalSugar * ratio).toFixed(2)),
+          sugar: Number((origin.sugar * ratio).toFixed(2)),
           salt: Number((origin.salt * ratio).toFixed(2)),
         })
       }
@@ -184,18 +184,24 @@ const FoodItem = (props: FoodItemProps) => {
         <>
           <div className="food-title">
             {data.foodName ? (
-              <p className="food-name">{data.foodName}</p>
+              <Input
+                label="음식명"
+                type="text"
+                placeholder="음식명"
+                name="foodName"
+                value={data.foodName}
+                onChange={customOnChange}
+              />
             ) : (
-              <p className="food-name">{data.title}</p>
+              <Input
+                label="음식명"
+                type="text"
+                placeholder="음식명"
+                name="foodName"
+                value={data.title}
+                onChange={customOnChange}
+              />
             )}
-            <Input
-              label="음식명"
-              type="text"
-              placeholder="음식명"
-              name="foodName"
-              value={data.foodName}
-              onChange={customOnChange}
-            />
             <div className="food-intake">
               <Input
                 label="1인분 기준 섭취량(g)"
@@ -244,8 +250,8 @@ const FoodItem = (props: FoodItemProps) => {
               label="당류"
               type="text"
               placeholder="g"
-              name="totalSugar"
-              value={data.totalSugar.toString()}
+              name="sugar"
+              value={data.sugar.toString()}
               onChange={customOnChange}
             />
             <Input

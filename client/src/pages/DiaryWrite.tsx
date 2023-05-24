@@ -229,9 +229,10 @@ export interface FoodList {
   carbohydrate: number
   protein: number
   fat: number
-  totalSugar: number
+  sugar: number
   salt: number
   custom?: boolean | undefined
+  title?: string
   [key: string]: string | number | boolean | undefined | null
 }
 
@@ -241,7 +242,10 @@ const DiaryWrite = () => {
   const param = useParams()
   const location = useLocation()
   const diaryData = location.state?.meal || null // 식단 등록, 수정할 때 제공되는 데이터
-  console.log(diaryData)
+  const thisMealType = Array.isArray(diaryData)
+    ? diaryData[0].mealType
+    : diaryData.mealType
+
   const [searchTxt, setSearchTxt] = useState('') // 검색 인풋 상태
   const [searchList, setSearchList] = useState<FoodList[]>([]) // 자동완성 검색어의 목록
   const [stage, setStage] = useState<FoodList | null>(null)
@@ -250,22 +254,22 @@ const DiaryWrite = () => {
   const [isEmpty, setIsEmpty] = useState(false) // 모달 상태
   const customId = useRef<number>(0) // custom 음식의 id
 
-  const mealType = [
+  const mealTypeLabel = [
     {
       mealType: 'BREAKFAST',
-      label: '☀️ 아침',
+      label: '☀️ 아침에 ',
     },
     {
       mealType: 'LUNCH',
-      label: '🌤️ 점심',
+      label: '🌤️ 점심에 ',
     },
     {
       mealType: 'DINNER',
-      label: '🌙 저녁',
+      label: '🌙 저녁에 ',
     },
     {
       mealType: 'SNACK',
-      label: '🍪 간식',
+      label: '🍪 간식으로 ',
     },
   ]
 
@@ -320,28 +324,33 @@ const DiaryWrite = () => {
       carbohydrate: 0,
       protein: 0,
       fat: 0,
-      totalSugar: 0,
+      sugar: 0,
       salt: 0,
       custom: true,
     }
     customId.current++
 
     setStage(newItem)
+    setIsEdit(false)
   }
 
   const deleteFoodItem = async (id: number) => {
-    console.log('delete')
-    const res = await axios.delete(`${url}/diaries/diaryId/meal/delete/${id}`, {
-      headers: {
-        'Content-Type': `application/json`,
-        'ngrok-skip-browser-warning': '69420',
-      },
-    })
-    console.log(res)
+    const res = await axios.delete(
+      `${url}/diaries/${param.id}/meal/delete/${id}`,
+      {
+        headers: {
+          'Content-Type': `application/json`,
+          'ngrok-skip-browser-warning': '69420',
+        },
+      }
+    )
+    getNewList()
   }
 
   const editToStage = (data: FoodList) => {
     setStage(data)
+    console.log(data)
+
     setIsEdit(true)
   }
 
@@ -362,13 +371,13 @@ const DiaryWrite = () => {
       newData = {
         diaryId: param.id,
         title: stage?.foodName,
-        mealType: diaryData.mealType,
+        mealType: thisMealType,
         kcal: stage?.kcal,
         servingSize: stage?.servingSize,
         carbohydrate: stage?.carbohydrate,
         protein: stage?.protein,
         fat: stage?.fat,
-        sugar: stage?.totalSugar,
+        sugar: stage?.sugar,
         salt: stage?.salt,
         custom: stage.custom,
       }
@@ -376,32 +385,31 @@ const DiaryWrite = () => {
       newData = {
         diaryId: param.id,
         title: stage?.foodName,
-        mealType: diaryData.mealType,
+        mealType: thisMealType,
         kcal: stage?.kcal,
         servingSize: stage?.servingSize,
         carbohydrate: stage?.carbohydrate,
         protein: stage?.protein,
         fat: stage?.fat,
-        sugar: stage?.totalSugar,
+        sugar: stage?.sugar,
         salt: stage?.salt,
       }
     }
+    console.log(newData)
 
     try {
       if (isEdit) {
-        // const res = await axios.patch(
-        //   `${url}/diaries/${param.id}/meal/update/${stage?.mealId}`,
-        //   newData,
-        //   {
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       'ngrok-skip-browser-warning': '69420',
-        //       Authorization: `Bearer ${getCookie('access')}`,
-        //     },
-        //   }
-        // )
-        // console.log(res)
-        console.log(`${url}/diaries/${param.id}/meal/update/${stage?.mealId}`)
+        const res = await axios.patch(
+          `${url}/diaries/${param.id}/meal/update/${stage?.mealId}`,
+          newData,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'ngrok-skip-browser-warning': '69420',
+              Authorization: `Bearer ${getCookie('access')}`,
+            },
+          }
+        )
       } else {
         const res = await axios.post(
           `${url}/diaries/${param.id}/meal/write`,
@@ -414,8 +422,8 @@ const DiaryWrite = () => {
             },
           }
         )
-        console.log(res)
       }
+      setStage(null)
       getNewList()
     } catch (err) {
       console.log(err)
@@ -430,9 +438,9 @@ const DiaryWrite = () => {
         Authorization: `Bearer ${getCookie('access')}`,
       },
     })
-    console.log(res.data.meal)
 
-    setFoodList(res.data.meal)
+    setFoodList(res.data.meal.filter((el: any) => el.mealType === thisMealType))
+    console.log(res.data.meal.filter((el: any) => el.mealType === thisMealType))
   }
 
   useEffect(() => {
@@ -453,7 +461,6 @@ const DiaryWrite = () => {
     } else {
       customId.current = diaryData[diaryData.length - 1].mealId + 1
     }
-    // TODO: post, patch, delete 요청 후 일기데이터를 get 하는 로직 필요함
     getNewList()
   }, [])
 
@@ -465,10 +472,10 @@ const DiaryWrite = () => {
           <div className="title">
             <h3>
               {
-                mealType.filter((el) => el.mealType === diaryData.mealType)[0]
+                mealTypeLabel.filter((el) => el.mealType === thisMealType)[0]
                   .label
               }
-              에 먹었어요
+              먹었어요
             </h3>
             <Button onClick={createCustomFoodItem}>
               <span className="material-icons-round">edit</span>
