@@ -80,6 +80,7 @@ const StyledNav = styled.nav`
       overflow: hidden;
       display: flex;
       justify-content: center;
+      flex-shrink: 0;
 
       img {
         display: block;
@@ -136,14 +137,8 @@ const StyledNav = styled.nav`
     }
   }
 
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     width: 90%;
-
-    .btn-box {
-      button {
-        font-size: ${({ theme }) => theme.fontSize.smmh};
-      }
-    }
 
     .login-box,
     .user-box {
@@ -193,9 +188,24 @@ const StyledNav = styled.nav`
     }
   }
 
-  @media screen and (max-width: 360px) {
-    width: 95%;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
     padding: 2rem 3rem;
+
+    .btn-box {
+      margin-bottom: 1rem;
+
+      button {
+        font-size: ${({ theme }) => theme.fontSize.mdh};
+      }
+    }
+
+    .login-box,
+    .user-box {
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      gap: 1.5rem;
+    }
   }
 `
 

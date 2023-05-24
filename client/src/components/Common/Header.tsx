@@ -39,16 +39,18 @@ const StyledHeader = styled.header`
     }
   }
 
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     padding: 1rem;
     height: 6rem;
 
-    .btn-menu {
-      font-size: ${({ theme }) => theme.fontSize.lgh};
-    }
-
     h1 {
       width: 5rem;
+    }
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    .btn-menu {
+      font-size: ${({ theme }) => theme.fontSize.mdh};
     }
   }
 `
