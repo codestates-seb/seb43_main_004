@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import { getCookie } from '../../utils/Cookie'
 import { userLogout } from '../../utils/userfunc'
+import Modal from './Modal'
 
 const StyledNavBg = styled.div`
   width: 100%;
