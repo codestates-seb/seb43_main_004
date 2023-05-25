@@ -80,7 +80,6 @@ const DiaryDetail = () => {
           {
             headers: {
               'Content-Type': 'application/json',
-              'ngrok-skip-browser-warning': '69420',
               Authorization: `Bearer ${getCookie('access')}`,
             },
           }
@@ -210,24 +209,23 @@ const DiaryDetail = () => {
   useEffect(() => {
     if (nutrientStatistics) {
       const data = sendNutrientDataToServer(nutrientStatistics)
-      console.log(data)
 
-      axios
-        .post(
-          `${process.env.REACT_APP_SERVER_URL}/diaries/recommend-recipe`,
-          {
-            data,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${getCookie('access')}`,
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res)
-        })
+      // axios
+      //   .post(
+      //     `${process.env.REACT_APP_SERVER_URL}/diaries/recommend-recipe`,
+      //     {
+      //       data,
+      //     },
+      //     {
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //         Authorization: `Bearer ${getCookie('access')}`,
+      //       },
+      //     }
+      //   )
+      //   .then((res) => {
+      //     console.log(res)
+      //   })
 
       const emoji = getEmoji(
         data['deficient'].length,
