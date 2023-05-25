@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 @RestController
@@ -29,7 +30,7 @@ public class MemberController {
 
     // 이메일 인증(회원가입시) & 이메일 중복 체크
     @PostMapping("/members/sendmail")
-    public ResponseEntity sendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
+    public ResponseEntity sendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) throws MessagingException{
         String email = emailRequestDto.getEmail();
 
         if (memberService.verifiedMemberEmail(email)) {
@@ -52,7 +53,7 @@ public class MemberController {
 
     // 이메일 인증(비밀번호 찾기시)
     @PostMapping("/members/findpassword/sendmail")
-    public ResponseEntity findpasswordSendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) {
+    public ResponseEntity findpasswordSendVerificationEmail(@RequestBody EmailRequestDto emailRequestDto) throws MessagingException {
         String email = emailRequestDto.getEmail();
 
         if (memberService.verifiedMemberEmail(email)){ // 이메일이 존재한다면

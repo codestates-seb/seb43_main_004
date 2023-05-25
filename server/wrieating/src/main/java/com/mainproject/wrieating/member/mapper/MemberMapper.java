@@ -12,7 +12,6 @@ public interface MemberMapper {
     Member memberPostToMember(MemberPostSignUpDto requestBody);
     Member memberPatchToMember(MemberPatchDto requestBody);
     MemberPostSignUpDto memberToMemberPost(Member member);
-    MemberPatchDeleteDto memberToMemberPatchDelete(Member member);
     MemberResponseDto memberToMemberResponse(Member member);
 
 }
