@@ -6,6 +6,8 @@ import { DataResponse } from '../../pages/DiaryCheck'
 const Stats = ({ diaries }: { diaries: DataResponse }) => {
   // 백엔드 데이터가 만들어지면 any에서  DataResponse로 변경 에정
   const { weekList, standardIntakes } = diaries
+  console.log(weekList)
+
   const intake = weekList && weekList[0] // 지난주 섭취량
   const standardIntake = standardIntakes && standardIntakes[0] // 평균섭취량
 
@@ -98,11 +100,12 @@ const Stats = ({ diaries }: { diaries: DataResponse }) => {
   )
 
   const hasData = Object.values(weekList[0]).some((value) => value !== 0)
+  console.log(filteredData, hasData)
 
   return (
     <StatsWrapper>
       <h3>지난주 통계</h3>
-      {hasData ? (
+      {hasData && filteredData.length > 0 ? (
         <>
           <div className="pie__container">
             <ResponsivePie
@@ -118,7 +121,7 @@ const Stats = ({ diaries }: { diaries: DataResponse }) => {
             />
           </div>
           <div className="pie__detail">
-            <p className="detail__Kcal">{`${intake?.kcal} Kcal`}</p>
+            <p className="detail__Kcal">{`${intake?.sumKcal} Kcal`}</p>
             <ul className="detail__container">
               {data.map((nutrient) => renderNutrientListItem(nutrient))}
             </ul>
@@ -127,12 +130,21 @@ const Stats = ({ diaries }: { diaries: DataResponse }) => {
       ) : (
         <div className="no__result__data">
           <div className="round__gray"></div>
-          <p className="detail__Kcal">{`${intake?.kcal} Kcal`}</p>
-          <p>
-            지난주 식단기록이 존재하지 않습니다.
-            <br /> 꾸준한 기록을 통해 통계를 제공받아
-            <br /> 섭취한 영양성분을 확인하세요!
-          </p>
+          <p className="detail__Kcal">{`${intake?.sumKcal} Kcal`}</p>
+          {filteredData.length === 0 ? (
+            <p className="no__length">
+              지난주 식단기록이 존재하지만 충분하지 않아 통계가 불가능합니다.
+              <br />
+              <br /> 꾸준한 기록을 통해 통계를 제공받아
+              <br /> 섭취한 영양성분을 확인하세요!
+            </p>
+          ) : (
+            <p className="nth__length">
+              지난주 식단기록이 존재하지 않습니다.
+              <br /> 꾸준한 기록을 통해 통계를 제공받아
+              <br /> 섭취한 영양성분을 확인하세요!
+            </p>
+          )}
         </div>
       )}
     </StatsWrapper>
@@ -254,6 +266,11 @@ const StatsWrapper = styled.div`
       background-color: var(--color-light-gray);
       border-radius: 50%;
     }
+
+    .no__length {
+      width: 200px;
+    }
+
     p:last-child {
       margin-top: 2rem;
       font-size: 14px;
@@ -264,6 +281,17 @@ const StatsWrapper = styled.div`
   @media (max-width: 850px) {
     h3 {
       font-size: 22px;
+    }
+
+    .pie__container {
+      width: 250px;
+      height: 250px;
+      left: -1rem;
+    }
+
+    .detail__container {
+      font-size: 12px;
+      padding: 1.5rem;
     }
 
     .no__result__data {

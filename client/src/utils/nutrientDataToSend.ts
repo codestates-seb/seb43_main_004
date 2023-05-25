@@ -6,7 +6,7 @@ const sendNutrientDataToServer = (data: NutrientData) => {
   }
 
   Object.entries(data).forEach(([nutrient, value]) => {
-    if (nutrient !== 'sugar') {
+    if (nutrient !== 'totalSugar') {
       // 당분을 제외한 항목만 처리
       const integerValue = parseInt(value.toFixed(0))
 

@@ -195,6 +195,25 @@ const Container = styled.div`
       }
     }
   }
+
+  @media (max-width: 430px) {
+    .react-calendar {
+      width: 350px;
+      border: 0.4px solid var(--color-light-gray);
+      border-radius: 15px;
+      .emoji {
+        font-size: 2.8rem;
+      }
+    }
+    .react-calendar__month-view__days {
+      button {
+        height: 65px;
+        font-size: 13px;
+        font-family: 'Pretendard', sans-serif;
+        font-weight: 400;
+      }
+    }
+  }
 `
 
 export default MobileCalendarPage

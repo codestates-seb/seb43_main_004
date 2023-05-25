@@ -29,12 +29,12 @@
     ],
     "weekList": [
       {
-        "carbohydrate": 1300,
-        "protein": 460,
-        "fat": 240,
-        "kcal": 2300,
-        "sugar": 130,
-        "salt": 13000
+        "carbohydrate": 0,
+        "protein": 0,
+        "fat": 0,
+        "kcal": 0,
+        "sugar": 0,
+        "salt": 0
       }
     ],
     "comment": "탄수화물이 너무 많아요",
@@ -97,7 +97,7 @@
       "meal": [
         {
           "mealId": 1,
-          "foodName": "고등어 조림",
+          "title": "고등어 조림",
           "mealType": "BREAKFAST",
           "kcal": 600,
           "servingSize": 100,
@@ -109,7 +109,7 @@
         },
         {
           "mealId": 2,
-          "foodName": "삼겹살",
+          "title": "삼겹살",
           "mealType": "LUNCH",
           "kcal": 700,
           "servingSize": 400,
@@ -121,7 +121,7 @@
         },
         {
           "mealId": 3,
-          "foodName": "삼양라면",
+          "title": "삼양라면",
           "mealType": "DINNER",
           "kcal": 560,
           "servingSize": 150,
@@ -133,7 +133,7 @@
         },
         {
           "mealId": 4,
-          "foodName": "김치",
+          "title": "김치",
           "mealType": "DINNER",
           "kcal": 65,
           "servingSize": 80,
@@ -144,7 +144,7 @@
           "salt": 25
         }
       ],
-      "standardIntake": [
+      "standardIntakes": [
         {
           "carbohydrate": 225,
           "protein": 60,
@@ -239,7 +239,7 @@
     "data": [
       {
         "id": 1,
-        "foodName": "밥",
+        "title": "밥",
         "carbohydrate": 30,
         "protein": 3,
         "fat": 9,
@@ -248,7 +248,7 @@
       },
       {
         "id": 2,
-        "foodName": "새우 볶음밥",
+        "title": "새우 볶음밥",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -257,7 +257,7 @@
       },
       {
         "id": 3,
-        "foodName": "감자 볶음밥",
+        "title": "감자 볶음밥",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -266,7 +266,7 @@
       },
       {
         "id": 4,
-        "foodName": "닭튀김",
+        "title": "닭튀김",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -275,7 +275,7 @@
       },
       {
         "id": 5,
-        "foodName": "새우초밥",
+        "title": "새우초밥",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -284,7 +284,7 @@
       },
       {
         "id": 6,
-        "foodName": "새우 튀김",
+        "title": "새우 튀김",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -293,7 +293,7 @@
       },
       {
         "id": 7,
-        "foodName": "햇반",
+        "title": "햇반",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -302,7 +302,7 @@
       },
       {
         "id": 8,
-        "foodName": "삼겹살",
+        "title": "삼겹살",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -311,7 +311,7 @@
       },
       {
         "id": 9,
-        "foodName": "닭볶음탕",
+        "title": "닭볶음탕",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,
@@ -320,7 +320,7 @@
       },
       {
         "id": 10,
-        "foodName": "닭똥집 튀김",
+        "title": "닭똥집 튀김",
         "carbohydrate": 30,
         "protein": 33,
         "fat": 9,

@@ -64,10 +64,10 @@ const CalendarPage = ({ diaries }: { diaries: DataResponse }) => {
   })
 
   const tileContent = ({ date }: { date: Date }) => {
-    const a = new Date(
+    const nowTime = new Date(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
     )
-    const formattedDate = a.toISOString().split('T')[0]
+    const formattedDate = nowTime.toISOString().split('T')[0]
     return <div className="emoji">{dateWithEmoji[formattedDate]}</div>
   }
 
