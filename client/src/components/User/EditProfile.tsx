@@ -14,6 +14,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../store'
 import { getCookie } from '../../utils/Cookie'
 import { __editUser } from '../../store/slices/profileSlice'
+import { userLogout } from '../../utils/userfunc'
 
 interface noticeType {
   nickName: string
@@ -187,8 +188,8 @@ const EditProfile = () => {
         },
       })
       .then((response) => {
-        console.log(response)
-        navigate('/sign-in')
+        userLogout()
+        navigate('/sign-in', { replace: true })
       })
       .catch((error) => {
         console.error(error)
@@ -309,12 +310,12 @@ const IconContainer = styled.div`
   display: flex;
   min-height: 13rem;
 
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     height: auto;
   }
 `
 const Wrapper = styled.div`
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     width: 88vw;
   }
 `
@@ -334,6 +335,11 @@ const GridContainer = styled.div`
       position: relative;
       top: 2rem;
     }
+  }
+
+  @media ${({ theme }) => theme.device.tablet} {
+    // grid-template-columns: none;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   @media ${({ theme }) => theme.device.mobile} {
