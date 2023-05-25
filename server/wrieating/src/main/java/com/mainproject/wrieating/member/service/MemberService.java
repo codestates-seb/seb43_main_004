@@ -6,7 +6,6 @@ import com.mainproject.wrieating.exception.BusinessLogicException;
 import com.mainproject.wrieating.exception.ExceptionCode;
 import com.mainproject.wrieating.helper.email.EmailSender;
 import com.mainproject.wrieating.helper.email.RandomGenerator;
-import com.mainproject.wrieating.member.dto.MemberPatchDeleteDto;
 import com.mainproject.wrieating.member.dto.MemberPostSignUpDto;
 import com.mainproject.wrieating.member.entity.Member;
 import com.mainproject.wrieating.member.entity.StandardIntake;
@@ -19,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
+import javax.mail.SendFailedException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -36,12 +38,27 @@ public class MemberService {
 
     private final EmailSender emailSender;
 
-    public String sendVerificationEmail(String email) {
+    // 이메일 전송 로직 및 예외처리
+    public String sendVerificationEmail(String email) throws MessagingException {
         // Verification Code 생성
         String verificationCode = RandomGenerator.generateRandomCode(6);
 
         // 이메일 인증 메일 발송
-        emailSender.sendVerificationEmail(email, verificationCode);
+        try {
+            emailSender.sendVerificationEmail(email, verificationCode);
+        } catch (AuthenticationFailedException e) {
+            // 메일 발신 계정의 정보가 잘못된 경우 처리
+
+            throw new MessagingException("Authentication failed. Check your username and password.", e);
+        } catch (SendFailedException e) {
+            // 수신자의 이메일 주소가 유효하지 않거나 도달할 수 없는 경우 처리
+
+            throw new MessagingException("Failed to send email to recipient.", e);
+        } catch (MessagingException e) {
+            // SMTP 서버와의 통신 문제나 메일 전송 중에 예기치 않은 오류가 발생할 경우 처리
+
+            throw new MessagingException("Error sending email.", e);
+        }
 
         return verificationCode;
     }
@@ -148,13 +165,15 @@ public class MemberService {
         return findMember;
     }
 
-    public void deleteMember(String token) {
+    public Member deleteMember(String token) {
         long memberId = jwtTokenizer.getMemberId(token);
 
-        MemberPatchDeleteDto findMember = mapper.memberToMemberPatchDelete(findVerifiedMember(memberId));
+        Member findMember = findVerifiedMember(memberId);
         // 회원 삭제하지않고 status만 바꾸는 로직
         
         findMember.setStatus(Member.Status.MEMBER_QUIT);
+
+        return memberRepository.save(findMember);
     }
 
     // 멤버 여부 체크
