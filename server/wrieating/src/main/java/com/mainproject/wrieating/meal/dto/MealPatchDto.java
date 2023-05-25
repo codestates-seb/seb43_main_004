@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class MealPatchDto {
     private String title;
+    private int servingSize;
     private int carbohydrate;
     private int protein;
     private int fat;
