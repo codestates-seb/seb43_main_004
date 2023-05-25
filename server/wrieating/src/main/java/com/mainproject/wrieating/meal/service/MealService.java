@@ -58,6 +58,8 @@ public class MealService {
 
         Optional.ofNullable(mealPatchDto.getTitle())
                 .ifPresent(meal::setTitle);
+        Optional.ofNullable(mealPatchDto.getServingSize())
+                        .ifPresent(meal::setServingSize);
         Optional.ofNullable(mealPatchDto.getKcal())
                 .ifPresent(meal::setKcal);
         Optional.ofNullable(mealPatchDto.getCarbohydrate())
