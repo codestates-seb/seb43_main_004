@@ -9,9 +9,14 @@ const MobileStats = ({ diaries }: { diaries: DataResponse }) => {
   const intake = weekList && weekList[0] // 지난주 섭취량
   const standardIntake = standardIntakes && standardIntakes[0] // 평균섭취량
   const [isOpenModal, setIsOpenModal] = useState(false)
+  const [isClosingModal, setIsClosingModal] = useState(false)
 
   const handleCloseModal = () => {
-    setIsOpenModal(false)
+    setIsClosingModal(true)
+    setTimeout(() => {
+      setIsOpenModal(false)
+      setIsClosingModal(false)
+    }, 700)
   }
 
   const handleOpenModal = () => {
@@ -107,14 +112,23 @@ const MobileStats = ({ diaries }: { diaries: DataResponse }) => {
   )
 
   const hasData = Object.values(weekList[0]).some((value) => value !== 0)
+  console.log(filteredData, hasData)
 
   return (
     <>
       {isOpenModal && <ModalBackground onClick={handleCloseModal} />}
       {isOpenModal ? (
-        <StatsWrapper>
-          <h3>지난주 통계</h3>
-          {hasData ? (
+        <StatsWrapper className={isClosingModal ? 'slide-down' : 'slide-up'}>
+          <header>
+            <h3>지난주 통계</h3>
+            <span
+              className="material-symbols-outlined"
+              onClick={handleCloseModal}
+            >
+              expand_more
+            </span>
+          </header>
+          {hasData && filteredData.length > 0 ? (
             <>
               <div className="pie__container">
                 <ResponsivePie
@@ -139,12 +153,22 @@ const MobileStats = ({ diaries }: { diaries: DataResponse }) => {
           ) : (
             <div className="no__result__data">
               <div className="round__gray"></div>
-              <p className="detail__Kcal">{`${intake?.kcal} Kcal`}</p>
-              <p>
-                지난주 식단기록이 존재하지 않습니다.
-                <br /> 꾸준한 기록을 통해 통계를 제공받아
-                <br /> 섭취한 영양성분을 확인하세요!
-              </p>
+              <p className="detail__Kcal">{`${intake?.sumKcal} Kcal`}</p>
+              {filteredData.length === 0 ? (
+                <p className="no__length">
+                  지난주 식단기록이 존재하지만 충분하지 않아 통계가
+                  불가능합니다.
+                  <br />
+                  <br /> 꾸준한 기록을 통해 통계를 제공받아
+                  <br /> 섭취한 영양성분을 확인하세요!
+                </p>
+              ) : (
+                <p className="nth__length">
+                  지난주 식단기록이 존재하지 않습니다.
+                  <br /> 꾸준한 기록을 통해 통계를 제공받아
+                  <br /> 섭취한 영양성분을 확인하세요!
+                </p>
+              )}
             </div>
           )}
         </StatsWrapper>
@@ -174,18 +198,40 @@ const StatsWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  height: 450px;
+  height: 500px;
   border: 1px solid var(--color-light-gray);
   border-radius: 15px 15px 0px 0px;
   padding: 1rem;
-  animation: slide-up 0.5s;
-  animation-fill-mode: forwards;
-  transition: 1s;
 
-  h3 {
-    font-size: 2.4rem;
-    text-align: center;
-    margin-top: 1rem;
+  &.slide-up {
+    /* 애니메이션 이름은 slide-up이며, 0.5초 동안 실행됩니다. */
+    animation: slide-up 1s;
+    /* 애니메이션 실행 방향을 위쪽으로 설정합니다. */
+    animation-fill-mode: forwards;
+    transition: 1s;
+  }
+
+  &.slide-down {
+    animation: slide-down 1s;
+    /* 애니메이션 실행 방향을 위쪽으로 설정합니다. */
+    animation-fill-mode: forwards;
+    transition: 1s;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    h3 {
+      font-size: 2.4rem;
+      text-align: center;
+      margin-top: 1rem;
+    }
+    span {
+      /* position: relative; */
+      margin-top: 0.5rem;
+      font-size: 30px;
+      /* top: 2px; */
+    }
   }
 
   .detail__Kcal {
@@ -197,7 +243,6 @@ const StatsWrapper = styled.div`
   .pie__container {
     position: relative;
     display: inline;
-    left: -3.5rem;
     width: 300px;
     height: 300px;
     margin: 0 auto;
@@ -280,6 +325,9 @@ const StatsWrapper = styled.div`
       background-color: var(--color-light-gray);
       border-radius: 50%;
     }
+    .no__length {
+      width: 200px;
+    }
     p:last-child {
       margin-top: 2rem;
       font-size: 14px;
@@ -288,56 +336,6 @@ const StatsWrapper = styled.div`
     }
   }
 
-  .slide-up {
-    /* 애니메이션 이름은 slide-up이며, 0.5초 동안 실행됩니다. */
-    animation: slide-up 0.5s;
-    /* 애니메이션 실행 방향을 위쪽으로 설정합니다. */
-    animation-fill-mode: forwards;
-    transition: 1s;
-  }
-
-  .slide-down {
-    animation: slide-down 1s;
-    /* 애니메이션 실행 방향을 위쪽으로 설정합니다. */
-    animation-fill-mode: backwards;
-    transition: 1s;
-  }
-  @media (max-width: 850px) {
-    h3 {
-      font-size: 22px;
-    }
-
-    .no__result__data {
-      width: 250px;
-      .round__gray {
-        width: 140px;
-        height: 140px;
-      }
-      p:last-child {
-        font-size: 14px;
-      }
-    }
-  }
-
-  @media (max-width: 710px) {
-    h3 {
-      font-size: 22px;
-    }
-    .no__result__data {
-      width: 240px;
-      .round__gray {
-        width: 160px;
-        height: 160px;
-      }
-      .detail__Kcal {
-        font-size: 18px;
-      }
-
-      p:last-child {
-        font-size: 16px;
-      }
-    }
-  }
   @keyframes slide-up {
     /* 0%에서는 translateY(100%)로 요소를 아래로 숨깁니다. */
     0% {

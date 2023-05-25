@@ -13,6 +13,7 @@ import { debounce } from '../utils/timefunc'
 
 const DiaryCheck = () => {
   const [diaries, setDiaries] = useState<DataResponse | null>(null)
+  console.log(diaries)
 
   const windowWidth = useSelector((state: RootState) => state.screenSize.width)
   const dispatch = useDispatch()
