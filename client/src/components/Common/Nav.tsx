@@ -111,6 +111,7 @@ const StyledNav = styled.nav`
 
     li {
       margin-bottom: 3rem;
+      word-break: keep-all;
     }
 
     a {
@@ -122,17 +123,6 @@ const StyledNav = styled.nav`
       &.active {
         color: ${({ theme }) => theme.color.point};
         border-bottom: 5px solid ${({ theme }) => theme.color.point};
-      }
-    }
-
-    .depth-2 {
-      font-size: ${({ theme }) => theme.fontSize.smh};
-      li {
-        margin-bottom: 2rem;
-
-        &:first-child {
-          margin-top: 2rem;
-        }
       }
     }
   }
@@ -180,10 +170,6 @@ const StyledNav = styled.nav`
         a.active {
           border-bottom-width: 3px;
         }
-      }
-
-      .depth-2 {
-        font-size: ${({ theme }) => theme.fontSize.larger};
       }
     }
   }
@@ -288,21 +274,14 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
             </NavLink>
           </li> */}
           <li>
-            <Link to="/recipe" onClick={handleMenu}>
-              모아보기
-            </Link>
-            <ul className="depth-2">
-              <li>
-                <NavLink to="/recipe" onClick={handleMenu}>
-                  레시피
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/nutrient" onClick={handleMenu}>
-                  영양성분
-                </NavLink>
-              </li>
-            </ul>
+            <NavLink to="/recipe" onClick={handleMenu}>
+              레시피 아카이브
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/nutrient" onClick={handleMenu}>
+              영양성분 아카이브
+            </NavLink>
           </li>
         </ul>
       </StyledNav>
