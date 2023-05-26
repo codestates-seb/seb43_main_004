@@ -5,11 +5,11 @@ import Button from '../Common/Button'
 import Input from '../Common/Input'
 import PaginationComponent from '../Common/Pagination'
 import { dtoResponsePage } from '../../dto'
-import calculateSimilarity from '../../utils/calculateSimilarity'
 import mealTypeMap from '../../utils/mealTypeMap'
 import SearchHighlight from './SearchHighlight'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store'
+import { BeatLoader } from 'react-spinners'
 import {
   fetchNutrientDataStart,
   fetchNutrientDataSuccess,
@@ -19,9 +19,8 @@ import {
 const FoodArchive = () => {
   const [inputVal, setInputVal] = useState('')
 
-  const [filteredData, setFilteredData] = useState<nutrient[]>([]) // 검색하여 필터링 된 데이터
+  // const [filteredData, setFilteredData] = useState<nutrient[]>([]) // 검색하여 필터링 된 데이터
   const [selectData, setSelectData] = useState<nutrient | null>(null) // 클릭한 음식 데이터
-  const [isNoResult, setIsNoResult] = useState(false)
   const [isHighlighted, setIsHighlighted] = useState(false) // 검색어 강조 여부 상태 추가
   const [activePage, setActivePage] = useState(1)
 
@@ -29,6 +28,7 @@ const FoodArchive = () => {
   const nutrientData = useSelector((state: RootState) => state.nutrient.data)
   const loading = useSelector((state: RootState) => state.nutrient.loading) // false or true
   const error = useSelector((state: RootState) => state.nutrient.error) // null or error
+  console.log(nutrientData)
 
   // // 데이터 정렬 함수
   // const handleSortData = () => {
@@ -87,8 +87,8 @@ const FoodArchive = () => {
       })
       .then((res) => {
         dispatch(fetchNutrientDataSuccess(res.data)) // 성공 액션 디스패치
-        setIsNoResult(nutrientData?.data.length === 0)
         setIsHighlighted(true)
+        setSelectData(null)
       })
       .catch((error) => {
         dispatch(fetchNutrientDataFailure(error.message)) // 실패 액션 디스패치
@@ -126,7 +126,6 @@ const FoodArchive = () => {
     <FoodArchiveWrapper>
       <header>
         <h2>음식 영양 성분</h2>
-        {/* <span className="material-symbols-outlined">question_mark</span> */}
       </header>
       <div className="search__form">
         <Input
@@ -138,13 +137,16 @@ const FoodArchive = () => {
         />
         <Button onClick={onClickSearchBtn}>검색</Button>
       </div>
-      {filteredData.length === 0 && isNoResult && (
+      {nutrientData?.data.length === 0 && (
         <p className="no-result-message">검색 결과가 없습니다.</p>
       )}
-      <div className="archive">
-        <ul className="archive__lists">
-          {(filteredData.length === 0 ? nutrientData?.data : filteredData)?.map(
-            (nutrient) => (
+
+      {loading ? (
+        <BeatLoader color="#ffd90f" margin={5} size={20} />
+      ) : (
+        <div className="archive">
+          <ul className="archive__lists">
+            {nutrientData?.data?.map((nutrient) => (
               <SearchHighlight
                 key={nutrient.foodId}
                 nutrient={nutrient}
@@ -152,51 +154,53 @@ const FoodArchive = () => {
                 handleClickFood={handleClickFood}
                 value={inputVal}
               />
-            )
-          )}
-        </ul>
+            ))}
+          </ul>
 
-        <div className="list__detail">
-          {selectData ? (
-            <div className="detail__container">
-              <header>
-                <h3>{selectData.foodName}</h3>
-                <p>{selectData.servingSize}g</p>
-              </header>
-              <section className="detail">
-                <div className="detail__data">
-                  <p className="detail__kcal">칼로리</p>
-                  <p>{selectData.kcal}kcal</p>
-                </div>
-                <p className="nutrient__detail">상세영양소</p>
-                {Object.entries(selectData).map(
-                  ([key, value]) =>
-                    key !== 'foodId' &&
-                    key !== 'foodDetailType' &&
-                    key !== 'foodRoughType' &&
-                    key !== 'foodName' &&
-                    key !== 'servingSize' &&
-                    key !== 'kcal' && (
-                      <div className="detail__data" key={key}>
-                        <p>{mealTypeMap[key]}</p>
-                        <p>{value}g</p>
-                      </div>
-                    )
-                )}
-              </section>
-            </div>
-          ) : (
-            <div className="click-no-result">
-              <p>선택된 음식이 없습니다.</p>
-              <p>
-                음식을 선택하여
-                <br />
-                영양성분을 확인해보세요!
-              </p>
-            </div>
-          )}
+          <div className="list__detail">
+            {selectData ? (
+              <div className="detail__container">
+                <header>
+                  <h3>{selectData.foodName}</h3>
+                  <p>{selectData.servingSize}g</p>
+                </header>
+                <section className="detail">
+                  <div className="detail__data">
+                    <p className="detail__kcal">칼로리</p>
+                    <p>{selectData.kcal}kcal</p>
+                  </div>
+                  <p className="nutrient__detail">상세영양소</p>
+                  {Object.entries(selectData).map(
+                    ([key, value]) =>
+                      key !== 'foodId' &&
+                      key !== 'foodDetailType' &&
+                      key !== 'foodRoughType' &&
+                      key !== 'foodName' &&
+                      key !== 'servingSize' &&
+                      key !== 'kcal' && (
+                        <div className="detail__data" key={key}>
+                          <p>{mealTypeMap[key]}</p>
+                          <p>{`${value}${
+                            mealTypeMap[key] === '나트륨' ? 'mg' : 'g'
+                          }`}</p>
+                        </div>
+                      )
+                  )}
+                </section>
+              </div>
+            ) : (
+              <div className="click-no-result">
+                <p>선택된 음식이 없습니다.</p>
+                <p>
+                  음식을 선택하여
+                  <br />
+                  영양성분을 확인해보세요!
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
       <PaginationComponent
         totalItemsCount={nutrientData?.pageInfo.totalElements || 0}
         activePage={activePage}
@@ -216,7 +220,7 @@ export interface nutrient {
   protein: number
   fat: number
   kcal: number
-  totalSugar: number
+  sugar: number
 }
 
 export interface nutrientResponse {
@@ -225,6 +229,10 @@ export interface nutrientResponse {
 
 const FoodArchiveWrapper = styled.div`
   width: 70vw;
+
+  span {
+    text-align: center;
+  }
 
   .archive {
     display: flex;

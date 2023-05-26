@@ -6,7 +6,6 @@ import { DataResponse } from '../../pages/DiaryCheck'
 const Stats = ({ diaries }: { diaries: DataResponse }) => {
   // 백엔드 데이터가 만들어지면 any에서  DataResponse로 변경 에정
   const { weekList, standardIntakes } = diaries
-  console.log(weekList)
 
   const intake = weekList && weekList[0] // 지난주 섭취량
   const standardIntake = standardIntakes && standardIntakes[0] // 평균섭취량
@@ -32,36 +31,40 @@ const Stats = ({ diaries }: { diaries: DataResponse }) => {
     {
       id: 'carbohydrate',
       label: '탄수화물',
-      value: `${intake.carbohydrate}`,
+      value: `${intake.carbohydrate.toFixed(0)}`,
       color: '#14B8A6',
     },
     {
       id: 'protein',
       label: '단백질',
-      value: `${intake.protein}`,
+      value: `${intake.protein.toFixed(0)}`,
       color: '#F59E0B',
     },
     {
       id: 'fat',
       label: '지방',
-      value: `${intake.fat}`,
+      value: `${intake.fat.toFixed(0)}`,
       color: '#FACC15',
     },
     {
       id: 'sugar',
       label: '당류',
-      value: `${intake.sugar}`,
+      value: `${intake.sugar.toFixed(0)}`,
       color: '#3B82F6',
     },
     {
       id: 'salt',
       label: '나트륨',
-      value: `${intake.salt / 1000}`,
+      value: `${(intake.salt / 1000).toFixed(2)}`,
       color: '#6366F1',
     },
   ]
 
-  const filteredData = data.filter((item) => Number(item.value) > 5)
+  const filteredData = data.filter((item) => {
+    console.log(Number(item.value), typeof Number(item.value))
+
+    Number(item.value) > 5
+  })
 
   // 통계부분
   const renderNutrientListItem = (nutrient: Nutrient) => {
@@ -101,7 +104,6 @@ const Stats = ({ diaries }: { diaries: DataResponse }) => {
 
   const hasData = Object.values(weekList[0]).some((value) => value !== 0)
   console.log(filteredData, hasData)
-
   return (
     <StatsWrapper>
       <h3>지난주 통계</h3>

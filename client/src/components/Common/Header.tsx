@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import logo from '../../assets/logo.png'
+import { getCookie } from '../../utils/Cookie'
 import Nav from './Nav'
 
 const StyledHeader = styled.header`
@@ -58,9 +59,6 @@ const StyledHeader = styled.header`
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const handleMenu = () => setMenuOpen(!menuOpen)
-  // const onHandleMenu = () =>{
-
-  // }
 
   return (
     <>
