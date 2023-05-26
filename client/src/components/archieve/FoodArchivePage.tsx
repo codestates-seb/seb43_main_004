@@ -88,6 +88,7 @@ const FoodArchive = () => {
       .then((res) => {
         dispatch(fetchNutrientDataSuccess(res.data)) // 성공 액션 디스패치
         setIsHighlighted(true)
+        setSelectData(null)
       })
       .catch((error) => {
         dispatch(fetchNutrientDataFailure(error.message)) // 실패 액션 디스패치
@@ -219,7 +220,7 @@ export interface nutrient {
   protein: number
   fat: number
   kcal: number
-  totalSugar: number
+  sugar: number
 }
 
 export interface nutrientResponse {
