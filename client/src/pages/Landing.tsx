@@ -67,6 +67,7 @@ const StyledLanding = styled.main`
           font-size: ${({ theme }) => theme.fontSize.larger};
           line-height: 1.3em;
           word-break: keep-all;
+          display: inline-block;
         }
       }
     }
@@ -202,6 +203,7 @@ const StyledLanding = styled.main`
               display: block;
               font-size: ${({ theme }) => theme.fontSize.small};
               line-height: 1.5em;
+              word-break: keep-all;
             }
 
             a {
@@ -276,7 +278,7 @@ const StyledLanding = styled.main`
     }
   }
 
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     margin-top: 6rem;
 
     section {
@@ -315,7 +317,7 @@ const StyledLanding = styled.main`
       }
 
       h2 {
-        font-size: 5rem;
+        font-size: 7rem;
       }
 
       p {
@@ -374,6 +376,73 @@ const StyledLanding = styled.main`
       }
     }
   }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    section {
+      .container {
+        width: 90%;
+
+        .txt-box {
+          h3 {
+            font-size: ${({ theme }) => theme.fontSize.smmh};
+          }
+
+          p {
+            font-size: ${({ theme }) => theme.fontSize.small};
+            word-break: keep-all;
+
+            br {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+
+    .visual {
+      img {
+        width: 170%;
+      }
+
+      h2 {
+        font-size: 5rem;
+      }
+
+      p {
+        font-size: ${({ theme }) => theme.fontSize.large};
+      }
+    }
+
+    .madeby {
+      .container {
+        h3 {
+          font-size: ${({ theme }) => theme.fontSize.smmh};
+        }
+
+        .profile-box {
+          & > div {
+            width: 100%;
+          }
+
+          .profile {
+            .profile-info {
+              .name {
+                font-size: ${({ theme }) => theme.fontSize.smh};
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .with {
+      .container {
+        h3 {
+          font-size: ${({ theme }) => theme.fontSize.smmh};
+        }
+      }
+    }
+  }
 `
 
 const Landing = () => {
@@ -384,7 +453,7 @@ const Landing = () => {
         img: feImg1,
         position: 'Frontend',
         name: '선유준',
-        part: '식단 일기 조회, 일기 상세조회, 영양성분 아카이브',
+        part: '일기 전체 / 상세조회, 영양성분 아카이브',
         link: 'https://github.com/YujunSun0',
       },
       {
@@ -400,7 +469,7 @@ const Landing = () => {
         img: feImg3,
         position: 'Frontend',
         name: '박혜원',
-        part: '일기 작성, 일기 수정, 레시피 아카이브, 랜딩페이지',
+        part: '일기 작성 / 수정, 레시피 아카이브, 랜딩페이지',
         link: 'https://github.com/moondrop0816',
       },
     ],
@@ -410,7 +479,7 @@ const Landing = () => {
         img: beImg1,
         position: 'Backend',
         name: '이용석',
-        part: '일기 CRUD, 레시피 조회/검색, 영양성분 조회/검색, 일별/주별 통계 계산, AWS 배포, DB데이터 관리',
+        part: '일기, 아카이브, 검색, 통계, AWS 배포, DB 데이터 관리, 추천',
         link: 'https://github.com/021Skyfall',
       },
       {
@@ -418,7 +487,7 @@ const Landing = () => {
         img: beImg2,
         position: 'Backend',
         name: '김석현',
-        part: '회원가입, 이메일 중복체크/난수 전송, 닉네임 중복체크, 회원수정, 비밀번호 찾기/변경, 로그인, 내정보, 회원탈퇴, JWT',
+        part: '회원 관리, 회원 이메일 인증, JWT, 추천',
         link: 'https://github.com/kimtjrgus',
       },
       {
@@ -426,7 +495,7 @@ const Landing = () => {
         img: beImg3,
         position: 'Backend',
         name: '임채영',
-        part: '이메일 난수 전송, 시간별 음식 등록/수정/삭제, 주별 통계 계산',
+        part: '회원 이메일 인증, 일기, 통계, 추천',
         link: 'https://github.com/CHEYOUNG-LIM',
       },
     ],

@@ -6,7 +6,7 @@ import Input from '../components/Common/Input'
 import FoodItem from '../components/diary/FoodItem'
 import axios from 'axios'
 import Modal from '../components/Common/Modal'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getCookie } from '../utils/Cookie'
 
 const StyledDiaryAdd = styled.main`
@@ -241,6 +241,7 @@ const DiaryWrite = () => {
   const url = process.env.REACT_APP_SERVER_URL
   const param = useParams()
   const location = useLocation()
+  const navigate = useNavigate()
   const diaryData = location.state?.meal || null // 식단 등록, 수정할 때 제공되는 데이터
   const thisMealType = Array.isArray(diaryData)
     ? diaryData[0].mealType
@@ -305,6 +306,15 @@ const DiaryWrite = () => {
         setSearchList(res.data.data)
       } catch (error) {
         setSearchList([])
+
+        if (axios.isAxiosError(error)) {
+          if (error.response?.data.status === 401) {
+            navigate(`/sign-in`)
+          } else {
+            // 그 외 에러(403,404,500)는 아래 페이지로 리다이렉트..
+            navigate(`/error/${error.response?.data.status}`)
+          }
+        }
       }
     }, 300),
     []
@@ -319,7 +329,7 @@ const DiaryWrite = () => {
     const newItem: FoodList = {
       foodId: customId.current,
       foodName: '',
-      servingSize: 100,
+      servingSize: 0,
       kcal: 0,
       carbohydrate: 0,
       protein: 0,
@@ -335,16 +345,28 @@ const DiaryWrite = () => {
   }
 
   const deleteFoodItem = async (id: number) => {
-    const res = await axios.delete(
-      `${url}/diaries/${param.id}/meal/delete/${id}`,
-      {
-        headers: {
-          'Content-Type': `application/json`,
-          'ngrok-skip-browser-warning': '69420',
-        },
+    try {
+      const res = await axios.delete(
+        `${url}/diaries/${param.id}/meal/delete/${id}`,
+        {
+          headers: {
+            'Content-Type': `application/json`,
+            'ngrok-skip-browser-warning': '69420',
+            Authorization: `Bearer ${getCookie('access')}`,
+          },
+        }
+      )
+      getNewList()
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data.status === 401) {
+          navigate(`/sign-in`)
+        } else {
+          // 그 외 에러(403,404,500)는 아래 페이지로 리다이렉트..
+          navigate(`/error/${error.response?.data.status}`)
+        }
       }
-    )
-    getNewList()
+    }
   }
 
   const editToStage = (data: FoodList) => {
@@ -366,19 +388,21 @@ const DiaryWrite = () => {
       setIsEmpty(true)
       return
     }
+
     let newData = {}
+
     if (stage?.custom) {
       newData = {
         diaryId: param.id,
         title: stage?.foodName,
         mealType: thisMealType,
-        kcal: stage?.kcal,
-        servingSize: stage?.servingSize,
-        carbohydrate: stage?.carbohydrate,
-        protein: stage?.protein,
-        fat: stage?.fat,
-        sugar: stage?.sugar,
-        salt: stage?.salt,
+        kcal: Number(stage?.kcal),
+        servingSize: Number(stage?.servingSize),
+        carbohydrate: Number(stage?.carbohydrate),
+        protein: Number(stage?.protein),
+        fat: Number(stage?.fat),
+        sugar: Number(stage?.sugar),
+        salt: Number(stage?.salt),
         custom: stage.custom,
       }
     } else {
@@ -395,7 +419,6 @@ const DiaryWrite = () => {
         salt: stage?.salt,
       }
     }
-    console.log(newData)
 
     try {
       if (isEdit) {
@@ -425,22 +448,41 @@ const DiaryWrite = () => {
       }
       setStage(null)
       getNewList()
-    } catch (err) {
-      console.log(err)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data.status === 401) {
+          navigate(`/sign-in`)
+        } else {
+          // 그 외 에러(403,404,500)는 아래 페이지로 리다이렉트..
+          navigate(`/error/${error.response?.data.status}`)
+        }
+      }
     }
   }
 
   const getNewList = async () => {
-    const res = await axios.get(`${url}/diaries/${param.id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': '69420',
-        Authorization: `Bearer ${getCookie('access')}`,
-      },
-    })
+    try {
+      const res = await axios.get(`${url}/diaries/${param.id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': '69420',
+          Authorization: `Bearer ${getCookie('access')}`,
+        },
+      })
 
-    setFoodList(res.data.meal.filter((el: any) => el.mealType === thisMealType))
-    console.log(res.data.meal.filter((el: any) => el.mealType === thisMealType))
+      setFoodList(
+        res.data.meal.filter((el: any) => el.mealType === thisMealType)
+      )
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data.status === 401) {
+          navigate(`/sign-in`)
+        } else {
+          // 그 외 에러(403,404,500)는 아래 페이지로 리다이렉트..
+          navigate(`/error/${error.response?.data.status}`)
+        }
+      }
+    }
   }
 
   useEffect(() => {
@@ -455,7 +497,14 @@ const DiaryWrite = () => {
           })
           customId.current = res.data.pageInfo.totalElements
         } catch (error) {
-          console.log(error)
+          if (axios.isAxiosError(error)) {
+            if (error.response?.data.status === 401) {
+              navigate(`/sign-in`)
+            } else {
+              // 그 외 에러(403,404,500)는 아래 페이지로 리다이렉트..
+              navigate(`/error/${error.response?.data.status}`)
+            }
+          }
         }
       })()
     } else {
@@ -588,11 +637,11 @@ const DiaryWrite = () => {
                     </p>
                     <p>
                       <span>당류</span>
-                      <span>{data.protein}g</span>
+                      <span>{data.sugar}g</span>
                     </p>
                     <p>
                       <span>나트륨</span>
-                      <span>{data.fat}mg</span>
+                      <span>{data.salt}mg</span>
                     </p>
                   </div>
                 </li>

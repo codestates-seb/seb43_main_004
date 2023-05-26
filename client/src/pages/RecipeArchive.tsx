@@ -113,6 +113,7 @@ interface recipeData {
 
 const RecipeArchive = () => {
   const url = process.env.REACT_APP_SERVER_URL
+  const navigate = useNavigate()
 
   const types = [
     {
@@ -175,27 +176,51 @@ const RecipeArchive = () => {
     }
     setSearchTxt('')
 
-    const res = await axios.get(
-      `${url}/recipes?page=${activePage}&size=12&filter=${keyword}`,
-      {
-        headers: {
-          'Content-Type': `application/json`,
-        },
+    try {
+      const res = await axios.get(
+        `${url}/recipes?page=${activePage}&size=12&filter=${keyword}`,
+        {
+          headers: {
+            'Content-Type': `application/json`,
+            'ngrok-skip-browser-warning': '69420',
+          },
+        }
+      )
+      setRecipes(res.data)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data.status === 401) {
+          navigate(`/sign-in`)
+        } else {
+          // 그 외 에러(403,404,500)는 아래 페이지로 리다이렉트..
+          navigate(`/error/${error.response?.data.status}`)
+        }
       }
-    )
-    setRecipes(res.data)
+    }
   }
 
   const getSearchData = async () => {
-    const res = await axios.get(
-      `${url}/recipes/search?page=${activePage}&size=12&search=${searchTxt}`,
-      {
-        headers: {
-          'Content-Type': `application/json`,
-        },
+    try {
+      const res = await axios.get(
+        `${url}/recipes/search?page=${activePage}&size=12&search=${searchTxt}`,
+        {
+          headers: {
+            'Content-Type': `application/json`,
+            'ngrok-skip-browser-warning': '69420',
+          },
+        }
+      )
+      setRecipes(res.data)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data.status === 401) {
+          navigate(`/sign-in`)
+        } else {
+          // 그 외 에러(403,404,500)는 아래 페이지로 리다이렉트..
+          navigate(`/error/${error.response?.data.status}`)
+        }
       }
-    )
-    setRecipes(res.data)
+    }
   }
 
   useEffect(() => {
