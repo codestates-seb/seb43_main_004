@@ -97,7 +97,7 @@
       "meal": [
         {
           "mealId": 1,
-          "title": "고등어 조림",
+          "title": "고등어 조림 무침 튀김 나물",
           "mealType": "BREAKFAST",
           "kcal": 600,
           "servingSize": 100,
@@ -166,7 +166,7 @@
       ],
       "recipe": [
         {
-          "foodName": "고등어 조림",
+          "foodName": "고등어 김치찌개",
           "foodImage": "https://m.62life.com/images/gdimg/7110001095_main1.jpg"
         },
         {

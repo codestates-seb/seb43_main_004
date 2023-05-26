@@ -19,17 +19,28 @@ import Landing from './pages/Landing'
 import RecipeArchive from './pages/RecipeArchive'
 import RecipeDetail from './pages/RecipeDetail'
 import useTokenCheck from './store/hooks/useTokenCheck'
+import ScrollToTop from './utils/ScrollToTop'
 
 function App() {
   const location = useLocation()
+  const isLandingPage = location.pathname === '/'
   // useTokenCheck()
 
   return (
     <div className="App">
+      <ScrollToTop />
       <Header />
-      {location.pathname === '/' ? (
+      {isLandingPage ? (
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <Landing />
+                <Footer showAlways={true} />
+              </>
+            }
+          />
         </Routes>
       ) : (
         <div className="wrapper">
@@ -55,7 +66,7 @@ function App() {
           </Routes>
         </div>
       )}
-      <Footer />
+      {!isLandingPage && <Footer />}
     </div>
   )
 }

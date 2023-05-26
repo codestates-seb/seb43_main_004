@@ -61,9 +61,7 @@ const Stats = ({ diaries }: { diaries: DataResponse }) => {
   ]
 
   const filteredData = data.filter((item) => {
-    console.log(Number(item.value), typeof Number(item.value))
-
-    Number(item.value) > 5
+    return Number(item.value) > 1
   })
 
   // 통계부분
@@ -103,7 +101,7 @@ const Stats = ({ diaries }: { diaries: DataResponse }) => {
   )
 
   const hasData = Object.values(weekList[0]).some((value) => value !== 0)
-  console.log(filteredData, hasData)
+
   return (
     <StatsWrapper>
       <h3>지난주 통계</h3>
