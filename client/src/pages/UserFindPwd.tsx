@@ -107,7 +107,6 @@ const UserFindPwd = () => {
           { email }
         )
         .then((response) => {
-          console.log(response.data)
           // 가입된 이메일이면
           if (response.data.isactive === true) {
             setAuthNums(response.data.message)
