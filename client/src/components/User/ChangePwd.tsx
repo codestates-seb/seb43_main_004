@@ -57,7 +57,7 @@ const ChangePwd = () => {
       isValid = false
     } else if (!checkPassword(newPassword)) {
       msg.newPassword =
-        '최소 8자, 영문+숫자+특수문자 조합으로 구성되어야 합니다.'
+        '최소 8자, 영문+숫자+특수문자(!@#$%&*?) 조합으로 구성되어야 합니다.'
       isValid = false
     }
 
