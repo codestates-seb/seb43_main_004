@@ -3,7 +3,9 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
-import { removeCookie, getCookie } from '../../utils/Cookie'
+import { getCookie } from '../../utils/Cookie'
+import { userLogout } from '../../utils/userfunc'
+import Modal from './Modal'
 
 const StyledNavBg = styled.div`
   width: 100%;
@@ -213,11 +215,9 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
   const [isLogin, setIsLogin] = useState(false)
 
   const logout = () => {
-    removeCookie('access', { path: '/' })
-    removeCookie('refresh', { path: '/' })
-    localStorage.removeItem('profileState')
-    navigate('/sign-in')
+    userLogout()
     setIsLogin(false)
+    navigate('/sign-in', { replace: true })
   }
 
   useEffect(() => {

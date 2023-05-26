@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { getCookie } from '../../utils/Cookie'
 
-const CalendarPage = ({ diaries }: { diaries: DataResponse }) => {
+const MobileCalendarPage = ({ diaries }: { diaries: DataResponse }) => {
   const [value, onChange] = useState(new Date())
   const navigate = useNavigate()
 
@@ -64,10 +64,10 @@ const CalendarPage = ({ diaries }: { diaries: DataResponse }) => {
   })
 
   const tileContent = ({ date }: { date: Date }) => {
-    const nowTime = new Date(
+    const a = new Date(
       Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
     )
-    const formattedDate = nowTime.toISOString().split('T')[0]
+    const formattedDate = a.toISOString().split('T')[0]
     return <div className="emoji">{dateWithEmoji[formattedDate]}</div>
   }
 
@@ -80,13 +80,6 @@ const CalendarPage = ({ diaries }: { diaries: DataResponse }) => {
         onClickDay={onChangeHandler}
         tileContent={tileContent}
       />
-      {/* <h1>
-        {new Date(value).toLocaleDateString('ko', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-        })}
-      </h1> */}
     </Container>
   )
 }
@@ -203,19 +196,19 @@ const Container = styled.div`
     }
   }
 
-  @media (max-width: 710px) {
+  @media (max-width: 430px) {
     .react-calendar {
-      width: 320px;
+      width: 350px;
       border: 0.4px solid var(--color-light-gray);
       border-radius: 15px;
       .emoji {
-        font-size: 2.2rem;
+        font-size: 2.8rem;
       }
     }
     .react-calendar__month-view__days {
       button {
-        height: 55px;
-        font-size: 10px;
+        height: 65px;
+        font-size: 13px;
         font-family: 'Pretendard', sans-serif;
         font-weight: 400;
       }
@@ -223,4 +216,4 @@ const Container = styled.div`
   }
 `
 
-export default CalendarPage
+export default MobileCalendarPage

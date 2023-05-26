@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Input from '../components/Common/Input'
 import Button from '../components/Common/Button'
@@ -21,14 +21,14 @@ const UserSignIn = () => {
   const [error, setError] = useState<string>('')
   const dispatch = useDispatch()
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
-    setValues({
+    setValues((values) => ({
       ...values,
       [name]: value,
-    })
-  }
+    }))
+  }, [])
 
   // 로그인
   const checkValid = async () => {
@@ -44,7 +44,7 @@ const UserSignIn = () => {
         const tokenForReissue = response.data.refreshToken
 
         const current = new Date()
-        current.setMinutes(current.getMinutes() + 40)
+        current.setMinutes(current.getMinutes() + 30)
 
         // 액세스 토큰
         setCookie('access', tokenWithNoBearer, {
@@ -54,7 +54,7 @@ const UserSignIn = () => {
           sameSite: 'none',
         })
         // 리프레시 토큰
-        current.setMinutes(current.getMinutes() + 420)
+        current.setMinutes(current.getMinutes() + 1440)
         setCookie('refresh', tokenForReissue, {
           path: '/',
           secure: true,
@@ -63,7 +63,13 @@ const UserSignIn = () => {
         })
       })
       .catch((error) => {
-        setError('존재하지 않는 계정입니다.')
+        if (axios.isAxiosError(error)) {
+          if (error.response?.data.status === 401) {
+            setError('존재하지 않는 계정입니다.')
+          } else {
+            navigate(`/error/${error.response?.data.status}`)
+          }
+        }
       })
 
     // 발급받은 토큰으로 유저 정보 얻어오기
@@ -83,6 +89,10 @@ const UserSignIn = () => {
         console.error(error)
       })
   }
+
+  useEffect(() => {
+    console.log('gg')
+  }, [])
 
   return (
     <Container>

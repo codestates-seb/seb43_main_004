@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import nutrientSlice from './slices/nutrientSlice'
 import profileSlice from './slices/profileSlice'
+import screenSizeSlice from './slices/screenSizeSlice'
 
 export const store = configureStore({
   reducer: {
     nutrient: nutrientSlice,
     profile: profileSlice,
+    screenSize: screenSizeSlice,
   },
 })
 

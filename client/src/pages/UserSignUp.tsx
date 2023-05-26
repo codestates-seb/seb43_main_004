@@ -12,9 +12,10 @@ import {
 } from '../dto/membership/members/dtoSignup'
 import { dtoResponse } from '../dto'
 import { debounce } from '../utils/timefunc'
-import axios, { AxiosResponse, AxiosError } from 'axios'
+import axios from 'axios'
 import Modal from '../components/Common/Modal'
 import { useNavigate } from 'react-router-dom'
+import { API } from '../utils/API'
 
 interface Props {
   social?: boolean
@@ -133,10 +134,7 @@ const UserSignUp = ({ social }: Props) => {
     // 이메일이 정상적으로 입력되었는지 확인 후 이메일 중복 체크
     if (checkEmail(email)) {
       await axios
-        .post(
-          `${process.env.REACT_APP_SERVER_URL}/members/emailcheck`,
-          emailData
-        )
+        .post(`${API}/members/emailcheck`, emailData)
         .then((response) => {
           // 가입된 이메일이 아니면
           if (response.data.data === false) {
@@ -154,7 +152,7 @@ const UserSignUp = ({ social }: Props) => {
           setError({ ...error, ...msg })
         })
     } else {
-      msg.email = '이메일이 유효하지 않습니다.'
+      msg.email = '이메일 형식이 올바르지 않습니다.'
       setError({ ...error, ...msg })
     }
 
@@ -217,10 +215,14 @@ const UserSignUp = ({ social }: Props) => {
       msg.nickName = '닉네임을 입력해주세요.'
       setError({ ...error, ...msg })
       return
+    } else if (nickName.length > 8) {
+      msg.nickName = '사용할 수 없는 닉네임입니다 (8자 초과)'
+      setError({ ...error, ...msg })
+      return
     }
 
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/members/nicknamecheck`, {
+      .post(`${API}/members/nicknamecheck`, {
         nickName,
       })
       .then((response) => {
@@ -247,7 +249,7 @@ const UserSignUp = ({ social }: Props) => {
     const msg = { password: '', ckPassword: '' }
 
     if (!checkPassword(password)) {
-      msg.password = '최소 8자, 영문+숫자 조합으로 구성되어야 합니다.'
+      msg.password = '최소 8자, 영문+숫자+특수문자 조합으로 구성되어야 합니다.'
       setError({ ...error, ...msg })
     } else if (password !== ckPassword) {
       msg.ckPassword = '비밀번호가 일치하지 않습니다.'
@@ -298,7 +300,9 @@ const UserSignUp = ({ social }: Props) => {
         openModal('회원가입이 완료되었습니다. \n로그인 페이지로 이동합니다.')
       })
       .catch((error) => {
-        console.error(error)
+        if (axios.isAxiosError(error)) {
+          navigate(`/error/${error.response?.data.status}`)
+        }
       })
   }
 
@@ -318,7 +322,7 @@ const UserSignUp = ({ social }: Props) => {
                   label="이메일"
                   type="email"
                   name="email"
-                  placeholder="email"
+                  placeholder="이메일"
                   error={error.email}
                   disabled={isConfirm}
                   onChange={handleInput}
@@ -337,7 +341,7 @@ const UserSignUp = ({ social }: Props) => {
                   label="인증번호"
                   type="text"
                   name="ckAuth"
-                  placeholder="0000"
+                  placeholder="인증번호"
                   error={error.auth}
                   success={isConfirm ? success.auth : ''}
                   disabled={isConfirm}
@@ -357,7 +361,7 @@ const UserSignUp = ({ social }: Props) => {
               label="닉네임"
               type="text"
               name="nickName"
-              placeholder="홍길순"
+              placeholder="8자 이내의 문자열"
               error={error.nickName}
               success={success.nickName}
               onChange={handleInput}
@@ -372,7 +376,7 @@ const UserSignUp = ({ social }: Props) => {
                 label="비밀번호"
                 type="password"
                 name="password"
-                placeholder="영문+숫자 조합하여 최소 8자 이상"
+                placeholder="영문, 숫자, 특수문자를 조합하여 최소 8자 이상"
                 error={error.password}
                 onChange={handleInput}
                 onBlur={isValidPassword}

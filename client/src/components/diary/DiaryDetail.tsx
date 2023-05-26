@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Button from '../Common/Button'
@@ -8,12 +8,15 @@ import MealList from './MealItem'
 import NutritionItem from './NutritionItem'
 import sendNutrientDataToServer from '../../utils/nutrientDataToSend'
 import NutrientComments from '../../utils/nutrientComment'
+import MobileDetail from './MobileDetail'
+import { useSelector, useDispatch } from 'react-redux'
 import { getCookie } from '../../utils/Cookie'
+import { RootState } from '../../store'
+import { setScreenSize } from '../../store/slices/screenSizeSlice'
+import { debounce } from '../../utils/timefunc'
 
 const DiaryDetail = () => {
   const [diary, setDiary] = useState<Diary | null>(null)
-  console.log(diary)
-
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'] // 요일을 구하기 위한 배열
   const [memoContent, setMemoContent] = useState(diary?.memo)
   const [isOpenMemo, setIsOpenMemo] = useState(true)
@@ -26,7 +29,9 @@ const DiaryDetail = () => {
   const navigate = useNavigate()
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
-  console.log(saveEmoji)
+  const windowWidth = useSelector((state: RootState) => state.screenSize.width)
+  const dispatch = useDispatch()
+  console.log(windowWidth)
 
   // 통계를 낸 영양소를 저장하는 함수 (퍼센트로 저장)
   const updateNutrientStatistics = (nutrientType: string, percent: number) => {
@@ -36,26 +41,26 @@ const DiaryDetail = () => {
     }))
   }
 
-  // 식단 등록하기 버튼을 누르면 실행
-  const handlePlusDiary = () => {
-    const mealTypes = ['아침', '점심', '저녁', '간식']
-    const mealTypeMap: { [key: string]: string } = {
-      아침: 'BREAKFAST',
-      점심: 'LUNCH',
-      저녁: 'DINNER',
-      간식: 'SNACK',
-    }
+  // // 식단 등록하기 버튼을 누르면 실행
+  // const handlePlusDiary = () => {
+  //   const mealTypes = ['아침', '점심', '저녁', '간식']
+  //   const mealTypeMap: { [key: string]: string } = {
+  //     아침: 'BREAKFAST',
+  //     점심: 'LUNCH',
+  //     저녁: 'DINNER',
+  //     간식: 'SNACK',
+  //   }
 
-    // mealType에 따라 식단이 등록되어있는지 확인할 수 있는 변수ㄴ
-    const isPlanner = mealTypes.map((el) => {
-      const hasData = diary?.meal.some(
-        (meal) => meal.mealType === mealTypeMap[el]
-      )
-      return { mealType: el, hasData }
-    })
+  //   // mealType에 따라 식단이 등록되어있는지 확인할 수 있는 변수ㄴ
+  //   const isPlanner = mealTypes.map((el) => {
+  //     const hasData = diary?.meal.some(
+  //       (meal) => meal.mealType === mealTypeMap[el]
+  //     )
+  //     return { mealType: el, hasData }
+  //   })
 
-    navigate(`/diaries/${id}/add`, { state: { meal: isPlanner } })
-  }
+  //   navigate(`/diaries/${id}/add`, { state: { meal: isPlanner } })
+  // }
 
   const onChangeModal = () => {
     setIsOpenModal((prev) => !prev)
@@ -71,7 +76,13 @@ const DiaryDetail = () => {
     Array.isArray(mealData) &&
       mealData.map((meal) => {
         axios.delete(
-          `${process.env.REACT_APP_SERVER_URL}/diaries/${id}/meal/delete/${meal.mealId}`
+          `${process.env.REACT_APP_SERVER_URL}/diaries/${id}/meal/delete/${meal.mealId}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getCookie('access')}`,
+            },
+          }
         )
       })
   }
@@ -114,7 +125,6 @@ const DiaryDetail = () => {
         {
           headers: {
             'Content-Type': 'application/json',
-            'ngrok-skip-browser-warning': '69420',
             Authorization: `Bearer ${getCookie('access')}`,
           },
         }
@@ -130,7 +140,12 @@ const DiaryDetail = () => {
 
   const onDeleteDiary = () => {
     axios
-      .delete(`${process.env.REACT_APP_SERVER_URL}/diaries/delete/${id}`)
+      .delete(`${process.env.REACT_APP_SERVER_URL}/diaries/delete/${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getCookie('access')}`,
+        },
+      })
       .then(() => {
         setIsOpenModal((prev) => !prev)
         navigate(`/diaries`)
@@ -143,8 +158,6 @@ const DiaryDetail = () => {
     appropriateCount: number,
     excessiveCount: number
   ) => {
-    console.log(deficientCount, appropriateCount, excessiveCount)
-
     if (deficientCount >= 3) {
       return '😵' // 부족한 항목에 대한 이모지 반환
     } else if (appropriateCount >= 3) {
@@ -169,14 +182,23 @@ const DiaryDetail = () => {
       .get(`${process.env.REACT_APP_SERVER_URL}/diaries/${id}`, {
         headers: {
           'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': '69420',
           Authorization: `Bearer ${getCookie('access')}`,
         },
       })
       .then((res) => {
         setDiary(res.data)
       })
-  }, [])
+
+    const handleResize = debounce(() => {
+      dispatch(setScreenSize({ width: window.innerWidth }))
+    }, 200)
+
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [id, dispatch])
 
   useEffect(() => {
     if (diary) {
@@ -184,47 +206,61 @@ const DiaryDetail = () => {
     }
   }, [diary])
 
-  // 통계 전송 + 이모지 반영s
   useEffect(() => {
-    const data = sendNutrientDataToServer(nutrientStatistics)
-    console.log(data)
+    if (nutrientStatistics) {
+      const data = sendNutrientDataToServer(nutrientStatistics)
 
-    // 여기에 리턴받은 데이터 전송하는 로직 구현해야함
-    // 이모지를 제공하는 로직
-    const emoji = getEmoji(
-      data['deficient'].length,
-      data['appropriate'].length,
-      data['excessive'].length
-    )
-    setSaveEmoji(emoji)
-    // 임시적으로 상태에 저장해둠 -> 이모지를 전송하는 로직 구현해야함
-    if (emoji !== diary?.diaryStatus) {
-      axios
-        .patch(
-          `${process.env.REACT_APP_SERVER_URL}/diaries/update/${id}`,
-          {
-            diaryStatus: emoji,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'ngrok-skip-browser-warning': '69420',
-              Authorization: `Bearer ${getCookie('access')}`,
+      // axios
+      //   .post(
+      //     `${process.env.REACT_APP_SERVER_URL}/diaries/recommend-recipe`,
+      //     {
+      //       data,
+      //     },
+      //     {
+      //       headers: {
+      //         'Content-Type': 'application/json',
+      //         Authorization: `Bearer ${getCookie('access')}`,
+      //       },
+      //     }
+      //   )
+      //   .then((res) => {
+      //     console.log(res)
+      //   })
+
+      const emoji = getEmoji(
+        data['deficient'].length,
+        data['appropriate'].length,
+        data['excessive'].length
+      )
+      setSaveEmoji(emoji)
+
+      if (emoji !== diary?.diaryStatus) {
+        axios
+          .patch(
+            `${process.env.REACT_APP_SERVER_URL}/diaries/update/${id}`,
+            {
+              diaryStatus: emoji,
             },
-          }
-        )
-        .then(() => {
-          console.log(diary?.diaryStatus, saveEmoji)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getCookie('access')}`,
+              },
+            }
+          )
+          .then(() => {
+            console.log('good')
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+      }
     }
-  }, [nutrientStatistics])
+  }, [id, nutrientStatistics, diary])
 
   return (
     <Wrapper>
-      <h2>나의 식단일기</h2>
+      <h2 className="title">나의 식단일기</h2>
       {diary && (
         <DiaryDetailWrapper>
           <Modal
@@ -254,10 +290,10 @@ const DiaryDetail = () => {
                   <span className="material-symbols-outlined">delete</span>
                   모든 기록 삭제
                 </Button>
-                <Button onClick={handlePlusDiary}>
+                {/* <Button onClick={handlePlusDiary}>
                   <span className="material-symbols-outlined">edit</span>
                   식단 등록하기
-                </Button>
+                </Button> */}
               </div>
             </h3>
             <MealList
@@ -292,12 +328,19 @@ const DiaryDetail = () => {
               ></textarea>
             </div>
           </div>
-          <div>
-            <div className="status__container">
-              <h2>오늘의 식단</h2>
-              <NutritionBar>
-                {['칼로리', '탄수화물', '단백질', '지방', '당분', '나트륨'].map(
-                  (el, idx) => (
+          {windowWidth > 560 ? (
+            <div className="aside_container">
+              <div className="status__container">
+                <h2>오늘의 식단</h2>
+                <NutritionBar>
+                  {[
+                    '칼로리',
+                    '탄수화물',
+                    '단백질',
+                    '지방',
+                    '당분',
+                    '나트륨',
+                  ].map((el, idx) => (
                     <NutritionItem
                       key={idx}
                       nutrientType={el}
@@ -306,32 +349,35 @@ const DiaryDetail = () => {
                       getColor={getColor}
                       updateNutrientStatistics={updateNutrientStatistics}
                     />
-                  )
+                  ))}
+                </NutritionBar>
+              </div>
+              <div className="recipe__container">
+                <h2>추천 레시피</h2>
+
+                {diary.recipe && diary.recipe.length !== 0 ? (
+                  <ul className="recipe__lists">
+                    <NutrientComments nutrientStatistics={nutrientStatistics} />
+                    {diary &&
+                      diary.recipe.map((el, idx) => {
+                        return (
+                          <li className="recipe__list" key={idx}>
+                            <img src={`${el.foodImage}`} />
+                            <span>{el.foodName}</span>
+                          </li>
+                        )
+                      })}
+                  </ul>
+                ) : (
+                  <p className="no__statistics">
+                    {`아직 등록된 음식이 없어\n 추천이 불가능합니다.`}
+                  </p>
                 )}
-              </NutritionBar>
+              </div>
             </div>
-            <div className="recipe__container">
-              <h2>추천 레시피</h2>
-              {diary.recipe && diary.recipe.length !== 0 ? (
-                <ul className="recipe__lists">
-                  <NutrientComments nutrientStatistics={nutrientStatistics} />
-                  {diary &&
-                    diary.recipe.map((el, idx) => {
-                      return (
-                        <li className="recipe__list" key={idx}>
-                          <img src={`${el.foodImage}`} />
-                          <span>{el.foodName}</span>
-                        </li>
-                      )
-                    })}
-                </ul>
-              ) : (
-                <p className="no__statistics">
-                  {`아직 등록된 음식이 없어\n 추천이 불가능합니다.`}
-                </p>
-              )}
-            </div>
-          </div>
+          ) : (
+            <MobileDetail diary={diary} />
+          )}
         </DiaryDetailWrapper>
       )}
     </Wrapper>
@@ -387,12 +433,24 @@ interface Recipe {
 
 const Wrapper = styled.div`
   max-width: 1150px;
-  width: calc(100% - 400px);
+  width: calc(100% - 25rem);
   white-space: nowrap;
   margin-bottom: 3rem;
+
   h2 {
     font-size: 28px;
     margin-bottom: 20px;
+  }
+
+  @media (max-width: 780px) {
+    width: calc(100% - 15rem);
+    h2 {
+      font-size: 22px;
+    }
+  }
+
+  @media (max-width: 680px) {
+    width: calc(100% - 7rem);
   }
 `
 const DiaryDetailWrapper = styled.div`
@@ -593,6 +651,24 @@ const DiaryDetailWrapper = styled.div`
     margin-bottom: 2rem;
     font-size: 15px;
     font-weight: 500;
+  }
+
+  @media (max-width: 780px) {
+    .diary__container {
+      .diary__header {
+        p {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 680px) {
+    width: calc(100% - 7rem);
+  }
+
+  @media (max-width: 560px) {
+    flex-direction: column;
   }
 `
 
