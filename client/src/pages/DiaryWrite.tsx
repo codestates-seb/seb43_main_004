@@ -319,7 +319,7 @@ const DiaryWrite = () => {
     const newItem: FoodList = {
       foodId: customId.current,
       foodName: '',
-      servingSize: 100,
+      servingSize: 0,
       kcal: 0,
       carbohydrate: 0,
       protein: 0,
@@ -373,13 +373,13 @@ const DiaryWrite = () => {
         diaryId: param.id,
         title: stage?.foodName,
         mealType: thisMealType,
-        kcal: stage?.kcal,
-        servingSize: stage?.servingSize,
-        carbohydrate: stage?.carbohydrate,
-        protein: stage?.protein,
-        fat: stage?.fat,
-        sugar: stage?.sugar,
-        salt: stage?.salt,
+        kcal: Number(stage?.kcal),
+        servingSize: Number(stage?.servingSize),
+        carbohydrate: Number(stage?.carbohydrate),
+        protein: Number(stage?.protein),
+        fat: Number(stage?.fat),
+        sugar: Number(stage?.sugar),
+        salt: Number(stage?.salt),
         custom: stage.custom,
       }
     } else {
@@ -396,7 +396,6 @@ const DiaryWrite = () => {
         salt: stage?.salt,
       }
     }
-    console.log(newData)
 
     try {
       if (isEdit) {
@@ -441,6 +440,7 @@ const DiaryWrite = () => {
     })
 
     setFoodList(res.data.meal.filter((el: any) => el.mealType === thisMealType))
+    console.log(res.data.meal)
   }
 
   useEffect(() => {
@@ -588,11 +588,11 @@ const DiaryWrite = () => {
                     </p>
                     <p>
                       <span>당류</span>
-                      <span>{data.protein}g</span>
+                      <span>{data.sugar}g</span>
                     </p>
                     <p>
                       <span>나트륨</span>
-                      <span>{data.fat}mg</span>
+                      <span>{data.salt}mg</span>
                     </p>
                   </div>
                 </li>
