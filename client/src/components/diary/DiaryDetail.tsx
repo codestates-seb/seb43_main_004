@@ -14,6 +14,8 @@ import { getCookie } from '../../utils/Cookie'
 import { RootState } from '../../store'
 import { setScreenSize } from '../../store/slices/screenSizeSlice'
 import { debounce } from '../../utils/timefunc'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const DiaryDetail = () => {
   const [diary, setDiary] = useState<Diary | null>(null)
@@ -24,7 +26,6 @@ const DiaryDetail = () => {
   const [nutrientStatistics, setNutrientStatistics] = useState<{
     [key: string]: number
   }>({})
-  console.log(diary)
 
   const navigate = useNavigate()
   const { id } = useParams()
@@ -72,10 +73,10 @@ const DiaryDetail = () => {
 
   // 식사 시간별로 삭제
   const handleDeleteMeal = (mealData: Meal[] | { [key: string]: string }) => {
-    Array.isArray(mealData) &&
-      mealData.map((meal) => {
-        axios
-          .delete(
+    if (Array.isArray(mealData)) {
+      Promise.all(
+        mealData.map((meal) =>
+          axios.delete(
             `${process.env.REACT_APP_SERVER_URL}/diaries/${id}/meal/delete/${meal.mealId}`,
             {
               headers: {
@@ -84,10 +85,37 @@ const DiaryDetail = () => {
               },
             }
           )
-          .then((res) => {
-            console.log(res)
+        )
+      )
+        .then(() => {
+          toast.success('메모 작성이 완료되었습니다!', {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'colored',
           })
-      })
+          axios
+            .get(`${process.env.REACT_APP_SERVER_URL}/diaries/${id}`, {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getCookie('access')}`,
+              },
+            })
+            .then((res) => {
+              setDiary(res.data) // 상태 업데이트
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
   }
 
   // textarea 요소 있는 value의 마지막으로 커서 이동
@@ -133,7 +161,16 @@ const DiaryDetail = () => {
         }
       )
       .then(() => {
-        console.log(`메모가 업데이트되었습니다.`) // toast창을 써야할 듯
+        toast.success('메모 작성이 완료되었습니다!', {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+        })
         setIsOpenMemo(true)
       })
       .catch((err) => {
@@ -229,43 +266,43 @@ const DiaryDetail = () => {
       //   .then((res) => {
       //     console.log(res)
       //   })
+      if (diary) {
+        const emoji = getEmoji(
+          data['deficient'].length,
+          data['appropriate'].length,
+          data['excessive'].length
+        )
 
-      const emoji = getEmoji(
-        data['deficient'].length,
-        data['appropriate'].length,
-        data['excessive'].length
-      )
-      console.log(emoji, diary?.diaryStatus)
-
-      if (emoji !== diary?.diaryStatus) {
-        axios
-          .patch(
-            `${process.env.REACT_APP_SERVER_URL}/diaries/update/${id}`,
-            {
-              diaryStatus: emoji,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${getCookie('access')}`,
+        if (emoji !== diary?.diaryStatus && diary?.meal.length !== 0) {
+          axios
+            .patch(
+              `${process.env.REACT_APP_SERVER_URL}/diaries/update/${id}`,
+              {
+                diaryStatus: emoji,
               },
-            }
-          )
-          .then(() => {
-            axios
-              .get(`${process.env.REACT_APP_SERVER_URL}/diaries/${id}`, {
+              {
                 headers: {
                   'Content-Type': 'application/json',
                   Authorization: `Bearer ${getCookie('access')}`,
                 },
-              })
-              .then((res) => {
-                setDiary(res.data)
-              })
-          })
-          .catch((err) => {
-            console.log(err)
-          })
+              }
+            )
+            .then(() => {
+              axios
+                .get(`${process.env.REACT_APP_SERVER_URL}/diaries/${id}`, {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getCookie('access')}`,
+                  },
+                })
+                .then((res) => {
+                  setDiary(res.data)
+                })
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        }
       }
     }
   }, [id, nutrientStatistics, diary])
@@ -295,7 +332,11 @@ const DiaryDetail = () => {
                 ).getDate()}일 ${
                   weekdays[new Date(diary.userDate).getDay()]
                 }요일`}</p>
-                <div className="header__emoji">{diary.diaryStatus}</div>
+                {diary.diaryStatus !== null ? (
+                  <div className="header__emoji">{diary.diaryStatus}</div>
+                ) : (
+                  <div className="header__emoji">{`🫥`}</div>
+                )}
               </div>
               <div className="diary__header__btn">
                 <Button onClick={onChangeModal} outline={true}>
@@ -392,6 +433,18 @@ const DiaryDetail = () => {
           )}
         </DiaryDetailWrapper>
       )}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </Wrapper>
   )
 }
