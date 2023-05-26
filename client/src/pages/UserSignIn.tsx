@@ -38,9 +38,14 @@ const UserSignIn = () => {
       return
     }
     // 액세스 토큰 발급(로그인)
-    await customInstance
-      .post(`/members/login`, values)
+    await axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/members/login`, values, {
+        headers: {
+          Authorization: `Bearer ${getCookie('access')}`, // 테스트 서버 이용할때는 붙였다가 삭제하면 됨
+        },
+      })
       .then((response) => {
+        console.log(response.data)
         const tokenWithNoBearer = response.data.accessToken.substr(7)
         const tokenForReissue = response.data.refreshToken
 
