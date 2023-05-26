@@ -147,7 +147,8 @@ const UserFindPwd = () => {
     }
 
     if (!checkPassword(password)) {
-      msg.password = '최소 8자, 영문+숫자+특수문자 조합으로 구성되어야 합니다.'
+      msg.password =
+        '최소 8자, 영문+숫자+특수문자(!@#$%&*?) 조합으로 구성되어야 합니다.'
       setError({ ...error, ...msg })
     } else if (checkPassword(password) && password !== ckPassword) {
       msg.ckPassword = '새 비밀번호가 일치하지 않습니다.'
