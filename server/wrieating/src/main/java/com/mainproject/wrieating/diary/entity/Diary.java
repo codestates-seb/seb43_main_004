@@ -41,7 +41,4 @@ public class Diary extends Auditable {
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<Meal> mealList = new ArrayList<>();
-
-
-    // TODO: 2023-05-16 recipe 연결해야뎀
 }
