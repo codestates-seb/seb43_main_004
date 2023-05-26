@@ -54,7 +54,7 @@ const EditProfile = () => {
     weight: '',
   })
 
-  // 모달 핸들링
+  // 모달 핸들링`
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [modalMsg, setModalMsg] = useState<string>('')
   const openModal = (msg: string) => {
@@ -127,15 +127,15 @@ const EditProfile = () => {
       }
     }
 
-    if ((!isActive && nameCheck === cantUse) || nameCheck !== nickName) {
+    if ((isActive && nameCheck === cantUse) || nameCheck !== nickName) {
       openModal('닉네임 중복 확인 필요')
       return
     }
 
-    if (weight <= 0) {
+    if (weight <= 0 && weight >= 500) {
       msg.weight = '유효하지 않은 값입니다.'
     }
-    if (height <= 0) {
+    if (height <= 0 && height >= 300) {
       msg.height = '유효하지 않은 값입니다.'
     }
     if (birth === '') {
@@ -250,6 +250,8 @@ const EditProfile = () => {
               label="생년월일"
               type="date"
               name="birth"
+              min="1900-01-01"
+              max="3000"
               value={birth}
               error={notice.birth}
               onChange={handleInput}
@@ -258,6 +260,8 @@ const EditProfile = () => {
               label="신장(cm)"
               type="number"
               name="height"
+              min={1}
+              max={300}
               value={height}
               error={notice.height}
               onChange={handleInput}
@@ -266,6 +270,8 @@ const EditProfile = () => {
               label="체중(kg)"
               type="number"
               name="weight"
+              min={1}
+              max={500}
               value={weight}
               error={notice.weight}
               onChange={handleInput}
@@ -338,11 +344,6 @@ const GridContainer = styled.div`
   }
 
   @media ${({ theme }) => theme.device.tablet} {
-    // grid-template-columns: none;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media ${({ theme }) => theme.device.mobile} {
     grid-template-columns: none;
   }
 `

@@ -76,7 +76,7 @@ const Radio = styled.div`
     }
   }
 
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     width: 9rem;
 
     span {
