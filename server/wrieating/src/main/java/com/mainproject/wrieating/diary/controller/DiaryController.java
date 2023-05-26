@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Positive;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,12 +58,15 @@ public class DiaryController {
         List<String> appropriateNutrients = nutrientBalanceDto.getAppropriate();
         List<String> excessiveNutrients = nutrientBalanceDto.getExcessive();
 
-        List<RecipesResponseDto> response = service.recommendRecipesByNutrientBalance(deficientNutrients, appropriateNutrients, excessiveNutrients);
+        List<String> filteredDeficientNutrients = service.filterTotalPrefix(deficientNutrients);
+        List<String> filteredAppropriateNutrients = service.filterTotalPrefix(appropriateNutrients);
+        List<String> filteredExcessiveNutrients = service.filterTotalPrefix(excessiveNutrients);
 
+
+        List<RecipesResponseDto> response = service.recommendRecipesByNutrientBalance(filteredDeficientNutrients, filteredAppropriateNutrients, filteredExcessiveNutrients);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
 
     @GetMapping
