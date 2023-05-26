@@ -11,6 +11,7 @@ import NutrientComments from '../../utils/nutrientComment'
 import MobileDetail from './MobileDetail'
 import { useSelector, useDispatch } from 'react-redux'
 import { getCookie } from '../../utils/Cookie'
+import { ApiCaller } from '../../utils/apiCaller'
 import { RootState } from '../../store'
 import { setScreenSize } from '../../store/slices/screenSizeSlice'
 import { debounce } from '../../utils/timefunc'
@@ -227,6 +228,12 @@ const DiaryDetail = () => {
       })
       .then((res) => {
         setDiary(res.data)
+      })
+      .catch((err) => {
+        if (err.response && err.response.status === 401) {
+          toast.warning('토큰이 만료되었습니다.')
+          navigate('/sign-in')
+        }
       })
 
     const handleResize = debounce(() => {

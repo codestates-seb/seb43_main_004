@@ -31,7 +31,15 @@ function App() {
       <Header />
       {location.pathname === '/' ? (
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <Landing />
+                <Footer showAlways={true} />
+              </>
+            }
+          />
         </Routes>
       ) : (
         <div className="wrapper">

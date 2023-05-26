@@ -114,7 +114,6 @@ const MobileStats = ({ diaries }: { diaries: DataResponse }) => {
   )
 
   const hasData = Object.values(weekList[0]).some((value) => value !== 0)
-  console.log(filteredData, hasData)
 
   return (
     <>
