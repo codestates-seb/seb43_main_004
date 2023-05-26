@@ -13,14 +13,4 @@ public class WeekResponseDto {
     private double fat;
     private double sugar;
     private double salt;
-
-    public WeekResponseDto() {
-        this.sumKcal = 0L;
-        this.kcal = 0.0;
-        this.carbohydrate = 0.0;
-        this.protein = 0.0;
-        this.fat = 0.0;
-        this.sugar = 0.0;
-        this.salt = 0.0;
-    }
 }

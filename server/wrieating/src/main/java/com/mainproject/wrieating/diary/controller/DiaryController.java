@@ -119,11 +119,7 @@ public class DiaryController {
         if (previousWeekData.getSumKcal() == null && previousWeekData.getAvgKcal() == null &&
         previousWeekData.getAvgFat() == null && previousWeekData.getAvgCarbohydrate() == null
         && previousWeekData.getAvgSalt() == null && previousWeekData.getAvgSugar() == null &&
-        previousWeekData.getAvgProtein() == null ||
-        previousWeekData.getSumKcal() == null || previousWeekData.getAvgKcal() == null ||
-                previousWeekData.getAvgFat() == null || previousWeekData.getAvgCarbohydrate() == null
-                || previousWeekData.getAvgSalt() == null || previousWeekData.getAvgSugar() == null ||
-                previousWeekData.getAvgProtein() == null) {
+        previousWeekData.getAvgProtein() == null) {
             Week week = new Week();
             week.setSumKcal(0L);
             week.setAvgKcal(0.0);

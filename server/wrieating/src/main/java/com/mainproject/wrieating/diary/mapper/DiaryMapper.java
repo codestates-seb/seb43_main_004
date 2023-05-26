@@ -103,7 +103,18 @@ public interface DiaryMapper {
 
     List<StandardIntakeResponseDto> standardIntakeToStandardIntakeDtos(List<StandardIntake> standardIntake);
 
-    WeekResponseDto weekToWeekResponseDto(Week week);
+    default WeekResponseDto weekToWeekResponseDto(Week week) {
+        WeekResponseDto weekResponseDto = new WeekResponseDto();
+        weekResponseDto.setSumKcal(week.getSumKcal());
+        weekResponseDto.setKcal(week.getAvgKcal());
+        weekResponseDto.setCarbohydrate(week.getAvgCarbohydrate());
+        weekResponseDto.setProtein(week.getAvgProtein());
+        weekResponseDto.setFat(week.getAvgFat());
+        weekResponseDto.setSugar(week.getAvgSugar());
+        weekResponseDto.setSalt(week.getAvgSalt());
+
+        return weekResponseDto;
+    }
 
     List<WeekResponseDto> weekToWeekResponseDtos(List<Week> weekList);
 }
