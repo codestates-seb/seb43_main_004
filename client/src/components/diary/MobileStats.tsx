@@ -74,9 +74,7 @@ const MobileStats = ({ diaries }: { diaries: DataResponse }) => {
   ]
 
   const filteredData = data.filter((item) => {
-    if (item.label === '나트륨') {
-      Number(item.value) > 5
-    }
+    return Number(item.value) > 1
   })
 
   // 통계부분
@@ -116,7 +114,6 @@ const MobileStats = ({ diaries }: { diaries: DataResponse }) => {
   )
 
   const hasData = Object.values(weekList[0]).some((value) => value !== 0)
-  console.log(filteredData, hasData)
 
   return (
     <>
@@ -148,7 +145,9 @@ const MobileStats = ({ diaries }: { diaries: DataResponse }) => {
                 />
               </div>
               <div className="pie__detail">
-                <p className="detail__Kcal">{`${intake?.kcal} Kcal`}</p>
+                <p className="detail__Kcal">{`${intake?.sumKcal.toFixed(
+                  0
+                )} Kcal`}</p>
                 <ul className="detail__container">
                   {data.map((nutrient) => renderNutrientListItem(nutrient))}
                 </ul>
@@ -394,7 +393,7 @@ const DefaultModal = styled.div`
   }
 `
 
-const ModalBackground = styled.div`
+export const ModalBackground = styled.div`
   position: fixed;
   top: 0;
   left: 0;
