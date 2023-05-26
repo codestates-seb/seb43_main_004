@@ -82,6 +82,7 @@ const StyledNav = styled.nav`
       overflow: hidden;
       display: flex;
       justify-content: center;
+      flex-shrink: 0;
 
       img {
         display: block;
@@ -112,6 +113,7 @@ const StyledNav = styled.nav`
 
     li {
       margin-bottom: 3rem;
+      word-break: keep-all;
     }
 
     a {
@@ -125,27 +127,10 @@ const StyledNav = styled.nav`
         border-bottom: 5px solid ${({ theme }) => theme.color.point};
       }
     }
-
-    .depth-2 {
-      font-size: ${({ theme }) => theme.fontSize.smh};
-      li {
-        margin-bottom: 2rem;
-
-        &:first-child {
-          margin-top: 2rem;
-        }
-      }
-    }
   }
 
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     width: 90%;
-
-    .btn-box {
-      button {
-        font-size: ${({ theme }) => theme.fontSize.smmh};
-      }
-    }
 
     .login-box,
     .user-box {
@@ -188,16 +173,27 @@ const StyledNav = styled.nav`
           border-bottom-width: 3px;
         }
       }
-
-      .depth-2 {
-        font-size: ${({ theme }) => theme.fontSize.larger};
-      }
     }
   }
 
-  @media screen and (max-width: 360px) {
-    width: 95%;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
     padding: 2rem 3rem;
+
+    .btn-box {
+      margin-bottom: 1rem;
+
+      button {
+        font-size: ${({ theme }) => theme.fontSize.mdh};
+      }
+    }
+
+    .login-box,
+    .user-box {
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      gap: 1.5rem;
+    }
   }
 `
 
@@ -281,21 +277,14 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
             </NavLink>
           </li> */}
           <li>
-            <Link to="/recipe" onClick={handleMenu}>
-              모아보기
-            </Link>
-            <ul className="depth-2">
-              <li>
-                <NavLink to="/recipe" onClick={handleMenu}>
-                  레시피
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/nutrient" onClick={handleMenu}>
-                  영양성분
-                </NavLink>
-              </li>
-            </ul>
+            <NavLink to="/recipe" onClick={handleMenu}>
+              레시피 아카이브
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/nutrient" onClick={handleMenu}>
+              영양성분 아카이브
+            </NavLink>
           </li>
         </ul>
       </StyledNav>

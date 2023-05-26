@@ -170,11 +170,13 @@ const FoodItem = (props: FoodItemProps) => {
 
   const customOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    if (name !== 'foodName' && isNaN(Number(value))) return
+    console.log(value)
+
+    if (name !== 'foodName' && !/^[0-9.]*$/.test(value)) return
     if (name === 'foodName') {
       setStage({ ...data, [name]: value })
     } else {
-      setStage({ ...data, [name]: Number(value) })
+      setStage({ ...data, [name]: value })
     }
   }
 
@@ -208,7 +210,7 @@ const FoodItem = (props: FoodItemProps) => {
                 type="text"
                 placeholder="g"
                 name="servingSize"
-                value={data.servingSize.toString()}
+                value={data.servingSize}
                 onChange={customOnChange}
               />
               <Input
@@ -216,7 +218,7 @@ const FoodItem = (props: FoodItemProps) => {
                 type="text"
                 placeholder="kcal"
                 name="kcal"
-                value={data.kcal.toString()}
+                value={data.kcal}
                 onChange={customOnChange}
               />
             </div>
@@ -227,7 +229,7 @@ const FoodItem = (props: FoodItemProps) => {
               type="text"
               placeholder="g"
               name="carbohydrate"
-              value={data.carbohydrate.toString()}
+              value={data.carbohydrate}
               onChange={customOnChange}
             />
             <Input
@@ -235,7 +237,7 @@ const FoodItem = (props: FoodItemProps) => {
               type="text"
               placeholder="g"
               name="protein"
-              value={data.protein.toString()}
+              value={data.protein}
               onChange={customOnChange}
             />
             <Input
@@ -243,7 +245,7 @@ const FoodItem = (props: FoodItemProps) => {
               type="text"
               placeholder="g"
               name="fat"
-              value={data.fat.toString()}
+              value={data.fat}
               onChange={customOnChange}
             />
             <Input
@@ -251,7 +253,7 @@ const FoodItem = (props: FoodItemProps) => {
               type="text"
               placeholder="g"
               name="sugar"
-              value={data.sugar.toString()}
+              value={data.sugar}
               onChange={customOnChange}
             />
             <Input
@@ -259,7 +261,7 @@ const FoodItem = (props: FoodItemProps) => {
               type="text"
               placeholder="mg"
               name="salt"
-              value={data.salt.toString()}
+              value={data.salt}
               onChange={customOnChange}
             />
           </div>
@@ -313,11 +315,11 @@ const FoodItem = (props: FoodItemProps) => {
             </p>
             <p>
               <span>당류</span>
-              <span>{data.protein}g</span>
+              <span>{data.sugar}g</span>
             </p>
             <p>
               <span>나트륨</span>
-              <span>{data.fat}mg</span>
+              <span>{data.salt}mg</span>
             </p>
           </div>
         </>
