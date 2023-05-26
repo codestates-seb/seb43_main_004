@@ -1,20 +1,20 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import Button from '../Common/Button'
-import Input from '../Common/Input'
-import PaginationComponent from '../Common/Pagination'
-import { dtoResponsePage } from '../../dto'
-import mealTypeMap from '../../utils/mealTypeMap'
-import SearchHighlight from './SearchHighlight'
+import Button from '../components/Common/Button'
+import Input from '../components/Common/Input'
+import PaginationComponent from '../components/Common/Pagination'
+import { dtoResponsePage } from '../dto'
+import mealTypeMap from '../utils/mealTypeMap'
+import SearchHighlight from '../components/archieve/SearchHighlight'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '../../store'
+import { RootState } from '../store'
 import { BeatLoader } from 'react-spinners'
 import {
   fetchNutrientDataStart,
   fetchNutrientDataSuccess,
   fetchNutrientDataFailure,
-} from '../../store/slices/nutrientSlice'
+} from '../store/slices/nutrientSlice'
 
 const FoodArchive = () => {
   const [inputVal, setInputVal] = useState('')
@@ -143,6 +143,11 @@ const FoodArchive = () => {
 
       {loading ? (
         <BeatLoader color="#ffd90f" margin={5} size={20} />
+      ) : nutrientData === null ? (
+        <li className="error-msg">
+          <span className="material-icons-round">search_off</span>
+          <h4>검색 결과가 없습니다.</h4>
+        </li>
       ) : (
         <div className="archive">
           <ul className="archive__lists">
@@ -351,6 +356,19 @@ const FoodArchiveWrapper = styled.div`
 
   .highlight {
     color: var(--color-primary);
+  }
+
+  .error-msg {
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    color: ${({ theme }) => theme.color.darkGray};
+    font-size: ${({ theme }) => theme.fontSize.smmh};
+
+    span {
+      font-size: 10rem;
+      margin-bottom: 3rem;
+    }
   }
 
   .click-no-result {

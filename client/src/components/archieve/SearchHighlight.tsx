@@ -1,5 +1,5 @@
 import React from 'react'
-import { nutrient } from './FoodArchivePage'
+import { nutrient } from '../../pages/FoodArchivePage'
 
 interface SearchHighlightProps {
   nutrient: nutrient
