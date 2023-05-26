@@ -74,9 +74,7 @@ const MobileStats = ({ diaries }: { diaries: DataResponse }) => {
   ]
 
   const filteredData = data.filter((item) => {
-    if (item.label === '나트륨') {
-      Number(item.value) > 5
-    }
+    return Number(item.value) > 1
   })
 
   // 통계부분
