@@ -44,7 +44,7 @@ public class MealService {
                 foodData.setCarbohydrate(meal.getCarbohydrate());
                 foodData.setProtein(meal.getProtein());
                 foodData.setFat(meal.getFat());
-                foodData.setTotalSugar(meal.getSugar());
+                foodData.setSugar(meal.getSugar());
                 foodData.setSalt(meal.getSalt());
                 foodArchiveRepository.save(foodData);
             }
