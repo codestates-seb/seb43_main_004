@@ -9,6 +9,7 @@ import axios from 'axios'
 import { getCookie, setCookie } from '../utils/Cookie'
 import { __getUser } from '../store/slices/profileSlice'
 import { useDispatch } from 'react-redux'
+import customInstance from '../utils/customInstance'
 
 interface userType {
   email: string
@@ -37,8 +38,8 @@ const UserSignIn = () => {
       return
     }
     // 액세스 토큰 발급(로그인)
-    await axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/members/login`, values)
+    await customInstance
+      .post(`/members/login`, values)
       .then((response) => {
         const tokenWithNoBearer = response.data.accessToken.substr(7)
         const tokenForReissue = response.data.refreshToken
@@ -46,14 +47,13 @@ const UserSignIn = () => {
         const current = new Date()
         current.setMinutes(current.getMinutes() + 30)
 
-        // 액세스 토큰
         setCookie('access', tokenWithNoBearer, {
           path: '/',
           secure: true,
           expires: current,
           sameSite: 'none',
         })
-        // 리프레시 토큰
+
         current.setMinutes(current.getMinutes() + 1440)
         setCookie('refresh', tokenForReissue, {
           path: '/',
@@ -83,16 +83,12 @@ const UserSignIn = () => {
       })
       .then((response) => {
         dispatch(__getUser(response.data.data))
-        navigate('/')
+        navigate(`/diaries`)
       })
       .catch((error) => {
         console.error(error)
       })
   }
-
-  useEffect(() => {
-    console.log('gg')
-  }, [])
 
   return (
     <Container>
