@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import loadingSlice from './slices/loadingSlice'
 import nutrientSlice from './slices/nutrientSlice'
 import profileSlice from './slices/profileSlice'
 import screenSizeSlice from './slices/screenSizeSlice'
@@ -8,6 +9,7 @@ export const store = configureStore({
     nutrient: nutrientSlice,
     profile: profileSlice,
     screenSize: screenSizeSlice,
+    loading: loadingSlice,
   },
 })
 
