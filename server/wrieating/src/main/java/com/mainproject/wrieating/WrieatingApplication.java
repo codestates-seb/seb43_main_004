@@ -37,10 +37,6 @@ public class WrieatingApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 
 		SpringApplication.run(WrieatingApplication.class, args);
-		
-		
-
-
 
 		// 음식 아카이브 데이터 삽입
 //		String filePath1 = "/home/ec2-user/action/server/wrieating/src/main/resources/totalfooddb.csv";
