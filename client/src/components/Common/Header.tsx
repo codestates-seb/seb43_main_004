@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import logo from '../../assets/logo.png'
+import { getCookie } from '../../utils/Cookie'
 import Nav from './Nav'
 
 const StyledHeader = styled.header`

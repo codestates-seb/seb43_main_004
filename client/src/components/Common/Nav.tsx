@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../store'
 import { getCookie } from '../../utils/Cookie'
 import { userLogout } from '../../utils/userfunc'
+import Modal from './Modal'
 
 const StyledNavBg = styled.div`
   width: 100%;
@@ -267,7 +268,10 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
         )}
         <ul className="depth-1">
           <li>
-            <NavLink to="/diaries" onClick={handleMenu}>
+            <NavLink
+              to={isLogin ? '/diaries' : '/sign-in'}
+              onClick={handleMenu}
+            >
               식단일기
             </NavLink>
           </li>

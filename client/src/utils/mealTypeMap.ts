@@ -4,7 +4,7 @@ const mealTypeMap: { [key: string]: string } = {
   protein: '단백질',
   fat: '지방',
   totalSugar: '당분',
-  natrium: '나트륨',
+  salt: '나트륨',
 }
 
 export default mealTypeMap
