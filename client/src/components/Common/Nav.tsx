@@ -268,7 +268,10 @@ const Nav = ({ menuOpen, handleMenu }: NavProps) => {
         )}
         <ul className="depth-1">
           <li>
-            <NavLink to="/diaries" onClick={handleMenu}>
+            <NavLink
+              to={isLogin ? '/diaries' : '/sign-in'}
+              onClick={handleMenu}
+            >
               식단일기
             </NavLink>
           </li>

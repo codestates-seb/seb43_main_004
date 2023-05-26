@@ -21,17 +21,16 @@ const DiaryDetail = () => {
   const [memoContent, setMemoContent] = useState(diary?.memo)
   const [isOpenMemo, setIsOpenMemo] = useState(true)
   const [isOpenModal, setIsOpenModal] = useState(false)
-  const [saveEmoji, setSaveEmoji] = useState('')
   const [nutrientStatistics, setNutrientStatistics] = useState<{
     [key: string]: number
   }>({})
+  console.log(diary)
 
   const navigate = useNavigate()
   const { id } = useParams()
   const textareaEl = useRef<HTMLTextAreaElement>(null)
   const windowWidth = useSelector((state: RootState) => state.screenSize.width)
   const dispatch = useDispatch()
-  console.log(windowWidth)
 
   // 통계를 낸 영양소를 저장하는 함수 (퍼센트로 저장)
   const updateNutrientStatistics = (nutrientType: string, percent: number) => {
@@ -160,10 +159,10 @@ const DiaryDetail = () => {
   ) => {
     if (deficientCount >= 3) {
       return '😵' // 부족한 항목에 대한 이모지 반환
-    } else if (appropriateCount >= 3) {
-      return '😄' // 적정한 항목에 대한 이모지 반환
     } else if (excessiveCount >= 3) {
       return '😭' // 과다한 항목에 대한 이모지 반환
+    } else if (appropriateCount >= 3) {
+      return '😄' // 적정한 항목에 대한 이모지 반환
     } else {
       return '😵'
     }
@@ -232,7 +231,7 @@ const DiaryDetail = () => {
         data['appropriate'].length,
         data['excessive'].length
       )
-      setSaveEmoji(emoji)
+      console.log(emoji, diary?.diaryStatus)
 
       if (emoji !== diary?.diaryStatus) {
         axios
@@ -249,7 +248,16 @@ const DiaryDetail = () => {
             }
           )
           .then(() => {
-            console.log('good')
+            axios
+              .get(`${process.env.REACT_APP_SERVER_URL}/diaries/${id}`, {
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${getCookie('access')}`,
+                },
+              })
+              .then((res) => {
+                setDiary(res.data)
+              })
           })
           .catch((err) => {
             console.log(err)
