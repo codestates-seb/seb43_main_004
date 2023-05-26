@@ -57,8 +57,8 @@ const NotFound = () => {
 }
 
 const Icon = styled.span`
-  font-size: 6rem;
-  margin-bottom: 1.4rem;
+  font-size: 8rem;
+  margin-bottom: 1.6rem;
 `
 
 const ErrorWrapper = styled.div`
@@ -67,11 +67,12 @@ const ErrorWrapper = styled.div`
 
   h1 {
     font-size: ${(props) => props.theme.fontSize.smmh};
+    margin: 1.5rem 0;
   }
 
   div {
     line-height: 2rem;
-    margin: 1rem 0 1.4rem 0;
+    margin: 1rem 0 1.6rem 0;
   }
 `
 

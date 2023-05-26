@@ -13,6 +13,8 @@ interface inputProps {
   success?: string
   error?: string
   disabled?: boolean
+  min?: number | string
+  max?: number | string
   onChange(e: React.ChangeEvent<HTMLInputElement>): void
   onBlur?(e: React.FocusEvent<HTMLInputElement>): void
   onKeyDown?(e: KeyboardEvent<HTMLInputElement>): void
@@ -29,6 +31,8 @@ const Input = (props: inputProps) => {
     error,
     success,
     disabled,
+    min,
+    max,
     onChange,
     onBlur,
     onKeyDown,
@@ -47,6 +51,8 @@ const Input = (props: inputProps) => {
         disabled={disabled}
         name={name}
         value={value}
+        min={min}
+        max={max}
         defaultValue={defaultValue}
         autoComplete="off"
       />
