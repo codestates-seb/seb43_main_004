@@ -45,6 +45,7 @@ const UserSignIn = () => {
         },
       })
       .then((response) => {
+        console.log(response.data)
         const tokenWithNoBearer = response.data.accessToken.substr(7)
         const tokenForReissue = response.data.refreshToken
 
