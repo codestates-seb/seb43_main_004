@@ -1,7 +1,7 @@
 // nutrientSlice.ts (수정 예시)
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { dtoResponsePage } from '../../dto'
-import { nutrient } from '../../components/archieve/FoodArchivePage'
+import { nutrient } from '../../pages/FoodArchivePage'
 
 export interface NutrientState {
   data: dtoResponsePage<nutrient> | null
