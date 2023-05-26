@@ -522,7 +522,16 @@ const Wrapper = styled.div`
   }
 
   @media (max-width: 680px) {
-    width: calc(100% - 7rem);
+    width: 100%;
+    .title {
+      margin-left: 7rem;
+    }
+  }
+
+  @media (max-width: 550px) {
+    .title {
+      margin: 1rem 1.5rem;
+    }
   }
 `
 const DiaryDetailWrapper = styled.div`
@@ -737,10 +746,18 @@ const DiaryDetailWrapper = styled.div`
 
   @media (max-width: 680px) {
     width: calc(100% - 7rem);
+    .diary__container {
+      margin-left: 7rem;
+    }
   }
 
   @media (max-width: 560px) {
     flex-direction: column;
+    width: 100%;
+    .diary__container {
+      width: calc(100% - 3rem);
+      margin: 0 auto;
+    }
   }
 `
 

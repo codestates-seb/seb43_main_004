@@ -393,7 +393,7 @@ const DefaultModal = styled.div`
   }
 `
 
-const ModalBackground = styled.div`
+export const ModalBackground = styled.div`
   position: fixed;
   top: 0;
   left: 0;
