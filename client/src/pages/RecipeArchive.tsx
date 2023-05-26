@@ -113,6 +113,7 @@ interface recipeData {
 
 const RecipeArchive = () => {
   const url = process.env.REACT_APP_SERVER_URL
+  const navigate = useNavigate()
 
   const types = [
     {
@@ -186,8 +187,15 @@ const RecipeArchive = () => {
         }
       )
       setRecipes(res.data)
-    } catch (err) {
-      console.log(err)
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data.status === 401) {
+          navigate(`/sign-in`)
+        } else {
+          // 그 외 에러(403,404,500)는 아래 페이지로 리다이렉트..
+          navigate(`/error/${error.response?.data.status}`)
+        }
+      }
     }
   }
 
@@ -204,7 +212,14 @@ const RecipeArchive = () => {
       )
       setRecipes(res.data)
     } catch (error) {
-      console.log(error)
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data.status === 401) {
+          navigate(`/sign-in`)
+        } else {
+          // 그 외 에러(403,404,500)는 아래 페이지로 리다이렉트..
+          navigate(`/error/${error.response?.data.status}`)
+        }
+      }
     }
   }
 
