@@ -133,7 +133,9 @@ public class DiaryService {
         query.where(finalPredicate);
 
         TypedQuery<RecipeData> typedQuery = entityManager.createQuery(query);
+
         List<RecipeData> recommendedRecipeData = typedQuery.getResultList();
+
 
         // 추천할 레시피가 없다면 전체 레시피데이터를 넣고
         if(recommendedRecipeData.isEmpty()){
@@ -242,5 +244,16 @@ public class DiaryService {
 
         // 조건식 생성
         return cb.lessThanOrEqualTo(root.get(nutrient), maxValue);
+    }
+
+
+    // "total" 접두사 필터링 메서드
+    public List<String> filterTotalPrefix(List<String> nutrients) {
+        List<String> filteredNutrients = new ArrayList<>();
+        for (String nutrient : nutrients) {
+            String filteredNutrient = nutrient.replace("total", "").toLowerCase();
+            filteredNutrients.add(filteredNutrient);
+        }
+        return filteredNutrients;
     }
 }
