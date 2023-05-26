@@ -146,7 +146,9 @@ const MobileStats = ({ diaries }: { diaries: DataResponse }) => {
                 />
               </div>
               <div className="pie__detail">
-                <p className="detail__Kcal">{`${intake?.kcal} Kcal`}</p>
+                <p className="detail__Kcal">{`${intake?.sumKcal.toFixed(
+                  0
+                )} Kcal`}</p>
                 <ul className="detail__container">
                   {data.map((nutrient) => renderNutrientListItem(nutrient))}
                 </ul>
