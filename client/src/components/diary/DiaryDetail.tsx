@@ -74,15 +74,19 @@ const DiaryDetail = () => {
   const handleDeleteMeal = (mealData: Meal[] | { [key: string]: string }) => {
     Array.isArray(mealData) &&
       mealData.map((meal) => {
-        axios.delete(
-          `${process.env.REACT_APP_SERVER_URL}/diaries/${id}/meal/delete/${meal.mealId}`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${getCookie('access')}`,
-            },
-          }
-        )
+        axios
+          .delete(
+            `${process.env.REACT_APP_SERVER_URL}/diaries/${id}/meal/delete/${meal.mealId}`,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getCookie('access')}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res)
+          })
       })
   }
 

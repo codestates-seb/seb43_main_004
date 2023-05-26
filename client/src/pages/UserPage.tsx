@@ -75,7 +75,7 @@ const ItemsWrapper = styled.div`
     margin-right: 1.4rem;
   }
 
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     flex-direction: column;
     gap: 1rem;
   }

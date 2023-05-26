@@ -160,14 +160,19 @@ const UserFindPwd = () => {
           newPassword: password,
         })
         .then((response) => {
-          console.log(response)
           setChange(true)
           openModal(
             '비밀번호가 성공적으로 변경되었습니다.\n로그인 페이지로 이동합니다.'
           )
         })
         .catch((error) => {
-          setError({ ...error, ...msg })
+          if (axios.isAxiosError(error)) {
+            if (error.response?.data.status === 401) {
+              openModal('비밀번호를 변경할 수 없습니다.')
+            } else {
+              navigate(`/error/${error.response?.data.status}`)
+            }
+          }
         })
     }
   }

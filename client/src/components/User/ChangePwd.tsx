@@ -154,7 +154,7 @@ const Wrapper = styled.div`
   width: 63.7rem;
   min-height: 40rem;
 
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     width: 88vw;
   }
 `
