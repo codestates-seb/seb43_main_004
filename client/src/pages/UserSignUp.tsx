@@ -15,6 +15,7 @@ import { debounce } from '../utils/timefunc'
 import axios from 'axios'
 import Modal from '../components/Common/Modal'
 import { useNavigate } from 'react-router-dom'
+import PwdInput from '../components/Common/PwdInput'
 
 interface Props {
   social?: boolean
@@ -375,18 +376,16 @@ const UserSignUp = ({ social }: Props) => {
           </div>
           {!social && (
             <>
-              <Input
+              <PwdInput
                 label="비밀번호"
-                type="password"
                 name="password"
                 placeholder="영문, 숫자, 특수문자를 조합하여 최소 8자 이상"
                 error={error.password}
                 onChange={handleInput}
                 onBlur={isValidPassword}
               />
-              <Input
+              <PwdInput
                 label="비밀번호 확인"
-                type="password"
                 name="passwordcheck"
                 placeholder="비밀번호를 입력해주세요"
                 error={error.ckPassword}
