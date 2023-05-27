@@ -8,6 +8,7 @@ import MealList from './MealItem'
 import NutritionItem from './NutritionItem'
 import sendNutrientDataToServer from '../../utils/nutrientDataToSend'
 import NutrientComments from '../../utils/nutrientComment'
+import { ModalBackground } from './MobileStats'
 import { useSelector, useDispatch } from 'react-redux'
 import { getCookie } from '../../utils/Cookie'
 import { RootState } from '../../store'
@@ -19,6 +20,8 @@ const MobileDetail = ({ diary }: { diary: Diary }) => {
   const [nutrientStatistics, setNutrientStatistics] = useState<{
     [key: string]: number
   }>({})
+  const [isOpenModal, setIsOpenModal] = useState(false)
+  const [isClosingModal, setIsClosingModal] = useState(false)
 
   const navigate = useNavigate()
   const { id } = useParams()
@@ -26,6 +29,18 @@ const MobileDetail = ({ diary }: { diary: Diary }) => {
   const windowWidth = useSelector((state: RootState) => state.screenSize.width)
   const dispatch = useDispatch()
   console.log(windowWidth)
+
+  const handleOpenModal = () => {
+    setIsOpenModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsClosingModal(true)
+    setTimeout(() => {
+      setIsOpenModal(false)
+      setIsClosingModal(false)
+    }, 700)
+  }
 
   // 통계를 낸 영양소를 저장하는 함수 (퍼센트로 저장)
   const updateNutrientStatistics = (nutrientType: string, percent: number) => {
@@ -71,11 +86,24 @@ const MobileDetail = ({ diary }: { diary: Diary }) => {
   }, [id, dispatch])
 
   return (
-    <DiaryDetailWrapper>
-      {diary && (
-        <div className="aside_container">
-          <div className="status__container2">
-            <h2>오늘의 식단</h2>
+    <>
+      {isOpenModal && <ModalBackground onClick={handleCloseModal} />}
+      <DiaryDetailWrapper>
+        {isOpenModal ? (
+          <div
+            className={`status__container2 ${
+              isClosingModal ? 'slide-down' : 'slide-up'
+            }`}
+          >
+            <header className="modal__header">
+              <h2>오늘의 식단</h2>
+              <span
+                className="material-symbols-outlined"
+                onClick={handleCloseModal}
+              >
+                expand_more
+              </span>
+            </header>
             <NutritionBar>
               {['칼로리', '탄수화물', '단백질', '지방', '당분', '나트륨'].map(
                 (el, idx) => (
@@ -112,9 +140,14 @@ const MobileDetail = ({ diary }: { diary: Diary }) => {
               )}
             </div>
           </div>
-        </div>
-      )}
-    </DiaryDetailWrapper>
+        ) : (
+          <DefaultModal onClick={handleOpenModal}>
+            <p>지난주 통계</p>
+            <span className="material-symbols-outlined">expand_less</span>
+          </DefaultModal>
+        )}
+      </DiaryDetailWrapper>
+    </>
   )
 }
 
@@ -166,20 +199,44 @@ interface Recipe {
 }
 
 const DiaryDetailWrapper = styled.div`
-  position: fixed;
-  bottom: 0;
-  width: 100vw;
-
-  background-color: white;
-  z-index: 110;
-
   .status__container2 {
     border: 1px solid var(--color-light-gray);
     border-radius: 15px 15px 0px 0px;
     padding: 1.7rem;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
     width: 100vw;
 
+    background-color: white;
+    z-index: 110;
+
+    &.slide-up {
+      /* 애니메이션 이름은 slide-up이며, 0.5초 동안 실행됩니다. */
+      animation: slide-up 1s;
+      /* 애니메이션 실행 방향을 위쪽으로 설정합니다. */
+      animation-fill-mode: forwards;
+      transition: 1s;
+    }
+
+    &.slide-down {
+      animation: slide-down 1s;
+      /* 애니메이션 실행 방향을 위쪽으로 설정합니다. */
+      animation-fill-mode: forwards;
+      transition: 1s;
+    }
+
+    .modal__header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      h2 {
+        margin: 0;
+      }
+    }
+
     h2 {
+      font-size: 18px !important;
       text-align: center;
       margin-top: 1rem;
       font-size: 2.5rem;
@@ -192,35 +249,12 @@ const DiaryDetailWrapper = styled.div`
     }
   }
 
-  .diary__memo {
-    header {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 1rem;
+  .recipe__container2 {
+    margin-top: 4rem;
 
-      p {
-        font-size: 17px;
-        font-weight: 600;
-      }
-      span {
-        cursor: pointer;
-        transition: all 0.2s linear;
-      }
-      span:hover {
-        transform: scale(1.2);
-      }
-    }
-
-    textarea {
-      resize: none;
-      width: 100%;
-      height: 170px;
-      border-radius: 8px;
-      outline: none;
-      font-weight: 300;
-      font-family: 'Pretendard', sans-serif;
-      padding: 1rem;
-      font-size: 15px;
+    h2 {
+      margin: 0;
+      margin-bottom: 2rem;
     }
   }
 
@@ -233,12 +267,19 @@ const DiaryDetailWrapper = styled.div`
     margin-bottom: 1.2rem;
   }
 
-  .recipe__list {
-    font-weight: 500;
+  .recipe__lists {
     display: flex;
-
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
+    margin: 0 auto;
+  }
+
+  .recipe__list {
+    width: 130px;
+    font-weight: 500;
     margin-bottom: 1rem;
+    justify-self: center;
 
     img {
       width: 45px;
@@ -275,11 +316,36 @@ const DiaryDetailWrapper = styled.div`
   }
 
   @media (max-width: 680px) {
-    width: calc(100% - 7rem);
+    width: 100%;
   }
 
-  @media (max-width: 560px) {
-    flex-direction: column;
+  @keyframes slide-up {
+    /* 0%에서는 translateY(100%)로 요소를 아래로 숨깁니다. */
+    0% {
+      transform: translateY(100%);
+    }
+
+    /* 100%에서는 translateY(0)으로 요소를 위로 올려서 보여줍니다. */
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  /* slide-down 이라는 이름의 애니메이션을 정의합니다. */
+  @keyframes slide-down {
+    /* animation: slide-down 0.5s ease; */
+
+    /* 0%에서는 요소가 보이는 상태로 시작합니다. */
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 100%에서는 요소가 아래로 사라지는 효과를 줍니다. */
+    100% {
+      opacity: 0;
+      transform: translateY(100%);
+    }
   }
 `
 
@@ -307,6 +373,12 @@ const NutritionBar = styled.ul`
   .C50000 {
     color: #c50000;
   }
+
+  li {
+    .status__bar {
+      width: 100%;
+    }
+  }
 `
 
 export const NutritionBarItem = styled.span<{
@@ -321,6 +393,24 @@ export const NutritionBarItem = styled.span<{
   position: absolute;
   left: 0;
   border-radius: 8px;
+`
+
+const DefaultModal = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  border: 1px solid var(--color-light-gray);
+  border-radius: 8px 8px 0px 0px;
+  p {
+    font-family: 'yg-jalnan';
+    font-size: 18px;
+    margin-right: 1rem;
+  }
 `
 
 export default MobileDetail

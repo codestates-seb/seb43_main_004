@@ -173,8 +173,15 @@ const RecipeDetail = () => {
         },
       })
       setData(res.data)
-    } catch (err: any) {
-      if (err.request.status === 404) navigate('/404')
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.data.status === 401) {
+          navigate(`/sign-in`)
+        } else {
+          // 그 외 에러(403,404,500)는 아래 페이지로 리다이렉트..
+          navigate(`/error/${error.response?.data.status}`)
+        }
+      }
     }
   }
 

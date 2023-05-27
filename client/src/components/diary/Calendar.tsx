@@ -168,6 +168,11 @@ const Container = styled.div`
     background: #e9e9e9;
     opacity: 0.5;
   }
+  // 아이폰 기본 스타일링으로 날짜타일의 글씨가 파란색으로 변하는 현상을 수정하기 위한 코드
+  .calender-date-tile {
+    color: inherit;
+    text-decoration: none;
+  }
 
   .emoji {
     padding: 0 auto;
