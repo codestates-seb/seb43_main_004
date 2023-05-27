@@ -35,9 +35,40 @@ const StyledRecipeItem = styled.li`
   }
 
   .name {
+    width: 100%;
     font-size: ${({ theme }) => theme.fontSize.large};
     font-weight: 700;
     margin-top: 2rem;
+    line-height: 1.5em;
+    word-break: keep-all;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  @media ${({ theme }) => theme.device.tablet} {
+    width: calc((100% - 6rem) / 3);
+
+    .recipe-img {
+      height: 20rem;
+    }
+
+    .name {
+      font-size: ${({ theme }) => theme.fontSize.middle};
+    }
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: calc((100% - 3rem) / 2);
+
+    .recipe-img {
+      height: 15rem;
+    }
+
+    .name {
+      font-size: ${({ theme }) => theme.fontSize.small};
+      margin-top: 1rem;
+    }
   }
 `
 

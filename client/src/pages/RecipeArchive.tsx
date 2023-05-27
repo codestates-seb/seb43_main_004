@@ -15,7 +15,7 @@ import all from '../assets/all.png'
 import { useNavigate } from 'react-router-dom'
 
 const StyledRecipeArchive = styled.main`
-  width: 98%;
+  width: 100%;
   max-width: 1250px;
 
   h2 {
@@ -38,9 +38,14 @@ const StyledRecipeArchive = styled.main`
       justify-content: space-around;
       align-items: center;
       text-align: center;
+      flex-wrap: wrap;
 
       li {
         cursor: pointer;
+
+        img {
+          width: 100%;
+        }
 
         p {
           font-size: ${({ theme }) => theme.fontSize.large};
@@ -88,6 +93,69 @@ const StyledRecipeArchive = styled.main`
         span {
           font-size: 10rem;
           margin-bottom: 3rem;
+        }
+      }
+    }
+  }
+
+  @media ${({ theme }) => theme.device.tablet} {
+    h2 {
+      font-size: ${({ theme }) => theme.fontSize.smh};
+      margin-bottom: 3rem;
+    }
+
+    h3 {
+      font-size: ${({ theme }) => theme.fontSize.large};
+      margin-bottom: 3rem;
+    }
+
+    .category {
+      margin-bottom: 3rem;
+
+      ul {
+        justify-content: space-between;
+
+        li {
+          width: calc((100% - 20rem) / 7);
+
+          p {
+            font-size: ${({ theme }) => theme.fontSize.middle};
+          }
+        }
+      }
+    }
+
+    .recipe-container {
+      .recipe-list {
+        gap: 3rem;
+      }
+    }
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    h3 {
+      margin-bottom: 2rem;
+    }
+
+    .category {
+      ul {
+        gap: 1rem;
+        justify-content: flex-start;
+
+        li {
+          width: calc((100% - 3rem) / 4);
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          img {
+            width: 40%;
+          }
+
+          p {
+            margin-top: 0rem;
+            font-size: ${({ theme }) => theme.fontSize.small};
+          }
         }
       }
     }
@@ -231,6 +299,8 @@ const RecipeArchive = () => {
     }
   }, [activePage])
 
+  console.log(url)
+
   return (
     <StyledRecipeArchive>
       <h2>레시피 아카이브</h2>
@@ -240,10 +310,8 @@ const RecipeArchive = () => {
           {types.map((type, idx) => {
             return (
               <li key={idx} onClick={() => getData(type.type)}>
-                <div>
-                  <img src={type.img} alt={type.type} />
-                  <p>{type.type}</p>
-                </div>
+                <img src={type.img} alt={type.type} />
+                <p>{type.type}</p>
               </li>
             )
           })}

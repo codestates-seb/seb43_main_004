@@ -11,10 +11,6 @@ const StyledFoodItem = styled.li`
   box-shadow: ${({ theme }) => theme.shadow};
   padding: 2rem;
 
-  &:not(:last-child) {
-    margin-bottom: 3rem;
-  }
-
   & > div {
     display: flex;
     justify-content: space-between;
@@ -82,7 +78,7 @@ const StyledFoodItem = styled.li`
     }
   }
 
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     .food-title {
       gap: 0;
 
@@ -91,10 +87,22 @@ const StyledFoodItem = styled.li`
 
         .intake-counter {
           gap: 0;
+          justify-content: space-evenly;
 
           input {
             width: 50%;
           }
+        }
+      }
+
+      &.custom {
+        .food-name {
+          width: 100%;
+          margin-bottom: 2rem;
+        }
+
+        .food-intake {
+          width: 100%;
         }
       }
     }
@@ -103,6 +111,33 @@ const StyledFoodItem = styled.li`
       & > * {
         width: 45%;
         margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    .food-title {
+      .food-name {
+        font-size: ${({ theme }) => theme.fontSize.larger};
+        width: 100%;
+        margin-bottom: 2rem;
+      }
+
+      .food-intake {
+        gap: 0.5rem;
+
+        .intake-counter {
+          width: 50%;
+        }
+      }
+    }
+
+    .food-info.custom {
+      flex-wrap: wrap;
+
+      > div {
+        width: 48%;
+        flex: 0 0 auto;
       }
     }
   }
@@ -170,7 +205,6 @@ const FoodItem = (props: FoodItemProps) => {
 
   const customOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    console.log(value)
 
     if (name !== 'foodName' && !/^[0-9.]*$/.test(value)) return
     if (name === 'foodName') {
@@ -184,26 +218,28 @@ const FoodItem = (props: FoodItemProps) => {
     <StyledFoodItem>
       {custom ? (
         <>
-          <div className="food-title">
-            {data.foodName ? (
-              <Input
-                label="음식명"
-                type="text"
-                placeholder="음식명"
-                name="foodName"
-                value={data.foodName}
-                onChange={customOnChange}
-              />
-            ) : (
-              <Input
-                label="음식명"
-                type="text"
-                placeholder="음식명"
-                name="foodName"
-                value={data.title}
-                onChange={customOnChange}
-              />
-            )}
+          <div className="food-title custom">
+            <div className="food-name">
+              {data.foodName ? (
+                <Input
+                  label="음식명"
+                  type="text"
+                  placeholder="음식명"
+                  name="foodName"
+                  value={data.foodName}
+                  onChange={customOnChange}
+                />
+              ) : (
+                <Input
+                  label="음식명"
+                  type="text"
+                  placeholder="음식명"
+                  name="foodName"
+                  value={data.title}
+                  onChange={customOnChange}
+                />
+              )}
+            </div>
             <div className="food-intake">
               <Input
                 label="1인분 기준 섭취량(g)"
@@ -223,7 +259,7 @@ const FoodItem = (props: FoodItemProps) => {
               />
             </div>
           </div>
-          <div className="food-info">
+          <div className="food-info custom">
             <Input
               label="탄수화물"
               type="text"
