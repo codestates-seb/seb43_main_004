@@ -26,6 +26,7 @@ const DiaryCheck = () => {
           headers: {
             'Content-Type': 'application / json',
             Authorization: `Bearer ${getCookie('access')}`,
+            'ngrok-skip-browser-warning': '69420',
           },
         }
       )

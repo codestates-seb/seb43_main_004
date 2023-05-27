@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 import { styled } from 'styled-components'
 import etc from '../assets/etc.png'
+import Button from '../components/Common/Button'
 
 const StyledRecipeDetail = styled.main`
   width: 100%;
@@ -154,6 +155,11 @@ const StyledRecipeDetail = styled.main`
         }
       }
     }
+  }
+
+  button {
+    display: flex;
+    margin: 5rem auto 0;
   }
 
   @media ${({ theme }) => theme.device.tablet} {
@@ -328,7 +334,6 @@ const RecipeDetail = () => {
           </div>
         </div>
       </div>
-
       <div className="recipe-step">
         <h3>
           <span>레시피</span>
@@ -356,6 +361,9 @@ const RecipeDetail = () => {
             })}
         </ul>
       </div>
+      <Button type="button" onClick={() => navigate(`/recipe`)}>
+        목록으로 돌아가기
+      </Button>
     </StyledRecipeDetail>
   )
 }

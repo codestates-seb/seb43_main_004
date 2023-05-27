@@ -29,6 +29,11 @@ const StyledDiaryAdd = styled.main`
     font-weight: 700;
   }
 
+  .btn-back {
+    font-size: ${({ theme }) => theme.fontSize.lgh};
+    margin-bottom: 3rem;
+  }
+
   .food-edit {
     margin-bottom: 1rem;
 
@@ -183,6 +188,10 @@ const StyledDiaryAdd = styled.main`
           justify-content: space-between;
         }
       }
+    }
+
+    button {
+      margin: 5rem auto 0;
     }
   }
 
@@ -697,6 +706,12 @@ const DiaryWrite = () => {
               ))
             )}
           </ul>
+          <Button
+            type="button"
+            onClick={() => navigate(`/diaries/${param.id}`)}
+          >
+            일기로 돌아가기
+          </Button>
         </div>
         {isEmpty && (
           <Modal
