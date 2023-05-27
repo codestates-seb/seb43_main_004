@@ -5,7 +5,7 @@ import { RootState } from '../../store'
 import { setScreenSize } from '../../store/slices/screenSizeSlice'
 import { debounce } from '../../utils/timefunc'
 
-const Footer = () => {
+const Footer = ({ showAlways }: { showAlways?: boolean }) => {
   const windowWidth = useSelector((state: RootState) => state.screenSize.width)
   const dispatch = useDispatch()
 
@@ -21,7 +21,7 @@ const Footer = () => {
     }
   }, [dispatch])
 
-  return windowWidth > 560 ? (
+  return showAlways || windowWidth > 560 ? (
     <FooterWrapper>
       <p>
         <strong>개발자</strong>

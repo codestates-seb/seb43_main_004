@@ -1,5 +1,5 @@
 import React from 'react'
-import { Meal } from './DiaryDetail'
+import { Meal } from '../../pages/DiaryDetail'
 interface MealListProps {
   diary: { meal: Meal[] }
   handleEditMeal: (mealData: Meal[] | { [key: string]: string }) => void

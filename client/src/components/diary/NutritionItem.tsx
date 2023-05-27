@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import nutrientTypeMap from '../../utils/nutrientTypeMap'
 import totalNutrientTypeMap from '../../utils/totalNutritionType'
-import { NutritionBarItem } from './DiaryDetail'
+import { NutritionBarItem } from '../../pages/DiaryDetail'
 
 interface NutritionItemProps {
   nutrientType: string

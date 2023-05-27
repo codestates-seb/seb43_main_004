@@ -2,7 +2,7 @@ import React from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import './App.css'
 import DiaryCheck from './pages/DiaryCheck'
-import DiaryDetail from './components/diary/DiaryDetail'
+import DiaryDetail from './pages/DiaryDetail'
 import Header from './components/Common/Header'
 import Footer from './components/Common/Footer'
 import UserSignIn from './pages/UserSignIn'
@@ -12,24 +12,35 @@ import NotFound from './pages/NotFound'
 import UserPage from './pages/UserPage'
 import EditProfile from './components/User/EditProfile'
 import ChangePwd from './components/User/ChangePwd'
-import FoodArchive from './components/archieve/FoodArchivePage'
+import FoodArchive from './pages/FoodArchivePage'
 import DiaryWrite from './pages/DiaryWrite'
 import UpdateReady from './pages/UpdateReady'
 import Landing from './pages/Landing'
 import RecipeArchive from './pages/RecipeArchive'
 import RecipeDetail from './pages/RecipeDetail'
 import useTokenCheck from './store/hooks/useTokenCheck'
+import ScrollToTop from './utils/ScrollToTop'
 
 function App() {
   const location = useLocation()
+  const isLandingPage = location.pathname === '/'
   // useTokenCheck()
 
   return (
     <div className="App">
+      <ScrollToTop />
       <Header />
-      {location.pathname === '/' ? (
+      {isLandingPage ? (
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <Landing />
+                <Footer showAlways={true} />
+              </>
+            }
+          />
         </Routes>
       ) : (
         <div className="wrapper">
@@ -55,7 +66,7 @@ function App() {
           </Routes>
         </div>
       )}
-      <Footer />
+      {!isLandingPage && <Footer />}
     </div>
   )
 }
