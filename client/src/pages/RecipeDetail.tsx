@@ -209,16 +209,16 @@ const RecipeDetail = () => {
                 <span>칼로리</span> : {data.kcal}kcal
               </li>
               <li>
-                <span>탄수화물</span> : {data.carbohydrate}kcal
+                <span>탄수화물</span> : {data.carbohydrate}g
               </li>
               <li>
-                <span>단백질</span> : {data.protein}kcal
+                <span>단백질</span> : {data.protein}g
               </li>
               <li>
-                <span>지방</span> : {data.fat}kcal
+                <span>지방</span> : {data.fat}g
               </li>
               <li>
-                <span>나트륨</span> : {data.natrium}kcal
+                <span>나트륨</span> : {data.salt}mg
               </li>
             </ul>
           </div>

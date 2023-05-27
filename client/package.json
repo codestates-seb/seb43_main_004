@@ -75,5 +75,6 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
     "prettier": "^2.8.8"
-  }
+  },
+  "proxy": "https://de2d-175-213-102-16.ngrok-free.app"
 }
