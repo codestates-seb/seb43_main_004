@@ -8,10 +8,9 @@ import axios from 'axios'
 import Modal from '../components/Common/Modal'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getCookie } from '../utils/Cookie'
-import useTokenCheck from '../store/hooks/useTokenCheck'
 
 const StyledDiaryAdd = styled.main`
-  width: 95%;
+  width: 100%;
   max-width: 1250px;
 
   h2 {

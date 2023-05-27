@@ -5,7 +5,7 @@ import { styled } from 'styled-components'
 import etc from '../assets/etc.png'
 
 const StyledRecipeDetail = styled.main`
-  width: 98%;
+  width: 100%;
   max-width: 1250px;
 
   .title-wrap {
@@ -36,6 +36,8 @@ const StyledRecipeDetail = styled.main`
       h2 {
         font-size: ${({ theme }) => theme.fontSize.lgh};
         margin-bottom: 2rem;
+        line-height: 1.3em;
+        word-break: keep-all;
       }
 
       .tips {
@@ -114,6 +116,7 @@ const StyledRecipeDetail = styled.main`
         justify-content: space-between;
         margin-bottom: 5rem;
         padding: 3rem;
+        word-break: keep-all;
 
         &:last-child {
           margin-bottom: 0;
@@ -147,6 +150,107 @@ const StyledRecipeDetail = styled.main`
             width: 100%;
             height: 100%;
             object-fit: cover;
+          }
+        }
+      }
+    }
+  }
+
+  @media ${({ theme }) => theme.device.tablet} {
+    .title-wrap {
+      .info {
+        h2 {
+          font-size: ${({ theme }) => theme.fontSize.smmh};
+        }
+
+        .tips {
+          font-size: ${({ theme }) => theme.fontSize.large};
+          margin-bottom: 2rem;
+        }
+
+        h3 {
+          font-size: ${({ theme }) => theme.fontSize.larger};
+          padding: 1.5rem;
+        }
+
+        .ingredients {
+          margin-bottom: 2rem;
+
+          div {
+            padding: 1.5rem;
+          }
+        }
+      }
+    }
+
+    .recipe-step {
+      h3 {
+        font-size: ${({ theme }) => theme.fontSize.smh};
+      }
+
+      ul {
+        li {
+          margin-bottom: 3rem;
+        }
+      }
+    }
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    .title-wrap {
+      flex-direction: column;
+
+      .visual {
+        width: 100%;
+        height: 30rem;
+        margin-bottom: 3rem;
+      }
+
+      .info {
+        width: 100%;
+
+        h2 {
+          font-size: ${({ theme }) => theme.fontSize.smh};
+        }
+
+        .tips {
+          font-size: ${({ theme }) => theme.fontSize.middle};
+        }
+
+        h3 {
+          font-size: ${({ theme }) => theme.fontSize.large};
+        }
+      }
+    }
+
+    .recipe-step {
+      h3 {
+        font-size: ${({ theme }) => theme.fontSize.larger};
+        margin-bottom: 0;
+      }
+
+      ul {
+        li {
+          flex-direction: column;
+          padding: 2rem;
+          margin-bottom: 2rem;
+
+          .txt-box {
+            width: 100%;
+            margin-bottom: 2rem;
+
+            .step {
+              font-size: ${({ theme }) => theme.fontSize.large};
+              margin-bottom: 1rem;
+            }
+
+            .desc {
+              font-size: ${({ theme }) => theme.fontSize.middle};
+            }
+          }
+
+          .img-box {
+            width: 100%;
           }
         }
       }

@@ -23,8 +23,15 @@
 
 @media screen and (max-width: 768px) {
   .wrapper {
+    width: 95%;
     margin-top: 6rem;
     min-height: calc(100vh - 6rem);
     padding: 3rem 0;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .wrapper {
+    width: 90%;
   }
 }
