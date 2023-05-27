@@ -15,7 +15,6 @@ import { debounce } from '../utils/timefunc'
 import axios from 'axios'
 import Modal from '../components/Common/Modal'
 import { useNavigate } from 'react-router-dom'
-import { API } from '../utils/API'
 
 interface Props {
   social?: boolean
@@ -134,7 +133,10 @@ const UserSignUp = ({ social }: Props) => {
     // 이메일이 정상적으로 입력되었는지 확인 후 이메일 중복 체크
     if (checkEmail(email)) {
       await axios
-        .post(`${API}/members/emailcheck`, emailData)
+        .post(
+          `${process.env.REACT_APP_SERVER_URL}/members/emailcheck`,
+          emailData
+        )
         .then((response) => {
           // 가입된 이메일이 아니면
           if (response.data.data === false) {
@@ -222,7 +224,7 @@ const UserSignUp = ({ social }: Props) => {
     }
 
     axios
-      .post(`${API}/members/nicknamecheck`, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/members/nicknamecheck`, {
         nickName,
       })
       .then((response) => {

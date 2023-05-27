@@ -18,13 +18,13 @@ import UpdateReady from './pages/UpdateReady'
 import Landing from './pages/Landing'
 import RecipeArchive from './pages/RecipeArchive'
 import RecipeDetail from './pages/RecipeDetail'
+
 import useTokenCheck from './store/hooks/useTokenCheck'
 import ScrollToTop from './utils/ScrollToTop'
 
 function App() {
   const location = useLocation()
   const isLandingPage = location.pathname === '/'
-  // useTokenCheck()
 
   return (
     <div className="App">

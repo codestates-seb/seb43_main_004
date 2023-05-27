@@ -9,7 +9,6 @@ const useTokenCheck = () => {
   useEffect(() => {
     const checkToken = () => {
       if (!getCookie('access')) {
-        userLogout()
         navigate('/sign-in', { replace: true })
       }
     }
