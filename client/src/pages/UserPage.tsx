@@ -3,10 +3,8 @@ import styled from 'styled-components'
 import Tab from '../components/Common/Tab'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store'
-import useTokenCheck from '../store/hooks/useTokenCheck'
 
 const UserPage = () => {
-  useTokenCheck()
   const userInfo = useSelector((state: RootState) => state.profile.data)
   const { nickName, gender, height, weight, activity, icon } = userInfo
 
