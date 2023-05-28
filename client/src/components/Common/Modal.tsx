@@ -45,6 +45,22 @@ const StyledModal = styled.div`
       gap: 0.5rem;
     }
   }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    .msg-box {
+      width: 90%;
+      padding: 3rem;
+
+      span {
+        margin-bottom: 2rem;
+      }
+
+      .msg-txt {
+        font-size: ${({ theme }) => theme.fontSize.middle};
+        margin-bottom: 3rem;
+      }
+    }
+  }
 `
 
 interface ModalProps {

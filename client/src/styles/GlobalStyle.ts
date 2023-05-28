@@ -63,6 +63,11 @@ const GlobalStyle = createGlobalStyle`
         background: transparent;
         padding: 0;
         cursor: pointer;
+        color:inherit
+    }
+
+    span {
+        color: inherit;
     }
 
     // icon setting
