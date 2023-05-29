@@ -30,8 +30,10 @@ public class CustomCorsConfiguration implements CorsConfigurationSource {
     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("https://d37e9ewzht4md2.cloudfront.net");
-        configuration.addAllowedOrigin("https://wrieating.kro.kr");
+//        configuration.addAllowedOrigin("https://d37e9ewzht4md2.cloudfront.net");
+//        configuration.addAllowedOrigin("https://wrieating.kro.kr");
+        configuration.addAllowedOrigin("https://wrieating.p-e.kr");
+        configuration.addAllowedOrigin("https://d3nhkf5eonoyfy.cloudfront.net");
         configuration.addAllowedMethod(HttpMethod.GET.name());
         configuration.addAllowedMethod(HttpMethod.POST.name());
         configuration.addAllowedMethod(HttpMethod.PUT.name());
