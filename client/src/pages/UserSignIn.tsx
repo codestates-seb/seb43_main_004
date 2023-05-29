@@ -79,7 +79,7 @@ const UserSignIn = () => {
       })
 
     // 발급받은 토큰으로 유저 정보 얻어오기
-    await axios
+    axios
       .get(`${process.env.REACT_APP_SERVER_URL}/members/myprofile`, {
         headers: {
           Authorization: `Bearer ${getCookie('access')}`,
