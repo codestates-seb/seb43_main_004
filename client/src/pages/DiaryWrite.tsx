@@ -10,7 +10,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getCookie } from '../utils/Cookie'
 
 const StyledDiaryAdd = styled.main`
-  width: 98%;
+  width: 100%;
   max-width: 1250px;
 
   h2 {
@@ -27,6 +27,11 @@ const StyledDiaryAdd = styled.main`
     gap: 0.5rem;
     font-size: ${({ theme }) => theme.fontSize.large};
     font-weight: 700;
+  }
+
+  .btn-back {
+    font-size: ${({ theme }) => theme.fontSize.lgh};
+    margin-bottom: 3rem;
   }
 
   .food-edit {
@@ -85,13 +90,15 @@ const StyledDiaryAdd = styled.main`
 
     .empty {
       border: 5px dashed ${({ theme }) => theme.color.lightGray};
-      padding: 5rem 0;
+      padding: 5rem 3rem;
       border-radius: 1.5rem;
       text-align: center;
 
       h4 {
         font-size: ${({ theme }) => theme.fontSize.smh};
         color: ${({ theme }) => theme.color.lightGray};
+        line-height: 1.3em;
+        word-break: keep-all;
       }
     }
 
@@ -178,12 +185,17 @@ const StyledDiaryAdd = styled.main`
           display: flex;
           align-items: center;
           gap: 1rem;
+          justify-content: space-between;
         }
       }
     }
+
+    button {
+      margin: 5rem auto 0;
+    }
   }
 
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     h2 {
       font-size: ${({ theme }) => theme.fontSize.smh};
       margin-bottom: 2rem;
@@ -219,6 +231,54 @@ const StyledDiaryAdd = styled.main`
       }
     }
   }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    .food-stage {
+      .empty {
+        padding: 3rem;
+
+        h4 {
+          font-size: ${({ theme }) => theme.fontSize.middle};
+        }
+      }
+
+      .full {
+        padding: 1rem;
+      }
+    }
+
+    .food-list {
+      .empty {
+        font-size: ${({ theme }) => theme.fontSize.middle};
+      }
+      li {
+        .title {
+          flex-wrap: wrap;
+
+          > p {
+            width: 100%;
+            font-size: ${({ theme }) => theme.fontSize.large};
+            margin-bottom: 2rem;
+          }
+
+          .intake {
+            justify-content: space-between;
+            width: 100%;
+            gap: 0;
+          }
+        }
+
+        .food-info {
+          flex-wrap: wrap;
+          margin-top: 2rem;
+
+          p {
+            width: 48%;
+          }
+        }
+      }
+    }
+  }
 `
 
 export interface FoodList {
@@ -237,15 +297,15 @@ export interface FoodList {
 }
 
 const DiaryWrite = () => {
-  // 상태 & 변수
   const url = process.env.REACT_APP_SERVER_URL
   const param = useParams()
   const location = useLocation()
   const navigate = useNavigate()
   const diaryData = location.state?.meal || null // 식단 등록, 수정할 때 제공되는 데이터
-  const thisMealType = Array.isArray(diaryData)
-    ? diaryData[0].mealType
-    : diaryData.mealType
+  const thisMealType =
+    diaryData !== null && Array.isArray(diaryData)
+      ? diaryData[0].mealType
+      : diaryData.mealType
 
   const [searchTxt, setSearchTxt] = useState('') // 검색 인풋 상태
   const [searchList, setSearchList] = useState<FoodList[]>([]) // 자동완성 검색어의 목록
@@ -371,8 +431,6 @@ const DiaryWrite = () => {
 
   const editToStage = (data: FoodList) => {
     setStage(data)
-    console.log(data)
-
     setIsEdit(true)
   }
 
@@ -648,6 +706,12 @@ const DiaryWrite = () => {
               ))
             )}
           </ul>
+          <Button
+            type="button"
+            onClick={() => navigate(`/diaries/${param.id}`)}
+          >
+            일기로 돌아가기
+          </Button>
         </div>
         {isEmpty && (
           <Modal

@@ -18,13 +18,14 @@ import UpdateReady from './pages/UpdateReady'
 import Landing from './pages/Landing'
 import RecipeArchive from './pages/RecipeArchive'
 import RecipeDetail from './pages/RecipeDetail'
-import useTokenCheck from './store/hooks/useTokenCheck'
+
 import ScrollToTop from './utils/ScrollToTop'
+import PrivateRoute from './components/Common/PrivateRoute'
+import PublicRoute from './components/Common/PublicRoute'
 
 function App() {
   const location = useLocation()
   const isLandingPage = location.pathname === '/'
-  // useTokenCheck()
 
   return (
     <div className="App">
@@ -45,22 +46,29 @@ function App() {
       ) : (
         <div className="wrapper">
           <Routes>
-            <Route path="/diaries" element={<DiaryCheck />} />
-            <Route path="/diaries/:id" element={<DiaryDetail />} />
-            <Route path="/diaries/:id/add" element={<DiaryWrite />} />
-            <Route path="/diaries/:id/update" element={<DiaryWrite />} />
+            {/* 로그인한 유저만 접근 가능, 그 외엔 '/sign-in'으로 이동 */}
+            <Route element={<PrivateRoute />}>
+              <Route path="/diaries" element={<DiaryCheck />} />
+              <Route path="/diaries/:id" element={<DiaryDetail />} />
+              <Route path="/diaries/:id/add" element={<DiaryWrite />} />
+              <Route path="/diaries/:id/update" element={<DiaryWrite />} />
+              <Route path="/userpage" element={<UserPage />}>
+                <Route path="" element={<EditProfile />} />
+                <Route path="change-pwd" element={<ChangePwd />} />
+              </Route>
+            </Route>
+            {/* 로그인 하지 않은 유저만 접근 가능, 그 외엔 '/'로 이동 */}
+            <Route element={<PublicRoute />}>
+              <Route path="/sign-in" element={<UserSignIn />} />
+              <Route path="/sign-up" element={<UserSignUp social={false} />} />
+              <Route path="/find-pwd" element={<UserFindPwd />} />
+            </Route>
+
             <Route path="/community" element={<UpdateReady />} />
             <Route path="/nutrient" element={<FoodArchive />} />
             <Route path="/recipe" element={<RecipeArchive />} />
             <Route path="/recipe/:id" element={<RecipeDetail />} />
-            <Route path="/sign-in" element={<UserSignIn />} />
-            <Route path="/sign-up" element={<UserSignUp social={false} />} />
-            {/* <Route path="/register" element={<UserSignUp social={true} />} /> */}
-            <Route path="/find-pwd" element={<UserFindPwd />} />
-            <Route path="/userpage" element={<UserPage />}>
-              <Route path="" element={<EditProfile />} />
-              <Route path="change-pwd" element={<ChangePwd />} />
-            </Route>
+
             <Route path="/error/:error" element={<NotFound />} />
             <Route path="/*" element={<NotFound />} />
           </Routes>

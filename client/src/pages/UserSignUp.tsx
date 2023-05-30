@@ -15,7 +15,7 @@ import { debounce } from '../utils/timefunc'
 import axios from 'axios'
 import Modal from '../components/Common/Modal'
 import { useNavigate } from 'react-router-dom'
-import { API } from '../utils/API'
+import PwdInput from '../components/Common/PwdInput'
 
 interface Props {
   social?: boolean
@@ -134,7 +134,10 @@ const UserSignUp = ({ social }: Props) => {
     // 이메일이 정상적으로 입력되었는지 확인 후 이메일 중복 체크
     if (checkEmail(email)) {
       await axios
-        .post(`${API}/members/emailcheck`, emailData)
+        .post(
+          `${process.env.REACT_APP_SERVER_URL}/members/emailcheck`,
+          emailData
+        )
         .then((response) => {
           // 가입된 이메일이 아니면
           if (response.data.data === false) {
@@ -222,7 +225,7 @@ const UserSignUp = ({ social }: Props) => {
     }
 
     axios
-      .post(`${API}/members/nicknamecheck`, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/members/nicknamecheck`, {
         nickName,
       })
       .then((response) => {
@@ -373,18 +376,16 @@ const UserSignUp = ({ social }: Props) => {
           </div>
           {!social && (
             <>
-              <Input
+              <PwdInput
                 label="비밀번호"
-                type="password"
                 name="password"
                 placeholder="영문, 숫자, 특수문자를 조합하여 최소 8자 이상"
                 error={error.password}
                 onChange={handleInput}
                 onBlur={isValidPassword}
               />
-              <Input
+              <PwdInput
                 label="비밀번호 확인"
-                type="password"
                 name="passwordcheck"
                 placeholder="비밀번호를 입력해주세요"
                 error={error.ckPassword}

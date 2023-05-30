@@ -10,6 +10,7 @@ import { getCookie, setCookie } from '../utils/Cookie'
 import { __getUser } from '../store/slices/profileSlice'
 import { useDispatch } from 'react-redux'
 import customInstance from '../utils/customInstance'
+import PwdInput from '../components/Common/PwdInput'
 
 interface userType {
   email: string
@@ -78,7 +79,7 @@ const UserSignIn = () => {
       })
 
     // 발급받은 토큰으로 유저 정보 얻어오기
-    await axios
+    axios
       .get(`${process.env.REACT_APP_SERVER_URL}/members/myprofile`, {
         headers: {
           Authorization: `Bearer ${getCookie('access')}`,
@@ -108,9 +109,8 @@ const UserSignIn = () => {
           placeholder="email"
           onChange={handleInput}
         />
-        <Input
+        <PwdInput
           label="비밀번호"
-          type="password"
           name="password"
           placeholder="password"
           error={error}
