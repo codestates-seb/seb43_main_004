@@ -55,7 +55,6 @@ const UserSignIn = () => {
 
         setCookie('access', tokenWithNoBearer, {
           path: '/',
-          secure: true,
           expires: current,
           sameSite: 'none',
         })
@@ -63,7 +62,6 @@ const UserSignIn = () => {
         current.setMinutes(current.getMinutes() + 1440)
         setCookie('refresh', tokenForReissue, {
           path: '/',
-          secure: true,
           expires: current,
           sameSite: 'none',
         })
