@@ -80,7 +80,7 @@
 
 <br />
    
-# 화면 구성
+## 화면 구성
 |메인페이지|로그인|
 |:---:|:---:|
 |<img src="https://github.com/codestates-seb/seb43_main_004/assets/120611048/ac69a6a9-65d8-48bb-94c4-59c06f8a2ec9" height="600px"/>|![회원가입 - 로그인](https://github.com/codestates-seb/seb43_main_004/assets/120611048/46904016-2c40-46b0-9d51-9477e672bd20)|
@@ -96,7 +96,7 @@
 <br>
   
    
-   ##  ERD(Entity Relationship Diagram) 
+ ##  ERD(Entity Relationship Diagram) 
 ![ERD](https://github.com/codestates-seb/seb43_main_004/assets/120611048/9eba74d5-3549-4af8-b712-4ddcf49a5279)
 
 <img width="579" alt="스크린샷 2023-05-30 오후 6 08 01" src="https://github.com/codestates-seb/seb43_main_004/assets/120611048/b03c74e9-d199-4d34-ad96-b82fb37d2698">
