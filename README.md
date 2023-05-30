@@ -1,3 +1,4 @@
+<div>
 <div align="center">
 
 <img width="1082" alt="main" src="https://github.com/codestates-seb/seb43_main_004/assets/120611048/8715771d-ef0e-4aba-8fb2-bf025cc1284c">
@@ -101,3 +102,4 @@
 
 <img width="579" alt="스크린샷 2023-05-30 오후 6 08 01" src="https://github.com/codestates-seb/seb43_main_004/assets/120611048/b03c74e9-d199-4d34-ad96-b82fb37d2698">
 
+</div>
