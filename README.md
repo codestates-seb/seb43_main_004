@@ -1,4 +1,3 @@
-<div>
 <div align="center">
 
 <img width="1082" alt="main" src="https://github.com/codestates-seb/seb43_main_004/assets/120611048/8715771d-ef0e-4aba-8fb2-bf025cc1284c">
@@ -80,6 +79,10 @@
 <a href="https://www.figma.com/file/9FtFxhpgFSt9Pq3IELT2Xw/main-project?type=design&node-id=224%3A4633&t=Smg1CZ3CQTPGwjXk-1" target="_blank">화면정의서</a> 
 
 <br />
+  
+  ## 📗 서비스 메뉴얼
+ 
+  <a href="https://file.notion.so/f/s/87764714-b11a-45da-822f-ab4a82da5744/SEB_43_Main_04_team_menual.pdf?id=8131f9d7-34ca-4d6c-8958-5e33057a9b43&table=block&spaceId=82d63a72-8254-4cde-bf1e-b2597b7c099c&expirationTimestamp=1685525684937&signature=Qs8jAlQyYnmuA6cLMYeMy-js2ahK2qgMqGWRP3Q6vIk&downloadName=SEB_43_Main_04_team_menual.pdf" target="_blank">서비스 메뉴얼 링크</a> 
    
 ## 화면 구성
 |메인페이지|로그인|
@@ -102,4 +105,3 @@
 
 <img width="579" alt="스크린샷 2023-05-30 오후 6 08 01" src="https://github.com/codestates-seb/seb43_main_004/assets/120611048/b03c74e9-d199-4d34-ad96-b82fb37d2698">
 
-</div>
