@@ -4,13 +4,12 @@ import Input from '../components/Common/Input'
 import Button from '../components/Common/Button'
 import Radio from '../components/Common/Radio'
 import { genderList, activityScore } from '../utils/options'
-import { checkEmail, checkPassword } from '../utils/userfunc'
-import { ApiCaller } from '../utils/apiCaller'
 import {
-  dtoReqEmailCheck,
-  dtoReqVerifyEmail,
-} from '../dto/membership/members/dtoSignup'
-import { dtoResponse } from '../dto'
+  checkEmail,
+  checkPassword,
+  checkDate,
+  checkNumber,
+} from '../utils/userfunc'
 import { debounce } from '../utils/timefunc'
 import axios from 'axios'
 import Modal from '../components/Common/Modal'
@@ -44,6 +43,9 @@ interface errorType {
   nickName: string
   password: string
   ckPassword: string
+  birth: string
+  weight: string
+  height: string
 }
 
 interface successType {
@@ -64,7 +66,7 @@ const UserSignUp = ({ social }: Props) => {
     birth: '',
   })
 
-  const { email, nickName, password } = values
+  const { email, nickName, password, birth, weight, height } = values
 
   const [ckPassword, setCkPassword] = useState<string>('')
   const [nameCheck, setNameCheck] = useState<string>('') // 닉네임 비교
@@ -79,6 +81,9 @@ const UserSignUp = ({ social }: Props) => {
     nickName: '',
     password: '',
     ckPassword: '',
+    birth: '',
+    weight: '',
+    height: '',
   })
 
   const [success, setSuccess] = useState<successType>({
@@ -106,13 +111,20 @@ const UserSignUp = ({ social }: Props) => {
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
-    setValues({ ...values, [name]: value })
-  }
+    if (name === 'ckAuth') {
+      setAuthNums({ ...authNums, ckAuth: value })
+    } else {
+      setValues({ ...values, [name]: value })
+    }
 
-  const handleAuthNum = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-
-    setAuthNums({ ...authNums, [name]: value })
+    if (name === 'height' || name === 'weight') {
+      if (!checkNumber(value)) {
+        setError({ ...error, [name]: '유효하지 않은 값입니다.' })
+      } else {
+        setValues({ ...values, [name]: Number(value) })
+        setError({ ...error, [name]: '' })
+      }
+    }
   }
 
   // 인증번호 전송
@@ -263,6 +275,18 @@ const UserSignUp = ({ social }: Props) => {
     }
   }
 
+  // 생년월일 유효성 검사
+  const isValidBirth = () => {
+    const msg = { birth: '' }
+
+    if (!checkDate(birth)) {
+      msg.birth = '유효하지 않은 생년월일입니다.'
+      setError({ ...error, ...msg })
+    } else {
+      setError({ ...error, ...msg })
+    }
+  }
+
   // 버튼 활성화를 위한 입력값 검증
   const checkValues = useCallback(
     debounce((values: userInfo, isConfirm: boolean, ckpwd: string) => {
@@ -275,13 +299,7 @@ const UserSignUp = ({ social }: Props) => {
         }
       }
 
-      if (
-        !isBlank &&
-        isConfirm &&
-        ckpwd === values.password &&
-        values.height > 0 &&
-        values.weight > 0
-      ) {
+      if (!isBlank && isConfirm && ckpwd === values.password) {
         isNotValid = false
       }
 
@@ -349,7 +367,7 @@ const UserSignUp = ({ social }: Props) => {
                   error={error.auth}
                   success={isConfirm ? success.auth : ''}
                   disabled={isConfirm}
-                  onChange={handleAuthNum}
+                  onChange={handleInput}
                 />
                 <div>
                   <Button disabled={isConfirm} onClick={verifyNumbers}>
@@ -404,22 +422,26 @@ const UserSignUp = ({ social }: Props) => {
             />
             <Input
               label="생년월일"
-              type="date"
+              type="text"
               name="birth"
+              error={error.birth}
               onChange={handleInput}
+              onBlur={isValidBirth}
             />
             <Input
               label="신장(cm)"
-              type="number"
+              type="text"
               name="height"
               placeholder="170"
+              error={error.height}
               onChange={handleInput}
             />
             <Input
               label="체중(kg)"
-              type="number"
+              type="text"
               name="weight"
               placeholder="65"
+              error={error.weight}
               onChange={handleInput}
             />
           </div>

@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../store'
 import { getCookie } from '../../utils/Cookie'
 import { __editUser } from '../../store/slices/profileSlice'
-import { userLogout } from '../../utils/userfunc'
+import { userLogout, checkDate, checkNumber } from '../../utils/userfunc'
 
 interface noticeType {
   nickName: string
@@ -73,6 +73,24 @@ const EditProfile = () => {
     const { name, value } = e.target
 
     setProfile({ ...profile, [name]: value })
+
+    if (name === 'birth') {
+      if (!checkDate(value)) {
+        setNotice({ ...notice, birth: '유효하지 생년월일입니다.' })
+      } else {
+        setProfile({ ...profile, birth: value })
+        setNotice({ ...notice, birth: '' })
+      }
+    }
+
+    if (name === 'height' || name === 'weight') {
+      if (!checkNumber(value)) {
+        setNotice({ ...notice, [name]: '유효하지 않은 값입니다.' })
+      } else {
+        setProfile({ ...profile, [name]: Number(value) })
+        setNotice({ ...notice, [name]: '' })
+      }
+    }
   }
 
   // 닉네임 중복 확인
@@ -132,12 +150,6 @@ const EditProfile = () => {
       return
     }
 
-    if (weight <= 0 && weight >= 500) {
-      msg.weight = '유효하지 않은 값입니다.'
-    }
-    if (height <= 0 && height >= 300) {
-      msg.height = '유효하지 않은 값입니다.'
-    }
     if (birth === '') {
       msg.birth = '생년월일을 입력해주세요.'
     }
@@ -175,7 +187,7 @@ const EditProfile = () => {
   }
 
   // 회원탈퇴
-  const deleteUser = () => {
+  const deleteUser = async () => {
     setDel(false)
     openModal(
       '회원 탈퇴가 완료되었습니다. \n그동안 라이팅을 이용해주셔서 감사합니다.'
@@ -258,20 +270,16 @@ const EditProfile = () => {
             />
             <Input
               label="신장(cm)"
-              type="number"
+              type="text"
               name="height"
-              min={1}
-              max={300}
               value={height}
               error={notice.height}
               onChange={handleInput}
             />
             <Input
               label="체중(kg)"
-              type="number"
+              type="text"
               name="weight"
-              min={1}
-              max={500}
               value={weight}
               error={notice.weight}
               onChange={handleInput}
