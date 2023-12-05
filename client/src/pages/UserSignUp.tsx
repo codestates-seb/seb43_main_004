@@ -125,6 +125,30 @@ const UserSignUp = ({ social }: Props) => {
         setError({ ...error, [name]: '' })
       }
     }
+
+    if (name === 'password') {
+      if (!checkPassword(value)) {
+        setError({
+          ...error,
+          [name]:
+            '최소 8자, 영문+숫자+특수문자(!@#$%&*?) 조합으로 구성되어야 합니다.',
+        })
+      } else {
+        setValues({ ...values, [name]: value })
+        setError({ ...error, [name]: '' })
+      }
+    }
+
+    if (name === 'birth') {
+      if (!checkDate(value)) {
+        setError({
+          ...error,
+          [name]: '유효하지 않은 생년월일입니다.',
+        })
+      } else {
+        setError({ ...error, [name]: '' })
+      }
+    }
   }
 
   // 인증번호 전송
@@ -259,34 +283,6 @@ const UserSignUp = ({ social }: Props) => {
       })
   }
 
-  // 비밀번호 유효성 검사
-  const isValidPassword = () => {
-    const msg = { password: '', ckPassword: '' }
-
-    if (!checkPassword(password)) {
-      msg.password =
-        '최소 8자, 영문+숫자+특수문자(!@#$%&*?) 조합으로 구성되어야 합니다.'
-      setError({ ...error, ...msg })
-    } else if (password !== ckPassword) {
-      msg.ckPassword = '비밀번호가 일치하지 않습니다.'
-      setError({ ...error, ...msg })
-    } else {
-      setError({ ...error, ...msg })
-    }
-  }
-
-  // 생년월일 유효성 검사
-  const isValidBirth = () => {
-    const msg = { birth: '' }
-
-    if (!checkDate(birth)) {
-      msg.birth = '유효하지 않은 생년월일입니다.'
-      setError({ ...error, ...msg })
-    } else {
-      setError({ ...error, ...msg })
-    }
-  }
-
   // 버튼 활성화를 위한 입력값 검증
   const checkValues = useCallback(
     debounce((values: userInfo, isConfirm: boolean, ckpwd: string) => {
@@ -349,7 +345,7 @@ const UserSignUp = ({ social }: Props) => {
                   disabled={isConfirm}
                   onChange={handleInput}
                 />
-                <div>
+                <div className="btn-div">
                   <Button
                     disabled={isConfirm}
                     onClick={() => sendNumbers(email)}
@@ -369,7 +365,7 @@ const UserSignUp = ({ social }: Props) => {
                   disabled={isConfirm}
                   onChange={handleInput}
                 />
-                <div>
+                <div className="btn-div">
                   <Button disabled={isConfirm} onClick={verifyNumbers}>
                     인증번호 확인
                   </Button>
@@ -388,7 +384,7 @@ const UserSignUp = ({ social }: Props) => {
               success={success.nickName}
               onChange={handleInput}
             />
-            <div>
+            <div className="btn-div">
               <Button onClick={checkDuplicate}>중복확인</Button>
             </div>
           </div>
@@ -400,34 +396,32 @@ const UserSignUp = ({ social }: Props) => {
                 placeholder="영문, 숫자, 특수문자를 조합하여 최소 8자 이상"
                 error={error.password}
                 onChange={handleInput}
-                onBlur={isValidPassword}
               />
-              <PwdInput
+              <Input
                 label="비밀번호 확인"
+                type="password"
                 name="passwordcheck"
                 placeholder="비밀번호를 입력해주세요"
-                error={error.ckPassword}
+                error={
+                  ckPassword !== '' && ckPassword !== password
+                    ? '비밀번호가 일치하지 않습니다.'
+                    : ''
+                }
                 onChange={(e) => setCkPassword(e.target.value)}
-                onBlur={isValidPassword}
               />
             </>
           )}
 
+          <Input
+            label="생년월일"
+            type="text"
+            name="birth"
+            placeholder="YYYY-MM-DD"
+            error={error.birth}
+            onChange={handleInput}
+          />
+
           <div className="grid-div">
-            <Radio
-              legend="성별"
-              radioArray={genderList}
-              checkedValue={values.gender}
-              onChange={handleInput}
-            />
-            <Input
-              label="생년월일"
-              type="text"
-              name="birth"
-              error={error.birth}
-              onChange={handleInput}
-              onBlur={isValidBirth}
-            />
             <Input
               label="신장(cm)"
               type="text"
@@ -446,6 +440,12 @@ const UserSignUp = ({ social }: Props) => {
             />
           </div>
 
+          <Radio
+            legend="성별"
+            radioArray={genderList}
+            checkedValue={values.gender}
+            onChange={handleInput}
+          />
           <Radio
             legend="활동수준"
             radioArray={activityScore}
@@ -503,18 +503,21 @@ const Form = styled.form`
     display: flex;
     align-items: flex-center;
     gap: 0.6rem;
+  }
+
+  .btn-div {
+    flex: 2 1 0;
 
     button {
+      width: 100%;
       position: relative;
       top: 2rem;
     }
   }
 
   .grid-div {
-    width: 100%;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    row-gap: 1.6rem;
+    grid-template-columns: 1fr 1fr;
     column-gap: 0.6rem;
   }
 `
