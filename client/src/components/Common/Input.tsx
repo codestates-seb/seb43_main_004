@@ -39,7 +39,7 @@ const Input = (props: inputProps) => {
   } = props
 
   return (
-    <InputWrapper>
+    <div>
       {label && <StyledLabel htmlFor={label}>{label}</StyledLabel>}
       <StyledInput
         id={label}
@@ -58,14 +58,9 @@ const Input = (props: inputProps) => {
       />
       {error && <ErrorMessage>{error}</ErrorMessage>}
       {success && <SuccessMessage>{success}</SuccessMessage>}
-    </InputWrapper>
+    </div>
   )
 }
-
-const InputWrapper = styled.div`
-  height: 6rem;
-  flex: 1;
-`
 
 const StyledLabel = styled.label`
   display: inline-block;
