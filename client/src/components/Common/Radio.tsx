@@ -10,7 +10,7 @@ const Radio = (props: radioProps) => {
       <Legend>{legend}</Legend>
       <RadioWrapper>
         {radioArray.map((i) => (
-          <div key={i.id} className="radio-div">
+          <RadioInputWrapper key={i.id}>
             <input
               id={i.id}
               type="radio"
@@ -20,7 +20,7 @@ const Radio = (props: radioProps) => {
               onChange={onChange}
             />
             <StyledLabel htmlFor={i.id}>{i.label}</StyledLabel>
-          </div>
+          </RadioInputWrapper>
         ))}
       </RadioWrapper>
     </div>
@@ -30,18 +30,22 @@ const Radio = (props: radioProps) => {
 const RadioWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1rem;
 
-  input[type='radio'],
+  input[type='radio'] {
+    display: none;
+  }
+
   input[type='radio']:checked + label {
-    color: var(--color-point);
-    accent-color: var(--color-point);
+    color: var(--color-white);
+    background-color: var(--color-primary);
     font-weight: 600;
+    transition: all 0.1s;
   }
+`
 
-  .radio-div {
-    margin-top: 0.8rem;
-  }
+const RadioInputWrapper = styled.div`
+  margin-top: 1rem;
 `
 
 const Legend = styled.legend`
@@ -53,6 +57,11 @@ const Legend = styled.legend`
 
 const StyledLabel = styled.label`
   font-size: 1.4rem;
+  color: var(--color-secondary);
+  border: 1px solid var(--color-secondary);
+  border-radius: 1rem;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
 `
 
 export default Radio
