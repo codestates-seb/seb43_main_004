@@ -41,7 +41,7 @@ export const checkDate = (date: string): boolean => {
 export const checkNumber = (nums: string): boolean => {
   const converted = Number(nums)
 
-  if (typeof converted === 'number' && converted > 0 && converted < 300) {
+  if (typeof converted === 'number' && converted > 0 && converted < 500) {
     return true
   }
 

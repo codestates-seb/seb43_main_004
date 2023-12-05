@@ -56,14 +56,12 @@ const UserSignIn = () => {
         setCookie('access', tokenWithNoBearer, {
           path: '/',
           expires: current,
-          sameSite: 'none',
         })
 
         current.setMinutes(current.getMinutes() + 1440)
         setCookie('refresh', tokenForReissue, {
           path: '/',
           expires: current,
-          sameSite: 'none',
         })
       })
       .catch((error) => {

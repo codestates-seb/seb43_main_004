@@ -76,7 +76,7 @@ const EditProfile = () => {
 
     if (name === 'birth') {
       if (!checkDate(value)) {
-        setNotice({ ...notice, birth: '유효하지 생년월일입니다.' })
+        setNotice({ ...notice, birth: '유효하지 않은 생년월일입니다.' })
       } else {
         setProfile({ ...profile, birth: value })
         setNotice({ ...notice, birth: '' })
@@ -136,13 +136,18 @@ const EditProfile = () => {
 
   // 프로필 수정
   const updateProfile = () => {
+    console.log(profile)
     const msg = { nickName: '', weight: '', height: '', birth: '' }
     let isBlank = false
 
-    for (const key in profile) {
-      if (profile[key] === '') {
-        isBlank = true
-      }
+    // for (const key in profile) {
+    //   if (profile[key] === '') {
+    //     isBlank = true
+    //   }
+    // }
+
+    if (notice.birth !== '' || notice.weight !== '' || notice.height !== '') {
+      isBlank = true
     }
 
     if ((isActive && nameCheck === cantUse) || nameCheck !== nickName) {
@@ -150,12 +155,8 @@ const EditProfile = () => {
       return
     }
 
-    if (birth === '') {
-      msg.birth = '생년월일을 입력해주세요.'
-    }
-
     if (isBlank) {
-      setNotice({ ...notice, ...msg })
+      openModal('입력값을 확인해주세요.')
     } else {
       axios
         .patch(
@@ -260,11 +261,10 @@ const EditProfile = () => {
             />
             <Input
               label="생년월일"
-              type="date"
+              type="text"
               name="birth"
-              min="1900-01-01"
-              max="3000"
               value={birth}
+              placeholder="YYYY-MM-DD"
               error={notice.birth}
               onChange={handleInput}
             />
