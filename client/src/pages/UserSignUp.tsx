@@ -27,8 +27,8 @@ interface userInfo {
   password: string
   gender: string
   activity: string
-  height: number
-  weight: number
+  height: string
+  weight: string
   birth: string
 }
 
@@ -38,11 +38,12 @@ interface authentication {
 }
 
 interface errorType {
+  [key: string]: any
   email: string
   auth: string
   nickName: string
   password: string
-  ckPassword: string
+  passwordcheck: string
   birth: string
   weight: string
   height: string
@@ -61,12 +62,12 @@ const UserSignUp = ({ social }: Props) => {
     password: '',
     gender: 'male',
     activity: 'NONE_ACTIVE',
-    height: 0,
-    weight: 0,
+    height: '',
+    weight: '',
     birth: '',
   })
 
-  const { email, nickName, password, birth, weight, height } = values
+  const { email, nickName, password } = values
 
   const [ckPassword, setCkPassword] = useState<string>('')
   const [nameCheck, setNameCheck] = useState<string>('') // 닉네임 비교
@@ -80,7 +81,7 @@ const UserSignUp = ({ social }: Props) => {
     auth: '',
     nickName: '',
     password: '',
-    ckPassword: '',
+    passwordcheck: '',
     birth: '',
     weight: '',
     height: '',
@@ -108,15 +109,15 @@ const UserSignUp = ({ social }: Props) => {
   }
 
   // 사용자 입력값 핸들링
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
+    // 인증번호
     if (name === 'ckAuth') {
       setAuthNums({ ...authNums, ckAuth: value })
-    } else {
-      setValues({ ...values, [name]: value })
     }
 
+    // 신장, 체중
     if (name === 'height' || name === 'weight') {
       if (!checkNumber(value)) {
         setError({ ...error, [name]: '유효하지 않은 값입니다.' })
@@ -126,6 +127,7 @@ const UserSignUp = ({ social }: Props) => {
       }
     }
 
+    // 비밀번호
     if (name === 'password') {
       if (!checkPassword(value)) {
         setError({
@@ -139,6 +141,11 @@ const UserSignUp = ({ social }: Props) => {
       }
     }
 
+    if (name === 'passwordcheck') {
+      setCkPassword(value)
+    }
+
+    // 생년월일
     if (name === 'birth') {
       if (!checkDate(value)) {
         setError({
@@ -146,10 +153,15 @@ const UserSignUp = ({ social }: Props) => {
           [name]: '유효하지 않은 생년월일입니다.',
         })
       } else {
+        setValues({ ...values, [name]: value })
         setError({ ...error, [name]: '' })
       }
     }
-  }
+
+    if (name) {
+      setValues({ ...values, [name]: value })
+    }
+  }, 300)
 
   // 인증번호 전송
   const sendNumbers = async (email: string) => {
@@ -285,23 +297,38 @@ const UserSignUp = ({ social }: Props) => {
 
   // 버튼 활성화를 위한 입력값 검증
   const checkValues = useCallback(
-    debounce((values: userInfo, isConfirm: boolean, ckpwd: string) => {
+    debounce((values: userInfo, isConfirm: boolean) => {
       let isBlank = false
+      let isNotError = true
       let isNotValid = true
+
+      for (const key in error) {
+        if (error[key] !== '') {
+          isNotError = false
+          break
+        }
+      }
 
       for (const key in values) {
         if (values[key] === '') {
           isBlank = true
+          break
         }
       }
 
-      if (!isBlank && isConfirm && ckpwd === values.password) {
+      if (
+        !isBlank &&
+        isNotError &&
+        isConfirm &&
+        values.passwordcheck === values.password
+      ) {
         isNotValid = false
       }
 
+      console.log(values)
       setIsEmpty(isNotValid)
-    }, 700),
-    []
+    }, 300),
+    [error]
   )
 
   // 가입하기 - 모든 값이 유효한 경우 버튼 활성화
@@ -312,9 +339,18 @@ const UserSignUp = ({ social }: Props) => {
       return
     }
 
+    const convertedUserinfo = {
+      ...values,
+      weight: Number(values.weight),
+      height: Number(values.height),
+    }
+
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/members/signup`, values)
-      .then((response) => {
+      .post(
+        `${process.env.REACT_APP_SERVER_URL}/members/signup`,
+        convertedUserinfo
+      )
+      .then(() => {
         openModal('회원가입이 완료되었습니다. \n로그인 페이지로 이동합니다.')
       })
       .catch((error) => {
@@ -325,8 +361,8 @@ const UserSignUp = ({ social }: Props) => {
   }
 
   useEffect(() => {
-    checkValues(values, isConfirm, ckPassword)
-  }, [values, isConfirm, ckPassword])
+    checkValues(values, isConfirm)
+  }, [values, ckPassword, isConfirm])
 
   return (
     <>
@@ -403,11 +439,11 @@ const UserSignUp = ({ social }: Props) => {
                 name="passwordcheck"
                 placeholder="비밀번호를 입력해주세요"
                 error={
-                  ckPassword !== '' && ckPassword !== password
+                  ckPassword !== password && ckPassword !== ''
                     ? '비밀번호가 일치하지 않습니다.'
                     : ''
                 }
-                onChange={(e) => setCkPassword(e.target.value)}
+                onChange={handleInput}
               />
             </>
           )}
