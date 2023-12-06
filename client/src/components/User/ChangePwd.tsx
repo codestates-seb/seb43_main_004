@@ -106,38 +106,36 @@ const ChangePwd = () => {
   return (
     <>
       <TabFrame title="비밀번호 변경">
-        <Wrapper>
-          <Form>
-            <Input
-              type="password"
-              label="현재 비밀번호"
-              placeholder="현재 비밀번호"
-              name="currentPassword"
-              value={currentPassword}
-              error={error.currentPassword}
-              onChange={handleInput}
-            />
-            <Input
-              type="password"
-              label="새 비밀번호"
-              placeholder="새 비밀번호"
-              name="newPassword"
-              value={newPassword}
-              error={error.newPassword}
-              onChange={handleInput}
-            />
-            <Input
-              type="password"
-              label="새 비밀번호 확인"
-              placeholder="비밀번호 확인"
-              name="ckPassword"
-              value={ckPassword}
-              error={error.ckPassword}
-              onChange={handleInput}
-            />
-            <Button onClick={changePassword}>변경하기</Button>
-          </Form>
-        </Wrapper>
+        <Form>
+          <Input
+            type="password"
+            label="현재 비밀번호"
+            placeholder="현재 비밀번호"
+            name="currentPassword"
+            value={currentPassword}
+            error={error.currentPassword}
+            onChange={handleInput}
+          />
+          <Input
+            type="password"
+            label="새 비밀번호"
+            placeholder="새 비밀번호"
+            name="newPassword"
+            value={newPassword}
+            error={error.newPassword}
+            onChange={handleInput}
+          />
+          <Input
+            type="password"
+            label="새 비밀번호 확인"
+            placeholder="비밀번호 확인"
+            name="ckPassword"
+            value={ckPassword}
+            error={error.ckPassword}
+            onChange={handleInput}
+          />
+          <Button onClick={changePassword}>변경하기</Button>
+        </Form>
       </TabFrame>
       <Modal
         state={isOpen}
@@ -150,23 +148,23 @@ const ChangePwd = () => {
   )
 }
 
-const Wrapper = styled.div`
-  width: 63.7rem;
-  min-height: 40rem;
-
-  @media ${({ theme }) => theme.device.tablet} {
-    width: 88vw;
-  }
-`
-
 const Form = styled.form`
-  width: 35rem;
+  width: 40rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 
   > button {
     margin-top: 0.8rem;
+  }
+
+  @media ${({ theme }) => theme.device.tablet} {
+    width: 80%;
+    min-width: 20rem;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
   }
 `
 

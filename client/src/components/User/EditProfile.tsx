@@ -215,97 +215,95 @@ const EditProfile = () => {
   return (
     <>
       <TabFrame title="프로필 수정">
-        <Wrapper>
-          <IconContainer>
-            <Icons
-              radioArray={icons}
-              checkedValue={icon}
-              onChange={handleInput}
-            />
-          </IconContainer>
-          <GridContainer>
-            <Input
-              label="이메일"
-              type="email"
-              name="email"
-              value={email}
-              disabled={true}
-              onChange={handleInput}
-            />
-            <div className="flex-div">
-              <Input
-                label="닉네임"
-                type="text"
-                name="nickName"
-                value={nickName}
-                disabled={!isActive}
-                success={notice.nickNameOk}
-                error={notice.nickName}
-                onChange={handleInput}
-              />
-              {!isActive ? (
-                <div>
-                  <Button onClick={() => setIsActive(true)}>닉네임 변경</Button>
-                </div>
-              ) : (
-                <div>
-                  <Button onClick={checkNickname}>중복확인</Button>
-                </div>
-              )}
-            </div>
-            <Radio
-              legend="성별"
-              radioArray={genderList}
-              checkedValue={gender}
-              onChange={handleInput}
-            />
-            <Input
-              label="생년월일"
-              type="text"
-              name="birth"
-              value={birth}
-              placeholder="YYYY-MM-DD"
-              error={notice.birth}
-              onChange={handleInput}
-            />
-            <Input
-              label="신장(cm)"
-              type="text"
-              name="height"
-              value={height}
-              error={notice.height}
-              onChange={handleInput}
-            />
-            <Input
-              label="체중(kg)"
-              type="text"
-              name="weight"
-              value={weight}
-              error={notice.weight}
-              onChange={handleInput}
-            />
-          </GridContainer>
-          <Radio
-            legend="활동수준"
-            radioArray={activityScore}
-            checkedValue={activity}
+        <IconContainer>
+          <Icons
+            radioArray={icons}
+            checkedValue={icon}
             onChange={handleInput}
           />
-          <ButtonWrapper>
-            <Button
-              outline="true"
-              onClick={() => {
-                setDel(true) // 회원탈퇴 버튼임을 인지시키기 위한 상태
-                openModal(
-                  '회원탈퇴시 유저정보 및 모든 데이터가 삭제됩니다.\n 회원탈퇴를 진행하시겠습니까?'
-                )
-              }}
-            >
-              회원탈퇴
-            </Button>
-            <Button onClick={updateProfile}>저장하기</Button>
-          </ButtonWrapper>
-        </Wrapper>
+        </IconContainer>
+        <GridContainer>
+          <Input
+            label="이메일"
+            type="email"
+            name="email"
+            value={email}
+            disabled={true}
+            onChange={handleInput}
+          />
+          <div className="flex-div">
+            <Input
+              label="닉네임"
+              type="text"
+              name="nickName"
+              value={nickName}
+              disabled={!isActive}
+              success={notice.nickNameOk}
+              error={notice.nickName}
+              onChange={handleInput}
+            />
+            {!isActive ? (
+              <div>
+                <Button onClick={() => setIsActive(true)}>닉네임 변경</Button>
+              </div>
+            ) : (
+              <div>
+                <Button onClick={checkNickname}>중복확인</Button>
+              </div>
+            )}
+          </div>
+          <Radio
+            legend="성별"
+            radioArray={genderList}
+            checkedValue={gender}
+            onChange={handleInput}
+          />
+          <Input
+            label="생년월일"
+            type="text"
+            name="birth"
+            value={birth}
+            placeholder="YYYY-MM-DD"
+            error={notice.birth}
+            onChange={handleInput}
+          />
+          <Input
+            label="신장(cm)"
+            type="text"
+            name="height"
+            value={height}
+            error={notice.height}
+            onChange={handleInput}
+          />
+          <Input
+            label="체중(kg)"
+            type="text"
+            name="weight"
+            value={weight}
+            error={notice.weight}
+            onChange={handleInput}
+          />
+        </GridContainer>
+        <Radio
+          legend="활동수준"
+          radioArray={activityScore}
+          checkedValue={activity}
+          onChange={handleInput}
+        />
+        <ButtonWrapper>
+          <Button
+            outline="true"
+            onClick={() => {
+              setDel(true) // 회원탈퇴 버튼임을 인지시키기 위한 상태
+              openModal(
+                '회원탈퇴시 유저정보 및 모든 데이터가 삭제됩니다.\n 회원탈퇴를 진행하시겠습니까?'
+              )
+            }}
+          >
+            회원탈퇴
+          </Button>
+          <Button onClick={updateProfile}>저장하기</Button>
+        </ButtonWrapper>
       </TabFrame>
       <Modal
         state={isOpen}
@@ -328,11 +326,6 @@ const IconContainer = styled.div`
     height: auto;
   }
 `
-const Wrapper = styled.div`
-  @media ${({ theme }) => theme.device.tablet} {
-    width: 88vw;
-  }
-`
 
 const GridContainer = styled.div`
   display: grid;
@@ -353,6 +346,14 @@ const GridContainer = styled.div`
 
   @media ${({ theme }) => theme.device.tablet} {
     grid-template-columns: none;
+
+    .flex-div {
+      flex-direction: column;
+
+      button {
+        top: 0;
+      }
+    }
   }
 `
 

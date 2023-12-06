@@ -53,16 +53,19 @@ const UserPage = () => {
           </ItemsWrapper>
         </div>
       </UserProfile>
-      <Tab
-        tabItem={[
-          { name: '프로필 수정', path: '/userpage' },
-          { name: '비밀번호 변경', path: '/userpage/change-pwd' },
-        ]}
-      />
+      <div className="test-div">
+        <Tab
+          tabItem={[
+            { name: '프로필 수정', path: '/userpage' },
+            { name: '비밀번호 변경', path: '/userpage/change-pwd' },
+          ]}
+        />
+      </div>
     </Container>
   )
 }
 const Container = styled.div`
+  width: 100%;
   max-width: 88rem;
 `
 
@@ -108,7 +111,14 @@ const UserProfile = styled.div`
     margin-bottom: 2rem;
   }
 
-  @media screen and (max-width: 500px) {
+  @media ${({ theme }) => theme.device.mobile} {
+    flex-direction: column;
+    gap: 2rem;
+
+    img {
+      width: 9rem;
+      height: 9rem;
+    }
   }
 `
 
