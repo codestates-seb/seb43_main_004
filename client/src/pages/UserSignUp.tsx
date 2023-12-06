@@ -547,7 +547,7 @@ const Form = styled.form`
   }
 
   .btn-div {
-    flex: 2 1 0;
+    flex: 1 1 1;
 
     button {
       width: 100%;
