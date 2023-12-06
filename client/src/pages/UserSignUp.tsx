@@ -528,6 +528,11 @@ const Container = styled.div`
   li:nth-child(even) {
     margin: 0.4rem 0;
   }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    padding: 2rem 1.8rem;
+  }
 `
 const Form = styled.form`
   display: flex;
@@ -547,7 +552,7 @@ const Form = styled.form`
     button {
       width: 100%;
       position: relative;
-      top: 2rem;
+      top: 1.8rem;
     }
   }
 
@@ -555,6 +560,20 @@ const Form = styled.form`
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 0.6rem;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    .flex-div {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 0.6rem;
+    }
+
+    .grid-div {
+      grid-template-columns: 1fr;
+      row-gap: 2rem;
+    }
   }
 `
 export default UserSignUp

@@ -31,6 +31,7 @@ const RadioWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  row-gap: 2rem;
 
   input[type='radio'] {
     display: none;
@@ -49,7 +50,6 @@ const RadioInputWrapper = styled.div`
 `
 
 const Legend = styled.legend`
-  display: inline-block;
   margin: 0 0 0.4rem 0.4rem;
   font-size: 1.4rem;
   font-weight: 700;

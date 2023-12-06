@@ -147,6 +147,11 @@ const Container = styled.div`
   span {
     font-size: 1.2rem;
   }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    padding: 2rem 1.8rem;
+  }
 `
 
 const Logo = styled.div`
