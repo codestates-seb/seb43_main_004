@@ -61,9 +61,7 @@ const Input = (props: inputProps) => {
     </InputWrapper>
   )
 }
-
 const InputWrapper = styled.div`
-  height: 6rem;
   flex: 1;
 `
 

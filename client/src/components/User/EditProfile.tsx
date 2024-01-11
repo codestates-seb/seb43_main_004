@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../../store'
 import { getCookie } from '../../utils/Cookie'
 import { __editUser } from '../../store/slices/profileSlice'
-import { userLogout } from '../../utils/userfunc'
+import { userLogout, checkDate, checkNumber } from '../../utils/userfunc'
 
 interface noticeType {
   nickName: string
@@ -73,6 +73,24 @@ const EditProfile = () => {
     const { name, value } = e.target
 
     setProfile({ ...profile, [name]: value })
+
+    if (name === 'birth') {
+      if (!checkDate(value)) {
+        setNotice({ ...notice, birth: '유효하지 않은 생년월일입니다.' })
+      } else {
+        setProfile({ ...profile, birth: value })
+        setNotice({ ...notice, birth: '' })
+      }
+    }
+
+    if (name === 'height' || name === 'weight') {
+      if (!checkNumber(value)) {
+        setNotice({ ...notice, [name]: '유효하지 않은 값입니다.' })
+      } else {
+        setProfile({ ...profile, [name]: Number(value) })
+        setNotice({ ...notice, [name]: '' })
+      }
+    }
   }
 
   // 닉네임 중복 확인
@@ -118,13 +136,18 @@ const EditProfile = () => {
 
   // 프로필 수정
   const updateProfile = () => {
+    console.log(profile)
     const msg = { nickName: '', weight: '', height: '', birth: '' }
     let isBlank = false
 
-    for (const key in profile) {
-      if (profile[key] === '') {
-        isBlank = true
-      }
+    // for (const key in profile) {
+    //   if (profile[key] === '') {
+    //     isBlank = true
+    //   }
+    // }
+
+    if (notice.birth !== '' || notice.weight !== '' || notice.height !== '') {
+      isBlank = true
     }
 
     if ((isActive && nameCheck === cantUse) || nameCheck !== nickName) {
@@ -132,18 +155,8 @@ const EditProfile = () => {
       return
     }
 
-    if (weight <= 0 && weight >= 500) {
-      msg.weight = '유효하지 않은 값입니다.'
-    }
-    if (height <= 0 && height >= 300) {
-      msg.height = '유효하지 않은 값입니다.'
-    }
-    if (birth === '') {
-      msg.birth = '생년월일을 입력해주세요.'
-    }
-
     if (isBlank) {
-      setNotice({ ...notice, ...msg })
+      openModal('입력값을 확인해주세요.')
     } else {
       axios
         .patch(
@@ -175,7 +188,7 @@ const EditProfile = () => {
   }
 
   // 회원탈퇴
-  const deleteUser = () => {
+  const deleteUser = async () => {
     setDel(false)
     openModal(
       '회원 탈퇴가 완료되었습니다. \n그동안 라이팅을 이용해주셔서 감사합니다.'
@@ -202,102 +215,95 @@ const EditProfile = () => {
   return (
     <>
       <TabFrame title="프로필 수정">
-        <Wrapper>
-          <IconContainer>
-            <Icons
-              radioArray={icons}
-              checkedValue={icon}
-              onChange={handleInput}
-            />
-          </IconContainer>
-          <GridContainer>
-            <Input
-              label="이메일"
-              type="email"
-              name="email"
-              value={email}
-              disabled={true}
-              onChange={handleInput}
-            />
-            <div className="flex-div">
-              <Input
-                label="닉네임"
-                type="text"
-                name="nickName"
-                value={nickName}
-                disabled={!isActive}
-                success={notice.nickNameOk}
-                error={notice.nickName}
-                onChange={handleInput}
-              />
-              {!isActive ? (
-                <div>
-                  <Button onClick={() => setIsActive(true)}>닉네임 변경</Button>
-                </div>
-              ) : (
-                <div>
-                  <Button onClick={checkNickname}>중복확인</Button>
-                </div>
-              )}
-            </div>
-            <Radio
-              legend="성별"
-              radioArray={genderList}
-              checkedValue={gender}
-              onChange={handleInput}
-            />
-            <Input
-              label="생년월일"
-              type="date"
-              name="birth"
-              min="1900-01-01"
-              max="3000"
-              value={birth}
-              error={notice.birth}
-              onChange={handleInput}
-            />
-            <Input
-              label="신장(cm)"
-              type="number"
-              name="height"
-              min={1}
-              max={300}
-              value={height}
-              error={notice.height}
-              onChange={handleInput}
-            />
-            <Input
-              label="체중(kg)"
-              type="number"
-              name="weight"
-              min={1}
-              max={500}
-              value={weight}
-              error={notice.weight}
-              onChange={handleInput}
-            />
-          </GridContainer>
-          <Radio
-            legend="활동수준"
-            radioArray={activityScore}
-            checkedValue={activity}
+        <IconContainer>
+          <Icons
+            radioArray={icons}
+            checkedValue={icon}
             onChange={handleInput}
           />
-          <ButtonWrapper>
-            <Button
-              outline="true"
-              onClick={() => {
-                setDel(true) // 회원탈퇴 버튼임을 인지시키기 위한 상태
-                openModal(
-                  '회원탈퇴시 유저정보 및 모든 데이터가 삭제됩니다.\n 회원탈퇴를 진행하시겠습니까?'
-                )
-              }}
-            >
-              회원탈퇴
-            </Button>
-            <Button onClick={updateProfile}>저장하기</Button>
-          </ButtonWrapper>
-        </Wrapper>
+        </IconContainer>
+        <GridContainer>
+          <Input
+            label="이메일"
+            type="email"
+            name="email"
+            value={email}
+            disabled={true}
+            onChange={handleInput}
+          />
+          <div className="flex-div">
+            <Input
+              label="닉네임"
+              type="text"
+              name="nickName"
+              value={nickName}
+              disabled={!isActive}
+              success={notice.nickNameOk}
+              error={notice.nickName}
+              onChange={handleInput}
+            />
+            {!isActive ? (
+              <div>
+                <Button onClick={() => setIsActive(true)}>닉네임 변경</Button>
+              </div>
+            ) : (
+              <div>
+                <Button onClick={checkNickname}>중복확인</Button>
+              </div>
+            )}
+          </div>
+          <Radio
+            legend="성별"
+            radioArray={genderList}
+            checkedValue={gender}
+            onChange={handleInput}
+          />
+          <Input
+            label="생년월일"
+            type="text"
+            name="birth"
+            value={birth}
+            placeholder="YYYY-MM-DD"
+            error={notice.birth}
+            onChange={handleInput}
+          />
+          <Input
+            label="신장(cm)"
+            type="text"
+            name="height"
+            value={height}
+            error={notice.height}
+            onChange={handleInput}
+          />
+          <Input
+            label="체중(kg)"
+            type="text"
+            name="weight"
+            value={weight}
+            error={notice.weight}
+            onChange={handleInput}
+          />
+        </GridContainer>
+        <Radio
+          legend="활동수준"
+          radioArray={activityScore}
+          checkedValue={activity}
+          onChange={handleInput}
+        />
+        <ButtonWrapper>
+          <Button
+            outline="true"
+            onClick={() => {
+              setDel(true) // 회원탈퇴 버튼임을 인지시키기 위한 상태
+              openModal(
+                '회원탈퇴시 유저정보 및 모든 데이터가 삭제됩니다.\n 회원탈퇴를 진행하시겠습니까?'
+              )
+            }}
+          >
+            회원탈퇴
+          </Button>
+          <Button onClick={updateProfile}>저장하기</Button>
+        </ButtonWrapper>
       </TabFrame>
       <Modal
         state={isOpen}
@@ -320,11 +326,6 @@ const IconContainer = styled.div`
     height: auto;
   }
 `
-const Wrapper = styled.div`
-  @media ${({ theme }) => theme.device.tablet} {
-    width: 88vw;
-  }
-`
 
 const GridContainer = styled.div`
   display: grid;
@@ -345,6 +346,14 @@ const GridContainer = styled.div`
 
   @media ${({ theme }) => theme.device.tablet} {
     grid-template-columns: none;
+
+    .flex-div {
+      flex-direction: column;
+
+      button {
+        top: 0;
+      }
+    }
   }
 `
 

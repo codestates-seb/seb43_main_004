@@ -11,7 +11,7 @@ const TabFrame = ({ title, children }: propType) => {
     <Container>
       <h1>{title}</h1>
       <hr />
-      {children}
+      <Wrapper>{children}</Wrapper>
     </Container>
   )
 }
@@ -26,6 +26,10 @@ const Container = styled.div`
     height: 1px;
     border: 0;
   }
+`
+
+const Wrapper = styled.div`
+  min-height: 40rem;
 `
 
 export default TabFrame

@@ -4,13 +4,12 @@ import Input from '../components/Common/Input'
 import Button from '../components/Common/Button'
 import Radio from '../components/Common/Radio'
 import { genderList, activityScore } from '../utils/options'
-import { checkEmail, checkPassword } from '../utils/userfunc'
-import { ApiCaller } from '../utils/apiCaller'
 import {
-  dtoReqEmailCheck,
-  dtoReqVerifyEmail,
-} from '../dto/membership/members/dtoSignup'
-import { dtoResponse } from '../dto'
+  checkEmail,
+  checkPassword,
+  checkDate,
+  checkNumber,
+} from '../utils/userfunc'
 import { debounce } from '../utils/timefunc'
 import axios from 'axios'
 import Modal from '../components/Common/Modal'
@@ -28,8 +27,8 @@ interface userInfo {
   password: string
   gender: string
   activity: string
-  height: number
-  weight: number
+  height: string
+  weight: string
   birth: string
 }
 
@@ -39,11 +38,15 @@ interface authentication {
 }
 
 interface errorType {
+  [key: string]: any
   email: string
   auth: string
   nickName: string
   password: string
-  ckPassword: string
+  passwordcheck: string
+  birth: string
+  weight: string
+  height: string
 }
 
 interface successType {
@@ -59,8 +62,8 @@ const UserSignUp = ({ social }: Props) => {
     password: '',
     gender: 'male',
     activity: 'NONE_ACTIVE',
-    height: 0,
-    weight: 0,
+    height: '',
+    weight: '',
     birth: '',
   })
 
@@ -78,7 +81,10 @@ const UserSignUp = ({ social }: Props) => {
     auth: '',
     nickName: '',
     password: '',
-    ckPassword: '',
+    passwordcheck: '',
+    birth: '',
+    weight: '',
+    height: '',
   })
 
   const [success, setSuccess] = useState<successType>({
@@ -103,17 +109,59 @@ const UserSignUp = ({ social }: Props) => {
   }
 
   // 사용자 입력값 핸들링
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInput = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
 
-    setValues({ ...values, [name]: value })
-  }
+    // 인증번호
+    if (name === 'ckAuth') {
+      setAuthNums({ ...authNums, ckAuth: value })
+    }
 
-  const handleAuthNum = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
+    // 신장, 체중
+    if (name === 'height' || name === 'weight') {
+      if (!checkNumber(value)) {
+        setError({ ...error, [name]: '유효하지 않은 값입니다.' })
+      } else {
+        setValues({ ...values, [name]: Number(value) })
+        setError({ ...error, [name]: '' })
+      }
+    }
 
-    setAuthNums({ ...authNums, [name]: value })
-  }
+    // 비밀번호
+    if (name === 'password') {
+      if (!checkPassword(value)) {
+        setError({
+          ...error,
+          [name]:
+            '최소 8자, 영문+숫자+특수문자(!@#$%&*?) 조합으로 구성되어야 합니다.',
+        })
+      } else {
+        setValues({ ...values, [name]: value })
+        setError({ ...error, [name]: '' })
+      }
+    }
+
+    if (name === 'passwordcheck') {
+      setCkPassword(value)
+    }
+
+    // 생년월일
+    if (name === 'birth') {
+      if (!checkDate(value)) {
+        setError({
+          ...error,
+          [name]: '유효하지 않은 생년월일입니다.',
+        })
+      } else {
+        setValues({ ...values, [name]: value })
+        setError({ ...error, [name]: '' })
+      }
+    }
+
+    if (name) {
+      setValues({ ...values, [name]: value })
+    }
+  }, 300)
 
   // 인증번호 전송
   const sendNumbers = async (email: string) => {
@@ -247,47 +295,40 @@ const UserSignUp = ({ social }: Props) => {
       })
   }
 
-  // 비밀번호 유효성 검사
-  const isValidPassword = () => {
-    const msg = { password: '', ckPassword: '' }
-
-    if (!checkPassword(password)) {
-      msg.password =
-        '최소 8자, 영문+숫자+특수문자(!@#$%&*?) 조합으로 구성되어야 합니다.'
-      setError({ ...error, ...msg })
-    } else if (password !== ckPassword) {
-      msg.ckPassword = '비밀번호가 일치하지 않습니다.'
-      setError({ ...error, ...msg })
-    } else {
-      setError({ ...error, ...msg })
-    }
-  }
-
   // 버튼 활성화를 위한 입력값 검증
   const checkValues = useCallback(
-    debounce((values: userInfo, isConfirm: boolean, ckpwd: string) => {
+    debounce((values: userInfo, isConfirm: boolean) => {
       let isBlank = false
+      let isNotError = true
       let isNotValid = true
+
+      for (const key in error) {
+        if (error[key] !== '') {
+          isNotError = false
+          break
+        }
+      }
 
       for (const key in values) {
         if (values[key] === '') {
           isBlank = true
+          break
         }
       }
 
       if (
         !isBlank &&
+        isNotError &&
         isConfirm &&
-        ckpwd === values.password &&
-        values.height > 0 &&
-        values.weight > 0
+        values.passwordcheck === values.password
       ) {
         isNotValid = false
       }
 
+      console.log(values)
       setIsEmpty(isNotValid)
-    }, 700),
-    []
+    }, 300),
+    [error]
   )
 
   // 가입하기 - 모든 값이 유효한 경우 버튼 활성화
@@ -298,9 +339,18 @@ const UserSignUp = ({ social }: Props) => {
       return
     }
 
+    const convertedUserinfo = {
+      ...values,
+      weight: Number(values.weight),
+      height: Number(values.height),
+    }
+
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/members/signup`, values)
-      .then((response) => {
+      .post(
+        `${process.env.REACT_APP_SERVER_URL}/members/signup`,
+        convertedUserinfo
+      )
+      .then(() => {
         openModal('회원가입이 완료되었습니다. \n로그인 페이지로 이동합니다.')
       })
       .catch((error) => {
@@ -311,8 +361,8 @@ const UserSignUp = ({ social }: Props) => {
   }
 
   useEffect(() => {
-    checkValues(values, isConfirm, ckPassword)
-  }, [values, isConfirm, ckPassword])
+    checkValues(values, isConfirm)
+  }, [values, ckPassword, isConfirm])
 
   return (
     <>
@@ -331,7 +381,7 @@ const UserSignUp = ({ social }: Props) => {
                   disabled={isConfirm}
                   onChange={handleInput}
                 />
-                <div>
+                <div className="btn-div">
                   <Button
                     disabled={isConfirm}
                     onClick={() => sendNumbers(email)}
@@ -349,9 +399,9 @@ const UserSignUp = ({ social }: Props) => {
                   error={error.auth}
                   success={isConfirm ? success.auth : ''}
                   disabled={isConfirm}
-                  onChange={handleAuthNum}
+                  onChange={handleInput}
                 />
-                <div>
+                <div className="btn-div">
                   <Button disabled={isConfirm} onClick={verifyNumbers}>
                     인증번호 확인
                   </Button>
@@ -370,7 +420,7 @@ const UserSignUp = ({ social }: Props) => {
               success={success.nickName}
               onChange={handleInput}
             />
-            <div>
+            <div className="btn-div">
               <Button onClick={checkDuplicate}>중복확인</Button>
             </div>
           </div>
@@ -382,48 +432,56 @@ const UserSignUp = ({ social }: Props) => {
                 placeholder="영문, 숫자, 특수문자를 조합하여 최소 8자 이상"
                 error={error.password}
                 onChange={handleInput}
-                onBlur={isValidPassword}
               />
-              <PwdInput
+              <Input
                 label="비밀번호 확인"
+                type="password"
                 name="passwordcheck"
                 placeholder="비밀번호를 입력해주세요"
-                error={error.ckPassword}
-                onChange={(e) => setCkPassword(e.target.value)}
-                onBlur={isValidPassword}
+                error={
+                  ckPassword !== password && ckPassword !== ''
+                    ? '비밀번호가 일치하지 않습니다.'
+                    : ''
+                }
+                onChange={handleInput}
               />
             </>
           )}
 
+          <Input
+            label="생년월일"
+            type="text"
+            name="birth"
+            placeholder="YYYY-MM-DD"
+            error={error.birth}
+            onChange={handleInput}
+          />
+
           <div className="grid-div">
-            <Radio
-              legend="성별"
-              radioArray={genderList}
-              checkedValue={values.gender}
-              onChange={handleInput}
-            />
-            <Input
-              label="생년월일"
-              type="date"
-              name="birth"
-              onChange={handleInput}
-            />
             <Input
               label="신장(cm)"
-              type="number"
+              type="text"
               name="height"
               placeholder="170"
+              error={error.height}
               onChange={handleInput}
             />
             <Input
               label="체중(kg)"
-              type="number"
+              type="text"
               name="weight"
               placeholder="65"
+              error={error.weight}
               onChange={handleInput}
             />
           </div>
 
+          <Radio
+            legend="성별"
+            radioArray={genderList}
+            checkedValue={values.gender}
+            onChange={handleInput}
+          />
           <Radio
             legend="활동수준"
             radioArray={activityScore}
@@ -470,6 +528,11 @@ const Container = styled.div`
   li:nth-child(even) {
     margin: 0.4rem 0;
   }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    padding: 2rem 1.8rem;
+  }
 `
 const Form = styled.form`
   display: flex;
@@ -481,19 +544,36 @@ const Form = styled.form`
     display: flex;
     align-items: flex-center;
     gap: 0.6rem;
+  }
+
+  .btn-div {
+    flex: 1 1 1;
 
     button {
+      width: 100%;
       position: relative;
-      top: 2rem;
+      top: 1.8rem;
     }
   }
 
   .grid-div {
-    width: 100%;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    row-gap: 1.6rem;
+    grid-template-columns: 1fr 1fr;
     column-gap: 0.6rem;
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    .flex-div {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 0.6rem;
+    }
+
+    .grid-div {
+      grid-template-columns: 1fr;
+      row-gap: 2rem;
+    }
   }
 `
 export default UserSignUp
