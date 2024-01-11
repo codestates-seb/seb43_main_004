@@ -269,13 +269,28 @@ const Container = styled.div`
 
   .flex-div {
     width: 100%;
-    display: flex;
-    align-items: flex-center;
+    display: grid;
+    grid-template-columns: 2fr 1.2fr;
     gap: 0.6rem;
 
     button {
+      width: 100%;
       position: relative;
-      top: 2rem;
+      top: 1.8rem;
+    }
+  }
+
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    padding: 2rem 1.8rem;
+
+    .flex-div {
+      grid-template-columns: 1fr;
+
+      button {
+        width: 100%;
+        position: relative;
+        top: 0;
     }
   }
 `

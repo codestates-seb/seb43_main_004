@@ -15,7 +15,7 @@ const Tab = ({ tabItem }: TabMenus) => {
   }, [])
 
   return (
-    <div>
+    <>
       <TabsWrapper>
         {tabItem.map((i, idx) => (
           <TabLink
@@ -31,7 +31,7 @@ const Tab = ({ tabItem }: TabMenus) => {
       <SubpageContainer>
         <Outlet />
       </SubpageContainer>
-    </div>
+    </>
   )
 }
 
@@ -52,6 +52,7 @@ const TabLink = styled(Link)`
   }
 `
 const SubpageContainer = styled.div`
+  width: 100%;
   min-height: 30rem;
   padding: 2.6rem;
   border: 1px solid var(--color-light-gray);

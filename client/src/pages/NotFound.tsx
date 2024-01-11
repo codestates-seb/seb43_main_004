@@ -62,7 +62,7 @@ const Icon = styled.span`
 `
 
 const ErrorWrapper = styled.div`
-  width: 55srem;
+  width: 55rem;
   text-align: center;
 
   h1 {
